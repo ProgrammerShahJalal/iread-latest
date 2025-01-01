@@ -1,0 +1,47 @@
+networks:
+  app_network:
+    driver: bridge
+
+services:
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "8005:3000" # Map frontend to localhost:8005
+    volumes:
+      - ./client:/var/www
+    command: npm start
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./server
+    ports:
+      - "8006:5003" # Map backend to localhost:8006
+    volumes:
+      - ./server:/var/www
+    command: npm run server
+    networks:
+      - app_network
+    depends_on:
+      - mysql # Ensures backend starts after MySQL
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3308:3306" # Expose MySQL on port 3308
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: iread
+      MYSQL_USER: iread
+      MYSQL_PASSWORD: $^&ADF232
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:

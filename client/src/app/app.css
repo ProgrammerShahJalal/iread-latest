@@ -1,0 +1,20 @@
+@import url("/frontend/css/bootstrap.min.css");
+@import url("/frontend/css/jquery-ui.min.css");
+@import url("/frontend/css/animate.css");
+@import url("/frontend/css/css-plugin-collections.css");
+
+@import url("/frontend/css/menuzord-skins/menuzord-rounded-boxed.css");
+@import url("/frontend/css/style-main.css");
+@import url("/frontend/css/preloader.css");
+@import url("/frontend/css/custom-bootstrap-margin-padding.css");
+@import url("/frontend/css/responsive.css");
+
+@import url("/frontend/css/colors/theme-skin-color-set-1.css");
+
+@import url("/style.css");
+/**
+
+<link href="/frontend/js/revolution-slider/css/settings.css" rel="stylesheet" type="text/css" />
+<link href="/frontend/js/revolution-slider/css/layers.css" rel="stylesheet" type="text/css" />
+<link href="/frontend/js/revolution-slider/css/navigation.css" rel="stylesheet" type="text/css" />
+*/
