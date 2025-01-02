@@ -7,6 +7,7 @@ import * as BlogCategoryBlogModel from "../modules/blog_categories_management/mo
 import * as BlogTagModel from "../modules/blog_tags_management/models/model";
 
 import * as BlogCommentModel from "../modules/blog_comment_management/models/model";
+import * as BlogLikeModel from "../modules/blog_likes_management/models/model";
 
 import * as AuthorModel from "../modules/author_management/models/model";
 
@@ -21,6 +22,7 @@ export type model_types = {
 
 
     BlogCommentModel: typeof BlogCommentModel.DataModel;
+    BlogLikeModel: typeof BlogLikeModel.DataModel;
    
     AuthorModel: typeof AuthorModel.DataModel;
 }
