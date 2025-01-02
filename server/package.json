@@ -72,6 +72,7 @@
     "server": "nodemon",
     "serve": "ts-node src/index.ts",
     "admin": "vite build --config vite-config-admin.js --watch  --sourcemap",
+    "super_admin": "vite build --config vite-config-super-admin.js --watch  --sourcemap",
     "server:lint": "npx esw --ext .ts src --fix",
     "server:lint:watch": "npx esw  --watch --ext .ts src --fix",
     "client:lint": "npx esw --ext .tsx public/management  --config .eslintrc.react.json --fix",
