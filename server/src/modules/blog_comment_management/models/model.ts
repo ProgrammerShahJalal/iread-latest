@@ -20,30 +20,20 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'blog_likes';
-export const modelName = 'BlogLikeModel';
+export const tableName = 'blog_comments';
+export const modelName = 'BlogCommentModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'active' | 'deactive' | 'block';
+type status = 'active' | 'deactive';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare title: string;
-    declare author_id: number;
-    declare short_description: string;
-    declare full_description: string;
-    declare cover_image: string;
-
-    declare is_published: status;
-    declare publish_date?: Date;
-
-    declare slug: string;
-    declare seo_title: string;
-    declare seo_keyword: string;
-    declare seo_description: string;
-
+    declare user_id: number;
+    declare blog_id: number;
+    declare comment: string;
+    declare parent_id: number;
 
     declare status?: status;
     declare creator?: number;
@@ -61,59 +51,27 @@ function init(sequelize: Sequelize) {
                 primaryKey: true,
             },
 
-            title: {
-                type: DataTypes.STRING(100),
-                allowNull: true,
-            },
-            author_id: {
+            user_id: {
                 type: DataTypes.BIGINT().UNSIGNED,
                 allowNull: true,
             },
-            short_description: {
+            blog_id: {
                 type: DataTypes.TEXT(),
                 allowNull: true,
             },
-            full_description: {
+            comment: {
                 type: DataTypes.TEXT(),
                 allowNull: true,
             },
-            cover_image: {
+            parent_id: {
                 type: DataTypes.STRING(),
                 allowNull: true,
             },
 
-            is_published: {
-                type: DataTypes.BOOLEAN(),
-                allowNull: true,
-                defaultValue: false,
-            },
-
-            publish_date: {
-                type: DataTypes.DATE(),
-                allowNull: true,
-            },
-
-            seo_title: {
-                type: DataTypes.STRING(100),
-                allowNull: true,
-            },
-            seo_keyword: {
-                type: DataTypes.STRING(100),
-                allowNull: true,
-            },
-            seo_description: {
-                type: DataTypes.TEXT(),
-                allowNull: true,
-            },
-
-            slug: {
-                type: DataTypes.STRING(100),
-                allowNull: true,
-            },
             status: {
                 type: new DataTypes.ENUM('active', 'deactive', 'draft', 'published'),
 
-                defaultValue: 'draft',
+                defaultValue: 'active',
             },
 
             created_at: DataTypes.DATE,
