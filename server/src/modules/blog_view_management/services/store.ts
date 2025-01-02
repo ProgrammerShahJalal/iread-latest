@@ -20,7 +20,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'date',
+        'total_count',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -75,13 +75,28 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
-    
-    let inputs: InferCreationAttributes<typeof data> = {
-     
+
+     /** Check for existing record by IP address */
+     const existingRecord = await models[modelName].findOne({
+        where: { ip: req.ip },
+        order: [['id', 'DESC']], // Get the most recent record by IP
+    });
+
+    let totalCount = 1; // Default to 1 for new records
+    if (existingRecord) {
+        totalCount = existingRecord.total_count + 1;
+    }
+
+
+    /** Prepare input data */
+    const inputs: InferCreationAttributes<typeof data> = {
         user_id: body.user_id,
         blog_id: body.blog_id,
-        date: moment.toString(),
-    }; 
+        date: moment().toISOString(),
+        total_count: totalCount,
+        ip: req.ip,
+    };
+
 
     /** print request data into console */
     // console.clear();
@@ -102,3 +117,4 @@ async function store(
 }
 
 export default store;
+

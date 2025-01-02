@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'blog_likes';
-export const modelName = 'BlogLikeModel';
+export const tableName = 'blog_views';
+export const modelName = 'BlogViewModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -30,10 +30,12 @@ type status = 'active' | 'deactive';
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare user_id: number;
+    declare user_id?: number;
     declare blog_id: number;
     declare date: string;
-    
+    declare total_count: number;
+    declare ip: string;
+
     declare status?: status;
     declare creator?: number;
 
@@ -62,6 +64,14 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.DATE(),
                 allowNull: true,
             },
+            total_count: {
+                type: DataTypes.INTEGER(),
+                allowNull: true,
+            },
+            ip: {
+                type: DataTypes.STRING(),
+                allowNull: true,
+            },
 
             status: {
                 type: new DataTypes.ENUM('active', 'deactive', 'draft', 'published'),
@@ -72,6 +82,7 @@ function init(sequelize: Sequelize) {
             created_at: DataTypes.DATE,
             updated_at: DataTypes.DATE,
         },
+
         {
             tableName: tableName,
             modelName: modelName,

@@ -7,12 +7,12 @@ import {
     Request,
 } from '../../../common_types/object';
 import { InferCreationAttributes } from 'sequelize';
-import moment from 'moment';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
 
+import moment from 'moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
@@ -20,7 +20,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'date',
+        'id',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -34,34 +34,19 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
-
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
+
+// async function update(
 //     fastify_instance: FastifyInstance,
 //     req: FastifyRequest,
 // ): Promise<responseObject> {
 //     throw new Error('500 test');
 // }
-async function store(
+
+async function update(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
@@ -74,14 +59,15 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let data = new models[modelName]();
-    
-    let inputs: InferCreationAttributes<typeof data> = {
-     
+    let user_model = new models[modelName]();
+
+    let inputs: InferCreationAttributes<typeof user_model> = {
         user_id: body.user_id,
         blog_id: body.blog_id,
-        date: moment.toString(),
-    }; 
+        date: body.date,
+        total_count: body.total_count,
+        ip: body.ip,
+    };
 
     /** print request data into console */
     // console.clear();
@@ -89,16 +75,27 @@ async function store(
 
     /** store data into database */
     try {
-        (await data.update(inputs)).save();
-
-        return response(201, 'data created', {
-            data,
-        });
+        let data = await models[modelName].findByPk(body.id);
+        if (data) {
+            data.update(inputs);
+            await data.save();
+            return response(201, 'data updated', { data });
+        } else {
+            throw new custom_error(
+                'data not found',
+                404,
+                'operation not possible',
+            );
+        }
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
-        throw new custom_error('server error', 500, error.message, uid);
-        // throw error;
+        if (error instanceof custom_error) {
+            error.uid = uid;
+        } else {
+            throw new custom_error('server error', 500, error.message, uid);
+        }
+        throw error;
     }
 }
 
-export default store;
+export default update;
