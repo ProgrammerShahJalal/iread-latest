@@ -33,7 +33,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,image',
+                'title,status',
             ),
         );
         dispatch(all({}));
@@ -43,7 +43,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-    
+  
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -70,8 +70,8 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Image`}
-                                            col_name={`image`}
+                                            label={`Status`}
+                                            col_name={`status`}
                                             sort={false}
                                         />
                                     </tr>
@@ -101,12 +101,11 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title} 
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.image}
-
+                                                        {i.status}
                                                     </td>
                                                 </tr>
                                             );

@@ -17,6 +17,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 {/* Dashboard  */}
                 <MenuSingle to="/" icon="icon-dashboard" label="Dashboard" />
                 <MenuSingle to="/blog-category" icon="icon-dashboard" label="Blog Category" />
+                <MenuSingle to="/blog-tags" icon="icon-dashboard" label="Blog Tags" />
                 {/* HRM  */}
                 <MenuDropDown
                     section_title="Management"

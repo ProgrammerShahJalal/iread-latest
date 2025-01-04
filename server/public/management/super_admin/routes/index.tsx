@@ -7,6 +7,7 @@ import user_branch_staff_routes from '../views/pages/users/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
+import blog_tags from '../views/pages/blog_tags/config/routes';
 
 interface RouteTypes extends NonIndexRouteObject {}
 const router: RouteTypes[] = [
@@ -21,6 +22,7 @@ const router: RouteTypes[] = [
             user_branch_staff_routes,
             contact_messages,
             blog_category,
+            blog_tags,
           
         ],
     },
