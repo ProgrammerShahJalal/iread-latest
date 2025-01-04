@@ -61,12 +61,24 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
+
+    /** Check for existing record by IP address */
+    const existingRecord = await models[modelName].findOne({
+        where: { ip: req.ip },
+        order: [['id', 'DESC']], // Get the most recent record by IP
+    });
+
+    let totalCount = 1; // Default to 1 for new records
+    if (existingRecord) {
+        totalCount = existingRecord.total_count + 1;
+    }
+
     let inputs: InferCreationAttributes<typeof user_model> = {
         user_id: body.user_id,
         blog_id: body.blog_id,
-        date: body.date,
-        total_count: body.total_count,
-        ip: body.ip,
+        date: moment().toISOString(),
+        total_count: totalCount,
+        ip: req.ip,
     };
 
     /** print request data into console */

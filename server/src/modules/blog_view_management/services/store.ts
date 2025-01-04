@@ -20,7 +20,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'total_count',
+        'id',
     ];
 
     for (let index = 0; index < fields.length; index++) {

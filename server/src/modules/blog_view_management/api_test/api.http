@@ -14,11 +14,9 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
-    "user_id": "1",
-    "blog_id": "1",
-    "date": "2025-01-02",
-    "total_count": "100"
-
+    "id": 2,
+    "user_id": "2",
+    "blog_id": "2"
 }
 
 
