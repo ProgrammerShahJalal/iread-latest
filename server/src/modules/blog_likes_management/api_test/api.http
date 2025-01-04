@@ -14,9 +14,9 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
+    "id": 1,
     "user_id": "1",
-    "blog_id": "1",
-    "date": "2025-01-02"
+    "blog_id": "1"
 }
 
 
@@ -26,7 +26,7 @@ POST {{hostname}}/update HTTP/1.1
 content-type: application/json
 
 {
-    "id": 3,
+    "id": 2,
     "date": "2025-03-02"
 }
 

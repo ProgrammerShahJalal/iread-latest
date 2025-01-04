@@ -20,7 +20,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'date',
+        'id',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -80,7 +80,7 @@ async function store(
      
         user_id: body.user_id,
         blog_id: body.blog_id,
-        date: moment.toString(),
+        date: moment().toISOString(),
     }; 
 
     /** print request data into console */
