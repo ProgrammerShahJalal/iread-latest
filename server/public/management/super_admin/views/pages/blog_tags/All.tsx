@@ -72,7 +72,7 @@ const All: React.FC<Props> = (props: Props) => {
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
-                                            sort={false}
+                                            sort={true}
                                         />
                                     </tr>
                                 </thead>
@@ -105,7 +105,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.status}
+                                                        {i.status === "active"? 'Active' : 'Inactive'}
                                                     </td>
                                                 </tr>
                                             );
