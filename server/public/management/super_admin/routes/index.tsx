@@ -8,6 +8,7 @@ import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
 import blog_tags from '../views/pages/blog_tags/config/routes';
+import blogs from '../views/pages/blogs/config/routes';
 
 interface RouteTypes extends NonIndexRouteObject {}
 const router: RouteTypes[] = [
@@ -23,7 +24,7 @@ const router: RouteTypes[] = [
             contact_messages,
             blog_category,
             blog_tags,
-          
+            blogs,
         ],
     },
 ];

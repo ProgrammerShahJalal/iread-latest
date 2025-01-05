@@ -7,6 +7,7 @@ import contact_management from '../views/pages/contact_management/config/store';
 
 import blog_category from '../views/pages/blog_category/config/store';
 import blog_tags from '../views/pages/blog_tags/config/store';
+import blogs from '../views/pages/blogs/config/store';
 
 const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
         contact_messages: contact_management.reducer,
         blog_category: blog_category.reducer,
         blog_tags: blog_tags.reducer,
+        blogs: blogs.reducer,
     },
     devTools: true,
 });

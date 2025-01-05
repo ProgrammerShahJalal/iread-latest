@@ -75,10 +75,21 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
-    
+
+
+    let image_path = 'avatar.png';
+    if (body['image']?.ext) {
+        image_path =
+            'uploads/blog_categories/' +
+            moment().format('YYYYMMDDHHmmss') +
+            body['image'].name;
+        await (fastify_instance as any).upload(body['image'], image_path);
+    }
+
+
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
-        image: body.image,
+        image: image_path,
     };
 
     /** print request data into console */

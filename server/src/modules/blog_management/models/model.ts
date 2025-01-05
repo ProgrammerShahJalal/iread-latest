@@ -25,7 +25,7 @@ export const modelName = 'BlogModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'active' | 'deactive' | 'block';
+type status = 'active' | 'deactive';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
@@ -111,9 +111,9 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             status: {
-                type: new DataTypes.ENUM('active', 'deactive', 'draft', 'published'),
+                type: new DataTypes.ENUM('active', 'deactive',),
 
-                defaultValue: 'draft',
+                defaultValue: 'active',
             },
 
             created_at: DataTypes.DATE,

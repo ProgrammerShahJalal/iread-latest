@@ -16,6 +16,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
             <ul className="sidebar-menu">
                 {/* Dashboard  */}
                 <MenuSingle to="/" icon="icon-dashboard" label="Dashboard" />
+                <MenuSingle to="/blogs" icon="fa fa-book" label="Blogs" />
                 <MenuSingle to="/blog-categories" icon="fa fa-th-list" label="Blog Category" />
                 <MenuSingle to="/blog-tags" icon="fa fa-tags" label="Blog Tags" />
                 {/* HRM  */}
