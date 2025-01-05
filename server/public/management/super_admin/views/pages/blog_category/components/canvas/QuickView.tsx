@@ -47,7 +47,20 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Image</th>
                                     <th>:</th>
-                                    <th>{state.item.image}</th>
+                                    <th>
+                                        <div
+                                        style={{
+                                            maxWidth: '30px',
+                                            aspectRatio: '4/4',
+                                        }}
+                                        >
+                                        <img
+                                        className='w-100'
+                                        src={state.item.image}
+                                        alt={state.item.title}
+                                        />
+                                        </div>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

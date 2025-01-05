@@ -115,7 +115,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                             className='mx-auto'
                                                             style={{
                                                                 aspectRatio:"4/4",
-                                                                maxWidth: '100px'
+                                                                maxWidth: '30px'
                                                             }}
                                                             >
                                                             <img

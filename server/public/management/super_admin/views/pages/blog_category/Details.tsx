@@ -47,12 +47,37 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'title',
-                                        'image',
+                                      
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
                                             <td>{get_value(i)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                <tbody>
+                                    {[
+                                        'image',
+                                    ].map((i) => (
+                                        <tr>
+                                            <td>{i.replaceAll('_', ' ')}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <div
+                                               
+                                                style={{
+                                                    maxWidth: '30px',
+                                                    aspectRatio: '4/4',
+                                                }}
+                                                >
+                                                <img
+                                                className='w-100'
+                                                src={get_value(i)}
+                                                alt={get_value(i)}
+                                                />
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

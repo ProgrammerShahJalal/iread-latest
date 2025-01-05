@@ -26,20 +26,15 @@ async function details(
             where: {
                 id: params.id,
             },
-            include: [
-                {
-                    model: models.BlogModel,
-                    as: "category_blogs",
-                    attributes: ["id", "title"],
-                    include:[
-                        {
-                            model: models.BlogCategoriesModel,
-                            as: 'blog_categories',
-                        }
-                    ]
+            // include: [
+            //     {
+            //         model: models.BlogModel,
+            //         as: "category_blogs",
+            //         attributes: ["id", "title"],
+                    
 
-                }
-            ]
+            //     }
+            // ]
         });
 
         if (data) {
