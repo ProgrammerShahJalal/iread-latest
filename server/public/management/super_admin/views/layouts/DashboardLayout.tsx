@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import TopHeader from './shared/TopHeader';
 import SideBar from './shared/menu/SideBar';
 
-export interface Props {}
+export interface Props { }
 
 const DashboardLayout: React.FC<Props> = (props: Props) => {
     return (

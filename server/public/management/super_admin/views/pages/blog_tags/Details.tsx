@@ -46,8 +46,8 @@ const Details: React.FC<Props> = (props: Props) => {
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'full_name',
-                                        'email',
+                                        'title',
+                                        'status',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>

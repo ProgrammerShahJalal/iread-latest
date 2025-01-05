@@ -77,18 +77,7 @@ const Filter: React.FC<Props> = (props: Props) => {
                                 handler={get_data}
                             ></DateEl>
                         </div>
-                        <div className="filter_item">
-                            <label htmlFor="end_date">Customer Data</label>
-                            <input
-                                type="text"
-                                onChange={(e) => set_filter({ key: 'custom_data', value: e.target.value })} />
-                        </div>
-                        <div className="filter_item">
-                            <label htmlFor="myfilter">My Filter Data</label>
-                            <input
-                                type="text"
-                                onChange={(e) => set_filter({ key: 'myfilter', value: e.target.value })} />
-                        </div>
+                        
 
                         <div className="filter_item">
                             <button

@@ -5,7 +5,7 @@ const setup: setup_type = {
     prefix,
     module_name: 'blog_category',
 
-    route_prefix: 'blog-category', // react route
+    route_prefix: 'blog-categories', // react route
 
     api_host: location.origin,
     api_prefix: 'blog-categories', // api route

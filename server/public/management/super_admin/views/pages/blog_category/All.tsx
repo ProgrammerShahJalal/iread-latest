@@ -33,7 +33,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,image',
+                'title,image,status',
             ),
         );
         dispatch(all({}));
@@ -74,6 +74,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`image`}
                                             sort={false}
                                         />
+                                        <TableHeading
+                                            label={`Status`}
+                                            col_name={`status`}
+                                            sort={false}
+                                        />
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -106,6 +111,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>
                                                         {i.image}
+
+                                                    </td>
+                                                    <td>
+                                                        {i.status}
 
                                                     </td>
                                                 </tr>
