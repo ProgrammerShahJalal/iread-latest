@@ -72,7 +72,7 @@ const All: React.FC<Props> = (props: Props) => {
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
-                                            sort={true}
+                                            sort={false}
                                         />
                                     </tr>
                                 </thead>

@@ -53,10 +53,9 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             
-            
 
             status: {
-                type: new DataTypes.ENUM('active', 'deactive', 'draft', 'published'),
+                type: new DataTypes.ENUM('active', 'deactive',),
 
                 defaultValue: 'active',
             },

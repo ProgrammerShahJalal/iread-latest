@@ -110,8 +110,19 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.image}
-
+                                                    
+                                                            <div
+                                                            className='mx-auto'
+                                                            style={{
+                                                                aspectRatio:"4/4",
+                                                                maxWidth: '100px'
+                                                            }}
+                                                            >
+                                                            <img
+                                                            className='w-100'
+                                    
+                                                            src={i.image} alt='category  image'/>
+                                                            </div>
                                                     </td>
                                                     <td>
                                                         {i.status}
