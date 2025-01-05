@@ -16,10 +16,14 @@ export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
+    const [data, setData] = useState<anyObject>({});
 
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
+        // console.log('data', data.getData())
+        form_data.append('full_description', data.getData());
+
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
@@ -29,7 +33,8 @@ const Create: React.FC<Props> = (props: Props) => {
 
     /* CKEDITOR RICH TEXT*/
     useEffect(() => {
-        CKEDITOR.replace('editor');
+        let editor = CKEDITOR.replace('full_description');
+        setData(editor);
     }, [])
 
     return (
@@ -54,8 +59,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                 <h5 className="mb-4">Blogs Informations</h5>
                                 <div className="row">
                                     <div className='col-8'>
-
-                                        <div id='editor'>
+                                        <label> Full Description</label>
+                                        <div id='full_description'>
 
                                         </div>
                                     </div>
@@ -77,7 +82,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             ))}
 
                                             <div className="form-group grid_full_width form-vertical">
-                                            <label>Publish Date</label>
+                                                <label>Publish Date</label>
                                                 <DateEl
                                                     value={''}
                                                     name={'publish_date'}
