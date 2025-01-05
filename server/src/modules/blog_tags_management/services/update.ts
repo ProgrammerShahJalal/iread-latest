@@ -63,6 +63,7 @@ async function update(
 
     let inputs: InferCreationAttributes<typeof user_model> = {
         title: body.title,
+        status: body.status,
        
     };
 

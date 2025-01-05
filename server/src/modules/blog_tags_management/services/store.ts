@@ -78,7 +78,6 @@ async function store(
     
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
-        
     };
 
     /** print request data into console */

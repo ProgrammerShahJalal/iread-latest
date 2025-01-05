@@ -105,7 +105,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.status === "active"? 'Active' : 'Inactive'}
+                                                        {i.status}
                                                     </td>
                                                 </tr>
                                             );

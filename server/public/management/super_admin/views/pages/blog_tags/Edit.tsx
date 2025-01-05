@@ -10,10 +10,8 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import InputImage from './components/management_data_page/InputImage';
-import DropDown from './components/dropdown/DropDown';
-import Select from './components/management_data_page/Select';
-import { anyObject } from '../../../common_types/object';
+import Select from 'react-select';
+
 export interface Props { }
 
 const Edit: React.FC<Props> = (props: Props) => {
@@ -28,6 +26,12 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
+
+
+    let statusOptions = [
+        { value: 'active', label: 'Active' },
+        { value: 'deactive', label: 'Deactive' },
+    ];
 
 
 
@@ -71,8 +75,8 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     </h5>
                                     <div className="form_auto_fit">
                                         {[
-                                            'full_name',
-                                            'email',
+                                            'title',
+
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
                                                 <Input
@@ -82,8 +86,49 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             </div>
                                         ))}
 
-                                        
                                     </div>
+
+                                    {/* DROPDOWN SELECT OPTIONS */}
+                                    <Select
+                                        name="status"
+                                        options={statusOptions}
+                                        value={statusOptions.find((option) => option.value === get_value('status'))}
+                                        onChange={(selectedOption: { value: string; label: string } | null) => {
+                                            const formData = new FormData();
+                                            if (selectedOption) {
+                                                formData.set('status', selectedOption.value);
+                                                dispatch(
+                                                    storeSlice.actions.set_item({
+                                                        ...state.item,
+                                                        status: selectedOption.value,
+                                                    })
+                                                );
+                                            }
+                                        }}
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                color: 'black', // Default text color for the input
+                                            }),
+                                            singleValue: (provided) => ({
+                                                ...provided,
+                                                color: 'black', // Text color for selected value
+                                            }),
+                                            menu: (provided) => ({
+                                                ...provided,
+                                                color: 'black', // Text color for dropdown options
+                                            }),
+                                            option: (provided, state) => ({
+                                                ...provided,
+                                                color: 'black', // Text color for each dropdown option
+                                                backgroundColor: state.isFocused ? '#f1f1f1' : 'white', // Highlight color for focused options
+                                            }),
+                                        }}
+                                    />
+
+
+
+
                                 </div>
 
                                 <div className="form-group form-vertical">
