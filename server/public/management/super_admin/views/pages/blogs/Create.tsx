@@ -26,6 +26,11 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
+    /* CKEDITOR RICH TEXT*/
+    useEffect(() => {
+        CKEDITOR.replace('editor');
+    }, [])
+
     return (
         <>
             <div className="page_content">
@@ -45,23 +50,84 @@ const Create: React.FC<Props> = (props: Props) => {
                                     name={`contact_messages_list`}
                                 /> */}
 
-                                <h5 className="mb-4">Category Informations</h5>
-                                <div className="form_auto_fit">
+                                <h5 className="mb-4">Blogs Informations</h5>
+                                <div className="row">
+                                    <div className='col-8'>
 
-                                    {[
-                                        'title',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                        <div id='editor'>
+
                                         </div>
-                                    ))}
-
-                                    <div className="form-group grid_full_width form-vertical">
-                                        <InputImage
-                                            label={'image'}
-                                            name={'image'}
-                                        />
                                     </div>
+
+                                    <div className='col-4'>
+
+                                        <div className="form_auto_fit">
+                                            {[
+                                                'slug',
+                                            ].map((i) => (
+                                                <div className="form-group form-vertical">
+                                                    <Input name={i} />
+                                                </div>
+                                            ))}
+
+                                            {[
+                                                'seo_title',
+                                            ].map((i) => (
+                                                <div className="form-group form-vertical">
+                                                    <Input name={i} />
+                                                </div>
+                                            ))}
+
+
+                                            {[
+                                                'seo_keyword',
+                                            ].map((i) => (
+                                                <div className="form-group form-vertical">
+                                                    <Input name={i} />
+                                                </div>
+                                            ))}
+
+
+                                            {[
+                                                'seo_description',
+                                            ].map((i) => (
+                                                <div className="form-group form-vertical">
+                                                    <Input name={i} />
+                                                </div>
+                                            ))}
+
+
+
+                                            <div className="form-group grid_full_width form-vertical">
+                                                <InputImage
+                                                    label={'Cover Image'}
+                                                    name={'cover_image'}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div
+                                    className='row'
+                                >
+                                    <div className='col-12'>
+                                        {[
+                                            'title',
+                                            'short_description',
+                                        ].map((i) => (
+                                            <div className="form-group form-vertical">
+                                                <Input name={i} />
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+
 
                                 </div>
                             </div>

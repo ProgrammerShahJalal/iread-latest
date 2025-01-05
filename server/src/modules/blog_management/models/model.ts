@@ -37,7 +37,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare cover_image: string;
 
     declare is_published: status;
-    declare publish_date?: Date;
+    declare publish_date?: string;
 
     declare slug: string;
     declare seo_title: string;

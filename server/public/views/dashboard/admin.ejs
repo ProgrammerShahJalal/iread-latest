@@ -9,8 +9,15 @@
     <meta name="keywords" content="">
     <meta name="author" content="pixelstrap">
     <link rel="developer-icon" href="https://md-shefat-masum.github.io/index/images/logo.png" type="image/x-icon">
-    <link rel="developer-shortcut icon" href="https://md-shefat-masum.github.io/index/images/logo.png" type="image/x-icon">
-    
+    <link rel="developer-shortcut icon" href="https://md-shefat-masum.github.io/index/images/logo.png"
+        type="image/x-icon">
+
+    <!-- ckeditor rich text -->
+    <!-- <script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script> -->
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+
     <link rel="icon" href="/ficon.png" type="image/x-icon">
     <link rel="shortcut icon" href="/ficon.png" type="image/x-icon">
     <title>Management - IREAD</title>
@@ -53,9 +60,14 @@
         <div id="app"></div>
         <div id="filter-root"></div>
     </div>
+    <style>
+        .cke_notifications_area {
+            display: none !important;
+        }
+    </style>
 
     <form action="/logout" enctype="multipart/form-data" method="POST" id="logout_form"></form>
-    
+
     <script src="https://unpkg.com/chartist@1.3.0/dist/index.umd.js"></script>
     <script src="https://unpkg.com/chartist-plugin-tooltips-updated@1.0.0/dist/chartist-plugin-tooltip.min.js"></script>
 

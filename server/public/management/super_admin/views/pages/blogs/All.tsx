@@ -17,6 +17,7 @@ import SelectItem from './components/all_data_page/SelectItem';
 import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
+import moment from 'moment/moment';
 
 export interface Props { }
 
@@ -33,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,,cover_image,is_published,status',
+                'title,cover_image,publish_date,status',
             ),
         );
         dispatch(all({}));
@@ -43,7 +44,11 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-    
+
+  let  formateTime = (date: string) => {
+    return moment(date).format('Do MMM YY');
+    }
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -75,8 +80,8 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={false}
                                         />
                                         <TableHeading
-                                            label={`Is Published`}
-                                            col_name={`is_published`}
+                                            label={`Publish Date`}
+                                            col_name={`publish_date`}
                                             sort={false}
                                         />
                                         <TableHeading
@@ -119,9 +124,9 @@ const All: React.FC<Props> = (props: Props) => {
 
                                                     </td>
                                                     <td>
-                                                        {i.is_published}
-
+                                                   { formateTime(i.publish_date)}
                                                     </td>
+
                                                     <td>
                                                         {i.status}
 
