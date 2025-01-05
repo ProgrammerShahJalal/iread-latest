@@ -9,6 +9,7 @@ import Select from './components/management_data_page/Select';
 import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
 import DropDown from './components/dropdown/DropDown';
+import DateEl from '../../components/DateEl';
 
 export interface Props { }
 
@@ -64,39 +65,25 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <div className="form_auto_fit">
                                             {[
                                                 'slug',
-                                            ].map((i) => (
-                                                <div className="form-group form-vertical">
-                                                    <Input name={i} />
-                                                </div>
-                                            ))}
-
-                                            {[
                                                 'seo_title',
-                                            ].map((i) => (
-                                                <div className="form-group form-vertical">
-                                                    <Input name={i} />
-                                                </div>
-                                            ))}
-
-
-                                            {[
                                                 'seo_keyword',
-                                            ].map((i) => (
-                                                <div className="form-group form-vertical">
-                                                    <Input name={i} />
-                                                </div>
-                                            ))}
-
-
-                                            {[
                                                 'seo_description',
+                                                'is_publish',
+
                                             ].map((i) => (
                                                 <div className="form-group form-vertical">
                                                     <Input name={i} />
                                                 </div>
                                             ))}
 
-
+                                            <div className="form-group grid_full_width form-vertical">
+                                            <label>Publish Date</label>
+                                                <DateEl
+                                                    value={''}
+                                                    name={'publish_date'}
+                                                    handler={() => { console.log('arguments') }}
+                                                ></DateEl>
+                                            </div>
 
                                             <div className="form-group grid_full_width form-vertical">
                                                 <InputImage
@@ -106,9 +93,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
                                         </div>
                                     </div>
-
-
-
 
                                 </div>
 
