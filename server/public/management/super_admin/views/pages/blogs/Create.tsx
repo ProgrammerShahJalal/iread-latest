@@ -169,7 +169,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
 
                                             {/* RADIO OPTIONS */}
-                                            <label>Is Published?</label>
+                                            <label>Is Published</label>
                                             <div style={{
                                                 paddingBottom: 10
                                             }}>
