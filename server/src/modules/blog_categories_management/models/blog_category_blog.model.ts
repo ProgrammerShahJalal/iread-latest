@@ -41,7 +41,10 @@ class DataModel extends Model<Infer, InferCreation> {
     declare updated_at?: CreationOptional<Date>;
 }
 
+
+
 function init(sequelize: Sequelize) {
+    sequelize.sync({ alter: true });
     DataModel.init(
         {
             id: {

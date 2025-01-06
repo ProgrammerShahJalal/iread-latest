@@ -35,7 +35,7 @@ const Create: React.FC<Props> = (props: Props) => {
     };
 
     const checkSlugUniqueness = async (slug: string): Promise<boolean> => {
-        const response = await fetch(`/api/check-slug?slug=${slug}`);
+        const response = await fetch(`/api/v1/blogs/slug?slug=${slug}`);
         const data = await response.json();
         return data.isUnique;
     };
@@ -151,7 +151,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <label>Title</label>
                                                 <input
                                                     onChange={handleTitleChange}
-                                                    type="text" className="form-control" name='title' id="title" aria-describedby="titleHelp" placeholder="Enter Title" />
+                                                    type="text" className="form-control" name='title' id="title" aria-describedby="titleHelp" placeholder="Enter Blog Title" />
 
                                             </div>
                                             <div className="form-group form-vertical">

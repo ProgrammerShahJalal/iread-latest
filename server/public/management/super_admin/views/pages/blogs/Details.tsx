@@ -9,7 +9,8 @@ import { details } from './config/store/async_actions/details';
 import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
-export interface Props {}
+import moment from 'moment/moment';
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -34,6 +35,10 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+    let formateTime = (date: string) => {
+        return moment(date).format('Do MMM YY');
+    }
+
     return (
         <>
             <div className="page_content">
@@ -42,12 +47,11 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'title',
-                                        'image',
+                                        'title'
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
@@ -55,6 +59,44 @@ const Details: React.FC<Props> = (props: Props) => {
                                             <td>{get_value(i)}</td>
                                         </tr>
                                     ))}
+                                    {[
+                                        'publish_date'
+                                    ].map((i) => (
+                                        <tr>
+                                            <td>{i.replaceAll('_', ' ')}</td>
+                                            <td>:</td>
+                                            <td>{formateTime(get_value(i))}</td>
+                                        </tr>
+                                    ))}
+
+                                    {[
+                                        'cover_image',
+                                    ].map((i) => (
+                                        <tr>
+                                            <td>{i.replaceAll('_', ' ')}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <div
+
+                                                    style={{
+                                                        maxWidth: '30px',
+                                                        aspectRatio: '4/4',
+                                                    }}
+                                                >
+                                                    <img
+                                                        className='w-100'
+                                                        src={get_value(i)}
+                                                        alt={get_value(i)}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+
+                                  
+
+
+
                                 </tbody>
                             </table>
                         </div>

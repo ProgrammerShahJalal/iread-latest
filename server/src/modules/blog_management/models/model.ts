@@ -61,7 +61,6 @@ function init(sequelize: Sequelize) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-
             title: {
                 type: DataTypes.STRING(100),
                 allowNull: true,

@@ -142,7 +142,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     
                                                     <td>
-                                                   { i.is_published == "publish" ? "Published" : "Draft" }
+                                                   { i.is_published === "publish" ? "Published" : "Draft" }
                                                     </td>
 
                                                     <td>
