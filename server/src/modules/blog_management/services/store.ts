@@ -6,7 +6,7 @@ import {
     responseObject,
     Request,
 } from '../../../common_types/object';
-import { InferCreationAttributes } from 'sequelize';
+import { InferCreationAttributes, json } from 'sequelize';
 import moment from 'moment';
 
 import response from '../../../helpers/response';
@@ -83,6 +83,8 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
+    let blogCategoryBlogModel = models.BlogCategoryBlogModel;
+
     let image_path = 'avatar.png';
     if (body['cover_image']?.ext) {
         image_path =
@@ -91,6 +93,8 @@ async function store(
             body['cover_image'].name;
         await (fastify_instance as any).upload(body['cover_image'], image_path);
     }
+
+    let categories = JSON.parse(body['blog_categories']) || [];
 
 
     let inputs: InferCreationAttributes<typeof data> = {
@@ -116,6 +120,16 @@ async function store(
     /** store data into database */
     try {
         (await data.update(inputs)).save();
+
+        if (data) {
+            categories?.forEach((categoryId: number) => {
+                blogCategoryBlogModel.create({
+                    blog_id: data.id || 1,
+                    blog_category_id: categoryId || 1,
+
+                })
+            });
+        }
 
         return response(201, 'data created', {
             data,

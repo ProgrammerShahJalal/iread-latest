@@ -81,7 +81,10 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                 <h5 className="mb-4">Blogs Informations</h5>
                                 <div className="row">
+
                                     <div className='col-8'>
+
+
                                         <label> Full Description</label>
                                         <div id='full_description'>
 
@@ -92,8 +95,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         </div>
 
                                         {[
-                                            'title',
-                                            'slug',
+
+
                                             'seo_title',
                                             'seo_keyword',
                                             'seo_description',
@@ -109,6 +112,12 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                         <div className="form_auto_fit">
 
+                                            <div className="form-group form-vertical">
+                                                <Input name="title" />
+                                            </div>
+                                            <div className="form-group form-vertical">
+                                                <Input name="slug" />
+                                            </div>
 
                                             <div className="form-group form-vertical">
                                                 <label>Blog Categories</label>
@@ -144,7 +153,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     />
                                                     Publish
                                                 </label>
-                                                <br/>
+                                                <br />
                                                 <label>
                                                     <input
                                                         type="radio"
@@ -187,7 +196,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                     </div>
 
                                 </div>
-
                                 <div
                                     className='row'
                                 >

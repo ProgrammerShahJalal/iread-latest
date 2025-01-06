@@ -5,6 +5,7 @@ import storeSlice from '../../config/store';
 import { initialState } from '../../config/store/inital_state';
 import { useSelector } from 'react-redux';
 import setup from '../../config/setup';
+import moment from 'moment/moment';
 export interface Props { }
 
 const modalRoot = document.getElementById('filter-root');
@@ -19,6 +20,12 @@ const QuickView: React.FC<Props> = (props: Props) => {
     function close_canvas(action: boolean = true) {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
+
+    let  formateTime = (date: string) => {
+        return moment(date).format('Do MMM YY');
+        }
+
+        // console.log('pub', state?.item.publish_date);
 
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
@@ -45,10 +52,37 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Image</th>
+                                    <th>Cover Image</th>
                                     <th>:</th>
-                                    <th>{state.item.image}</th>
+                                    <th>
+                                        <div
+                                         
+                                        style={{
+                                            aspectRatio: '4/4',
+                                            maxWidth: '30px',
+                                        }}
+                                        >
+                                        <img
+                                         className='w-100'
+                                        src={state.item.cover_image}
+                                        alt={state.item.title}
+                                        />
+                                        </div>
+                                    </th>
                                 </tr>
+
+                                {/* <tr>
+                                    <th>Is Published</th>
+                                    <th>:</th>
+                                    <th>{(state.item.is_published) ? 'Yes' : 'No'}</th>
+                                </tr> */}
+
+                                <tr>
+                                    <th>Published Date</th>
+                                    <th>:</th>
+                                    <th> { formateTime(state.item.publish_date)}</th>
+                                </tr>
+
                                 <tr>
                                     <th>Status</th>
                                     <th>:</th>

@@ -80,6 +80,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={false}
                                         />
                                         <TableHeading
+                                            label={`Is Published?`}
+                                            col_name={`is_published`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
                                             label={`Publish Date`}
                                             col_name={`publish_date`}
                                             sort={false}
@@ -120,9 +125,26 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.cover_image}
+                                                       <div
+                                                       className="mx-auto"
+                                                       style={{
+                                                        aspectRatio: "4/4",
+                                                        maxWidth: "30px",
+                                                       }}
+                                                       >
+                                                       <img
+                                                       className='w-100'
+                                                        src={i.cover_image}
+                                                        alt="cover_image"
+                                                        />
+                                                       </div>
 
                                                     </td>
+                                                    
+                                                    <td>
+                                                   { i.is_published == "publish" ? "Published" : "Draft" }
+                                                    </td>
+
                                                     <td>
                                                    { formateTime(i.publish_date)}
                                                     </td>

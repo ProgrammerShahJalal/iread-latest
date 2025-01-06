@@ -70,7 +70,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'status'];
+        select_fields = ['id', 'title', 'status', 'is_published'];
     }
 
     let query: FindAndCountOptions = {
@@ -83,20 +83,15 @@ async function all(
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
-        query.where = {
-            ...query.where,
-            role: role,
-        }
-    }
+ 
 
     if (search_key) {
         query.where = {
             ...query.where,
             [Op.or]: [
-                { full_name: { [Op.like]: `%${search_key}%` } },
-                { email: { [Op.like]: `%${search_key}%` } },
-                { status: { [Op.like]: `%${search_key}%` } },
+                { title: { [Op.like]: `%${search_key}%` } },
+                // { email: { [Op.like]: `%${search_key}%` } },
+                // { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
             ],
         };
