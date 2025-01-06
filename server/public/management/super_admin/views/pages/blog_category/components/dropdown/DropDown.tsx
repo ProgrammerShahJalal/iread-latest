@@ -98,8 +98,7 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                                                     />
                                                 </div>
                                                 <div className="label">
-                                                    {i.uid} -
-                                                    {i.name}
+                                                    {i.title}
                                                 </div>
                                             </label>
                                         </li>

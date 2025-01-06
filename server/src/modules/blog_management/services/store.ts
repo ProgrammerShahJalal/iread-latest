@@ -21,6 +21,13 @@ async function validate(req: Request) {
     let field = '';
     let fields = [
         'title',
+        'short_description',
+        'full_description',
+        'cover_image',
+        'slug',
+        'seo_title',
+        'seo_description',
+        'seo_keyword',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -77,12 +84,12 @@ async function store(
     let data = new models[modelName]();
 
     let image_path = 'avatar.png';
-    if (body['image']?.ext) {
+    if (body['cover_image']?.ext) {
         image_path =
             'uploads/blogs/' +
             moment().format('YYYYMMDDHHmmss') +
-            body['image'].name;
-        await (fastify_instance as any).upload(body['image'], image_path);
+            body['cover_image'].name;
+        await (fastify_instance as any).upload(body['cover_image'], image_path);
     }
 
 

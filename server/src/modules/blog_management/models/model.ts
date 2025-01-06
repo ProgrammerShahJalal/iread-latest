@@ -26,6 +26,7 @@ export const modelName = 'BlogModel';
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'active' | 'deactive';
+type publish = 'publish' | 'draft';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
@@ -36,7 +37,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare full_description: string;
     declare cover_image: string;
 
-    declare is_published: status;
+    declare is_published: publish;
     declare publish_date?: string;
 
     declare slug: string;
@@ -83,9 +84,8 @@ function init(sequelize: Sequelize) {
             },
 
             is_published: {
-                type: DataTypes.BOOLEAN(),
-                allowNull: true,
-                defaultValue: false,
+                type: DataTypes.ENUM('draft','publish',),
+                defaultValue: 'publish',
             },
 
             publish_date: {
