@@ -27,10 +27,35 @@ const Create: React.FC<Props> = (props: Props) => {
 
     const [data, setData] = useState<anyObject>({});
 
+    const generateSlug = (title: string): string => {
+        return title
+            .toLowerCase()
+            .trim()
+            .replace(/[\s\W-]+/g, '-'); // Replace spaces and special characters with hyphens
+    };
+
+    const checkSlugUniqueness = async (slug: string): Promise<boolean> => {
+        const response = await fetch(`/api/check-slug?slug=${slug}`);
+        const data = await response.json();
+        return data.isUnique;
+    };
+
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
+
+
+        const title = form_data.get('title') as string;
+        let slug = generateSlug(title);
+
+        // Check slug uniqueness
+        const isUnique = await checkSlugUniqueness(slug);
+        if (!isUnique) {
+            slug = `${slug}-${Date.now()}`; // Append timestamp for uniqueness
+        }
+        form_data.set('slug', slug);
+
         form_data.append('full_description', data.getData());
 
         const response = await dispatch(store(form_data) as any);
@@ -39,6 +64,14 @@ const Create: React.FC<Props> = (props: Props) => {
             // init_nominee();
         }
     }
+
+    const [slug, setSlug] = useState('');
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const title = e.target.value;
+        setSlug(generateSlug(title));
+    };
+
 
     const dispatch = useAppDispatch();
     const params = useParams();
@@ -65,6 +98,8 @@ const Create: React.FC<Props> = (props: Props) => {
         let editor = CKEDITOR.replace('full_description');
         setData(editor);
     }, [])
+
+
 
     return (
         <>
@@ -113,10 +148,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <div className="form_auto_fit">
 
                                             <div className="form-group form-vertical">
-                                                <Input name="title" />
+                                                <label>Title</label>
+                                                <input
+                                                    onChange={handleTitleChange}
+                                                    type="text" className="form-control" name='title' id="title" aria-describedby="titleHelp" placeholder="Enter Title" />
+
                                             </div>
                                             <div className="form-group form-vertical">
-                                                <Input name="slug" />
+                                                <Input name="slug" value={slug} />
                                             </div>
 
                                             <div className="form-group form-vertical">
@@ -196,24 +235,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                     </div>
 
                                 </div>
-                                <div
-                                    className='row'
-                                >
-                                    <div className='col-12'>
-                                        {/* {[
-                                            'title',
-                                            'short_description',
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                <Input name={i} />
-                                            </div>
-                                        ))} */}
 
-                                    </div>
-
-
-
-                                </div>
                             </div>
 
                             <div className="form-group form-vertical">
