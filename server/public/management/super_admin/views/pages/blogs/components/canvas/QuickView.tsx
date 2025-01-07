@@ -71,11 +71,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     </th>
                                 </tr>
 
-                                {/* <tr>
+                                <tr>
                                     <th>Is Published</th>
                                     <th>:</th>
-                                    <th>{(state.item.is_published) ? 'Yes' : 'No'}</th>
-                                </tr> */}
+                                    <th>{(state.item.is_published === 'draft') ? 'Draft' : 'Published'}</th>
+                                </tr>
 
                                 <tr>
                                     <th>Published Date</th>

@@ -95,7 +95,16 @@ const Details: React.FC<Props> = (props: Props) => {
 
                                   
 
-
+{[
+                                        'is_published',
+                                        'status',
+                                    ].map((i) => (
+                                        <tr>
+                                            <td>{i.replaceAll('_', ' ')}</td>
+                                            <td>:</td>
+                                            <td>{get_value(i)}</td>
+                                        </tr>
+                                    ))}
 
                                 </tbody>
                             </table>
