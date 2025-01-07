@@ -120,7 +120,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                     <div className='col-8'>
 
 
-                                        <label> Full Description</label>
+                                        <label className='mb-4'> Full Description</label>
                                         <div id='full_description'>
 
                                         </div>
