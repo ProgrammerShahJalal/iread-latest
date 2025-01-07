@@ -104,7 +104,7 @@ async function store(
         full_description: body.full_description,
         cover_image: image_path,
         is_published: body.is_published,
-        publish_date: moment().toISOString(),
+        publish_date: body.publish_date,
         slug: body.slug,
         seo_title: body.seo_title,
         seo_keyword: body.seo_keyword,

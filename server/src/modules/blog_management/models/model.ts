@@ -83,7 +83,7 @@ function init(sequelize: Sequelize) {
             },
 
             is_published: {
-                type: DataTypes.ENUM('draft','publish',),
+                type: DataTypes.ENUM('publish','draft'),
                 defaultValue: 'publish',
             },
 
