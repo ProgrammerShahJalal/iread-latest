@@ -93,9 +93,9 @@ const Details: React.FC<Props> = (props: Props) => {
                                         </tr>
                                     ))}
 
-                                  
 
-{[
+
+                                    {[
                                         'is_published',
                                         'status',
                                     ].map((i) => (

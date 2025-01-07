@@ -94,7 +94,7 @@ async function store(
         await (fastify_instance as any).upload(body['cover_image'], image_path);
     }
 
-    let categories = JSON.parse(body['blog_categories']) || [];
+    let categories: number[] = JSON.parse(body['blog_categories']) || [];
 
 
     let inputs: InferCreationAttributes<typeof data> = {
@@ -103,41 +103,39 @@ async function store(
         short_description: body.short_description,
         full_description: body.full_description,
         cover_image: image_path,
-
         is_published: body.is_published,
         publish_date: moment().toISOString(),
-
         slug: body.slug,
         seo_title: body.seo_title,
         seo_keyword: body.seo_keyword,
         seo_description: body.seo_description,
     };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
-    /** store data into database */
     try {
-        (await data.update(inputs)).save();
 
-        if (data) {
-            categories?.forEach((categoryId: number) => {
-                blogCategoryBlogModel.create({
-                    blog_id: data.id || 1,
-                    blog_category_id: categoryId || 1,
+        await data.update(inputs);
+        await data.save();
 
-                })
-            });
+
+        if (!data.id) {
+            throw new Error('Failed to save blog data.');
         }
 
-        return response(201, 'data created', {
-            data,
-        });
+
+        await Promise.all(
+            categories.map(async (categoryId) => {
+                await blogCategoryBlogModel.create({
+                    blog_id: data.id || 1,
+                    blog_category_id: categoryId,
+                });
+            })
+        );
+
+
+        return response(201, 'data created', { data });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
         throw new custom_error('server error', 500, error.message, uid);
-        // throw error;
     }
 }
 

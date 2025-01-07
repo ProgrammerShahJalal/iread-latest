@@ -44,7 +44,6 @@ class DataModel extends Model<Infer, InferCreation> {
 
 
 function init(sequelize: Sequelize) {
-    sequelize.sync({ alter: true });
     DataModel.init(
         {
             id: {
