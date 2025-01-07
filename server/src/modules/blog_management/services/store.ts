@@ -99,7 +99,7 @@ async function store(
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
-        author_id: body.author_id,
+        author_id: body.user_id || 1,
         short_description: body.short_description,
         full_description: body.full_description,
         cover_image: image_path,

@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,cover_image,publish_date,status',
+                'title,cover_image,is_published,publish_date,status',
             ),
         );
         dispatch(all({}));
@@ -142,7 +142,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     
                                                     <td>
-                                                   { i.is_published === "publish" ? "Published" : "Draft" }
+                                                   { i?.is_published !== "draft" ? "Published" : "Draft" }
                                                     </td>
 
                                                     <td>
