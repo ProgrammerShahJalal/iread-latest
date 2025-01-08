@@ -13,6 +13,7 @@ import * as BlogViewModel from "../modules/blog_view_management/models/model";
 import * as AuthorModel from "../modules/author_management/models/model";
 
 import * as EventModel from "../modules/event_management/models/model";
+import * as EventCategoriesModel from "../modules/event_categories_management/models/model";
 
 export type model_types = {
     ContactModel: typeof ContactModel.DataModel;
@@ -31,4 +32,5 @@ export type model_types = {
     AuthorModel: typeof AuthorModel.DataModel;
 
     EventModel: typeof EventModel.DataModel;
+    EventCategoriesModel: typeof EventCategoriesModel.DataModel;
 }
