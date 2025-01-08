@@ -90,7 +90,7 @@ async function all(
             ...query.where,
             [Op.or]: [
                 { title: { [Op.like]: `%${search_key}%` } },
-                // { email: { [Op.like]: `%${search_key}%` } },
+                { place: { [Op.place]: `%${search_key}%` } },
                 // { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
             ],

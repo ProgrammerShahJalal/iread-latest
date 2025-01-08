@@ -19,7 +19,7 @@ const Filter: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
 
     function get_data(data: { [key: string]: any }): void {
-        // console.log(data);
+        console.log(data);
         set_filter({
             key: data.key,
             value: data.value,

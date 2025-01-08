@@ -12,6 +12,8 @@ import * as BlogViewModel from "../modules/blog_view_management/models/model";
 
 import * as AuthorModel from "../modules/author_management/models/model";
 
+import * as EventModel from "../modules/event_management/models/model";
+
 export type model_types = {
     ContactModel: typeof ContactModel.DataModel;
     ErrorTraceModel: typeof ErrorTraceModel.DataModel;
@@ -27,4 +29,6 @@ export type model_types = {
     BlogViewModel: typeof BlogViewModel.DataModel;
    
     AuthorModel: typeof AuthorModel.DataModel;
+
+    EventModel: typeof EventModel.DataModel;
 }

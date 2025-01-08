@@ -37,7 +37,6 @@ const Edit: React.FC = () => {
     useEffect(() => {
         const fullDescriptionElement = document.querySelector('[data-name="fullDescription"]');
         if (fullDescriptionElement && !Object.keys(data).length) {
-            console.log('=======cheking=======');
             const editor = CKEDITOR.replace('full_description');
             // editorRef.current = editor; // Save CKEditor instance in ref
 
