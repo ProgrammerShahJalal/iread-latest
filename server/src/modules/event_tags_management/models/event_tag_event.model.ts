@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'blog_tags';
-export const modelName = 'BlogTagsModel';
+export const tableName = 'event_tag_event';
+export const modelName = 'EventTagEventModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -30,7 +30,9 @@ type status = 'active' | 'deactive';
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare title: string;
+    declare event_id: number;
+    declare event_tag_id: number;
+    
 
     declare status?: status;
     declare creator?: number;
@@ -38,6 +40,8 @@ class DataModel extends Model<Infer, InferCreation> {
     declare created_at?: CreationOptional<Date>;
     declare updated_at?: CreationOptional<Date>;
 }
+
+
 
 function init(sequelize: Sequelize) {
     DataModel.init(
@@ -48,14 +52,18 @@ function init(sequelize: Sequelize) {
                 primaryKey: true,
             },
 
-            title: {
-                type: DataTypes.STRING(100),
+            event_id: {
+                type: DataTypes.BIGINT().UNSIGNED,
                 allowNull: true,
             },
             
+            event_tag_id: {
+                type: DataTypes.BIGINT().UNSIGNED,
+                allowNull: true,
+            },
 
             status: {
-                type: new DataTypes.ENUM('active', 'deactive',),
+                type: new DataTypes.ENUM('active', 'deactive'),
 
                 defaultValue: 'active',
             },

@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'blog_tags';
-export const modelName = 'BlogTagsModel';
+export const tableName = 'event_tags';
+export const modelName = 'EventTagsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
