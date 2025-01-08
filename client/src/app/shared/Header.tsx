@@ -270,10 +270,10 @@ function Header() {
                                     <a href="#">AI Models</a>
                                 </li>
                                 <li>
-                                    <a href="#">Profile</a>
+                                    <a href="/profile">Profile</a>
                                 </li>
                                 <li>
-                                    <a href="#">Contact</a>
+                                    <a href="/contact">Contact</a>
                                 </li>
                             </ul>
                             <ul className="pull-right flip hidden-sm hidden-xs d-flex">
