@@ -272,6 +272,9 @@ function Header() {
                                 <li>
                                     <a href="#">Profile</a>
                                 </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
                             </ul>
                             <ul className="pull-right flip hidden-sm hidden-xs d-flex">
                                 <li>
