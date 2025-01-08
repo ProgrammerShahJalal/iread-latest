@@ -31,133 +31,7 @@ function Header() {
                             </div>
                         </div>
                         <div className="col-md-8">
-                            <div className="widget m-0 pull-right sm-pull-none sm-text-center">
-                                <ul className="list-inline pull-right">
-                                    <li className="mb-0 pb-0">
-                                        <div className="top-dropdown-outer pt-5 pb-10">
-                                            <a className="top-cart-link has-dropdown text-white text-hover-theme-colored">
-                                                <i className="fa fa-shopping-cart font-13" /> (12)
-                                            </a>
-                                            <ul className="dropdown">
-                                                <li>
-                                                    <div className="dropdown-cart">
-                                                        <table className="table cart-table-list table-responsive">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="#">
-                                                                            <Image
-                                                                                src="/frontend/images/products/sm1.jpg"
-                                                                                width={100}
-                                                                                height={100}
-                                                                                alt="product"
-                                                                            />
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="#"> Product Title</a>
-                                                                    </td>
-                                                                    <td>X3</td>
-                                                                    <td>$ 100.00</td>
-                                                                    <td>
-                                                                        <a className="close" href="#">
-                                                                            <i className="fa fa-close font-13" />
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="#">
-                                                                            <Image
-                                                                                src="/frontend/images/products/sm2.jpg"
-                                                                                width={100}
-                                                                                height={100}
-                                                                                alt="product"
-                                                                            />
-                                                                        </a>
-                                                                    </td>
-                                                                    <td>
-                                                                        <a href="#"> Product Title</a>
-                                                                    </td>
-                                                                    <td>X2</td>
-                                                                    <td>$ 70.00</td>
-                                                                    <td>
-                                                                        <a className="close" href="#">
-                                                                            <i className="fa fa-close font-13" />
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <div className="total-cart text-right">
-                                                            <table className="table table-responsive">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>Cart Subtotal</td>
-                                                                        <td>$170.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Shipping and Handling</td>
-                                                                        <td>$20.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Order Total</td>
-                                                                        <td>$190.00</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div className="cart-btn text-right">
-                                                            <a
-                                                                className="btn btn-theme-colored btn-xs"
-                                                                href="shop-cart.html"
-                                                            >
-                                                                {" "}
-                                                                View cart
-                                                            </a>
-                                                            <a
-                                                                className="btn btn-dark btn-xs"
-                                                                href="shop-checkout.html"
-                                                            >
-                                                                Checkout
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li className="mb-0 pb-0">
-                                        <div className="top-dropdown-outer pt-5 pb-10">
-                                            <a className="top-search-box has-dropdown text-white text-hover-theme-colored">
-                                                <i className="fa fa-search font-13" /> &nbsp;
-                                            </a>
-                                            <ul className="dropdown">
-                                                <li>
-                                                    <div className="search-form-wrapper">
-                                                        <form method="get" className="mt-10">
-                                                            <input
-                                                                type="text"
-                                                                defaultValue="Enter your search"
-                                                                id="searchinput"
-                                                                name="s"
-                                                                className=""
-                                                            />
-                                                            <label>
-                                                                <input
-                                                                    type="submit"
-                                                                    name="submit"
-                                                                    defaultValue=""
-                                                                />
-                                                            </label>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+
                             <div className="widget no-border m-0 mr-15 pull-right flip sm-pull-none sm-text-center">
                                 <ul className="styled-icons icon-circled icon-sm pull-right flip sm-pull-none sm-text-center mt-sm-15">
                                     <li>
@@ -282,7 +156,7 @@ function Header() {
                                         className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
                                         data-toggle="modal"
                                         data-target="#BSParentModal"
-                                        href="#"
+                                        href="/donate"
                                     >
                                         Donate Us
                                     </a>
