@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import UpcomingCountdownTimer from '@/CoundownTimer/UpcomingCoundownTimer'
 
 function Header() {
     return (
@@ -101,9 +102,9 @@ function Header() {
                                     </li>
                                     <li>
                                         <p className="font-12 text-gray text-uppercase">
-                                            We are open!
+                                            Upcoming Event!
                                         </p>
-                                        <h5 className="font-13 text-black m-0"> Mon-Fri 8:00-16:00</h5>
+                                        <UpcomingCountdownTimer offerTill='2025-01-25T23:59:59'/>
                                     </li>
                                 </ul>
                             </div>

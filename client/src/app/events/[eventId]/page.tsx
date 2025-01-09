@@ -1,3 +1,4 @@
+import CountdownTimer from '@/CoundownTimer/CoundownTimer'
 import React from 'react'
 
 const EventDetailsPage = () => {
@@ -32,7 +33,9 @@ const EventDetailsPage = () => {
       <div className="row text-center">
         <div className="col-md-12">
           <h2 id="basic-coupon-clock" className="text-white font-28">
-            04 days 12:03:53
+
+          {/* date and time in ISO 8601 format (e.g., "YYYY-MM-DDTHH:mm:ss"). This allows the component to calculate the time remaining until the specified date. */}
+          <CountdownTimer offerTill="2025-02-15T23:59:59"/>
           </h2>
           {/* Final Countdown Timer Script */}
         </div>
