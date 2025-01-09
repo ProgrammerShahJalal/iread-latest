@@ -1,14 +1,15 @@
-import React from 'react'
+import React from "react";
 
 function page() {
   return (
     <section className="">
       <div className="container">
         <div className="section-content">
-          <div className='row'>
-
+          <div className="row">
             <div className="col-md-7">
-              <h4 className="mt-0 mb-30 line-bottom">Be a Hero: Make a Difference with Your Donation Today!</h4>
+              <h4 className="mt-0 mb-30 line-bottom">
+                Be a Hero: Make a Difference with Your Donation Today!
+              </h4>
               {/* Contact Form */}
               <form
                 id="contact_form"
@@ -108,12 +109,11 @@ function page() {
               </form>
               {/* Contact Form Validation*/}
             </div>
-
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 export default page;
