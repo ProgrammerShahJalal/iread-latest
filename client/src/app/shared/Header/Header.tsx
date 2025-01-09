@@ -72,7 +72,7 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <a
                                     className="menuzord-brand pull-left flip xs-pull-center mb-15"
-                                    href="#/"
+                                    href="/"
                                 >
                                     IREAD
                                 </a>
@@ -85,9 +85,9 @@ function Header() {
                                         <i className="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
                                     <li>
-                                        <a href="#" className="font-12 text-gray text-uppercase">
+                                        <p className="font-12 text-gray text-uppercase">
                                             Call us today!
-                                        </a>
+                                        </p>
                                         <h5 className="font-14 m-0"> +(012) 345 6789</h5>
                                     </li>
                                 </ul>
@@ -100,9 +100,9 @@ function Header() {
                                         <i className="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
                                     <li>
-                                        <a href="#" className="font-12 text-gray text-uppercase">
+                                        <p className="font-12 text-gray text-uppercase">
                                             We are open!
-                                        </a>
+                                        </p>
                                         <h5 className="font-13 text-black m-0"> Mon-Fri 8:00-16:00</h5>
                                     </li>
                                 </ul>
@@ -120,28 +120,28 @@ function Header() {
                         >
                             <ul className="menuzord-menu">
                                 <li>
-                                    <a href="#">Home</a>
+                                    <a href="/">Home</a>
                                 </li>
                                 <li>
-                                    <a href="#">About Us</a>
+                                    <a href="/about">About Us</a>
                                 </li>
                                 <li>
-                                    <a href="#">Events</a>
+                                    <a href="/events">Events</a>
                                 </li>
                                 <li>
-                                    <a href="#">Courses</a>
+                                    <a href="/courses">Courses</a>
                                 </li>
                                 <li>
-                                    <a href="#">Forum</a>
+                                    <a href="/forum">Forum</a>
                                 </li>
                                 <li>
-                                    <a href="#">Blog</a>
+                                    <a href="/blog">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="#">Trainers</a>
+                                    <a href="/trainers">Trainers</a>
                                 </li>
                                 <li>
-                                    <a href="#">AI Models</a>
+                                    <a href="/aiModels">AI Models</a>
                                 </li>
                                 <li>
                                     <a href="/profile">Profile</a>
