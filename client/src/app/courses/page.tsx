@@ -65,7 +65,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/1"
                   >
                     view details
                   </a>
@@ -95,7 +95,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/2"
                   >
                     view details
                   </a>
@@ -125,7 +125,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/3"
                   >
                     view details
                   </a>
@@ -155,7 +155,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/4"
                   >
                     view details
                   </a>
@@ -185,7 +185,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/5"
                   >
                     view details
                   </a>
@@ -217,7 +217,7 @@ const CoursePage = () => {
                   </p>
                   <a
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                    href="page-courses-accounting-technologies.html"
+                    href="/courses/6"
                   >
                     view details
                   </a>
