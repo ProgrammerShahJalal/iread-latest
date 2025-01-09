@@ -1,12 +1,21 @@
-import React from 'react'
-import Image from 'next/image'
+"use client"
+import React, { useState } from "react";
+import ModalVideo from "react-modal-video";
+import "react-modal-video/css/modal-video.css";
+import Image from "next/image";
 
-type Props = {}
+type Props = {};
 
-function About({ }: Props) {
+function AboutPage({ }: Props) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
     return (
         <>
-            <section className="">
+            <section>
                 <div className="container">
                     <div className="section-content">
                         <div className="row">
@@ -35,30 +44,33 @@ function About({ }: Props) {
                                     Know More →
                                 </a>
                             </div>
+
                             <div className="col-md-6">
-                                <div className="video-popup">
-                                    <a
-                                        href="#"
-                                        data-lightbox-gallery="youtube-video"
-                                        title="Video"
-                                    >
-                                        <Image
-                                            src="/frontend/images/about/5.jpg"
-                                            width={300}
-                                            height={300}
-                                            alt="about us"
-                                            className="img-responsive img-fullwidth"
-                                        />
-                                    </a>
+                                <div className="video-container">
+                                    <Image
+                                        src="/frontend/images/about/5.jpg"
+                                        width={300}
+                                        height={300}
+                                        alt="About us"
+                                        className="img-responsive img-fullwidth cursor-pointer"
+                                        onClick={openModal}
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
+          
+            {/* Modal Video */}
+            <ModalVideo
+                channel="youtube"
+                isOpen={isOpen}
+                videoId="pW1uVUg5wXM"
+                onClose={() => setIsOpen(false)}
+            />
         </>
-    )
+    );
 }
 
-export default About
+export default AboutPage;
