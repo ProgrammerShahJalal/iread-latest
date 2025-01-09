@@ -1,6 +1,6 @@
 import React from "react";
 
-function page() {
+function DonationPage() {
   return (
     <section className="">
       <div className="container">
@@ -10,10 +10,11 @@ function page() {
               <h4 className="mt-0 mb-30 line-bottom">
                 Be a Hero: Make a Difference with Your Donation Today!
               </h4>
-              {/* Contact Form */}
+              
+              {/* Donation Form */}
               <form
-                id="contact_form"
-                name="contact_form"
+                id="donation_form"
+                name="donation_form"
                 className=""
                 method="post"
               >
@@ -47,40 +48,42 @@ function page() {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-sm-6">
+               <div className="row">
+               <div className="col-sm-6">
                     <div className="form-group">
-                      <label htmlFor="form_name">
-                        Subject <small>*</small>
-                      </label>
+                      <label htmlFor="form_phone">Phone <small>*</small></label>
                       <input
-                        name="form_subject"
+                        name="form_phone"
                         className="form-control required"
                         type="text"
-                        placeholder="Enter Subject"
+                        placeholder="Enter Phone"
                         aria-required="true"
                       />
                     </div>
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <label htmlFor="form_phone">Phone</label>
+                      <label htmlFor="form_name">
+                        Occupation <small>*</small>
+                      </label>
                       <input
-                        name="form_phone"
-                        className="form-control"
+                        name="form_occupation"
+                        className="form-control required"
                         type="text"
-                        placeholder="Enter Phone"
+                        placeholder="Enter Occupation"
+                        aria-required="true"
                       />
                     </div>
                   </div>
-                </div>
+               </div>
+               
                 <div className="form-group">
-                  <label htmlFor="form_name">Message</label>
+                  <label htmlFor="form_name">Donation Ammount <small>*</small></label>
                   <textarea
-                    name="form_message"
+                    name="form_ammount"
                     className="form-control required"
                     rows={5}
-                    placeholder="Enter Message"
+                    placeholder="Enter Donation Ammount"
                     aria-required="true"
                     defaultValue={""}
                   />
@@ -97,7 +100,7 @@ function page() {
                     className="btn btn-flat btn-theme-colored text-uppercase mt-10 mb-sm-30 border-left-theme-color-2-4px"
                     data-loading-text="Please wait..."
                   >
-                    Send your message
+                    Next
                   </button>
                   <button
                     type="reset"
@@ -107,7 +110,7 @@ function page() {
                   </button>
                 </div>
               </form>
-              {/* Contact Form Validation*/}
+              {/* Donation Form Validation*/}
             </div>
           </div>
         </div>
@@ -116,4 +119,4 @@ function page() {
   );
 }
 
-export default page;
+export default DonationPage;

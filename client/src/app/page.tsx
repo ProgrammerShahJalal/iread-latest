@@ -1,4 +1,4 @@
-import About from "./home/About";
+import AboutPage from "./about/page";
 import Blog from "./home/Blog";
 import Courses from "./home/Courses";
 import Gallery from "./home/Gallery";
@@ -8,7 +8,7 @@ import OurTeachers from "./home/OurTeachers";
 export default function Home() {
     return (
         <main>
-            <About />
+            <AboutPage />
 
             <Courses />
 
