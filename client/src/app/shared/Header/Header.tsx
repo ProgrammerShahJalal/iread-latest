@@ -136,7 +136,7 @@ function Header() {
                                     <a href="/forum">Forum</a>
                                 </li>
                                 <li>
-                                    <a href="/blog">Blog</a>
+                                    <a href="/blogs">Blog</a>
                                 </li>
                                 <li>
                                     <a href="/trainers">Trainers</a>
