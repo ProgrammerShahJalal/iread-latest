@@ -24,7 +24,8 @@ function DonationPage() {
     }
     return stripePromise;
   };
-
+console.log("pub key", process?.env?.STRIPE_PUBLIC_KEY);
+console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -46,9 +47,10 @@ function DonationPage() {
     try {
       console.log('from frontend', donationData)
       const response = await axios.post(
-        "http://127.0.0.1:5001/api/v1/donations/create-checkout-session",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/donations/create-checkout-session`,
         donationData
       );
+      
       const sessionId = response.data?.sessionId;
 
       // Redirect to Stripe Checkout
