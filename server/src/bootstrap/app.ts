@@ -7,6 +7,7 @@ import { FastifyCookieOptions } from '@fastify/cookie';
 import get_recursive_route_files_by_directory from '../helpers/get_recursive_route_files_by_directory';
 import { app_config } from '../configs/app.config';
 const underPressure = require('@fastify/under-pressure');
+import fastifyCors from '@fastify/cors';
 
 class FastifyApp {
     private fastify: FastifyInstance;
@@ -155,6 +156,12 @@ class FastifyApp {
             engine: { ejs: require('ejs') },
             root: path.resolve(path.join(__dirname), '../../public/views'),
         });
+
+        this.fastify.register(fastifyCors, {
+            origin: 'http://localhost:3000', // Replace with your frontend's URL
+            methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+            credentials: true, // Allow cookies/auth headers
+          });
     }
 
     private setHandlers(sequelizeInstance: Sequelize) {
