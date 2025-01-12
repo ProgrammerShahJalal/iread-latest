@@ -4,8 +4,8 @@ function ProfilePage() {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
             {/* Profile Header */}
-            <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mb-6">
-                <h1 className="text-3xl font-bold text-blue-600">My Profile</h1>
+            <div className="w-full max-w-4xl bg-white rounded-lg p-6 mb-6">
+                <h1 className="text-3xl font-bold text-[#202C45]">My Profile</h1>
                 <p className="text-gray-700 mt-2">Manage your account details and preferences</p>
             </div>
 

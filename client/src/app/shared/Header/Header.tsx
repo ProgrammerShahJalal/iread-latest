@@ -12,20 +12,20 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <ul className="list-inline font-13 sm-text-center mt-5">
                                     <li>
-                                        <a className="text-white" href="#">
+                                        <a className="text-white" href="faq">
                                             FAQ
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Help Desk
+                                        <a className="text-white" href="/privacy">
+                                            Privacy Policy
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Login
+                                        <a className="text-white" href="/terms">
+                                            Terms and Conditions
                                         </a>
                                     </li>
                                 </ul>
