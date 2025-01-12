@@ -192,7 +192,7 @@ const EventsPage = () => {
                                                                         <div className="mt-10">
                                                                             <a
                                                                                 className="btn btn-dark btn-theme-colored btn-sm mt-10 mr-5"
-                                                                                href="#"
+                                                                                href={`/events/${event?.id}#form`}
                                                                             >
                                                                                 Register
                                                                             </a>

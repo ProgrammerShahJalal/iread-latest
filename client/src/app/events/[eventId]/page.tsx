@@ -110,10 +110,47 @@ const events = [
   }
 ];
 
+const photoGallary = [
+ 
+  {
+    "id": "gallery1",
+    "image": "https://cdn.pixabay.com/photo/2021/03/02/15/01/bird-6062768_1280.jpg",
+  },
+  {
+    "id": "gallery2",
+    "image": "https://cdn.pixabay.com/photo/2024/04/18/14/04/vietnam-8704397_960_720.jpg",
+  },
+  {
+    "id": "gallery3",
+    "image": "https://cdn.pixabay.com/photo/2024/09/19/17/34/ai-generated-9059345_960_720.png",
+  },
+  {
+    "id": "gallery4",
+    "image": "https://cdn.pixabay.com/photo/2020/04/04/13/41/corona-5002341_1280.jpg",
+  },
+  {
+    "id": "gallery5",
+    "image": "https://cdn.pixabay.com/photo/2017/06/29/23/25/oxford-2456589_1280.jpg",
+  },
+  {
+    "id": "gallery6",
+    "image": "https://cdn.pixabay.com/photo/2021/10/11/17/54/technology-6701504_1280.jpg",
+  },
+  {
+    "id": "gallery7",
+    "image": "https://cdn.pixabay.com/photo/2024/02/20/09/56/network-connections-8585083_1280.jpg",
+  },
+  {
+    "id": "gallery8",
+    "image": "https://cdn.pixabay.com/photo/2021/03/29/12/16/stairs-6133971_960_720.jpg",
+  },
+]
+
+
+
 const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
 
-  console.log('eventId', eventId);
 
   const event = events?.find((event) => event.id === eventId);
 
@@ -152,29 +189,29 @@ const EventDetailsPage = () => {
             <p>{event.full_description}</p>
 
             <div className='my-5'>
-            <h4 className='text-lg font-bold'>Registration Schedule</h4>
-            <p>
-              <strong>Start:</strong> {event.reg_start_date} <br />
-              <strong>End:</strong> {event.reg_end_date}
-            </p>
+              <h4 className='text-lg font-bold'>Registration Schedule</h4>
+              <p>
+                <strong>Start:</strong> {event.reg_start_date} <br />
+                <strong>End:</strong> {event.reg_end_date}
+              </p>
             </div>
             <div className='my-5'>
-            <h4 className='text-lg font-bold'>Event Schedule</h4>
-            <p>
-              <strong>Start:</strong> {event.session_start_date} <br />
-              <strong>End:</strong> {event.session_end_date}
-            </p>
+              <h4 className='text-lg font-bold'>Event Schedule</h4>
+              <p>
+                <strong>Start:</strong> {event.session_start_date} <br />
+                <strong>End:</strong> {event.session_end_date}
+              </p>
             </div>
 
             <div className="my-5">
-            <h4 className='text-lg font-bold'>Location</h4>
-            <p>{event.place}</p>
+              <h4 className='text-lg font-bold'>Location</h4>
+              <p>{event.place}</p>
             </div>
 
-           <div className="my-5">
-           <h4 className='text-lg font-bold'>Prerequisites</h4>
-           <p>{event.pre_requisities}</p>
-           </div>
+            <div className="my-5">
+              <h4 className='text-lg font-bold'>Prerequisites</h4>
+              <p>{event.pre_requisities}</p>
+            </div>
 
             <h4 className='text-lg font-bold'>Terms & Conditions</h4>
             <p>{event.terms_and_condition}</p>
@@ -189,21 +226,160 @@ const EventDetailsPage = () => {
                 height={300}
                 className="w-full rounded mb-4"
               />
-              <p className='flex justify-between items-center'>
-               <div>
-               <p> <strong>Price:</strong> ${event.price}</p>
-               <p><strong className='text-green-600'>Discount Price:</strong> ${event.discount_price}</p>
-               </div>
-              <div>
-              <p className='text-indigo-600 font-semibold'>{event.event_type}</p>
+              <div className='flex justify-between items-center'>
+                <div>
+                  <p> <strong>Price:</strong> ${event.price}</p>
+                  <p><strong className='text-green-600'>Discount Price:</strong> ${event.discount_price}</p>
+                </div>
+                <div>
+                  <p className='text-indigo-600 font-semibold'>{event.event_type}</p>
+                </div>
               </div>
-              </p>
-              <a href="#" className="btn btn-primary w-full mt-3">
+              <a href="#form" className="btn bg-[#202C45] text-white w-full mt-3">
                 Register Now
               </a>
             </div>
           </div>
         </div>
+
+  <div id='form' className="container-fluid">
+  <div className="section-title">
+    <div className="row">
+      <div className="mt-24 col-md-6 col-md-offset-3 text-center">
+        <h3 className="title text-2xl font-semibold text-[#202C45]">Registration Form</h3>
+      </div>
+    </div>
+  </div>
+  <div className="row mt">
+    <div className="col-md-6 col-md-offset-3">
+      <form
+        id="booking-form"
+        name="booking-form"
+        action="includes/event-register.php"
+        method="post"
+        encType="multipart/form-data"
+      >
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Enter Name"
+                name="register_name"
+                required={true}
+                className="form-control"
+                aria-required="true"
+              />
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Enter Email"
+                name="register_email"
+                className="form-control"
+                required={true}
+                aria-required="true"
+              />
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Enter Phone"
+                name="register_phone"
+                className="form-control"
+                required={true}
+                aria-required="true"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label>Ticket types</label>
+              <select
+                name="ticket_type"
+                className="form-control valid"
+                aria-invalid="false"
+              >
+                <option>One Person</option>
+                <option>Two Person</option>
+                <option>Family Pack</option>
+                <option>Premium</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label>Event types</label>
+              <select
+                name="event_type"
+                className="form-control valid"
+                aria-invalid="false"
+              >
+                <option>Event 1</option>
+                <option>Event 2</option>
+                <option>Event 3</option>
+                <option>All package</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-sm-12">
+            <div className="form-group text-center">
+              <input
+                name="form_botcheck"
+                className="form-control"
+                type="hidden"
+                defaultValue=""
+              />
+              <button
+                data-loading-text="Please wait..."
+                className="btn btn-dark btn-theme-colored btn-sm btn-block mt-20 pt-10 pb-10"
+                type="submit"
+              >
+                Register now
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      {/* Job Form Validation*/}
+    </div>
+  </div>
+</div>
+
+
+
+        <div className="my-10">
+          <div>
+            <h4 className="text-lg font-bold mb-4">Photo Gallery</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {
+                photoGallary?.map((gallary, index) => {
+                  return (
+                    gallary.image && (
+                      <div key={index}>
+                        <Image
+                          src={gallary.image || ''}
+                          alt={event.title || "Gallery Image"}
+                          width={200}
+                          height={150}
+                          className="w-full rounded"
+                        />
+                      </div>
+                    )
+                  );
+                })
+              }
+
+
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   )

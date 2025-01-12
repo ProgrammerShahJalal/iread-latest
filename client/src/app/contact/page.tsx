@@ -3,8 +3,8 @@ import React from 'react';
 const ContactPage = () => {
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold text-blue-600 mb-4">Contact Us</h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center my-10 p-4">
+      <h1 className="text-4xl font-bold text-[#202C45] mb-4">Contact Us</h1>
       <p className="text-lg text-gray-700 text-center mb-6">
         We’d love to hear from you! Whether you have a question, feedback, or just want to say hello, feel free to reach out.
       </p>
@@ -47,7 +47,7 @@ const ContactPage = () => {
             id="message"
             name="message"
             rows={5}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#202C45]"
             placeholder="Write your message here..."
           ></textarea>
         </div>
@@ -55,7 +55,7 @@ const ContactPage = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 hover:bg-blue-700 transition duration-200"
+          className="w-full bg-[#202C45] text-white font-semibold rounded-lg px-4 py-2 hover:bg-[#2b3a5a] transition duration-200"
         >
           Send Message
         </button>
