@@ -10,6 +10,9 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2022/08/11/23/15/wagon-7380477_1280.jpg",
     is_published: 'publish',
     publish_date: "2025-01-06 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
   },
   {
     id: 'blog2',
@@ -22,6 +25,9 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2015/08/15/16/06/pink-chair-889695_1280.jpg",
     is_published: 'publish',
     publish_date: "2025-03-06 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
   },
   {
     id: "blog3",
@@ -34,6 +40,9 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2015/05/30/01/18/vegetables-790022_1280.jpg",
     is_published: 'publish',
     publish_date: "2025-01-09 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
   },
   {
     id: "blog4",
@@ -46,6 +55,9 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2015/05/23/16/15/planting-780738_1280.jpg",
     is_published: 'publish',
     publish_date: "2024-11-06 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
   },
   {
     id: 'blog5',
@@ -58,6 +70,10 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2021/09/04/03/00/tomatoes-6596913_1280.jpg",
     is_published: 'publish',
     publish_date: "2025-03-06 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
+    
   },
   {
     id: 'blog6',
@@ -70,5 +86,8 @@ export const blogs = [
     cover_image: "https://cdn.pixabay.com/photo/2023/06/22/07/13/soil-8080788_1280.jpg",
     is_published: 'publish',
     publish_date: "2024-09-30 08:35:46",
+    seo_title: "Top 10 Gardening Tips for Beginners | Gardening Guide",
+    seo_description: "Learn the top 10 gardening tips for beginners to create a thriving garden. From soil prep to plant care, start your gardening journey today.",
+    seo_keywords: "gardening tips, beginner gardening, soil preparation, plant care, gardening guide",
   },
 ];
