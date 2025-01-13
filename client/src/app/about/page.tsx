@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.css";
 import Image from "next/image";
@@ -15,12 +15,13 @@ function AboutPage({ }: Props) {
         setIsOpen(true);
     };
 
+
     return (
         <>
             <section>
                 <div className="container">
                     <div className="section-content">
-                        <div className="row flex gap-10">
+                        <div className="row gap-10">
                             <div className="col-md-6">
                                 <h6 className="letter-space-4 text-gray-darkgray text-uppercase mt-0 mb-0">
                                     All About
@@ -28,7 +29,7 @@ function AboutPage({ }: Props) {
                                 <h2 className="text-uppercase font-weight-600 mt-0 font-28 line-bottom">
                                     The World’s Best Education in Our University
                                 </h2>
-                                <h4 className="text-theme-colored text-lg">
+                                <h4 className="text-theme-colored text-3xl md:text-lg">
                                     Lorem ipsum dolor sit amet soluta saepe odit error, maxime
                                     praesentium sunt udiandae!
                                 </h4>
@@ -62,10 +63,10 @@ function AboutPage({ }: Props) {
                         </div>
                     </div>
                 </div>
-                <HappyStudentAtAGlance/>
-                <FaqPage/>
+                <HappyStudentAtAGlance />
+                <FaqPage />
             </section>
-          
+
             {/* Modal Video */}
             <ModalVideo
                 channel="youtube"
