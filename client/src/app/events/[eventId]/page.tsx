@@ -2,6 +2,7 @@
 
 import CountdownTimer from '@/CoundownTimer/CoundownTimer'
 import { events, photoGallary } from '@/data/events';
+import ImageGallery from '@/home/ImageGallary';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React from 'react'
@@ -19,6 +20,10 @@ const EventDetailsPage = () => {
   if (!event) {
     return <div>No Event Info Right Now</div>
   }
+
+  const imageUrls = photoGallary?.map((image) => image.image);
+
+
   return (
     <section>
       <div
@@ -218,27 +223,7 @@ const EventDetailsPage = () => {
         <div className="my-10">
           <div>
             <h4 className="text-lg font-bold mb-4">Photo Gallery</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {
-                photoGallary?.map((gallary, index) => {
-                  return (
-                    gallary.image && (
-                      <div key={index}>
-                        <Image
-                          src={gallary.image || ''}
-                          alt={event.title || "Gallery Image"}
-                          width={200}
-                          height={150}
-                          className="w-full rounded"
-                        />
-                      </div>
-                    )
-                  );
-                })
-              }
-
-
-            </div>
+             <ImageGallery images={imageUrls} />
           </div>
         </div>
 
