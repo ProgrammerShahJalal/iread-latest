@@ -7,11 +7,13 @@ function HappyStudentAtAGlance({ }: Props) {
         <>
             <section
                 className="divider parallax layer-overlay overlay-theme-colored-9"
-                data-bg-img="/frontend/images/bg/bg2.jpg"
+                data-bg-img="/frontend/images/bg/bg.png"
                 data-parallax-ratio="0.7"
                 style={{
-                    backgroundImage: 'url("/frontend/images/bg/bg2.jpg")',
-                    backgroundPosition: "50% 163px"
+                    backgroundImage: 'url("/frontend/images/bg/bg.png")',
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
                 }}
             >
                 <div className="container">
