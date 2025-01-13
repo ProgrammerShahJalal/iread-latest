@@ -28,7 +28,7 @@ function OurTeachers({ }: Props) {
                                             width={262}
                                             height={300}
                                             alt="product"
-                                            className="img-fullwidth"
+                                            className="w-full"
                                         />
                                     </div>
                                     <div className="content border-1px border-bottom-theme-color-2-2px p-15 bg-light clearfix">
@@ -72,7 +72,7 @@ function OurTeachers({ }: Props) {
                                             width={262}
                                             height={300}
                                             alt="product"
-                                            className="img-fullwidth"
+                                            className="w-full"
                                         />
                                     </div>
                                     <div className="content border-1px border-bottom-theme-color-2-2px p-15 bg-light clearfix">
@@ -116,7 +116,7 @@ function OurTeachers({ }: Props) {
                                             width={262}
                                             height={300}
                                             alt="product"
-                                            className="img-fullwidth"
+                                            className="w-full"
                                         />
                                     </div>
                                     <div className="content border-1px border-bottom-theme-color-2-2px p-15 bg-light clearfix">
@@ -160,7 +160,7 @@ function OurTeachers({ }: Props) {
                                             width={262}
                                             height={300}
                                             alt="product"
-                                            className="img-fullwidth"
+                                            className="w-full"
                                         />
                                     </div>
                                     <div className="content border-1px border-bottom-theme-color-2-2px p-15 bg-light clearfix">

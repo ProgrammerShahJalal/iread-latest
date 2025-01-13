@@ -29,6 +29,14 @@ const images = [
         id: 6,
         src: 'https://cdn.pixabay.com/photo/2024/03/05/03/53/ai-generated-8613606_960_720.png',
     },
+    {
+        id: "gallery7",
+        src: "https://cdn.pixabay.com/photo/2024/02/20/09/56/network-connections-8585083_1280.jpg",
+      },
+      {
+        id: "gallery8",
+        src: "https://cdn.pixabay.com/photo/2021/03/29/12/16/stairs-6133971_960_720.jpg",
+      },
 ]
 
 function Gallery({ }: Props) {
@@ -50,12 +58,8 @@ function Gallery({ }: Props) {
                         </div>
                     </div>
                     <div className="container section-content">
-                        <div className="row">
-                            {
-                                images && (
+                        <div >
                                     <ImageGallery images={imageUrls} />
-                                )
-                            }
                         </div>
                     </div>
                 </div>
