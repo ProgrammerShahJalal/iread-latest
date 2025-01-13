@@ -1,5 +1,6 @@
 'use client';
 
+import { happyStudentsGlance } from '@/data/happyStudentsGlance';
 import React, { useEffect, useRef, useState } from 'react'
 import CountUp from 'react-countup';
 
@@ -46,76 +47,33 @@ function HappyStudentAtAGlance({ }: Props) {
             >
                 <div className="container">
                     <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-3 mb-md-50">
-                            <div className="funfact text-center">
-                                <i className="pe-7s-smile mt-5 text-theme-color-2" />
-                                {isVisible && (
-                                    <h2 className="text-center text-xl font-bold my-2">
-                                        <CountUp
-                                            end={5248}
-                                            duration={2.5}
-                                            separator=","
-                                            prefix="+"
-                                        />
-                                    </h2>
-                                )}
-                                <h5 className="text-white text-uppercase mb-0">Happy Students</h5>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-3 mb-md-50">
-                            <div className="funfact text-center">
-                                <i className="pe-7s-note2 mt-5 text-theme-color-2" />
-                                {isVisible && (
-                                     <h2 className="text-center text-xl font-bold my-2">
-                                        <CountUp
-                                            end={675}
-                                            duration={2.5}
-                                            separator=","
-                                            prefix="+"
-                                        />
-                                    </h2>
-                                )}
-                                <h5 className="text-white text-uppercase mb-0">Our Courses</h5>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-3 mb-md-50">
-                            <div className="funfact text-center">
-                                <i className="pe-7s-users mt-5 text-theme-color-2" />
-                                {isVisible && (
-                                     <h2 className="text-center text-xl font-bold my-2">
-                                        <CountUp
-                                            end={248}
-                                            duration={2.5}
-                                            separator=","
-                                            prefix="+"
-                                        />
-                                    </h2>
-                                )}
-                                <h5 className="text-white text-uppercase mb-0">Our Teachers</h5>
-                            </div>
-                        </div>
-                        <div className="col-xs-12 col-sm-6 col-md-3 mb-md-0">
-                            <div className="funfact text-center">
-                                <i className="pe-7s-cup mt-5 text-theme-color-2" />
-                                {isVisible && (
-                                     <h2 className="text-center text-xl font-bold my-2">
-                                        <CountUp
-                                            end={24}
-                                            duration={2.5}
-                                            separator=","
-                                            prefix="+"
-                                        />
-                                    </h2>
-                                )}
-                                <h5 className="text-white text-uppercase mb-0">Awards Won</h5>
-                            </div>
-                        </div>
+                        {
+                            happyStudentsGlance?.map((item) => {
+                                return (
+                                    <div className="col-xs-12 col-sm-6 col-md-3 mb-md-50" key={item?.title}>
+                                        <div className="text-center">
+                                            <i className={`text-5xl ${item?.icon} mt-5 text-theme-color-2 `}/>
+                                            {isVisible && (
+                                                <h2 className="text-center text-white text-5xl font-bold my-2">
+                                                    <CountUp
+                                                        end={item?.count}
+                                                        duration={2.5}
+                                                        separator=","
+                                                        suffix='+'
+                                                    />
+                                                </h2>
+                                            )}
+                                            <h5 className="text-white text-uppercase mb-0">{item?.title}</h5>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </section>
-
         </>
     )
 }
 
-export default HappyStudentAtAGlance
+export default HappyStudentAtAGlance;
