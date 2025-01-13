@@ -10,7 +10,7 @@ function Gallery({ }: Props) {
                 <div className="container">
                     <div className="section-title mb-10">
                         <div className="row">
-                            <div className="col-md-12">
+                            <div className="col-md-12 text-3xl">
                                 <h2 className="mt-0 text-uppercase text-theme-colored title line-bottom line-height-1">
                                     Our
                                     <span className="text-theme-color-2 font-weight-400"> Gllery</span>
