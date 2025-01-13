@@ -1,6 +1,7 @@
 "use client";
 
 import { blogs } from '@/data/blogs';
+import Head from 'next/head';
 import Image from 'next/image'
 import { useParams } from 'next/navigation';
 import React from 'react'
@@ -9,11 +10,13 @@ import React from 'react'
 
 const BlogDetailsPage = () => {
 
+
+
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
     return date.toLocaleDateString('en-GB', options);
-};
+  };
 
   const { blogId } = useParams<{ blogId: string }>();
 
@@ -23,6 +26,13 @@ const BlogDetailsPage = () => {
   if (!blog) {
     return <div>No Blog Info Right Now</div>
   }
+
+  <Head>
+    <title>{blog.seo_title}</title>
+    <meta name="description" content={blog.seo_description} />
+    <meta name="keywords" content={blog.seo_keywords} />
+  </Head>
+
   return (
     <section>
       <div className="container my-10">
@@ -45,7 +55,7 @@ const BlogDetailsPage = () => {
                   </div>
                   <div className="text-center text-uppercase text-2xl pt-10 pl-15">
                     <h4>
-                        {blog?.title}
+                      {blog?.title}
                     </h4>
                   </div>
                   <div className="entry-meta pl-15">
@@ -56,7 +66,7 @@ const BlogDetailsPage = () => {
                       <li>
                         By: <span className="text-theme-color-2">{blog?.author}</span>
                       </li>
-                     
+
                     </ul>
                   </div>
                   <div className="entry-content mt-10">
@@ -66,11 +76,17 @@ const BlogDetailsPage = () => {
                     <p className="mb-15 text-justify">
                       {blog?.full_description}
                     </p>
-                    
-                   
+
+
                   </div>
+
+                  <div className="container mt-5">
+                    <h3 className='font-semibold text-2xl md:text-lg'>About the Author</h3>
+                    <p>{blog.author}</p>
+                  </div>
+
                 </article>
-               
+
               </div>
             </div>
           </div>

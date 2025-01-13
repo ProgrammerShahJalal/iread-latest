@@ -1,8 +1,10 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ModalVideo from "react-modal-video";
 import "react-modal-video/css/modal-video.css";
 import Image from "next/image";
+import HappyStudentAtAGlance from "@/home/HappyStudentAtAGlance";
+import FaqPage from "@/faq/page";
 
 type Props = {};
 
@@ -13,12 +15,13 @@ function AboutPage({ }: Props) {
         setIsOpen(true);
     };
 
+
     return (
         <>
             <section>
                 <div className="container">
                     <div className="section-content">
-                        <div className="row">
+                        <div className="row gap-10">
                             <div className="col-md-6">
                                 <h6 className="letter-space-4 text-gray-darkgray text-uppercase mt-0 mb-0">
                                     All About
@@ -26,11 +29,11 @@ function AboutPage({ }: Props) {
                                 <h2 className="text-uppercase font-weight-600 mt-0 font-28 line-bottom">
                                     The World’s Best Education in Our University
                                 </h2>
-                                <h4 className="text-theme-colored">
+                                <h4 className="text-theme-colored text-3xl md:text-lg">
                                     Lorem ipsum dolor sit amet soluta saepe odit error, maxime
                                     praesentium sunt udiandae!
                                 </h4>
-                                <p>
+                                <p className="my-5">
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
                                     atque officiis maxime suscipit expedita obcaecati nulla in ducimus
                                     iure quos quam recusandae dolor quas et perspiciatis voluptatum
@@ -49,10 +52,10 @@ function AboutPage({ }: Props) {
                                 <div className="video-container">
                                     <Image
                                         src="/frontend/images/about/5.jpg"
-                                        width={300}
+                                        width={400}
                                         height={300}
                                         alt="About us"
-                                        className="img-responsive img-fullwidth cursor-pointer"
+                                        className="w-full rounded-md cursor-pointer"
                                         onClick={openModal}
                                     />
                                 </div>
@@ -60,8 +63,10 @@ function AboutPage({ }: Props) {
                         </div>
                     </div>
                 </div>
+                <HappyStudentAtAGlance />
+                <FaqPage />
             </section>
-          
+
             {/* Modal Video */}
             <ModalVideo
                 channel="youtube"
