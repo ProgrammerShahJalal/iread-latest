@@ -3,7 +3,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { responseObject } from '../../common_types/object';
 import all from './services/all';
 
-const stripe = new Stripe('sk_test_51JwIBsFBTfTsSwmzevCEzr42DeBZtu6fJSylaIXLwwMHDy16IR9VHhEa5lc8vLP4fmk3D8Cpx5JxKH187yFWRcPU009G257uXe', { apiVersion: "2024-12-18.acacia" });
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, { apiVersion: "2024-12-18.acacia" });
 
 export default function(fastify: FastifyInstance) {
 return {
@@ -27,7 +27,7 @@ return {
             phone?: string; 
             occupation?: string; 
           }
-        
+          
         const { name, email, phone, occupation, amount } = req.body as DonationRequest;
     
         if (!name || !email || !amount) {
@@ -56,8 +56,8 @@ return {
                 },
               ],
               mode: 'payment',
-              success_url: `http://localhost:3000/donate/success`,
-              cancel_url: `http://localhost:3000/donate/cancel`,
+              success_url: `${process.env.FRONTEND_URL}/donate/success`,
+              cancel_url: `${process.env.FRONTEND_URL}/donate/cancel`,
               metadata: {
                 name,
                 email,
