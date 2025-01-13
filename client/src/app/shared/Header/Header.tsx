@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import UpcomingCountdownTimer from '@/CoundownTimer/UpcomingCoundownTimer'
+import Navbar from './Navbar'
 
 function Header() {
     return (
@@ -12,20 +13,20 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <ul className="list-inline font-13 sm-text-center mt-5">
                                     <li>
-                                        <a className="text-white" href="#">
+                                        <a className="text-white" href="faq">
                                             FAQ
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Help Desk
+                                        <a className="text-white" href="/privacy">
+                                            Privacy Policy
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Login
+                                        <a className="text-white" href="/terms">
+                                            Terms and Conditions
                                         </a>
                                     </li>
                                 </ul>
@@ -112,82 +113,7 @@ function Header() {
                     </div>
                 </div>
             </div>
-            <div className="header-nav">
-                <div className="header-nav-wrapper navbar-scrolltofixed bg-theme-colored border-bottom-theme-color-2-1px">
-                    <div className="container">
-                        <nav
-                            id="menuzord"
-                            className="menuzord bg-theme-colored pull-left flip menuzord-responsive"
-                        >
-                            <ul className="menuzord-menu">
-                                <li>
-                                    <a href="/">Home</a>
-                                </li>
-                                <li>
-                                    <a href="/about">About Us</a>
-                                </li>
-                                <li>
-                                    <a href="/events">Events</a>
-                                </li>
-                                <li>
-                                    <a href="/courses">Courses</a>
-                                </li>
-                                <li>
-                                    <a href="/forum">Forum</a>
-                                </li>
-                                <li>
-                                    <a href="/blogs">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="/trainers">Trainers</a>
-                                </li>
-                                <li>
-                                    <a href="/aiModels">AI Models</a>
-                                </li>
-                                <li>
-                                    <a href="/profile">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="/contact">Contact</a>
-                                </li>
-                            </ul>
-                            <ul className="pull-right flip hidden-sm hidden-xs d-flex">
-                                <li>
-                                    <a
-                                        className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
-                                        data-toggle="modal"
-                                        data-target="#BSParentModal"
-                                        href="/donate"
-                                    >
-                                        Donate Us
-                                    </a>
-                                </li>
-                            </ul>
-                            <div id="top-search-bar" className="collapse">
-                                <div className="container">
-                                    <form
-                                        role="search"
-                                        action="#"
-                                        className="search_form_top"
-                                        method="get"
-                                    >
-                                        <input
-                                            type="text"
-                                            placeholder="Type text and press Enter..."
-                                            name="s"
-                                            className="form-control"
-                                            autoComplete="off"
-                                        />
-                                        <span className="search-close">
-                                            <i className="fa fa-search" />
-                                        </span>
-                                    </form>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+            <Navbar/>
         </header>
 
     )

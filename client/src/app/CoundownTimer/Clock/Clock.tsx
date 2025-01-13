@@ -17,7 +17,7 @@ const Clock: FC<ClockProps> = ({
 }) => {
   return (
     <div>
-      <div className="flex justify-center items-center gap-2">
+      <div className="flex justify-start items-center gap-2">
         <div>
           <p className='text-4xl'>{timerDays ?? 0}</p>
           <small className='text-white text-xl font-semibold'>Days</small>
