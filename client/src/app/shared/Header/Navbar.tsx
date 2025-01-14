@@ -1,113 +1,86 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import React from "react";
 
-const navigation = [
-  { name: "Home", href: "/home", current: true },
-  { name: "About Us", href: "", current: false },
-  { name: "Events", href: "#", current: false },
-  { name: "Courses", href: "#", current: false },
-  { name: "Forum", href: "#", current: false },
-  { name: "Blogs", href: "#", current: false },
-  { name: "Trainers", href: "#", current: false },
-  { name: "AI Models", href: "#", current: false },
-  { name: "Contact", href: "#", current: false },
-  { name: "Profile", href: "#", current: false },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export default function Navbar() {
+function Navbar() {
   return (
-    <div className="tailwind-scope">
-      <Disclosure as="nav" className="bg-gray-800">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-              {/* Mobile menu button*/}
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Open main menu</span>
-                <Bars3Icon
-                  aria-hidden="true"
-                  className="block size-6 group-data-[open]:hidden"
-                />
-                <XMarkIcon
-                  aria-hidden="true"
-                  className="hidden size-6 group-data-[open]:block"
-                />
-              </DisclosureButton>
-            </div>
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex shrink-0 items-center">
-                <Image
-                  alt="Your Company"
-                  src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                  className="h-8 w-auto"
-                  width={8}
-                  height={8}
-                />
-              </div>
-              <div className="hidden sm:ml-6 sm:block">
-                <div className="flex space-x-4">
-                  {navigation?.map((item) => (
-                    <a
-                      key={item?.name}
-                      href={item?.href}
-                      aria-current={item?.current ? "page" : undefined}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium"
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+    <div>
+      <div className="header-nav">
+        <div className="header-nav-wrapper navbar-scrolltofixed bg-theme-colored border-bottom-theme-color-2-1px">
+          <div className="container">
+            <nav
+              id="menuzord"
+              className="menuzord bg-theme-colored pull-left flip menuzord-responsive"
+            >
+              <ul className="menuzord-menu">
+                <li>
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <a href="/about">About Us</a>
+                </li>
+                <li>
+                  <a href="/events">Events</a>
+                </li>
+                <li>
+                  <a href="/courses">Courses</a>
+                </li>
+                <li>
+                  <a href="/forum">Forum</a>
+                </li>
+                <li>
+                  <a href="/blogs">Blogs</a>
+                </li>
+                <li>
+                  <a href="/trainers">Trainers</a>
+                </li>
+                <li>
+                  <a href="/aiModels">AI Models</a>
+                </li>
+                <li>
+                  <a href="/profile">Profile</a>
+                </li>
+                <li>
+                  <a href="/contact">Contact</a>
+                </li>
+              </ul>
+              <ul className="pull-right flip hidden-sm hidden-xs d-flex">
+                <li>
+                  <a
+                    className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
+                    data-toggle="modal"
+                    data-target="#BSParentModal"
+                    href="/donate"
+                  >
+                    Donate Us
+                  </a>
+                </li>
+              </ul>
+              <div id="top-search-bar" className="collapse">
+                <div className="container">
+                  <form
+                    role="search"
+                    action="#"
+                    className="search_form_top"
+                    method="get"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Type text and press Enter..."
+                      name="s"
+                      className="form-control"
+                      autoComplete="off"
+                    />
+                    <span className="search-close">
+                      <i className="fa fa-search" />
+                    </span>
+                  </form>
                 </div>
               </div>
-            </div>
+            </nav>
           </div>
         </div>
-
-        <DisclosurePanel className="sm:hidden">
-          <div className="space-y-1 px-2 pb-3 pt-2">
-            {!(navigation?.length == 0) ? (
-              <>
-                {navigation?.map((item) => (
-                  <DisclosureButton
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item?.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block rounded-md px-3 py-2 text-base font-medium"
-                    )}
-                  >
-                    {item?.name}
-                  </DisclosureButton>
-                ))}
-              </>
-            ) : (
-              <p>No Menu Items</p>
-            )}
-          </div>
-        </DisclosurePanel>
-      </Disclosure>
+      </div>
     </div>
   );
 }
+
+export default Navbar;

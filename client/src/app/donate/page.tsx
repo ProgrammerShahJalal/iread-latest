@@ -37,15 +37,25 @@ function DonationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (parseFloat(donationData.amount) <= 0) {
+      alert("Please enter a valid donation amount.");
+      return;
+    }
+
     try {
+      console.log("from frontend", donationData);
       const response = await axios.post(
-        "/api/v1/create-checkout-session",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/donations/create-checkout-session`,
         donationData
       );
-      const sessionId = response.data.sessionId;
+
+      const sessionId = response.data?.session_id;
+
+      // console.log('sessionId', sessionId);
 
       // Redirect to Stripe Checkout
-      const stripe = await getStripe(); // Assuming you have a helper function to load Stripe.js
+      const stripe = await getStripe();
       const { error } = await stripe.redirectToCheckout({ sessionId });
       if (error) {
         console.error(error);
@@ -127,7 +137,7 @@ function DonationPage() {
                   <input
                     name="amount"
                     className="form-control"
-                    type="text"
+                    type="number"
                     placeholder="Enter Donation Amount"
                     value={donationData.amount}
                     onChange={handleChange}
@@ -153,54 +163,3 @@ function DonationPage() {
 }
 
 export default DonationPage;
-
-/* backend */
-
-// import Fastify from 'fastify';
-// import Stripe from 'stripe';
-
-// const fastify = Fastify();
-// const stripe = new Stripe('YOUR_STRIPE_SECRET_KEY', { apiVersion: '2020-08-27' });
-
-// fastify.post('/api/create-checkout-session', async (request, reply) => {
-//   const { name, email, phone, occupation, amount } = request.body;
-
-//   try {
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ['card'],
-//       line_items: [
-//         {
-//           price_data: {
-//             currency: 'usd',
-//             product_data: {
-//               name: 'Donation',
-//             },
-//             unit_amount: parseInt(amount, 10) * 100,  // Stripe expects amount in cents
-//           },
-//           quantity: 1,
-//         },
-//       ],
-//       mode: 'payment',
-//       success_url: 'https://yourdomain.com/success',
-//       cancel_url: 'https://yourdomain.com/cancel',
-//       metadata: {
-//         name,
-//         email,
-//         phone,
-//         occupation,
-//       },
-//     });
-
-//     reply.send({ sessionId: session.id });
-//   } catch (error) {
-//     reply.status(500).send({ error: error.message });
-//   }
-// });
-
-// fastify.listen(3000, (err, address) => {
-//   if (err) {
-//     console.error(err);
-//     process.exit(1);
-//   }
-//   console.log(`Server listening at ${address}`);
-// });

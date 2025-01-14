@@ -13,8 +13,11 @@
     "@heroicons/react": "^2.2.0",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.5.0",
+    "axios": "^1.7.9",
+    "lightgallery": "^2.8.2",
     "next": "14.2.4",
     "react": "^18",
+    "react-countup": "^6.5.3",
     "react-dom": "^18",
     "react-modal-video": "^2.0.2"
   },
