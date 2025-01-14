@@ -24,8 +24,7 @@ function DonationPage() {
     }
     return stripePromise;
   };
-console.log("pub key", process?.env?.STRIPE_PUBLIC_KEY);
-console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -51,7 +50,9 @@ console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
         donationData
       );
       
-      const sessionId = response.data?.sessionId;
+      const sessionId = response.data?.session_id;
+
+      // console.log('sessionId', sessionId);
 
       // Redirect to Stripe Checkout
       const stripe = await getStripe(); 
@@ -136,7 +137,7 @@ console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
                   <input
                     name="amount"
                     className="form-control"
-                    type="text"
+                    type="number"
                     placeholder="Enter Donation Amount"
                     value={donationData.amount}
                     onChange={handleChange}

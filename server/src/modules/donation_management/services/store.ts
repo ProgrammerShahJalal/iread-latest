@@ -1,5 +1,5 @@
 import db from '../models/db';
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import fastify, { FastifyInstance, FastifyRequest } from 'fastify';
 import { body, validationResult } from 'express-validator';
 import {
     anyObject,
@@ -14,6 +14,9 @@ import error_trace from '../../../helpers/error_trace';
 
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
+import Stripe from 'stripe';
+import axios from 'axios'; 
+
 
 /** validation rules */
 async function validate(req: Request) {
@@ -23,7 +26,7 @@ async function validate(req: Request) {
         'email',
         'phone',
         'occupation',
-        'ammount',
+        'amount',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -43,6 +46,25 @@ async function validate(req: Request) {
     return result;
 }
 
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, { apiVersion: "2024-12-18.acacia" });
+
+interface DonationRequest {
+    name: string;
+    email: string;
+    amount: string;
+    phone?: string;
+    occupation?: string;
+}
+
+interface Donation {
+    name: string;
+    email: string;
+    phone?: string;
+    occupation?: string;
+    amount: number;
+    session_id: string;
+}
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -59,27 +81,76 @@ async function store(
     let data = new models[modelName]();
 
 
+    const { name, email, phone, occupation, amount } = req.body as DonationRequest;
 
-    let inputs: InferCreationAttributes<typeof data> = {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        occupation: body.occupation,
-        ammount: body.ammount,
-    };
+
 
     try {
 
+        const amountInCents = Math.round(parseFloat(amount) * 100);
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: `Donation by ${name}`,
+                            description: `Occupation: ${occupation}, Phone: ${phone}`,
+                        },
+                        unit_amount: amountInCents,
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL}/donate/success`,
+            cancel_url: `${process.env.FRONTEND_URL}/donate/cancel`,
+            metadata: {
+                name,
+                email,
+                phone,
+                occupation,
+            },
+        } as Stripe.Checkout.SessionCreateParams);
+
+        // Save session data to the database
+        // await store(fastify, req);
+        let inputs: InferCreationAttributes<typeof data> = {
+            name: body.name,
+            email: body.email,
+            phone: body.phone,
+            occupation: body.occupation,
+            amount: body.amount,
+            session_id: session?.id,
+        };
         await data.update(inputs);
         await data.save();
-
+    
 
         if (!data.id) {
-            throw new Error('Failed to save blog data.');
+            throw new Error('Failed to save donation data.');
         }
 
+        // Webhook logic
+        const webhookURL = process.env.WEBHOOK_URL || 'http://127.0.0.1:5001/api/v1/donations/webhook'; 
+        const webhookPayload = {
+            event: 'data.created',
+            data: {
+                id: data.id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                occupation: data.occupation,
+                amount: data.amount,
+            },
+        };
 
-        return response(201, 'data created', { data });
+        // Call the webhook
+        await axios.post(webhookURL, webhookPayload);
+
+
+        return response(201, 'data created', { name, email, phone, occupation, amount, sessionId: session.id });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
         throw new custom_error('server error', 500, error.message, uid);
