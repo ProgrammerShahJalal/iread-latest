@@ -9,7 +9,6 @@ module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void)
     fastify
         .post(`${prefix}/create-checkout-session`, controllerInstance.session)
         .post(`${prefix}/webhook`, controllerInstance.webhook)
-           .get(`${prefix}/all`, controllerInstance.all)
         // .post(`${prefix}/store`, controllerInstance.store)
         // .post(`${prefix}/update`, controllerInstance.update)
         // .post(`${prefix}/soft-delete`, controllerInstance.soft_delete)
