@@ -13,7 +13,7 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <ul className="list-inline font-13 sm-text-center mt-5">
                                     <li>
-                                        <a className="text-white" href="faq">
+                                        <a className="text-white" href="/faq">
                                             FAQ
                                         </a>
                                     </li>

@@ -38,10 +38,9 @@ const Invoice: React.FC<InvoiceProps> = ({ name, email, phone, occupation, amoun
     };
 
 
-
     return (
-        <div className="container mb-10">
-            <div className="mx-auto w-4/5 max-w-[768px]">
+        <div className=" mb-10">
+            <div className="mx-auto max-w-[768px] min-w-[320px]">
                 <div>
                     <div className="text-center">
                         <button className="bg-green-600 px-3 py-2 rounded-md text-white" onClick={() => generatePDF(getTargetElement, { filename: 'invoice.pdf' }, )}>Download Invoice</button>
