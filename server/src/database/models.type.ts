@@ -16,6 +16,8 @@ import * as EventModel from "../modules/event_management/models/model";
 import * as EventCategoriesModel from "../modules/event_categories_management/models/model";
 import * as EventTagsModel from "../modules/event_tags_management/models/model";
 
+import * as DonationModel from "../modules/donation_management/models/model";
+
 export type model_types = {
     ContactModel: typeof ContactModel.DataModel;
     ErrorTraceModel: typeof ErrorTraceModel.DataModel;
@@ -35,4 +37,6 @@ export type model_types = {
     EventModel: typeof EventModel.DataModel;
     EventCategoriesModel: typeof EventCategoriesModel.DataModel;
     EventTagsModel: typeof EventTagsModel.DataModel;
+
+    DonationModel: typeof DonationModel.DataModel;
 }

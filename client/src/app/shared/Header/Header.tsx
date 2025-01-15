@@ -1,5 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
+import UpcomingCountdownTimer from '@/CoundownTimer/UpcomingCoundownTimer'
+import Navbar from './Navbar'
 
 function Header() {
     return (
@@ -11,20 +13,20 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <ul className="list-inline font-13 sm-text-center mt-5">
                                     <li>
-                                        <a className="text-white" href="#">
+                                        <a className="text-white" href="/faq">
                                             FAQ
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Help Desk
+                                        <a className="text-white" href="/privacy">
+                                            Privacy Policy
                                         </a>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="#">
-                                            Login
+                                        <a className="text-white" href="/terms">
+                                            Terms and Conditions
                                         </a>
                                     </li>
                                 </ul>
@@ -72,7 +74,7 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <a
                                     className="menuzord-brand pull-left flip xs-pull-center mb-15"
-                                    href="#/"
+                                    href="/"
                                 >
                                     IREAD
                                 </a>
@@ -80,30 +82,30 @@ function Header() {
                         </div>
                         <div className="col-xs-12 col-sm-4 col-md-4">
                             <div className="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
-                                <ul className="list-inline">
+                                <ul className="list-inline flex justify-center items-center mr-3">
                                     <li>
                                         <i className="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
                                     <li>
-                                        <a href="#" className="font-12 text-gray text-uppercase">
+                                        <p className="font-12 text-gray text-uppercase">
                                             Call us today!
-                                        </a>
+                                        </p>
                                         <h5 className="font-14 m-0"> +(012) 345 6789</h5>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-4 col-md-3">
+                        <div className="col-xs-12 col-sm-4 col-md-3 ">
                             <div className="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
-                                <ul className="list-inline">
+                                <ul className="list-inline flex justify-center items-center">
                                     <li>
                                         <i className="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
                                     <li>
-                                        <a href="#" className="font-12 text-gray text-uppercase">
-                                            We are open!
-                                        </a>
-                                        <h5 className="font-13 text-black m-0"> Mon-Fri 8:00-16:00</h5>
+                                        <p className="font-12 text-gray text-uppercase">
+                                            Upcoming Event!
+                                        </p>
+                                        <UpcomingCountdownTimer offerTill='2025-01-25T23:59:59'/>
                                     </li>
                                 </ul>
                             </div>
@@ -111,82 +113,7 @@ function Header() {
                     </div>
                 </div>
             </div>
-            <div className="header-nav">
-                <div className="header-nav-wrapper navbar-scrolltofixed bg-theme-colored border-bottom-theme-color-2-1px">
-                    <div className="container">
-                        <nav
-                            id="menuzord"
-                            className="menuzord bg-theme-colored pull-left flip menuzord-responsive"
-                        >
-                            <ul className="menuzord-menu">
-                                <li>
-                                    <a href="#">Home</a>
-                                </li>
-                                <li>
-                                    <a href="#">About Us</a>
-                                </li>
-                                <li>
-                                    <a href="#">Events</a>
-                                </li>
-                                <li>
-                                    <a href="#">Courses</a>
-                                </li>
-                                <li>
-                                    <a href="#">Forum</a>
-                                </li>
-                                <li>
-                                    <a href="#">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="#">Trainers</a>
-                                </li>
-                                <li>
-                                    <a href="#">AI Models</a>
-                                </li>
-                                <li>
-                                    <a href="/profile">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="/contact">Contact</a>
-                                </li>
-                            </ul>
-                            <ul className="pull-right flip hidden-sm hidden-xs d-flex">
-                                <li>
-                                    <a
-                                        className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
-                                        data-toggle="modal"
-                                        data-target="#BSParentModal"
-                                        href="/donate"
-                                    >
-                                        Donate Us
-                                    </a>
-                                </li>
-                            </ul>
-                            <div id="top-search-bar" className="collapse">
-                                <div className="container">
-                                    <form
-                                        role="search"
-                                        action="#"
-                                        className="search_form_top"
-                                        method="get"
-                                    >
-                                        <input
-                                            type="text"
-                                            placeholder="Type text and press Enter..."
-                                            name="s"
-                                            className="form-control"
-                                            autoComplete="off"
-                                        />
-                                        <span className="search-close">
-                                            <i className="fa fa-search" />
-                                        </span>
-                                    </form>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+            <Navbar/>
         </header>
 
     )
