@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useRef } from "react";
-import generatePDF, { Options } from "react-to-pdf";
+import generatePDF from "react-to-pdf";
 
 
 interface InvoiceProps {
@@ -9,14 +9,34 @@ interface InvoiceProps {
     phone: string | null;
     occupation: string | null;
     amount: string | null;
-  }
+}
 
-  
-  const Invoice: React.FC<InvoiceProps> = ({ name, email,phone, occupation, amount }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const targetRef = useRef();
+
+const Invoice: React.FC<InvoiceProps> = ({ name, email, phone, occupation, amount }) => {
+
+    const targetRef = useRef<HTMLDivElement>(null);
+
 
     const getTargetElement = () => document.getElementById('content-id');
+
+    // Function to get today's date in a readable format
+    const getTodayDate = () => {
+        const today = new Date();
+        const options: Intl.DateTimeFormatOptions = {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        };
+        return today.toLocaleDateString("en-US", options);
+    };
+
+    const generateInvoiceNumber = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+        return `${randomNum}-${year}`;
+    };
+
 
 
     return (
@@ -24,15 +44,15 @@ interface InvoiceProps {
             <div className="mx-auto w-4/5 max-w-[768px]">
                 <div>
                     <div className="text-center">
-                        <button className="bg-green-600 px-3 py-2 rounded-md text-white" onClick={() => generatePDF(getTargetElement, { filename: 'invoice.pdf' }, Options)}>Download Invoice</button>
+                        <button className="bg-green-600 px-3 py-2 rounded-md text-white" onClick={() => generatePDF(getTargetElement, { filename: 'invoice.pdf' }, )}>Download Invoice</button>
                     </div>
-                    <div ref={targetRef} id="content-id" className="p-10 rounded-md">
+                    <div ref={targetRef} id="content-id" className="p-10 mb-24 rounded-md">
                         {/* Invoice Header */}
-                        <div className="flex items-center justify-between mb-8 px-3">
+                        <div className="flex items-center justify-between mb-8 px-3 pt-20">
                             <div>
-                                <span className="text-2xl">Donation Invoice #</span>: 0047-2025
+                                <span className="text-2xl">Donation Invoice #</span>: {generateInvoiceNumber()}
                                 <br />
-                                <span>Date</span>: 15 January 2025
+                                <span>Date</span>: {getTodayDate()}
                                 <br />
                             </div>
                             <div className="text-right">
@@ -55,7 +75,7 @@ interface InvoiceProps {
                                 <p><strong>Occupation:</strong> {occupation}</p>
                             </div>
                             <div className="text-right">
-                            <h1 className="font-bold">Recipient Info</h1>
+                                <h1 className="font-bold">Recipient Info</h1>
                                 IREAD
                                 <br />
                                 Street 12

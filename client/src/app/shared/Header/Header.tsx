@@ -82,7 +82,7 @@ function Header() {
                         </div>
                         <div className="col-xs-12 col-sm-4 col-md-4">
                             <div className="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
-                                <ul className="list-inline">
+                                <ul className="list-inline flex justify-center items-center mr-3">
                                     <li>
                                         <i className="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
@@ -95,9 +95,9 @@ function Header() {
                                 </ul>
                             </div>
                         </div>
-                        <div className="col-xs-12 col-sm-4 col-md-3">
+                        <div className="col-xs-12 col-sm-4 col-md-3 ">
                             <div className="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
-                                <ul className="list-inline">
+                                <ul className="list-inline flex justify-center items-center">
                                     <li>
                                         <i className="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block" />
                                     </li>
