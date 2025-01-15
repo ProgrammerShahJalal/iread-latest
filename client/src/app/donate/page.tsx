@@ -42,17 +42,16 @@ function DonationPage() {
       alert("Please enter a valid donation amount.");
       return;
     }
-    
+
     try {
-      console.log('from frontend', donationData)
+      // console.log('from frontend', donationData)
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/donations/create-checkout-session`,
         donationData
       );
-      
-      const sessionId = response.data?.session_id;
 
-      // console.log('sessionId', sessionId);
+      const sessionId = response?.data?.data?.sessionId;
+
 
       // Redirect to Stripe Checkout
       const stripe = await getStripe(); 
@@ -60,6 +59,7 @@ function DonationPage() {
       if (error) {
         console.error(error);
       }
+   
     } catch (error) {
       console.error("Error creating checkout session:", error);
     }
