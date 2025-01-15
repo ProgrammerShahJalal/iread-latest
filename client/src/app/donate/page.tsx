@@ -19,7 +19,7 @@ function DonationPage() {
   const getStripe = (): Promise<any> => {
     if (!stripePromise) {
       stripePromise = loadStripe(
-        "pk_test_51JwIBsFBTfTsSwmz8bqtyXmnIOlnITi40PZxeH94CVw4gw41R2R6chUyOdKef9J0CCNKuB22rOlGeVlfUcS2L9Nf008TuoJ83R"
+        process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string
       ); // Use your Stripe public key here
     }
     return stripePromise;
