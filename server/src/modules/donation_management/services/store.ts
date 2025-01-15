@@ -15,7 +15,7 @@ import error_trace from '../../../helpers/error_trace';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 import Stripe from 'stripe';
-import axios from 'axios'; 
+import axios from 'axios';
 
 
 /** validation rules */
@@ -52,15 +52,15 @@ interface DonationRequest {
     name: string;
     email: string;
     amount: string;
-    phone?: string;
-    occupation?: string;
+    phone: string;
+    occupation: string;
 }
 
 interface Donation {
     name: string;
     email: string;
-    phone?: string;
-    occupation?: string;
+    phone: string;
+    occupation: string;
     amount: number;
     session_id: string;
 }
@@ -104,7 +104,7 @@ async function store(
                 },
             ],
             mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/donate/success`,
+            success_url: `${process.env.FRONTEND_URL}/donate/success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&occupation=${encodeURIComponent(occupation)}&amount=${amountInCents / 100}`,
             cancel_url: `${process.env.FRONTEND_URL}/donate/cancel`,
             metadata: {
                 name,
@@ -113,7 +113,7 @@ async function store(
                 occupation,
             },
         } as Stripe.Checkout.SessionCreateParams);
-
+        // console.log('Stripe Session:', session);
         // Save session data to the database
         // await store(fastify, req);
         let inputs: InferCreationAttributes<typeof data> = {
@@ -126,14 +126,14 @@ async function store(
         };
         await data.update(inputs);
         await data.save();
-    
+
 
         if (!data.id) {
             throw new Error('Failed to save donation data.');
         }
 
         // Webhook logic
-        const webhookURL = process.env.WEBHOOK_URL || 'http://127.0.0.1:5001/api/v1/donations/webhook'; 
+        const webhookURL = process.env.WEBHOOK_URL || 'http://127.0.0.1:5001/api/v1/donations/webhook';
         const webhookPayload = {
             event: 'data.created',
             data: {
@@ -152,6 +152,7 @@ async function store(
 
         return response(201, 'data created', { name, email, phone, occupation, amount, sessionId: session.id });
     } catch (error: any) {
+        console.error('Error creating donation:', error);
         let uid = await error_trace(models, error, req.url, req.body);
         throw new custom_error('server error', 500, error.message, uid);
     }
