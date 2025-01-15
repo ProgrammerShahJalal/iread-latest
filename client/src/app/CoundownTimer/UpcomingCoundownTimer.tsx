@@ -53,7 +53,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({ offerTi
   }, [startTimer]);
 
   return (
-    <div className="text-sm">
+    <div>
       <UpClock
         timerDays={timerDays}
         timerHours={timerHours}

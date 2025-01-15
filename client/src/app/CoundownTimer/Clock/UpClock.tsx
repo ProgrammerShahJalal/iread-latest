@@ -19,23 +19,23 @@ const UpClock: FC<ClockProps> = ({
     <div>
       <div className="flex justify-center items-center gap-2">
         <div>
-          <p >{timerDays ?? 0}</p>
-          <small >Days</small>
+          <p className='text-2xl md:text-sm lg:text-xs'>{timerDays ?? 0}</p>
+          <small className='text-2xl md:text-sm lg:text-xs'>Days</small>
         </div>
-        <span >:</span>
+        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
         <div>
-          <p >{timerHours ?? 0}</p>
-          <small >Hours</small>
+          <p className='text-2xl md:text-sm lg:text-xs'>{timerHours ?? 0}</p>
+          <small className='text-2xl md:text-sm lg:text-xs'>Hours</small>
         </div>
-        <span >:</span>
+        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
         <div>
-          <p >{timerMinutes ?? 0}</p>
-          <small >Minutes</small>
+          <p className='text-2xl md:text-sm lg:text-xs'>{timerMinutes ?? 0}</p>
+          <small className='text-2xl md:text-sm lg:text-xs'>Minutes</small>
         </div>
-        <span >:</span>
+        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
         <div>
-          <p >{timerSeconds ?? 0}</p>
-          <small >Seconds</small>
+          <p className='text-2xl md:text-sm lg:text-xs'>{timerSeconds ?? 0}</p>
+          <small className='text-2xl md:text-sm lg:text-xs'>Seconds</small>
         </div>
       </div>
     </div>

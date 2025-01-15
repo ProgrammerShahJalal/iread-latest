@@ -34,8 +34,8 @@ class DataModel extends Model<Infer, InferCreation> {
     declare email: string;
     declare phone: string;
     declare occupation: string;
-    declare ammount: number;
-
+    declare amount: number;
+    declare session_id: string;
 
     declare status?: status;
     declare creator?: number;
@@ -69,11 +69,15 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
 
-            ammount: {
+            amount: {
                 type: DataTypes.DECIMAL(10, 2),
                 allowNull: true,
             },
-            
+            session_id: {
+                type: DataTypes.STRING(100),
+                allowNull: true,
+            },
+
             status: {
                 type: new DataTypes.ENUM('active', 'deactive',),
 
