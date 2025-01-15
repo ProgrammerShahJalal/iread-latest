@@ -18,7 +18,6 @@ const DonationSuccessPage = () => {
   const occupation = searchParams.get('occupation');
   const amount = searchParams.get('amount');
 
-  // console.log('name, email, amount', name, email, amount);
 
   return (
     <>

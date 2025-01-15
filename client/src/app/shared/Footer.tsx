@@ -8,7 +8,7 @@ const Footer = () => {
                     {/* Logo & About Section */}
                     <div className="w-full md:w-2/5 mb-6 md:mb-0">
                         <h1 className="text-white text-2xl font-bold">IREAD</h1>
-                        <p className="text-gray-300 mt-4 text-lg md:text-sm">
+                        <p className="text-gray-300 mt-4 text-xl md:text-sm">
                             IREAD Online Learning Platform.
                             Unlock the power of artificial intelligence with cutting-edge tools and resources.
                         </p>
@@ -17,7 +17,7 @@ const Footer = () => {
                     {/* Links Section */}
                     <div className="w-full md:w-1/5 mb-6 md:mb-0">
                         <h2 className="text-white text-xl font-semibold mb-4">Quick Links</h2>
-                        <ul className="text-gray-300 text-lg md:text-sm space-y-2">
+                        <ul className="text-gray-300 text-xl md:text-sm space-y-2">
                             <li>
                                 <a href="/" className="hover:underline">
                                     Home
@@ -44,7 +44,7 @@ const Footer = () => {
                     {/* Legal Links */}
                     <div className="w-full md:w-1/5 mb-6 md:mb-0">
                         <h2 className="text-white text-xl font-semibold mb-4">Legal</h2>
-                        <ul className="text-gray-300 text-lg md:text-sm space-y-2">
+                        <ul className="text-gray-300 text-xl md:text-sm space-y-2">
                             <li>
                                 <a href="/privacy" className="hover:underline">
                                     Privacy Policy
@@ -67,10 +67,10 @@ const Footer = () => {
                     {/* Contact Section */}
                     <div className="w-full md:w-1/5">
                         <h2 className="text-white text-xl font-semibold mb-4">Contact Us</h2>
-                        <p className="text-gray-300 text-lg md:text-sm">
+                        <p className="text-gray-300 text-xl md:text-sm">
                             Email: <a href="mailto:support@aiuniverse.com" className="hover:underline">support@iread.com</a>
                         </p>
-                        <p className="text-gray-300 text-lg md:text-sm">
+                        <p className="text-gray-300 text-xl md:text-sm">
                             Phone: <a href="tel:+1234567890" className="hover:underline">+123 456 7890</a>
                         </p>
                         <div className="mt-4 flex space-x-4">
@@ -105,7 +105,7 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Section */}
-                <div className="mt-10 text-center text-lg md:text-sm text-gray-400 border-t border-gray-600 pt-6">
+                <div className="mt-10 text-center text-xl md:text-sm text-gray-400 border-t border-gray-600 pt-6">
                     © {new Date().getFullYear()} IREAD. All rights reserved.
                     Developed by Tech Park IT
                 </div>
