@@ -1,0 +1,44 @@
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  #menuzord-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+      margin: 10px;
+    }
+  
+    #menuzord-menu {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background-color: #202C45;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 10;
+    }
+  
+    #menuzord-menu.active {
+      display: flex;
+    }
+  
+    #menuzord-menu li {
+      margin: 10px 0;
+      text-align: center;
+    }
+  }
+  

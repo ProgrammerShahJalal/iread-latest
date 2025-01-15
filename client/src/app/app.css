@@ -14,6 +14,7 @@
 @import url("/frontend/css/colors/theme-skin-color-set-1.css");
 
 @import url("/style.css");
+@import url("/globals.css");
 
 @tailwind base;
 @tailwind components;

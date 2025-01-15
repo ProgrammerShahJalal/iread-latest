@@ -19,13 +19,12 @@ function DonationPage() {
   const getStripe = (): Promise<any> => {
     if (!stripePromise) {
       stripePromise = loadStripe(
-        "pk_test_51JwIBsFBTfTsSwmz8bqtyXmnIOlnITi40PZxeH94CVw4gw41R2R6chUyOdKef9J0CCNKuB22rOlGeVlfUcS2L9Nf008TuoJ83R"
+        process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string
       ); // Use your Stripe public key here
     }
     return stripePromise;
   };
-console.log("pub key", process?.env?.STRIPE_PUBLIC_KEY);
-console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -43,15 +42,16 @@ console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
       alert("Please enter a valid donation amount.");
       return;
     }
-    
+
     try {
-      console.log('from frontend', donationData)
+      // console.log('from frontend', donationData)
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/donations/create-checkout-session`,
         donationData
       );
-      
-      const sessionId = response.data?.sessionId;
+
+      const sessionId = response?.data?.data?.sessionId;
+
 
       // Redirect to Stripe Checkout
       const stripe = await getStripe(); 
@@ -59,6 +59,7 @@ console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
       if (error) {
         console.error(error);
       }
+   
     } catch (error) {
       console.error("Error creating checkout session:", error);
     }
@@ -136,7 +137,7 @@ console.log("next backend", process?.env?.NEXT_PUBLIC_BACKEND_URL);
                   <input
                     name="amount"
                     className="form-control"
-                    type="text"
+                    type="number"
                     placeholder="Enter Donation Amount"
                     value={donationData.amount}
                     onChange={handleChange}
