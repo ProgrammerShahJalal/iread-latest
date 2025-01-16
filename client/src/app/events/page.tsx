@@ -1,5 +1,6 @@
 import { events } from '@/data/events';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 const EventsPage = () => {
@@ -71,7 +72,7 @@ const EventsPage = () => {
                                                                     </div>
                                                                     <div className="schedule-details clearfix p-15 pt-10">
                                                                         <h5 className="font-16 title">
-                                                                            <a href={`/events/${event?.id}`}>{event?.title}</a>
+                                                                            <Link href={`/events/${event?.id}`}>{event?.title}</Link>
 
                                                                         </h5>
                                                                         <ul className="list-inline font-11 mb-20">
@@ -86,15 +87,15 @@ const EventsPage = () => {
                                                                             {event?.short_description}
                                                                         </p>
                                                                         <div className="mt-10">
-                                                                            <a
+                                                                            <Link
                                                                                 className="btn btn-dark btn-theme-colored btn-sm mt-10 mr-5"
                                                                                 href={`/events/${event?.id}#form`}
                                                                             >
                                                                                 Register
-                                                                            </a>
-                                                                            <a href={`/events/${event?.id}`} className="btn btn-dark btn-sm mt-10">
+                                                                            </Link>
+                                                                            <Link href={`/events/${event?.id}`} className="btn btn-dark btn-sm mt-10">
                                                                                 Details
-                                                                            </a>
+                                                                            </Link>
                                                                         </div>
                                                                     </div>
                                                                 </div>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
+import toast from "react-hot-toast";
 
 function DonationPage() {
   const [donationData, setDonationData] = useState({
@@ -39,7 +40,7 @@ function DonationPage() {
     e.preventDefault();
 
     if (parseFloat(donationData.amount) <= 0) {
-      alert("Please enter a valid donation amount.");
+      toast.error("Please enter a valid donation amount.")
       return;
     }
 

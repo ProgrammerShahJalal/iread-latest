@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import './Navbar.css';
+import Link from 'next/link';
 
 function Navbar() {
   useEffect(() => {
@@ -32,46 +33,46 @@ function Navbar() {
               </button>
               <ul id="menuzord-menu" className="menuzord-menu">
                 <li>
-                  <a href="/">Home</a>
+                  <Link href="/">Home</Link>
                 </li>
                 <li>
-                  <a href="/about">About Us</a>
+                  <Link href="/about">About Us</Link>
                 </li>
                 <li>
-                  <a href="/events">Events</a>
+                  <Link href="/events">Events</Link>
                 </li>
                 <li>
-                  <a href="/courses">Courses</a>
+                  <Link href="/courses">Courses</Link>
                 </li>
                 <li>
-                  <a href="/forum">Forum</a>
+                  <Link href="/forum">Forum</Link>
                 </li>
                 <li>
-                  <a href="/blogs">Blogs</a>
+                  <Link href="/blogs">Blogs</Link>
                 </li>
                 <li>
-                  <a href="/trainers">Trainers</a>
+                  <Link href="/trainers">Trainers</Link>
                 </li>
                 <li>
-                  <a href="/aiModels">AI Models</a>
+                  <Link href="/aiModels">AI Models</Link>
                 </li>
                 <li>
-                  <a href="/profile">Profile</a>
+                  <Link href="/profile">Profile</Link>
                 </li>
                 <li>
-                  <a href="/contact">Contact</a>
+                  <Link href="/contact">Contact</Link>
                 </li>
               </ul>
               <ul>
                 <li>
-                  <a
+                  <Link
                     className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
                     data-toggle="modal"
                     data-target="#BSParentModal"
                     href="/donate"
                   >
                     Donate Us
-                  </a>
+                  </Link>
                 </li>
               </ul>
               <div id="top-search-bar" className="collapse">
