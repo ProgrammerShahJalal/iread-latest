@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 const CoursePage = () => {
@@ -24,10 +25,10 @@ const CoursePage = () => {
             <h2 className="title text-white">Courses</h2>
             <ol className="breadcrumb text-left text-black mt-10">
               {/* <li>
-                <a href="#">Home</a>
+                <Link href="#">Home</Link>
               </li>
               <li>
-                <a href="#">Pages</a>
+                <Link href="#">Pages</Link>
               </li>
               <li className="active text-gray-silver">Page Title</li> */}
             </ol>
@@ -63,12 +64,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/1"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -93,12 +94,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/2"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -123,12 +124,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/3"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -153,12 +154,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/4"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -183,12 +184,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/5"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -215,12 +216,12 @@ const CoursePage = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam aliquam ipsum quis ipsum facilisis sit amet.
                   </p>
-                  <a
+                  <Link
                     className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                     href="/courses/6"
                   >
                     view details
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -257,29 +258,29 @@ const CoursePage = () => {
               <div className="categories">
                 <ul className="list list-border angle-double-right">
                   <li>
-                    <a href="#">
+                    <Link href="#">
                       Creative<span>(19)</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#">
+                    <Link href="#">
                       Portfolio<span>(21)</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#">
+                    <Link href="#">
                       Fitness<span>(15)</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#">
+                    <Link href="#">
                       Gym<span>(35)</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#">
+                    <Link href="#">
                       Personal<span>(16)</span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -290,37 +291,37 @@ const CoursePage = () => {
               </h5>
               <div className="latest-posts">
                 <article className="post media-post clearfix pb-0 mb-10">
-                  <a className="post-thumb" href="#">
+                  <Link className="post-thumb" href="#">
                     <Image src="/frontend/images/services/s1.jpg" alt=""  width={100}
                     height={100}/>
-                  </a>
+                  </Link>
                   <div className="post-right">
                     <h5 className="post-title mt-0">
-                      <a href="#">Sustainable Construction</a>
+                      <Link href="#">Sustainable Construction</Link>
                     </h5>
                     <p>Lorem ipsum dolor sit amet adipisicing elit...</p>
                   </div>
                 </article>
                 <article className="post media-post clearfix pb-0 mb-10">
-                  <a className="post-thumb" href="#">
+                  <Link className="post-thumb" href="#">
                     <Image src="/frontend/images/services/s3.jpg" alt="" width={100}
                     height={100}/>
-                  </a>
+                  </Link>
                   <div className="post-right">
                     <h5 className="post-title mt-0">
-                      <a href="#">Industrial Coatings</a>
+                      <Link href="#">Industrial Coatings</Link>
                     </h5>
                     <p>Lorem ipsum dolor sit amet adipisicing elit...</p>
                   </div>
                 </article>
                 <article className="post media-post clearfix pb-0 mb-10">
-                  <a className="post-thumb" href="#">
+                  <Link className="post-thumb" href="#">
                     <Image src="/frontend/images/services/s2.jpg" alt=""  width={100}
                     height={100}/>
-                  </a>
+                  </Link>
                   <div className="post-right">
                     <h5 className="post-title mt-0">
-                      <a href="#">Storefront Installations</a>
+                      <Link href="#">Storefront Installations</Link>
                     </h5>
                     <p>Lorem ipsum dolor sit amet adipisicing elit...</p>
                   </div>
@@ -344,35 +345,35 @@ const CoursePage = () => {
             <ul className="pagination theme-colored xs-pull-center m-0">
               <li>
                 {" "}
-                <a href="#" aria-label="Previous">
+                <Link href="#" aria-label="Previous">
                   {" "}
                   <span aria-hidden="true">«</span>{" "}
-                </a>{" "}
+                </Link>{" "}
               </li>
               <li className="active">
-                <a href="#">1</a>
+                <Link href="#">1</Link>
               </li>
               <li>
-                <a href="#">2</a>
+                <Link href="#">2</Link>
               </li>
               <li>
-                <a href="#">3</a>
+                <Link href="#">3</Link>
               </li>
               <li>
-                <a href="#">4</a>
+                <Link href="#">4</Link>
               </li>
               <li>
-                <a href="#">5</a>
+                <Link href="#">5</Link>
               </li>
               <li>
-                <a href="#">...</a>
+                <Link href="#">...</Link>
               </li>
               <li>
                 {" "}
-                <a href="#" aria-label="Next">
+                <Link href="#" aria-label="Next">
                   {" "}
                   <span aria-hidden="true">»</span>{" "}
-                </a>{" "}
+                </Link>{" "}
               </li>
             </ul>
           </nav>
