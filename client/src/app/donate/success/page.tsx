@@ -1,7 +1,7 @@
 "use client";
 import Invoice from '@/Invoice/Invoice';
 import React from 'react';
-
+import emailjs from "@emailjs/browser";
 import { useSearchParams } from 'next/navigation';
 
 
@@ -19,6 +19,26 @@ const DonationSuccessPage = () => {
   const amount = searchParams.get('amount');
 
 
+
+   // Function to get today's date in a readable format
+   const getTodayDate = () => {
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    };
+    return today.toLocaleDateString("en-US", options);
+};
+
+const generateInvoiceNumber = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+    return `${randomNum}-${year}`;
+};
+
+
   return (
     <>
       <div className=" text-center">
@@ -27,7 +47,15 @@ const DonationSuccessPage = () => {
           Your donation was successful. Your support helps us make a difference.
         </p>
       </div>
-      <Invoice  name={name} email={email} phone={phone} occupation={occupation} amount={amount} />
+      <Invoice  
+      name={name} 
+      email={email} 
+      phone={phone} 
+      occupation={occupation} 
+      amount={amount}
+      getTodayDate={getTodayDate} 
+      generateInvoiceNumber={generateInvoiceNumber} 
+       />
     </>
   );
 };
