@@ -1,5 +1,6 @@
 import { blogs } from "@/data/blogs";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 
@@ -56,7 +57,7 @@ const Blog = () => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <a href={`/blogs/${blog.id}`}>{blog.title}</a>
+                                                        <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
@@ -64,9 +65,9 @@ const Blog = () => {
 
                                         </div>
                                         <p className="text-justify mt-3">{blog.short_description}</p>
-                                        <a href={`/blogs/${blog.id}`} className="btn-read-more">
+                                        <Link href={`/blogs/${blog.id}`} className="btn-read-more">
                                             Read more
-                                        </a>
+                                        </Link>
                                     </div>
                                 </article>
                             </div>
