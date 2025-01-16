@@ -16,7 +16,7 @@ const DonationSuccessPage = () => {
 
   const [isEmailSent, setIsEmailSent] = useState(false); // Track if email has been sent
 
-  // Function to get today's date in a readable format
+  // Function to get today's date in Link readable format
   const getTodayDate = () => {
     const today = new Date();
     const options: Intl.DateTimeFormatOptions = {

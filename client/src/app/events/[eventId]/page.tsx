@@ -4,6 +4,7 @@ import CountdownTimer from '@/CoundownTimer/CoundownTimer'
 import { events, photoGallary } from '@/data/events';
 import ImageGallery from '@/home/ImageGallary';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React from 'react'
 
@@ -102,9 +103,9 @@ const EventDetailsPage = () => {
                   <p className='text-indigo-600 font-semibold'>{event.event_type}</p>
                 </div>
               </div>
-              <a href="#form" className="btn bg-[#202C45] text-white w-full mt-3">
+              <Link href="#form" className="btn bg-[#202C45] text-white w-full mt-3">
                 Register Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>
