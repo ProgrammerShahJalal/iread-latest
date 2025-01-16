@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image'
+import Link from 'next/link';
 import React, { useState } from 'react'
 import ModalVideo from 'react-modal-video';
 import "react-modal-video/css/modal-video.css";
@@ -42,12 +43,12 @@ function Hero() {
                             accusantium delectus nisi reprehenderit, eveniet fuga modi pariatur,
                             eius vero. Ea vitae maiores.
                         </p>
-                        <a
+                        <Link
                             className="btn btn-theme-colored btn-flat btn-lg mt-10 mb-sm-30"
                             href="#"
                         >
                             Know More →
-                        </a>
+                        </Link>
                     </div>
 
                     <div className="col-md-6">

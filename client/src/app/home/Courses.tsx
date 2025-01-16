@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type Course = {
   id: number;
@@ -86,12 +87,12 @@ function Courses({}: Props) {
                     <div className="content text-left flip p-25 pt-0">
                       <h4 className="line-bottom mb-10 text-3xl md:text-lg mt-2">{course.title}</h4>
                       <p>{course.description}</p>
-                      <a
+                      <Link
                         className="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                         href={course.detailsPage}
                       >
                         View Details
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

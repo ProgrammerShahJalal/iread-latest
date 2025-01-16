@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -19,24 +20,24 @@ const Footer = () => {
                         <h2 className="text-white text-xl font-semibold mb-4">Quick Links</h2>
                         <ul className="text-gray-300 text-xl md:text-sm space-y-2">
                             <li>
-                                <a href="/" className="hover:underline">
+                                <Link href="/" className="hover:underline">
                                     Home
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/about" className="hover:underline">
+                                <Link href="/about" className="hover:underline">
                                     About Us
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/forum" className="hover:underline">
+                                <Link href="/forum" className="hover:underline">
                                     Forum
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/contact" className="hover:underline">
+                                <Link href="/contact" className="hover:underline">
                                     Contact
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -46,19 +47,19 @@ const Footer = () => {
                         <h2 className="text-white text-xl font-semibold mb-4">Legal</h2>
                         <ul className="text-gray-300 text-xl md:text-sm space-y-2">
                             <li>
-                                <a href="/privacy" className="hover:underline">
+                                <Link href="/privacy" className="hover:underline">
                                     Privacy Policy
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/terms" className="hover:underline">
+                                <Link href="/terms" className="hover:underline">
                                     Terms and Conditions
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/faq" className="hover:underline">
+                                <Link href="/faq" className="hover:underline">
                                     FAQ
-                                </a>
+                                </Link>
                             </li>
 
                         </ul>
@@ -68,38 +69,38 @@ const Footer = () => {
                     <div className="w-full md:w-1/5">
                         <h2 className="text-white text-xl font-semibold mb-4">Contact Us</h2>
                         <p className="text-gray-300 text-xl md:text-sm">
-                            Email: <a href="mailto:support@aiuniverse.com" className="hover:underline">support@iread.com</a>
+                            Email: <Link href="mailto:support@aiuniverse.com" className="hover:underline">support@iread.com</Link>
                         </p>
                         <p className="text-gray-300 text-xl md:text-sm">
-                            Phone: <a href="tel:+1234567890" className="hover:underline">+123 456 7890</a>
+                            Phone: <Link href="tel:+1234567890" className="hover:underline">+123 456 7890</Link>
                         </p>
                         <div className="mt-4 flex space-x-4">
 
-                            <a href="#">
+                            <Link href="#">
                                 <i className="fa fa-facebook text-white" />
-                            </a>
+                            </Link>
 
-                            <a
+                            <Link
                                 href="#"
 
                             >
                                 <i className="fa fa-twitter text-white" />
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="#"
                             >
                                 <i className="fa fa-linkedin text-white" />
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="#"
                             >
                                 <i className="fa fa-google-plus text-white" />
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="#"
                             >
                                 <i className="fa fa-instagram text-white" />
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

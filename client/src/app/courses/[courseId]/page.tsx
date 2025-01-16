@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const CourseDetailsPage = () => {
@@ -72,7 +73,7 @@ const CourseDetailsPage = () => {
                                             </p>
                                             <p>
                                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
-                                                voluptatem officiis quod animi possimus a, iure nam sunt quas
+                                                voluptatem officiis quod animi possimus Link, iure nam sunt quas
                                                 aperiam non recusandae reprehenderit, nesciunt cumque pariatur
                                                 totam repellendus delectus? Maxime quasi earum nobis, dicta,
                                                 aliquam facere reiciendis, delectus voluptas, ea assumenda
@@ -83,19 +84,19 @@ const CourseDetailsPage = () => {
                                             </h4>
                                             <ul id="myTab" className="nav nav-tabs boot-tabs">
                                                 <li className="active">
-                                                    <a href="#small" data-toggle="tab">
+                                                    <Link href="#small" data-toggle="tab">
                                                         Categories
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                    <a href="#medium" data-toggle="tab">
+                                                    <Link href="#medium" data-toggle="tab">
                                                         Categories
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                    <a href="#large" data-toggle="tab">
+                                                    <Link href="#large" data-toggle="tab">
                                                         Categories
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                             </ul>
                                             <div id="myTabContent" className="tab-content">
@@ -249,44 +250,44 @@ const CourseDetailsPage = () => {
                                                 <div className="services-list">
                                                     <ul className="list list-border angle-double-right">
                                                         <li className="active">
-                                                            <a href="page-courses-accounting-technologies.html">
+                                                            <Link href="page-courses-accounting-technologies.html">
                                                                 Accounting Technologies
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-chemical-engineering.html">
+                                                            <Link href="page-courses-chemical-engineering.html">
                                                                 Chemical Engineering
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-computer-technologies.html">
+                                                            <Link href="page-courses-computer-technologies.html">
                                                                 Computer Technologies
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-development-studies.html">
+                                                            <Link href="page-courses-development-studies.html">
                                                                 Development Studies
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-electrical-electronic.html">
+                                                            <Link href="page-courses-electrical-electronic.html">
                                                                 Electrical &amp; Electronic
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-modern-languages.html">
+                                                            <Link href="page-courses-modern-languages.html">
                                                                 Modern Languages
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-modern-technologies.html">
+                                                            <Link href="page-courses-modern-technologies.html">
                                                                 Modern Technologies
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                         <li>
-                                                            <a href="page-courses-software-engineering.html">
+                                                            <Link href="page-courses-software-engineering.html">
                                                                 Software Engineering
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                     </ul>
                                                 </div>
