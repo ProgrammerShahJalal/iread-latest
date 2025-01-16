@@ -9,33 +9,17 @@ interface InvoiceProps {
     phone: string | null;
     occupation: string | null;
     amount: string | null;
+    getTodayDate: () => string;
+    generateInvoiceNumber: () => string;
 }
 
 
-const Invoice: React.FC<InvoiceProps> = ({ name, email, phone, occupation, amount }) => {
+const Invoice: React.FC<InvoiceProps> = ({ name, email, phone, occupation, amount, getTodayDate, generateInvoiceNumber }) => {
 
     const targetRef = useRef<HTMLDivElement>(null);
 
 
     const getTargetElement = () => document.getElementById('content-id');
-
-    // Function to get today's date in a readable format
-    const getTodayDate = () => {
-        const today = new Date();
-        const options: Intl.DateTimeFormatOptions = {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        };
-        return today.toLocaleDateString("en-US", options);
-    };
-
-    const generateInvoiceNumber = () => {
-        const date = new Date();
-        const year = date.getFullYear();
-        const randomNum = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
-        return `${randomNum}-${year}`;
-    };
 
 
     return (
