@@ -88,7 +88,7 @@ async function store(
     //     await (fastify_instance as any).upload(body['cover_image'], image_path);
     // }
 
-    // let values: number[] = JSON.parse(body['app_setting_values']) || [];
+    let values: number[] = JSON.parse(body['app_setting_values']) || [];
 
 
     let inputs: InferCreationAttributes<typeof data> = {

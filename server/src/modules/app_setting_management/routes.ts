@@ -4,7 +4,7 @@ import controller from './controller';
 
 module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void) {
     const controllerInstance = controller(fastify);
-    let prefix: string = '/app-setting';
+    let prefix: string = '/app-settings';
 
     fastify
         .get(`${prefix}`, controllerInstance.all)
