@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import UpcomingCountdownTimer from '@/CoundownTimer/UpcomingCoundownTimer'
 import Navbar from './Navbar'
+import Link from 'next/link'
 
 function Header() {
     return (
@@ -13,21 +14,21 @@ function Header() {
                             <div className="widget no-border m-0">
                                 <ul className="list-inline font-13 sm-text-center mt-5">
                                     <li>
-                                        <a className="text-white" href="/faq">
+                                        <Link className="text-white" href="/faq">
                                             FAQ
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="/privacy">
+                                        <Link className="text-white" href="/privacy">
                                             Privacy Policy
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="text-white">|</li>
                                     <li>
-                                        <a className="text-white" href="/terms">
+                                        <Link className="text-white" href="/terms">
                                             Terms and Conditions
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -72,12 +73,12 @@ function Header() {
                     <div className="row">
                         <div className="col-xs-12 col-sm-4 col-md-5">
                             <div className="widget no-border m-0">
-                                <a
+                                <Link
                                     className="menuzord-brand pull-left flip xs-pull-center mb-15"
                                     href="/"
                                 >
                                     IREAD
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         <div className="col-xs-12 col-sm-4 col-md-4">
