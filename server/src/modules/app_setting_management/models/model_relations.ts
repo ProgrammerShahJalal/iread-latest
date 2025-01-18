@@ -3,7 +3,7 @@ import Models from "../../../database/models";
 export function init() {
     const models = Models.get();
 
-    models.AppSettingModel.hasMany(models.AppSettingValuesModel, {
+    models.AppSettinsgModel.hasMany(models.AppSettingsValuesModel, {
         foreignKey: "app_setting_key_id",
         as: "app_settings",
     });

@@ -82,7 +82,7 @@ async function all(
         },
         include: [
             {
-                model: models.AppSettingValuesModel,
+                model: models.AppSettingsValuesModel,
                 as : 'app_settings',
             }
         ],

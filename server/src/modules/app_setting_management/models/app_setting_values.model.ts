@@ -21,7 +21,7 @@ import {
 } from 'sequelize';
 
 export const tableName = 'app_setting_values';
-export const modelName = 'AppSettingValuesModel';
+export const modelName = 'AppSettingsValuesModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -56,11 +56,6 @@ function init(sequelize: Sequelize) {
             app_setting_key_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
-                // references: {
-                //     model: 'app_settings',
-                //     key: 'id',
-                // },
-                // onDelete: 'CASCADE',
             },
             title: {
                 type: DataTypes.STRING(100),

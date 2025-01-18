@@ -18,8 +18,8 @@ import * as EventTagsModel from "../modules/event_tags_management/models/model";
 
 import * as DonationModel from "../modules/donation_management/models/model";
 
-import * as AppSettingModel from "../modules/app_setting_management/models/model";
-import * as AppSettingValuesModel from "../modules/app_setting_management/models/app_setting_values.model";
+import * as AppSettinsgModel from "../modules/app_setting_management/models/model";
+import * as AppSettingsValuesModel from "../modules/app_setting_management/models/app_setting_values.model";
 
 import * as AppSubscribersModel from "../modules/app_subscribers_management/models/model";
 
@@ -45,8 +45,8 @@ export type model_types = {
 
     DonationModel: typeof DonationModel.DataModel;
 
-    AppSettingModel: typeof AppSettingModel.DataModel;
-    AppSettingValuesModel: typeof AppSettingValuesModel.DataModel;
+    AppSettinsgModel: typeof AppSettinsgModel.DataModel;
+    AppSettingsValuesModel: typeof AppSettingsValuesModel.DataModel;
 
     AppSubscribersModel: typeof AppSubscribersModel.DataModel;
 }
