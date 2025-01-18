@@ -18,7 +18,7 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
-    "email" : "shah.jalal.ju.bd@gmail.com"
+    "email" : "iread.hello@gmail.com"
 }
 
 
@@ -29,7 +29,8 @@ content-type: application/json
 
 {
     "id": 1,
-    "email": "farabi@gmail.com"
+    "status": "active"
+
 }
 
 # soft delete

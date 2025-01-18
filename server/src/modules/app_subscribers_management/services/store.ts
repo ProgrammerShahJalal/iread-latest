@@ -68,7 +68,7 @@ async function store(
 
 
         if (!data.id) {
-            throw new Error('Failed to save blog data.');
+            throw new Error('Failed to save data.');
         }
 
 
