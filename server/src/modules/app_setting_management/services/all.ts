@@ -54,6 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
+    // let models = await db();
     let models = Models.get();
     let query_param = req.query as any;
 
@@ -79,7 +80,12 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [
+            {
+                model: models.AppSettingValuesModel,
+                as : 'app_settings',
+            }
+        ],
     };
 
     query.attributes = select_fields;

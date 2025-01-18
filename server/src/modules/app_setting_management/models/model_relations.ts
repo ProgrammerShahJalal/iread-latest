@@ -1,0 +1,15 @@
+import Models from "../../../database/models";
+
+export function init() {
+    const models = Models.get();
+
+    models.AppSettingModel.hasMany(models.AppSettingValuesModel, {
+        foreignKey: "app_setting_key_id",
+        as: "app_settings",
+    });
+
+    // models.BlogCommentModel.belongsTo(models.BlogModel, {
+    //     foreignKey: "blog_id",
+    //     as: "blogs",
+    // });
+}

@@ -54,6 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
+    // let models = await db();
     let models = Models.get();
     let query_param = req.query as any;
 
