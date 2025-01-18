@@ -12,7 +12,6 @@ function Hero() {
     const openModal = () => {
         setIsOpen(true);
     };
-
     return (
         <>
         {/* Modal Video */}
