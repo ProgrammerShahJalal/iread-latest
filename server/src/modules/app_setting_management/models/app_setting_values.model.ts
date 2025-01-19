@@ -21,7 +21,7 @@ import {
 } from 'sequelize';
 
 export const tableName = 'app_setting_values';
-export const modelName = 'AppSettingsValuesModel';
+export const modelName = 'AppSettingValuesModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
