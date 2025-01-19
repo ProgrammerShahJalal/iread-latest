@@ -23,6 +23,7 @@ import * as EventSessionsAssesmentsModel from "../modules/event_session_assesmen
 import * as EventSessionAssesmentSubmissionsModel from "../modules/event_session_assesment_submissions_management/models/model";
 import * as EventAttendanceModel from "../modules/event_attendance_management/models/model";
 import * as EventEnrollmentsModel from "../modules/event_enrollments_management/models/model";
+import * as EventPaymentsModel from "../modules/event_payments_management/models/model";
 
 import * as DonationModel from "../modules/donation_management/models/model";
 
@@ -58,6 +59,7 @@ export type model_types = {
     EventSessionAssesmentSubmissionsModel: typeof EventSessionAssesmentSubmissionsModel.DataModel;
     EventAttendanceModel: typeof EventAttendanceModel.DataModel;
     EventEnrollmentsModel: typeof EventEnrollmentsModel.DataModel;
+    EventPaymentsModel: typeof EventPaymentsModel.DataModel;
 
     DonationModel: typeof DonationModel.DataModel;
 
