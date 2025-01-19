@@ -5,6 +5,6 @@ export function init() {
 
     models.EventModel.hasMany(models.EventCertifiedUsersModel, {
         foreignKey: "event_id",
-        as: "event_resources",
+        as: "event_faqs",
     })
 }
