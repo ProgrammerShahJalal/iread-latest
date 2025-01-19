@@ -19,6 +19,7 @@ import * as EventCertifiedUsersModel from "../modules/event_certified_users_mana
 import * as EventResourcesModel from "../modules/event_resources_management/models/model";
 import * as EventFaqsModel from "../modules/event_faqs_management/models/model";
 import * as EventSessionsModel from "../modules/event_sessions_management/models/model";
+import * as EventSessionsAssesmentsModel from "../modules/event_session_assesments_management/models/model";
 
 import * as DonationModel from "../modules/donation_management/models/model";
 
@@ -50,6 +51,7 @@ export type model_types = {
     EventResourcesModel: typeof EventResourcesModel.DataModel;
     EventFaqsModel: typeof EventFaqsModel.DataModel;
     EventSessionsModel: typeof EventSessionsModel.DataModel;
+    EventSessionsAssesmentsModel: typeof EventSessionsAssesmentsModel.DataModel;
 
     DonationModel: typeof DonationModel.DataModel;
 
