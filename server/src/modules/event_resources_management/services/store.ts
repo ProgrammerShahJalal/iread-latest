@@ -7,12 +7,12 @@ import {
     Request,
 } from '../../../common_types/object';
 import { InferCreationAttributes } from 'sequelize';
+import moment from 'moment';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
 
-import moment from 'moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
@@ -20,7 +20,8 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'id',
+        'title',
+        'url',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -34,19 +35,34 @@ async function validate(req: Request) {
             .run(req);
     }
 
+    // field = 'reference';
+    // await body(field)
+    //     .not()
+    //     .isEmpty()
+    //     .custom(async (value) => {
+    //         const length = value.length;
+    //         if (length <= 2) {
+    //             throw new Error(
+    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+    //             );
+    //         }
+    //     })
+    //     .withMessage(
+    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+    //     )
+    //     .run(req);
+
     let result = await validationResult(req);
 
     return result;
 }
-
-// async function update(
+// async function store(
 //     fastify_instance: FastifyInstance,
 //     req: FastifyRequest,
 // ): Promise<responseObject> {
 //     throw new Error('500 test');
 // }
-
-async function update(
+async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
@@ -59,15 +75,13 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let user_model = new models[modelName]();
-
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        user_id: body.user_id,
+    let data = new models[modelName]();
+    
+    let inputs: InferCreationAttributes<typeof data> = {
+     
         event_id: body.event_id,
-        scores: body.scores,
-        grade: body.grade,
-        date: body.date,
-        is_submitted: body.is_submitted,
+        title: body.title,
+        url: body.url,
     };
 
     /** print request data into console */
@@ -76,27 +90,16 @@ async function update(
 
     /** store data into database */
     try {
-        let data = await models[modelName].findByPk(body.id);
-        if (data) {
-            data.update(inputs);
-            await data.save();
-            return response(201, 'data updated', { data });
-        } else {
-            throw new custom_error(
-                'data not found',
-                404,
-                'operation not possible',
-            );
-        }
+        (await data.update(inputs)).save();
+
+        return response(201, 'data created', {
+            data,
+        });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
-        if (error instanceof custom_error) {
-            error.uid = uid;
-        } else {
-            throw new custom_error('server error', 500, error.message, uid);
-        }
-        throw error;
+        throw new custom_error('server error', 500, error.message, uid);
+        // throw error;
     }
 }
 
-export default update;
+export default store;
