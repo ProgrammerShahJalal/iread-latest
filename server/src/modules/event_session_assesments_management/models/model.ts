@@ -20,23 +20,24 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'app_setting_values';
-export const modelName = 'AppSettingValuesModel';
+export const tableName = 'event_sessions_assesments';
+export const modelName = 'EventSessionsAssesmentsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'active' | 'deactive';
-type type = 'text' | 'number' | 'file' | "text editor";
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare app_setting_key_id: number;
+    declare event_id: number;
+    declare event_session_id: number;
     declare title: string;
-    declare value: string;
-    declare is_default: boolean;
-    declare type: type;
-
+    declare description: string;
+    declare mark: number;
+    declare pass_mark: number;
+    declare start: string;
+    declare end: string;
 
     declare status?: status;
     declare creator?: number;
@@ -53,28 +54,41 @@ function init(sequelize: Sequelize) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            app_setting_key_id: {
+            event_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
+            event_session_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
             title: {
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING,
                 allowNull: true,
             },
-            value: {
-                type: DataTypes.STRING(150),
+            description: {
+                type: DataTypes.STRING,
                 allowNull: true,
             },
-            is_default: {
-                type: DataTypes.BOOLEAN,
+            mark: {
+                type: DataTypes.INTEGER,
                 allowNull: true,
             },
-            type: {
-                type: DataTypes.ENUM('text', 'number', 'file', 'text editor'),
+            pass_mark: {
+                type: DataTypes.INTEGER,
                 allowNull: true,
             },
+            start: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            end: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+
             status: {
-                type: new DataTypes.ENUM('active', 'deactive',),
+                type: new DataTypes.ENUM('active', 'deactive'),
 
                 defaultValue: 'active',
             },

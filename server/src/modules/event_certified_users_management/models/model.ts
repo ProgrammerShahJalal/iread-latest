@@ -20,23 +20,22 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'app_setting_values';
-export const modelName = 'AppSettingValuesModel';
+export const tableName = 'event_certified_users';
+export const modelName = 'EventCertifiedUsersModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'active' | 'deactive';
-type type = 'text' | 'number' | 'file' | "text editor";
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare app_setting_key_id: number;
-    declare title: string;
-    declare value: string;
-    declare is_default: boolean;
-    declare type: type;
-
+    declare user_id?: number;
+    declare event_id: number;
+    declare scores: number;
+    declare grade: string;
+    declare date: string;
+    declare is_submitted: boolean;
 
     declare status?: status;
     declare creator?: number;
@@ -53,28 +52,34 @@ function init(sequelize: Sequelize) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            app_setting_key_id: {
+
+            user_id: {
+                type: DataTypes.BIGINT().UNSIGNED,
+                allowNull: true,
+            },
+            event_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            title: {
-                type: DataTypes.STRING(100),
+            scores: {
+                type: DataTypes.INTEGER(),
                 allowNull: true,
             },
-            value: {
-                type: DataTypes.STRING(150),
+            grade: {
+                type: DataTypes.STRING(),
                 allowNull: true,
             },
-            is_default: {
-                type: DataTypes.BOOLEAN,
+            date: {
+                type: DataTypes.STRING(),
                 allowNull: true,
             },
-            type: {
-                type: DataTypes.ENUM('text', 'number', 'file', 'text editor'),
-                allowNull: true,
+            is_submitted: {
+                type: DataTypes.BOOLEAN(),
+                defaultValue: false,
             },
+
             status: {
-                type: new DataTypes.ENUM('active', 'deactive',),
+                type: new DataTypes.ENUM('active', 'deactive'),
 
                 defaultValue: 'active',
             },
