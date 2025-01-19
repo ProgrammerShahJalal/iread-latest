@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'event_certified_users';
-export const modelName = 'EventCertifiedUsersModel';
+export const tableName = 'event_session_assesment_submissions';
+export const modelName = 'EventSessionAssesmentSubmissionsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -30,12 +30,13 @@ type status = 'active' | 'deactive';
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare user_id?: number;
     declare event_id: number;
-    declare scores: number;
+    declare event_session_id: number;
+    declare event_session_assesment_id: number;
+    declare submitted_content: string;
+    declare mark: number;
+    declare obtained_mark: number;
     declare grade: string;
-    declare date: string;
-    declare is_submitted: boolean;
 
     declare status?: status;
     declare creator?: number;
@@ -52,31 +53,35 @@ function init(sequelize: Sequelize) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-
-            user_id: {
-                type: DataTypes.BIGINT().UNSIGNED,
-                allowNull: true,
-            },
             event_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            scores: {
-                type: DataTypes.INTEGER(),
+            event_session_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
+            event_session_assesment_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
+            submitted_content: {
+                type: DataTypes.TEXT(),
+                allowNull: true,
+            },
+            mark: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
+            obtained_mark: {
+                type: DataTypes.INTEGER,
                 allowNull: true,
             },
             grade: {
                 type: DataTypes.STRING(),
                 allowNull: true,
             },
-            date: {
-                type: DataTypes.STRING(),
-                allowNull: true,
-            },
-            is_submitted: {
-                type: DataTypes.BOOLEAN(),
-                defaultValue: false,
-            },
+
 
             status: {
                 type: new DataTypes.ENUM('active', 'deactive'),
