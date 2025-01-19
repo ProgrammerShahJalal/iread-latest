@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'event_certified_users';
-export const modelName = 'EventCertifiedUsersModel';
+export const tableName = 'event_resources';
+export const modelName = 'EventResourcesModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -30,12 +30,9 @@ type status = 'active' | 'deactive';
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
-    declare user_id?: number;
     declare event_id: number;
-    declare scores: number;
-    declare grade: string;
-    declare date: string;
-    declare is_submitted: boolean;
+    declare title: string;
+    declare url: string;
 
     declare status?: status;
     declare creator?: number;
@@ -52,30 +49,17 @@ function init(sequelize: Sequelize) {
                 autoIncrement: true,
                 primaryKey: true,
             },
-
-            user_id: {
-                type: DataTypes.BIGINT().UNSIGNED,
-                allowNull: true,
-            },
             event_id: {
-                type: DataTypes.TEXT(),
+                type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            scores: {
-                type: DataTypes.INTEGER(),
+            title: {
+                type: DataTypes.STRING,
                 allowNull: true,
             },
-            grade: {
-                type: DataTypes.STRING(),
+            url: {
+                type: DataTypes.STRING,
                 allowNull: true,
-            },
-            date: {
-                type: DataTypes.STRING(),
-                allowNull: true,
-            },
-            is_submitted: {
-                type: DataTypes.BOOLEAN(),
-                defaultValue: false,
             },
 
             status: {

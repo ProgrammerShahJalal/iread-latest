@@ -79,6 +79,7 @@ async function store(
     let data = new models[modelName]();
     
     let inputs: InferCreationAttributes<typeof data> = {
+     
         user_id: body.user_id,
         event_id: body.event_id,
         scores: body.scores,

@@ -1,4 +1,4 @@
-@hostname = http://127.0.0.1:5001/api/v1/event-certified-users
+@hostname = http://127.0.0.1:5001/api/v1/event-resources
 
 # all
 ###
@@ -14,11 +14,9 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
-    "user_id": "2",
-    "event_id": "3",
-    "scores": "567",
-    "grade": "A-",
-    "date": "2025-04-01"
+    "event_id": "2",
+    "title": "Marketing Monster",
+    "url": "https://www.example.com"
 }
 
 

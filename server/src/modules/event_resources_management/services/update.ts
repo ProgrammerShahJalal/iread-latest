@@ -62,12 +62,9 @@ async function update(
     let user_model = new models[modelName]();
 
     let inputs: InferCreationAttributes<typeof user_model> = {
-        user_id: body.user_id,
         event_id: body.event_id,
-        scores: body.scores,
-        grade: body.grade,
-        date: body.date,
-        is_submitted: body.is_submitted,
+        title: body.title,
+        url: body.url,
     };
 
     /** print request data into console */
