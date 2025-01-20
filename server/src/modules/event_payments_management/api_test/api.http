@@ -35,7 +35,6 @@ content-type: application/json
 {
     "id": 2,
     "amount": "100.60",
-    "is_refunded": true
 }
 ###
 #payment refunds
@@ -43,7 +42,7 @@ POST {{hostname}}/payment-refunds HTTP/1.1
 content-type: application/json
 
 {
-    "id": 3,
+    "id": 2,
     "is_refunded": true
 }
 
