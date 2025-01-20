@@ -83,6 +83,7 @@ async function store(
         event_id: body.event_id,
         user_id: body.user_id,
         event_enrollment_id: body.event_enrollment_id,
+        event_payment_id: body.event_payment_id,
         date: body.date,
         amount: body.amount,
         trx_id: body.trx_id,
