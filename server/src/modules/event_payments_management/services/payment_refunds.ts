@@ -52,7 +52,7 @@ async function payment_refunds(
     /** Initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let user_model = new models[modelName]();
+    let payment_model = new models[modelName]();
 
     try {
         /** Fetch payment data */
@@ -70,7 +70,7 @@ async function payment_refunds(
         await data.save();
 
         /** Log refund details in `event_payment_refunds` */
-        const refundInputs: InferCreationAttributes<typeof user_model> = {
+        const refundInputs: InferCreationAttributes<typeof payment_model> = {
             event_id: data.event_id,
             user_id: data.user_id,
             event_enrollment_id: data.event_enrollment_id,
