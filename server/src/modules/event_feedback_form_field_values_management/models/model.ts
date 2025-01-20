@@ -20,25 +20,22 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'event_payments';
-export const modelName = 'EventPaymentsModel';
+export const tableName = 'event_feedback_form_field_values';
+export const modelName = 'EventFeedbackFormFieldValuesModel';
+
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'success' | 'failed';
-type media = 'Stripe' | 'Bank';
+type status = 'active' | 'deactive';
+
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
+    declare event_form_field_id: number;
     declare user_id: number;
-    declare event_enrollment_id: number;
-    declare date: string;
-    declare amount: number;
-    declare trx_id: string;
-    declare media: media;
-    declare is_refunded?: boolean;
+    declare value: string;
 
     declare status?: status;
     declare creator?: number;
@@ -59,39 +56,24 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
+            event_form_field_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
             user_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            event_enrollment_id: {
-                type: DataTypes.BIGINT.UNSIGNED,
+            value: {
+                type: DataTypes.TEXT,
                 allowNull: true,
-            },
-            date: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
-            amount: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: true,
-            },
-            trx_id: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
-            media: {
-                type: DataTypes.ENUM('Stripe', 'Bank'),
-                defaultValue: 'Stripe',
-            },
-            is_refunded: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: false,
             },
 
 
             status: {
-                type: new DataTypes.ENUM('success', 'failed'),
-                defaultValue: 'success',
+                type: new DataTypes.ENUM('active', 'deactive'),
+
+                defaultValue: 'active',
             },
 
             created_at: DataTypes.DATE,
