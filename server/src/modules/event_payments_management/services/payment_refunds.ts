@@ -39,70 +39,64 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
-
-async function update(
+async function payment_refunds(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    /** validation */
-    let validate_result = await validate(req as Request);
+    /** Validation */
+    const validate_result = await validate(req as Request);
     if (!validate_result.isEmpty()) {
-        return response(422, 'validation error', validate_result.array());
+        return response(422, 'Validation error', validate_result.array());
     }
 
-    /** initializations */
+    /** Initializations */
     let models = Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        event_id: body.event_id,
-        user_id: body.user_id,
-        event_enrollment_id: body.event_enrollment_id,
-        event_payment_id: body.event_payment_id,
-        date: body.date,
-        amount: body.amount,
-        trx_id: body.trx_id,
-        media: body.media,
-        is_refunded: body.is_refunded,
-    };
-
-    /* check user id exist */
-    /* check user id exist */
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
-    /** store data into database */
     try {
+        /** Fetch payment data */
         let data = await models[modelName].findByPk(body.id);
-        if (data) {
-            data.update(inputs);
-            await data.save();
-            return response(201, 'data updated', { data });
-        } else {
+        if (!data) {
             throw new custom_error(
-                'data not found',
+                'Payment data not found',
                 404,
-                'operation not possible',
+                'Refund operation not possible'
             );
         }
+
+        /** Mark as refunded in `event_payments` */
+        data.is_refunded = true;
+        await data.save();
+
+        /** Log refund details in `event_payment_refunds` */
+        const refundInputs: InferCreationAttributes<typeof user_model> = {
+            event_id: data.event_id,
+            user_id: data.user_id,
+            event_enrollment_id: data.event_enrollment_id,
+            event_payment_id: data.id as number,
+            date: moment().toISOString(),
+            amount: data.amount,
+            trx_id: data.trx_id,
+            media: data.media,
+        };
+
+        await models.EventPaymentRefundsModel.create(refundInputs);
+
+        return response(201, 'Refund processed successfully', {
+            data,
+            refundDetails: refundInputs,
+        });
     } catch (error: any) {
-        let uid = await error_trace(models, error, req.url, req.body);
+        const uid = await error_trace(models, error, req.url, req.body);
         if (error instanceof custom_error) {
             error.uid = uid;
         } else {
-            throw new custom_error('server error', 500, error.message, uid);
+            throw new custom_error('Server error', 500, error.message, uid);
         }
         throw error;
     }
 }
 
-export default update;
+
+export default payment_refunds;
