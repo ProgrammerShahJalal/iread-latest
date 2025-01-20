@@ -20,25 +20,27 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'event_payments';
-export const modelName = 'EventPaymentsModel';
+export const tableName = 'event_feedback_form_fields';
+export const modelName = 'EventFeedbackFormFieldsModel';
+
+interface SelectOption {
+    label: string;
+    value: string | number;
+}
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'success' | 'failed';
-type media = 'Stripe' | 'Bank';
+type status = 'active' | 'deactive';
+type type = 'text' | 'date' | 'number' | 'textarea' | 'select' | 'checkbox';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
-    declare user_id: number;
-    declare event_enrollment_id: number;
-    declare date: string;
-    declare amount: number;
-    declare trx_id: string;
-    declare media: media;
-    declare is_refunded?: boolean;
+    declare label: string;
+    declare type: type;
+    declare select_options: SelectOption[];
+    declare serial: number;
 
     declare status?: status;
     declare creator?: number;
@@ -59,39 +61,28 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            user_id: {
-                type: DataTypes.BIGINT.UNSIGNED,
-                allowNull: true,
-            },
-            event_enrollment_id: {
-                type: DataTypes.BIGINT.UNSIGNED,
-                allowNull: true,
-            },
-            date: {
+            label: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            amount: {
-                type: DataTypes.DECIMAL(10, 2),
+            type: {
+                type: new DataTypes.ENUM('text', 'date', 'number', 'textarea', 'select', 'checkbox'),
+                defaultValue: 'text',
+            },
+            select_options: {
+                type: DataTypes.JSON,
                 allowNull: true,
             },
-            trx_id: {
-                type: DataTypes.STRING,
+            serial: {
+                type: DataTypes.INTEGER,
                 allowNull: true,
-            },
-            media: {
-                type: DataTypes.ENUM('Stripe', 'Bank'),
-                defaultValue: 'Stripe',
-            },
-            is_refunded: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: false,
             },
 
 
             status: {
-                type: new DataTypes.ENUM('success', 'failed'),
-                defaultValue: 'success',
+                type: new DataTypes.ENUM('active', 'deactive'),
+
+                defaultValue: 'active',
             },
 
             created_at: DataTypes.DATE,
