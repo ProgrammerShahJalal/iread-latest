@@ -20,8 +20,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'event_payments';
-export const modelName = 'EventPaymentsModel';
+export const tableName = 'event_payment_refunds';
+export const modelName = 'EventPaymentRefundsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -34,11 +34,11 @@ class DataModel extends Model<Infer, InferCreation> {
     declare event_id: number;
     declare user_id: number;
     declare event_enrollment_id: number;
+    declare event_payment_id: number;
     declare date: string;
     declare amount: number;
     declare trx_id: string;
     declare media: media;
-    declare is_refunded?: boolean;
 
     declare status?: status;
     declare creator?: number;
@@ -67,6 +67,10 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
+            event_payment_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
             date: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -82,10 +86,6 @@ function init(sequelize: Sequelize) {
             media: {
                 type: DataTypes.ENUM('Stripe', 'Bank'),
                 defaultValue: 'Stripe',
-            },
-            is_refunded: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: false,
             },
 
 
