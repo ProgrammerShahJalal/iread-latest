@@ -24,6 +24,9 @@ import * as EventSessionAssesmentSubmissionsModel from "../modules/event_session
 import * as EventAttendanceModel from "../modules/event_attendance_management/models/model";
 import * as EventEnrollmentsModel from "../modules/event_enrollments_management/models/model";
 import * as EventPaymentsModel from "../modules/event_payments_management/models/model";
+import * as EventPaymentRefundsModel from "../modules/event_payment_refunds_management/models/model";
+import * as EventFeedbackFormFieldsModel from "../modules/event_feedback_form_fields_management/models/model";
+import * as EventFeedbackFormFieldValuesModel from "../modules/event_feedback_form_field_values_management/models/model";
 
 import * as DonationModel from "../modules/donation_management/models/model";
 
@@ -60,6 +63,9 @@ export type model_types = {
     EventAttendanceModel: typeof EventAttendanceModel.DataModel;
     EventEnrollmentsModel: typeof EventEnrollmentsModel.DataModel;
     EventPaymentsModel: typeof EventPaymentsModel.DataModel;
+    EventPaymentRefundsModel: typeof EventPaymentRefundsModel.DataModel;
+    EventFeedbackFormFieldsModel: typeof EventFeedbackFormFieldsModel.DataModel;
+    EventFeedbackFormFieldValuesModel: typeof EventFeedbackFormFieldValuesModel.DataModel;
 
     DonationModel: typeof DonationModel.DataModel;
 
