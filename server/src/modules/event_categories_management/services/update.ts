@@ -70,9 +70,6 @@ async function update(
      }
 
 
-  
-console.log('image path', image_path);
-
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);

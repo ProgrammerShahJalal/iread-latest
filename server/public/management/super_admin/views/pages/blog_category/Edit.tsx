@@ -71,18 +71,27 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     </h5>
                                     <div className="form_auto_fit">
                                         {[
-                                            'full_name',
-                                            'email',
+                                            'title',
+                                            'image',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input
-                                                    name={i}
-                                                    value={get_value(i)}
-                                                />
+                                                {
+                                                    i === 'title' ? <Input
+                                                        name={i}
+                                                        value={get_value(i)}
+                                                    /> : <div className="form-group grid_full_width form-vertical">
+                                                        <InputImage
+                                                            label={'image'}
+                                                            name={'image'}
+                                                        />
+
+                                                    </div>
+                                                }
+
                                             </div>
                                         ))}
 
-                                        
+
                                     </div>
                                 </div>
 

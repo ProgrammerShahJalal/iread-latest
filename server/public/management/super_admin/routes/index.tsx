@@ -11,6 +11,7 @@ import blog_tags from '../views/pages/blog_tags/config/routes';
 import blogs from '../views/pages/blogs/config/routes';
 
 import event_category from '../views/pages/event_category/config/routes';
+import event_tags from '../views/pages/event_tags/config/routes';
 
 interface RouteTypes extends NonIndexRouteObject {}
 const router: RouteTypes[] = [
@@ -28,6 +29,7 @@ const router: RouteTypes[] = [
             blog_tags,
             blogs,
             event_category,
+            event_tags,
         ],
     },
 ];
