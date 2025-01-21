@@ -44,6 +44,9 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
     
+    (state.all as any)?.data?.map((i)=> {
+        console.log('i.image', i.image);
+    })
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
