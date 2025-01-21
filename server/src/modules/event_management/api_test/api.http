@@ -18,20 +18,20 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Parenting",
-    "reg_start_date": "2025-02-01",
+    "title": "Tech Tonick",
+    "reg_start_date": "2025-02-08",
     "reg_end_date": "2025-03-31",
-    "session_start_date": "2025-03-01",
-    "session_end_date": "2025-03-28",
-    "place": "Dhaka",
+    "session_start_date_time": "2025-04-03 16:30:00",
+    "session_end_date_time": "2025-04-03 17:30:00",
+    "place": "Canada",
     "short_description": "short description 2",
     "full_description": "long long description 2",
     "pre_requisities": "pre requisities 2",
     "terms_and_conditions": "terms and conditions 2",
     "event_type": "offline",
     "poster": "poster2.png",
-    "price": 99.43,
-    "discount_price": 59.67
+    "price": 199.43,
+    "discount_price": 159.67
 }
 
 

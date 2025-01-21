@@ -61,22 +61,14 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        title: body.title,
-        reg_start_date: body.reg_start_date,
-        reg_end_date: body.reg_end_date,
-        session_start_date: body.session_start_date,
-        session_end_date: body.session_end_date,
-        place: body.place,
-        short_description: body.short_description,
-        full_description: body.full_description,
-        pre_requisities: body.pre_requisities,
-        terms_and_conditions: body.terms_and_conditions,
-        event_type: body.event_type,
-        poster: body.poster,
-        price: body.price,
-        discount_price: body.discount_price,
-    };
+     let image_path = 'avatar.png';
+        if (body['poster']?.ext) {
+            image_path =
+                'uploads/events/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body['poster'].name;
+            await (fastify_instance as any).upload(body['poster'], image_path);
+        }
 
 
     /** print request data into console */
@@ -86,6 +78,22 @@ async function update(
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+        let inputs: InferCreationAttributes<typeof user_model> = {
+            title: body.title,
+            reg_start_date: body.reg_start_date,
+            reg_end_date: body.reg_end_date,
+            session_start_date_time: body.session_start_date_time,
+            session_end_date_time: body.session_end_date_time,
+            place: body.place,
+            short_description: body.short_description,
+            full_description: body.full_description,
+            pre_requisities: body.pre_requisities,
+            terms_and_conditions: body.terms_and_conditions,
+            event_type: body.event_type,
+            poster: image_path || data?.poster as string,
+            price: body.price,
+            discount_price: body.discount_price,
+        };
         if (data) {
             data.update(inputs);
             await data.save();

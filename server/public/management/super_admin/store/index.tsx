@@ -9,6 +9,10 @@ import blog_category from '../views/pages/blog_category/config/store';
 import blog_tags from '../views/pages/blog_tags/config/store';
 import blogs from '../views/pages/blogs/config/store';
 
+import event_category from '../views/pages/event_category/config/store';
+import event_tags from '../views/pages/event_tags/config/store';
+import events from '../views/pages/events/config/store';
+
 const store = configureStore({
     reducer: {
         common_store: commonStore.reducer,
@@ -17,6 +21,9 @@ const store = configureStore({
         blog_category: blog_category.reducer,
         blog_tags: blog_tags.reducer,
         blogs: blogs.reducer,
+        event_category: event_category.reducer,
+        event_tags: event_tags.reducer,
+        events: events.reducer,
     },
     devTools: true,
 });
