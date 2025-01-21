@@ -36,8 +36,8 @@ class DataModel extends Model<Infer, InferCreation> {
     declare reg_start_date: string;
     declare reg_end_date: string;
 
-    declare session_start_date: string;
-    declare session_end_date: string;
+    declare session_start_date_time: string;
+    declare session_end_date_time: string;
 
     declare place: string;
     declare short_description: string;
@@ -76,14 +76,14 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             reg_end_date: {
-                type: DataTypes.DATE(),
+                type: DataTypes.STRING,
                 allowNull: true,
             },
-            session_start_date: {
-                type: DataTypes.DATE(),
+            session_start_date_time: {
+                type: DataTypes.STRING,
                 allowNull: true,
             },
-            session_end_date: {
+            session_end_date_time: {
                 type: DataTypes.DATE(),
                 allowNull: true,
             },

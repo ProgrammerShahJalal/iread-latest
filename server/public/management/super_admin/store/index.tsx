@@ -11,6 +11,7 @@ import blogs from '../views/pages/blogs/config/store';
 
 import event_category from '../views/pages/event_category/config/store';
 import event_tags from '../views/pages/event_tags/config/store';
+import events from '../views/pages/events/config/store';
 
 const store = configureStore({
     reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
         blogs: blogs.reducer,
         event_category: event_category.reducer,
         event_tags: event_tags.reducer,
+        events: events.reducer,
     },
     devTools: true,
 });
