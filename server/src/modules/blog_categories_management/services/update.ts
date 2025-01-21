@@ -39,12 +39,6 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -61,19 +55,22 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        title: body.title,
-        image: body.image,
-    };
-
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
+    let image_path = 'avatar.png';
+         if (body['image']?.ext) {
+             image_path =
+                 'uploads/event_categories/' +
+                 moment().format('YYYYMMDDHHmmss') +
+                 body['image'].name;
+             await (fastify_instance as any).upload(body['image'], image_path);
+         }
+    
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+        let inputs: InferCreationAttributes<typeof user_model> = {
+            title: body.title,
+            image: image_path || data?.image,
+        };
         if (data) {
             data.update(inputs);
             await data.save();
