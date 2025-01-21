@@ -23,8 +23,8 @@ async function validate(req: Request) {
         'title',
         'reg_start_date',
         'reg_end_date',
-        'session_start_date',
-        'session_end_date',
+        'session_start_date_time',
+        'session_end_date_time',
         'place',
         'short_description',
         'full_description',
@@ -48,33 +48,11 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
-
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -90,7 +68,6 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-    let blogCategoryBlogModel = models.BlogCategoryBlogModel;
 
     let image_path = 'avatar.png';
     if (body['poster']?.ext) {
@@ -101,15 +78,13 @@ async function store(
         await (fastify_instance as any).upload(body['poster'], image_path);
     }
 
-    // let categories: number[] = JSON.parse(body['blog_categories']) || [];
-
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
         reg_start_date: body.reg_start_date,
         reg_end_date: body.reg_end_date,
-        session_start_date: body.session_start_date,
-        session_end_date: body.session_end_date,
+        session_start_date_time: body.session_start_date_time,
+        session_end_date_time: body.session_end_date_time,
         place: body.place,
         short_description: body.short_description,
         full_description: body.full_description,
@@ -130,16 +105,6 @@ async function store(
         if (!data.id) {
             throw new Error('Failed to save blog data.');
         }
-
-
-        // await Promise.all(
-        //     categories.map(async (categoryId) => {
-        //         await blogCategoryBlogModel.create({
-        //             blog_id: data.id || 1,
-        //             blog_category_id: categoryId,
-        //         });
-        //     })
-        // );
 
 
         return response(201, 'data created', { data });
