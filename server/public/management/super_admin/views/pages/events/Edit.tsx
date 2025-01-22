@@ -14,6 +14,8 @@ import setup from './config/setup';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import { anyObject } from '../../../common_types/object';
+import DateTime from '../../components/DateTime';
+import moment from 'moment/moment';
 
 const Edit: React.FC = () => {
     const state: typeof initialState = useSelector(
@@ -49,37 +51,24 @@ const Edit: React.FC = () => {
         }
     }, [state.item]);
 
-    // Generate slug
-    const generateSlug = (title: string): string =>
-        title.toLowerCase().trim().replace(/[\s\W-]+/g, '-');
+    if(state){
+        console.log('state', state?.item)
+    }
 
-    const checkSlugUniqueness = async (slug: string): Promise<boolean> => {
-        const response = await fetch(`/api/v1/blogs/slug?slug=${slug}`);
-        const data = await response.json();
-        return data.isUnique;
-    };
+    // console.log('data', data?.getData());
 
     // Handle form submission
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
 
-        // Generate the slug from the title
-        const title = form_data.get('title') as string;
-        let slug = generateSlug(title);
-
-        // Check slug uniqueness
-        const isUnique = await checkSlugUniqueness(slug);
-        if (!isUnique) {
-            slug = `${slug}-${Date.now()}`; // Append timestamp for uniqueness
-        }
-        form_data.set('slug', slug);
         form_data.append('full_description', data.getData());
 
-        const response = await dispatch(update(form_data) as any);
-        console.log('RESPONSE', response);
-    }
 
+        const response = await dispatch(update(form_data) as any);
+        // console.log('RESPONSE', response);
+    }
+    
 
     // Get value helper
     const get_value = (key: string): string => {
@@ -90,11 +79,6 @@ const Edit: React.FC = () => {
         }
     };
 
-    // Handle title change
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const title = e.target.value;
-        setSlug(generateSlug(title));
-    };
 
     return (
         <div className="page_content">
@@ -125,33 +109,38 @@ const Edit: React.FC = () => {
                                             ></textarea>
                                         </div>
 
-                                        {['seo_title', 'seo_keyword', 'seo_description'].map((i) => (
+                                        {[
+                                            'pre_requisities',
+                                            'terms_and_conditions',
+                                            'price',
+                                            'discount_price',
+                                        ].map((i) => (
                                             <div key={i} className="form-group form-vertical">
                                                 <Input value={get_value(i)} name={i} />
                                             </div>
                                         ))}
                                     </div>
                                     <div className="col-4">
-                                        <Input value={get_value('title')} name="title" />
-                                        <Input value={get_value('slug')} name="slug" />
-                                        <label>Blog Categories</label>
-                                        <CategoryDropDown
-                                            name="blog_categories"
-                                            multiple={true}
-                                            get_selected_data={(data) => console.log(data)}
-                                        />
+                                        <div className='form-group form-vertical'>
+                                            <Input value={get_value('title')} name="title" />
+                                        </div>
+                                        <div className='form-group form-vertical'>
+                                            <Input value={get_value('place')} name="place" />
+                                        </div>
+
+
 
                                         {/* RADIO OPTIONS */}
-                                        <label>Is Published</label>
+                                        <label>Event Type</label>
                                         <div style={{
                                             paddingBottom: 10
                                         }}>
                                             <label>
                                                 <input
                                                     type="radio"
-                                                    name="is_published"
-                                                    value="publish"
-                                                    checked={get_value('status') === 'publish'}
+                                                    name="event_type"
+                                                    value="online"
+                                                    checked={get_value('status') === 'online'}
                                                     onChange={(e) => {
                                                         const formData = new FormData();
                                                         formData.set('status', e.target.value);
@@ -163,15 +152,15 @@ const Edit: React.FC = () => {
                                                         );
                                                     }}
                                                 />
-                                                Publish
+                                                Online
                                             </label>
                                             <br />
                                             <label>
                                                 <input
                                                     type="radio"
-                                                    name="is_published"
-                                                    value="draft"
-                                                    checked={get_value('status') === 'draft'}
+                                                    name="event_type"
+                                                    value="offline"
+                                                    checked={get_value('status') === 'offline'}
                                                     onChange={(e) => {
                                                         const formData = new FormData();
                                                         formData.set('status', e.target.value);
@@ -183,21 +172,59 @@ const Edit: React.FC = () => {
                                                         );
                                                     }}
                                                 />
-                                                Draft
+                                                Offline
                                             </label>
                                         </div>
 
-                                        <label>Published Date</label>
-                                        <DateEl
-                                            value={get_value('publish_date')}
-                                            name="publish_date"
-                                            handler={() => console.log('Date changed')}
-                                        />
-                                        <InputImage
-                                            defalut_preview={get_value('cover_image')}
-                                            label="Cover Image"
-                                            name="cover_image"
-                                        />
+                                        <div className='form-group grid_full_width form-vertical'>
+                                            <label>Reg Start Date</label>
+                                            <DateEl
+                                                value={get_value('reg_start_date')}
+                                                // value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
+                                                name="reg_start_date"
+                                                handler={() => console.log('Date changed')}
+                                            />
+                                            {/* <input
+                                                // value={get_value('reg_start_date')}
+                                                value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
+                                                name="reg_start_date"
+                                                // handler={() => console.log('Date changed')}
+                                            /> */}
+                                        </div>
+
+                                        <div className='form-group grid_full_width form-vertical'>
+                                            <label>Reg End Date</label>
+                                            <DateEl
+                                                value={get_value('reg_end_date')}
+                                                name="reg_end_date"
+                                                handler={() => console.log('Date changed')}
+                                            />
+                                        </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                                <label>Session Start Date Time</label>
+                                                <DateTime
+                                                    value={get_value('session_start_date_time')}
+                                                    name={'session_start_date_time'}
+                                                    handler={() => { console.log('arguments') }}
+                                                ></DateTime>
+                                            </div>
+                                            <div className="form-group grid_full_width form-vertical">
+                                                <label>Session End Date Time</label>
+                                                <DateTime
+                                                    value={get_value('session_end_date_time')}
+                                                    name={'session_end_date_time'}
+                                                    handler={() => { console.log('arguments') }}
+                                                ></DateTime>
+                                            </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <InputImage
+                                                defalut_preview={get_value('poster')}
+                                                label="Poster"
+                                                name="poster"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

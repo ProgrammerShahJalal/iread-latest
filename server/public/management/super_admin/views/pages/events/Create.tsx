@@ -101,8 +101,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                         </div>
 
                                         {[
-
-
                                             'pre_requisities',
                                             'terms_and_conditions',
                                             'price',
