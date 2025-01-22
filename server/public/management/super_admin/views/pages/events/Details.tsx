@@ -36,11 +36,12 @@ const Details: React.FC<Props> = (props: Props) => {
     }
 
     let formateDate = (date: string) => {
-         return moment(date).format('Do MMM YY');
+         return moment.utc(date).format('Do MMM YY');
     }
-    let formateDateTime = (date: string) => {
-         return moment(date).format('Do MMM YY, h:mm:ss A');
-    }
+    let formateDateTimeUTC = (date: string) => {
+        return moment.utc(date).format('Do MMM YY, h:mm:ss A');
+    };
+    
 
     return (
         <>
@@ -63,7 +64,13 @@ const Details: React.FC<Props> = (props: Props) => {
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                            <td>{get_value(i)}</td>
+                                            {
+                                                i === 'price' || i === 'discount_price' ? (
+                                                    <td>${get_value(i)}</td>
+                                                ): (
+                                                    <td>{get_value(i)}</td>
+                                                )
+                                            }
                                         </tr>
                                     ))}
                                     {[
@@ -83,7 +90,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                            <td>{formateDateTime(get_value(i))}</td>
+                                            <td>{formateDateTimeUTC(get_value(i))}</td>
                                         </tr>
                                     ))}
 

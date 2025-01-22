@@ -13,9 +13,9 @@ interface TargetWithPicker {
 // Format date and time
 export function formattedDateTime(value: string | null): string {
     if (value) {
-        return moment(value).format('DD MMMM YYYY, HH:mm');
+        return moment(value).format('Do MMM YY, h:mm:ss A');
     } else {
-        return moment().format('DD MMMM YYYY, HH:mm');
+        return moment().format('Do MMM YY, h:mm:ss A');
     }
 }
 
