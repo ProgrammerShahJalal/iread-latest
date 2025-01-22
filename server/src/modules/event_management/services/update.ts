@@ -79,24 +79,24 @@ async function update(
     try {
         let data = await models[modelName].findByPk(body.id);
         let inputs: InferCreationAttributes<typeof user_model> = {
-            title: body.title,
-            reg_start_date: body.reg_start_date,
-            reg_end_date: body.reg_end_date,
-            session_start_date_time: body.session_start_date_time,
-            session_end_date_time: body.session_end_date_time,
-            place: body.place,
-            short_description: body.short_description,
-            full_description: body.full_description,
-            pre_requisities: body.pre_requisities,
-            terms_and_conditions: body.terms_and_conditions,
-            event_type: body.event_type,
+            title: body.title || data?.title,
+            reg_start_date: body.reg_start_date || data?.reg_end_date,
+            reg_end_date: body.reg_end_date || data?.reg_end_date,
+            session_start_date_time: body.session_start_date_time || data?.session_start_date_time,
+            session_end_date_time: body.session_end_date_time || data?.session_end_date_time,
+            place: body.place || data?.place,
+            short_description: body.short_description || data?.short_description,
+            full_description: body.full_description || data?.full_description,
+            pre_requisities: body.pre_requisities || data?.pre_requisities,
+            terms_and_conditions: body.terms_and_conditions || data?.terms_and_conditions,
+            event_type: body.event_type || data?.event_type,
             poster: image_path || data?.poster as string,
-            price: body.price,
-            discount_price: body.discount_price,
+            price: body.price || data?.price,
+            discount_price: body.discount_price || data?.discount_price,
         };
         if (data) {
-            data.update(inputs);
-            await data.save();
+            // data.update(inputs);
+            // await data.save();
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

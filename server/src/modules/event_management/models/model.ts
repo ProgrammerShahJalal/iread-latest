@@ -72,7 +72,7 @@ function init(sequelize: Sequelize) {
             },
 
             reg_start_date: {
-                type: DataTypes.DATE(),
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             reg_end_date: {
@@ -84,7 +84,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             session_end_date_time: {
-                type: DataTypes.DATE(),
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             place: {
