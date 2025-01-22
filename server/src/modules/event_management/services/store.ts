@@ -78,6 +78,7 @@ async function store(
         await (fastify_instance as any).upload(body['poster'], image_path);
     }
 
+    console.log('body', body);
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
@@ -98,12 +99,11 @@ async function store(
 
     try {
 
-        await data.update(inputs);
-        await data.save();
+        (await data.update(inputs)).save();
 
 
         if (!data.id) {
-            throw new Error('Failed to save blog data.');
+            throw new Error('Failed to save data.');
         }
 
 

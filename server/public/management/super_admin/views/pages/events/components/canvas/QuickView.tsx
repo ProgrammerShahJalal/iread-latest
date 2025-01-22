@@ -21,11 +21,12 @@ const QuickView: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
 
-    let  formateTime = (date: string) => {
-        return moment(date).format('Do MMM YY');
-        }
-
-        // console.log('pub', state?.item.publish_date);
+ let formateDateTimeUTC = (date: string) => {
+        return moment.utc(date).format('Do MMM YY, h:mm:ss A');
+    };
+ let formateDate = (date: string) => {
+         return moment.utc(date).format('Do MMM YY');
+    }
 
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
@@ -52,7 +53,17 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Cover Image</th>
+                                    <th>Place</th>
+                                    <th>:</th>
+                                    <th>{state.item.place}</th>
+                                </tr>
+                                <tr>
+                                    <th>Event Type</th>
+                                    <th>:</th>
+                                    <th>{state.item.event_type}</th>
+                                </tr>
+                                <tr>
+                                    <th>Poster</th>
                                     <th>:</th>
                                     <th>
                                         <div
@@ -64,25 +75,44 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                         >
                                         <img
                                          className='w-100'
-                                        src={state.item.cover_image}
+                                        src={state.item.poster}
                                         alt={state.item.title}
                                         />
                                         </div>
                                     </th>
                                 </tr>
 
-                                <tr>
-                                    <th>Is Published</th>
-                                    <th>:</th>
-                                    <th>{(state.item.is_published === 'draft') ? 'Draft' : 'Published'}</th>
-                                </tr>
 
                                 <tr>
-                                    <th>Published Date</th>
+                                    <th>Session Start Date Time</th>
                                     <th>:</th>
-                                    <th> { formateTime(state.item.publish_date)}</th>
+                                    <th> { formateDateTimeUTC(state.item.session_start_date_time)}</th>
                                 </tr>
-
+                                <tr>
+                                    <th>Session End Date Time</th>
+                                    <th>:</th>
+                                    <th> { formateDateTimeUTC(state.item.session_end_date_time)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Registration Start Date</th>
+                                    <th>:</th>
+                                    <th> { formateDate(state.item.reg_start_date)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Registration End Date</th>
+                                    <th>:</th>
+                                    <th> { formateDate(state.item.reg_end_date)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Price</th>
+                                    <th>:</th>
+                                    <th> ${state.item.price}</th>
+                                </tr>
+                                <tr>
+                                    <th>Discount Price</th>
+                                    <th>:</th>
+                                    <th> ${state.item.discount_price}</th>
+                                </tr>
                                 <tr>
                                     <th>Status</th>
                                     <th>:</th>

@@ -57,7 +57,7 @@ async function all(
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
-    let search_key = query_param.search_key;
+    let search_key = query_param?.search_key;
     let orderByCol = query_param.orderByCol || 'id';
     let role = query_param.role || null;
     let orderByAsc = query_param.orderByAsc || 'true';
@@ -68,9 +68,9 @@ async function all(
 
     if (query_param.select_fields) {
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
-        select_fields = [...select_fields, 'id', 'status'];
+        select_fields = [...select_fields, 'id','title','place','status',];
     } else {
-        select_fields = ['id', 'title', 'status',];
+        select_fields = ['id','title','place','status',];
     }
 
     let query: FindAndCountOptions = {
@@ -83,19 +83,18 @@ async function all(
 
     query.attributes = select_fields;
 
- 
 
     if (search_key) {
         query.where = {
             ...query.where,
             [Op.or]: [
-                { title: { [Op.like]: `%${search_key}%` } },
-                { place: { [Op.place]: `%${search_key}%` } },
-                // { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
+                { title: { [Op.like]: `%${search_key}%` } },
+                { place: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }
+    
 
     try {
         let data = await (fastify_instance as anyObject).paginate(

@@ -13,9 +13,9 @@ interface TargetWithPicker {
 // Format date and time
 export function formattedDateTime(value: string | null): string {
     if (value) {
-        return moment(value).format('DD MMMM YYYY, HH:mm');
+        return moment.utc(value).format('Do MMM YY, h:mm:ss A');
     } else {
-        return moment().format('DD MMMM YYYY, HH:mm');
+        return moment.utc().format('Do MMM YY, h:mm:ss A');
     }
 }
 
@@ -64,9 +64,9 @@ const DateTime: React.FC<Props> = ({ value, name, handler }: Props) => {
                 onChange={dateTimeHandler}
                 className="form-control"
             />
-            {/* <div className="form-control preview">
+            <div className="form-control preview">
                 {inputValue && formattedDateTime(inputValue)}
-            </div> */}
+            </div>
         </label>
     );
 };

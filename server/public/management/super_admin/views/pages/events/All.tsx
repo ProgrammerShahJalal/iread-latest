@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'id,title,place,poster,session_start_date_time,price,discount_price,status',
+                'id,title,place,event_type,poster,session_start_date_time,session_end_date_time,reg_start_date,reg_end_date,price,discount_price,status',
             ),
         );
         dispatch(all({}));
@@ -55,9 +55,9 @@ const All: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
-    }
+    let formateDateTimeUTC = (date: string) => {
+           return moment.utc(date).format('Do MMM YY, h:mm:ss A');
+       };
 
     return (
         <div className="page_content">
@@ -99,6 +99,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`session_start_date_time`}
                                             sort={false}
                                         />
+                                        {/* <TableHeading
+                                            label={`Session End Date Time`}
+                                            col_name={`session_end_date_time`}
+                                            sort={false}
+                                        /> */}
 
                                         <TableHeading
                                             label={`Price`}
@@ -120,7 +125,7 @@ const All: React.FC<Props> = (props: Props) => {
                                 </thead>
                                 <tbody id="all_list">
                                     {(state.all as any)?.data?.map(
-                                        (i: { [key: string]: any }) => {
+                                        (i: { [key: string]: any },index) => {
 
                                             return (
                                                 <tr
@@ -135,7 +140,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     <td>
                                                         <SelectItem item={i} />
                                                     </td>
-                                                    <td>{i.id}</td>
+                                                    <td>{index + 1}</td>
 
                                                     <td>
                                                         <span
@@ -175,8 +180,11 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
 
                                                     <td>
-                                                    {formateDateTime(i.session_start_date_time)}
+                                                    {formateDateTimeUTC(i.session_start_date_time)}
                                                     </td>
+                                                    {/* <td>
+                                                    {formateDateTimeUTC(i.session_end_date_time)}
+                                                    </td> */}
                                                     <td>
                                                         ${i.price}
                                                     </td>
