@@ -92,7 +92,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             short_description: {
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING(1000),
                 allowNull: true,
             },
             full_description: {
@@ -101,7 +101,7 @@ function init(sequelize: Sequelize) {
             },
 
             pre_requisities: {
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING(1000),
                 allowNull: true,
             },
             terms_and_conditions: {
