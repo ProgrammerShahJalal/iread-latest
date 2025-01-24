@@ -35,23 +35,32 @@ const Edit: React.FC = () => {
 
     // Initialize CKEditor
     useEffect(() => {
-        const fullDescriptionElement = document.querySelector('[data-name="fullDescription"]');
-        if (fullDescriptionElement && !Object.keys(data).length) {
-            const editor = CKEDITOR.replace('full_description');
-            // editorRef.current = editor; // Save CKEditor instance in ref
+        const fullDescriptionElement = document.querySelector(
+            '[data-name="fullDescription"]',
+        );
+        if (fullDescriptionElement && !editorRef.current) {
+            const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
+            editorRef.current = editor; // Save the instance to the ref
 
             const defaultValue = get_value('full_description');
             if (defaultValue) {
-                editor?.setData(defaultValue);
+                editor.setData(defaultValue);
             }
 
-            setData(editor);
+            // Cleanup function to destroy the editor on component unmount
+            return () => {
+                editor.destroy();
+                editorRef.current = null;
+            };
         }
     }, [state.item]);
 
     // Generate slug
     const generateSlug = (title: string): string =>
-        title.toLowerCase().trim().replace(/[\s\W-]+/g, '-');
+        title
+            .toLowerCase()
+            .trim()
+            .replace(/[\s\W-]+/g, '-');
 
     const checkSlugUniqueness = async (slug: string): Promise<boolean> => {
         const response = await fetch(`/api/v1/blogs/slug?slug=${slug}`);
@@ -80,7 +89,6 @@ const Edit: React.FC = () => {
         console.log('RESPONSE', response);
     }
 
-
     // Get value helper
     const get_value = (key: string): string => {
         try {
@@ -103,63 +111,104 @@ const Edit: React.FC = () => {
                 {Object.keys(state.item).length > 0 && (
                     <div className="content_body custom_scroll">
                         <form onSubmit={handle_submit} className="mx-auto pt-3">
-                            <input type="hidden" name="id" defaultValue={get_value('id')} />
+                            <input
+                                type="hidden"
+                                name="id"
+                                defaultValue={get_value('id')}
+                            />
                             <div>
                                 <h5 className="mb-4">Input Data</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-2">Full Description</label>
-                                        <div
-                                            data-name="fullDescription"
-                                            id="full_description"
-                                        ></div>
+                                        <label className="mb-2">
+                                            Full Description
+                                        </label>
+                                        {state.item && (
+                                            <div
+                                                data-name="fullDescription"
+                                                id="full_description"
+                                            ></div>
+                                        )}
 
                                         <div className="form-group mt-4">
                                             <label>Short Description</label>
                                             <textarea
                                                 className="form-control"
-                                                defaultValue={get_value('short_description')}
+                                                defaultValue={get_value(
+                                                    'short_description',
+                                                )}
                                                 name="short_description"
                                                 id="short_description"
                                                 rows={3}
                                             ></textarea>
                                         </div>
 
-                                        {['seo_title', 'seo_keyword', 'seo_description'].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                <Input value={get_value(i)} name={i} />
+                                        {[
+                                            'seo_title',
+                                            'seo_keyword',
+                                            'seo_description',
+                                        ].map((i) => (
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                <Input
+                                                    value={get_value(i)}
+                                                    name={i}
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                     <div className="col-4">
-                                        <Input value={get_value('title')} name="title" />
-                                        <Input value={get_value('slug')} name="slug" />
+                                        <Input
+                                            value={get_value('title')}
+                                            name="title"
+                                        />
+                                        <Input
+                                            value={get_value('slug')}
+                                            name="slug"
+                                        />
                                         <label>Blog Categories</label>
                                         <CategoryDropDown
                                             name="blog_categories"
                                             multiple={true}
-                                            get_selected_data={(data) => console.log(data)}
+                                            get_selected_data={(data) =>
+                                                console.log(data)
+                                            }
                                         />
 
                                         {/* RADIO OPTIONS */}
                                         <label>Is Published</label>
-                                        <div style={{
-                                            paddingBottom: 10
-                                        }}>
+                                        <div
+                                            style={{
+                                                paddingBottom: 10,
+                                            }}
+                                        >
                                             <label>
                                                 <input
                                                     type="radio"
                                                     name="is_published"
                                                     value="publish"
-                                                    checked={get_value('status') === 'publish'}
+                                                    checked={
+                                                        get_value('status') ===
+                                                        'publish'
+                                                    }
                                                     onChange={(e) => {
-                                                        const formData = new FormData();
-                                                        formData.set('status', e.target.value);
+                                                        const formData =
+                                                            new FormData();
+                                                        formData.set(
+                                                            'status',
+                                                            e.target.value,
+                                                        );
                                                         dispatch(
-                                                            storeSlice.actions.set_item({
-                                                                ...state.item,
-                                                                status: e.target.value,
-                                                            })
+                                                            storeSlice.actions.set_item(
+                                                                {
+                                                                    ...state.item,
+                                                                    status: e
+                                                                        .target
+                                                                        .value,
+                                                                },
+                                                            ),
                                                         );
                                                     }}
                                                 />
@@ -171,15 +220,26 @@ const Edit: React.FC = () => {
                                                     type="radio"
                                                     name="is_published"
                                                     value="draft"
-                                                    checked={get_value('status') === 'draft'}
+                                                    checked={
+                                                        get_value('status') ===
+                                                        'draft'
+                                                    }
                                                     onChange={(e) => {
-                                                        const formData = new FormData();
-                                                        formData.set('status', e.target.value);
+                                                        const formData =
+                                                            new FormData();
+                                                        formData.set(
+                                                            'status',
+                                                            e.target.value,
+                                                        );
                                                         dispatch(
-                                                            storeSlice.actions.set_item({
-                                                                ...state.item,
-                                                                status: e.target.value,
-                                                            })
+                                                            storeSlice.actions.set_item(
+                                                                {
+                                                                    ...state.item,
+                                                                    status: e
+                                                                        .target
+                                                                        .value,
+                                                                },
+                                                            ),
                                                         );
                                                     }}
                                                 />
@@ -191,10 +251,14 @@ const Edit: React.FC = () => {
                                         <DateEl
                                             value={get_value('publish_date')}
                                             name="publish_date"
-                                            handler={() => console.log('Date changed')}
+                                            handler={() =>
+                                                console.log('Date changed')
+                                            }
                                         />
                                         <InputImage
-                                            defalut_preview={get_value('cover_image')}
+                                            defalut_preview={get_value(
+                                                'cover_image',
+                                            )}
                                             label="Cover Image"
                                             name="cover_image"
                                         />
@@ -202,7 +266,9 @@ const Edit: React.FC = () => {
                                 </div>
                             </div>
                             <div className="form-group form-vertical">
-                                <button className="btn btn-outline-info">Submit</button>
+                                <button className="btn btn-outline-info">
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -214,7 +280,9 @@ const Edit: React.FC = () => {
                                 to={`/${setup.route_prefix}/details/${state.item.id}`}
                                 className="outline"
                             >
-                                <span className="material-symbols-outlined fill">visibility</span>
+                                <span className="material-symbols-outlined fill">
+                                    visibility
+                                </span>
                                 <div className="text">Details</div>
                             </Link>
                         </li>
