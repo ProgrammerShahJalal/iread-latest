@@ -27,8 +27,6 @@ const Edit: React.FC = () => {
     const editorRef = useRef<any>(null); // Ref to hold the CKEditor instance
     const [data, setData] = useState<anyObject>({});
 
-    const [slug, setSlug] = useState('');
-
     // Fetch details when component mounts
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
@@ -37,38 +35,37 @@ const Edit: React.FC = () => {
 
     // Initialize CKEditor
     useEffect(() => {
-        const fullDescriptionElement = document.querySelector('[data-name="fullDescription"]');
-        if (fullDescriptionElement && !Object.keys(data).length) {
-            const editor = CKEDITOR.replace('full_description');
-            // editorRef.current = editor; // Save CKEditor instance in ref
+        const fullDescriptionElement = document.querySelector(
+            '[data-name="fullDescription"]',
+        );
+        if (fullDescriptionElement && !editorRef.current) {
+            const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
+            editorRef.current = editor; // Save the instance to the ref
 
             const defaultValue = get_value('full_description');
             if (defaultValue) {
-                editor?.setData(defaultValue);
+                editor.setData(defaultValue);
             }
 
-            setData(editor);
+            // Cleanup function to destroy the editor on component unmount
+            return () => {
+                editor.destroy();
+                editorRef.current = null;
+            };
         }
     }, [state.item]);
-
-    if(state){
-        console.log('state', state?.item)
-    }
-
-    // console.log('data', data?.getData());
 
     // Handle form submission
     async function handle_submit(e) {
         e.preventDefault();
+        console.log('e===>', e);
         let form_data = new FormData(e.target);
 
         form_data.append('full_description', data.getData());
 
-
         const response = await dispatch(update(form_data) as any);
         // console.log('RESPONSE', response);
     }
-    
 
     // Get value helper
     const get_value = (key: string): string => {
@@ -79,7 +76,6 @@ const Edit: React.FC = () => {
         }
     };
 
-
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -87,22 +83,32 @@ const Edit: React.FC = () => {
                 {Object.keys(state.item).length > 0 && (
                     <div className="content_body custom_scroll">
                         <form onSubmit={handle_submit} className="mx-auto pt-3">
-                            <input type="hidden" name="id" defaultValue={get_value('id')} />
+                            <input
+                                type="hidden"
+                                name="id"
+                                defaultValue={get_value('id')}
+                            />
                             <div>
                                 <h5 className="mb-4">Input Data</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-2">Full Description</label>
-                                        <div
-                                            data-name="fullDescription"
-                                            id="full_description"
-                                        ></div>
+                                        <label className="mb-2">
+                                            Full Description
+                                        </label>
+                                        {state.item && (
+                                            <div
+                                                data-name="fullDescription"
+                                                id="full_description"
+                                            ></div>
+                                        )}
 
                                         <div className="form-group mt-4">
                                             <label>Short Description</label>
                                             <textarea
                                                 className="form-control"
-                                                defaultValue={get_value('short_description')}
+                                                defaultValue={get_value(
+                                                    'short_description',
+                                                )}
                                                 name="short_description"
                                                 id="short_description"
                                                 rows={3}
@@ -115,40 +121,63 @@ const Edit: React.FC = () => {
                                             'price',
                                             'discount_price',
                                         ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                <Input value={get_value(i)} name={i} />
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                <Input
+                                                    value={get_value(i)}
+                                                    name={i}
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                     <div className="col-4">
-                                        <div className='form-group form-vertical'>
-                                            <Input value={get_value('title')} name="title" />
+                                        <div className="form-group form-vertical">
+                                            <Input
+                                                value={get_value('title')}
+                                                name="title"
+                                            />
                                         </div>
-                                        <div className='form-group form-vertical'>
-                                            <Input value={get_value('place')} name="place" />
+                                        <div className="form-group form-vertical">
+                                            <Input
+                                                value={get_value('place')}
+                                                name="place"
+                                            />
                                         </div>
-
-
 
                                         {/* RADIO OPTIONS */}
                                         <label>Event Type</label>
-                                        <div style={{
-                                            paddingBottom: 10
-                                        }}>
+                                        <div
+                                            style={{
+                                                paddingBottom: 10,
+                                            }}
+                                        >
                                             <label>
                                                 <input
                                                     type="radio"
                                                     name="event_type"
                                                     value="online"
-                                                    checked={get_value('status') === 'online'}
+                                                    checked={
+                                                        get_value('status') ===
+                                                        'online'
+                                                    }
                                                     onChange={(e) => {
-                                                        const formData = new FormData();
-                                                        formData.set('status', e.target.value);
+                                                        const formData =
+                                                            new FormData();
+                                                        formData.set(
+                                                            'status',
+                                                            e.target.value,
+                                                        );
                                                         dispatch(
-                                                            storeSlice.actions.set_item({
-                                                                ...state.item,
-                                                                status: e.target.value,
-                                                            })
+                                                            storeSlice.actions.set_item(
+                                                                {
+                                                                    ...state.item,
+                                                                    status: e
+                                                                        .target
+                                                                        .value,
+                                                                },
+                                                            ),
                                                         );
                                                     }}
                                                 />
@@ -160,15 +189,26 @@ const Edit: React.FC = () => {
                                                     type="radio"
                                                     name="event_type"
                                                     value="offline"
-                                                    checked={get_value('status') === 'offline'}
+                                                    checked={
+                                                        get_value('status') ===
+                                                        'offline'
+                                                    }
                                                     onChange={(e) => {
-                                                        const formData = new FormData();
-                                                        formData.set('status', e.target.value);
+                                                        const formData =
+                                                            new FormData();
+                                                        formData.set(
+                                                            'status',
+                                                            e.target.value,
+                                                        );
                                                         dispatch(
-                                                            storeSlice.actions.set_item({
-                                                                ...state.item,
-                                                                status: e.target.value,
-                                                            })
+                                                            storeSlice.actions.set_item(
+                                                                {
+                                                                    ...state.item,
+                                                                    status: e
+                                                                        .target
+                                                                        .value,
+                                                                },
+                                                            ),
                                                         );
                                                     }}
                                                 />
@@ -176,51 +216,64 @@ const Edit: React.FC = () => {
                                             </label>
                                         </div>
 
-                                        <div className='form-group grid_full_width form-vertical'>
+                                        <div className="form-group grid_full_width form-vertical">
                                             <label>Reg Start Date</label>
                                             <DateEl
-                                                value={get_value('reg_start_date')}
-                                                // value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
+                                                value={get_value(
+                                                    'reg_start_date',
+                                                )}
                                                 name="reg_start_date"
-                                                handler={() => console.log('Date changed')}
-                                            />
-                                            {/* <input
-                                                // value={get_value('reg_start_date')}
-                                                value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
-                                                name="reg_start_date"
-                                                // handler={() => console.log('Date changed')}
-                                            /> */}
-                                        </div>
-
-                                        <div className='form-group grid_full_width form-vertical'>
-                                            <label>Reg End Date</label>
-                                            <DateEl
-                                                value={get_value('reg_end_date')}
-                                                name="reg_end_date"
-                                                handler={() => console.log('Date changed')}
+                                                handler={() =>
+                                                    console.log('Date changed')
+                                                }
                                             />
                                         </div>
 
                                         <div className="form-group grid_full_width form-vertical">
-                                                <label>Session Start Date Time</label>
-                                                <DateTime
-                                                    value={get_value('session_start_date_time')}
-                                                    name={'session_start_date_time'}
-                                                    handler={() => { console.log('arguments') }}
-                                                ></DateTime>
-                                            </div>
-                                            <div className="form-group grid_full_width form-vertical">
-                                                <label>Session End Date Time</label>
-                                                <DateTime
-                                                    value={get_value('session_end_date_time')}
-                                                    name={'session_end_date_time'}
-                                                    handler={() => { console.log('arguments') }}
-                                                ></DateTime>
-                                            </div>
+                                            <label>Reg End Date</label>
+                                            <DateEl
+                                                value={get_value(
+                                                    'reg_end_date',
+                                                )}
+                                                name="reg_end_date"
+                                                handler={() =>
+                                                    console.log('Date changed')
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>
+                                                Session Start Date Time
+                                            </label>
+                                            <DateTime
+                                                value={get_value(
+                                                    'session_start_date_time',
+                                                )}
+                                                name={'session_start_date_time'}
+                                                handler={() => {
+                                                    console.log('arguments');
+                                                }}
+                                            ></DateTime>
+                                        </div>
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>Session End Date Time</label>
+                                            <DateTime
+                                                value={get_value(
+                                                    'session_end_date_time',
+                                                )}
+                                                name={'session_end_date_time'}
+                                                handler={() => {
+                                                    console.log('arguments');
+                                                }}
+                                            ></DateTime>
+                                        </div>
 
                                         <div className="form-group grid_full_width form-vertical">
                                             <InputImage
-                                                defalut_preview={get_value('poster')}
+                                                defalut_preview={get_value(
+                                                    'poster',
+                                                )}
                                                 label="Poster"
                                                 name="poster"
                                             />
@@ -229,19 +282,23 @@ const Edit: React.FC = () => {
                                 </div>
                             </div>
                             <div className="form-group form-vertical">
-                                <button className="btn btn-outline-info">Submit</button>
+                                <button className="btn btn-outline-info">
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>
                 )}
                 <Footer>
-                    {state.item.id && (
+                    {state?.item?.id && (
                         <li>
                             <Link
                                 to={`/${setup.route_prefix}/details/${state.item.id}`}
                                 className="outline"
                             >
-                                <span className="material-symbols-outlined fill">visibility</span>
+                                <span className="material-symbols-outlined fill">
+                                    visibility
+                                </span>
                                 <div className="text">Details</div>
                             </Link>
                         </li>

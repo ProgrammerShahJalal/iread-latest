@@ -32,8 +32,9 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     }, []);
 
     function date_handler() {
-        if (date_input.current) {
-            const input_value = date_input.current.value;
+        if (date_input?.current) {
+            const input_value = date_input.current?.value;
+            console.log('date_input value', date_input?.current?.value);
             setInput_value(input_value);
             handler({
                 [name]: input_value,
@@ -51,7 +52,7 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     };
 
     return (
-        <label
+        <><label
             htmlFor={name}
             className="text-capitalize d-block date_custom_control"
         >
@@ -62,12 +63,11 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
                 id={name}
                 name={name}
                 onChange={date_handler}
-                className="form-control"
-            />
-            <div className="form-control preview">
+                className="form-control" />
+
+        </label><div className="form-control preview">
                 {input_value && formated_date(input_value)}
-            </div>
-        </label>
+            </div></>
     );
 };
 
