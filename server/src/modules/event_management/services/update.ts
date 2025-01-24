@@ -77,7 +77,7 @@ async function update(
         let data = await models[modelName].findByPk(body.id);
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
-            reg_start_date: body.reg_start_date || data?.reg_end_date,
+            reg_start_date: body.reg_start_date || data?.reg_start_date,
             reg_end_date: body.reg_end_date || data?.reg_end_date,
             session_start_date_time:
                 body.session_start_date_time || data?.session_start_date_time,
@@ -95,6 +95,7 @@ async function update(
             price: body.price || data?.price,
             discount_price: body.discount_price || data?.discount_price,
         };
+        console.log('body', body);
         if (data) {
             data.update(inputs);
             await data.save();
