@@ -58,6 +58,7 @@ const Edit: React.FC = () => {
     // Handle form submission
     async function handle_submit(e) {
         e.preventDefault();
+        console.log('e===>', e);
         let form_data = new FormData(e.target);
 
         form_data.append('full_description', data.getData());
@@ -221,18 +222,11 @@ const Edit: React.FC = () => {
                                                 value={get_value(
                                                     'reg_start_date',
                                                 )}
-                                                // value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
                                                 name="reg_start_date"
                                                 handler={() =>
                                                     console.log('Date changed')
                                                 }
                                             />
-                                            {/* <input
-                                                // value={get_value('reg_start_date')}
-                                                value={moment(state.item?.reg_start_date).format('YYYY-MM-DD')}
-                                                name="reg_start_date"
-                                                // handler={() => console.log('Date changed')}
-                                            /> */}
                                         </div>
 
                                         <div className="form-group grid_full_width form-vertical">
@@ -296,7 +290,7 @@ const Edit: React.FC = () => {
                     </div>
                 )}
                 <Footer>
-                    {state.item.id && (
+                    {state?.item?.id && (
                         <li>
                             <Link
                                 to={`/${setup.route_prefix}/details/${state.item.id}`}
