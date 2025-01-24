@@ -71,7 +71,7 @@ const Paginate: React.FC<Props> = ({
             <ul className="pagination">
                 {data?.links?.map((i) => {
                     return (
-                        <li>
+                        <li key={i.label}>
                             <a
                                 onClick={(e) =>
                                     i.url && change_page(i.url, e, i.label)
