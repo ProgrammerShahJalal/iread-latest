@@ -61,21 +61,6 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        title: body.title,
-        author_id: body.author_id,
-        short_description: body.short_description,
-        full_description: body.full_description,
-        cover_image: body.cover_image,
-
-        is_published: body.is_published,
-        publish_date: body.publish_date,
-
-        slug: body.slug,
-        seo_title: body.seo_title,
-        seo_keyword: body.seo_keyword,
-        seo_description: body.seo_description,
-    };
 
 
     /** print request data into console */
@@ -85,6 +70,21 @@ async function update(
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+        let inputs: InferCreationAttributes<typeof user_model> = {
+            title: body.title || data?.title,
+            author_id: body.author_id || data?.author_id,
+            short_description: body.short_description || data?.short_description,
+            full_description: body.full_description || data?.full_description,
+            cover_image: body.cover_image || data?.cover_image,
+    
+            is_published: body.is_published || data?.is_published,
+            publish_date: body.publish_date || data?.publish_date,
+    
+            slug: body.slug || data?.slug,
+            seo_title: body.seo_title || data?.seo_title,
+            seo_keyword: body.seo_keyword || data?.seo_keyword,
+            seo_description: body.seo_description || data?.seo_description,
+        };
         if (data) {
             data.update(inputs);
             await data.save();
