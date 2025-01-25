@@ -13,7 +13,6 @@ import { initialState } from './config/store/inital_state';
 import setup from './config/setup';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
-import { anyObject } from '../../../common_types/object';
 import DateTime from '../../components/DateTime';
 import moment from 'moment/moment';
 
@@ -24,10 +23,10 @@ const Edit: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
-    const editorRef = useRef<any>(null); // Ref to hold the CKEditor instance
-    const [data, setData] = useState<anyObject>({});
+    const editorRef = useRef<any>(null); // Ref for CKEditor instance
+    const [data, setData] = useState<string>(''); // State for CKEditor content
 
-    // Fetch details when component mounts
+    // Fetch details on component mount
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
@@ -39,35 +38,34 @@ const Edit: React.FC = () => {
             '[data-name="fullDescription"]',
         );
         if (fullDescriptionElement && !editorRef.current) {
-            const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
-            editorRef.current = editor; // Save the instance to the ref
-
+            const editor = CKEDITOR.replace('full_description');
+            editorRef.current = editor;
+    
             const defaultValue = get_value('full_description');
             if (defaultValue) {
-                editor.setData(defaultValue);
+                editor?.setData(defaultValue);
             }
-
-            // Cleanup function to destroy the editor on component unmount
+    
             return () => {
                 editor.destroy();
                 editorRef.current = null;
             };
         }
     }, [state.item]);
+    
 
     // Handle form submission
-    async function handle_submit(e) {
+    const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('e===>', e);
-        let form_data = new FormData(e.target);
 
-        form_data.append('full_description', data.getData());
+        const form_data = new FormData(e.currentTarget);
+        form_data.append('full_description', data);
 
         const response = await dispatch(update(form_data) as any);
-        // console.log('RESPONSE', response);
-    }
+        // console.log('Response:', response);
+    };
 
-    // Get value helper
+    // Helper to get values from state
     const get_value = (key: string): string => {
         try {
             return state.item[key] || state.item?.info?.[key] || '';
@@ -92,9 +90,7 @@ const Edit: React.FC = () => {
                                 <h5 className="mb-4">Input Data</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-2">
-                                            Full Description
-                                        </label>
+                                        <label className="mb-2">Full Description</label>
                                         {state.item && (
                                             <div
                                                 data-name="fullDescription"
@@ -106,80 +102,46 @@ const Edit: React.FC = () => {
                                             <label>Short Description</label>
                                             <textarea
                                                 className="form-control"
-                                                defaultValue={get_value(
-                                                    'short_description',
-                                                )}
+                                                defaultValue={get_value('short_description')}
                                                 name="short_description"
                                                 id="short_description"
                                                 rows={3}
                                             ></textarea>
                                         </div>
 
-                                        {[
-                                            'pre_requisities',
-                                            'terms_and_conditions',
-                                            'price',
-                                            'discount_price',
-                                        ].map((i) => (
-                                            <div
-                                                key={i}
-                                                className="form-group form-vertical"
-                                            >
-                                                <Input
-                                                    value={get_value(i)}
-                                                    name={i}
-                                                />
-                                            </div>
-                                        ))}
+                                        {['pre_requisities', 'terms_and_conditions', 'price', 'discount_price'].map(
+                                            (i) => (
+                                                <div key={i} className="form-group form-vertical">
+                                                    <Input value={get_value(i)} name={i} />
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
                                     <div className="col-4">
                                         <div className="form-group form-vertical">
-                                            <Input
-                                                value={get_value('title')}
-                                                name="title"
-                                            />
+                                            <Input value={get_value('title')} name="title" />
                                         </div>
                                         <div className="form-group form-vertical">
-                                            <Input
-                                                value={get_value('place')}
-                                                name="place"
-                                            />
+                                            <Input value={get_value('place')} name="place" />
                                         </div>
 
-                                        {/* RADIO OPTIONS */}
+                                        {/* Event Type Radio Buttons */}
                                         <label>Event Type</label>
-                                        <div
-                                            style={{
-                                                paddingBottom: 10,
-                                            }}
-                                        >
+                                        <div style={{ paddingBottom: 10 }}>
                                             <label>
                                                 <input
                                                     type="radio"
                                                     name="event_type"
                                                     value="online"
-                                                    checked={
-                                                        get_value('status') ===
-                                                        'online'
-                                                    }
-                                                    onChange={(e) => {
-                                                        const formData =
-                                                            new FormData();
-                                                        formData.set(
-                                                            'status',
-                                                            e.target.value,
-                                                        );
+                                                    checked={get_value('status') === 'online'}
+                                                    onChange={(e) =>
                                                         dispatch(
-                                                            storeSlice.actions.set_item(
-                                                                {
-                                                                    ...state.item,
-                                                                    status: e
-                                                                        .target
-                                                                        .value,
-                                                                },
-                                                            ),
-                                                        );
-                                                    }}
+                                                            storeSlice.actions.set_item({
+                                                                ...state.item,
+                                                                status: e.target.value,
+                                                            }),
+                                                        )
+                                                    }
                                                 />
                                                 Online
                                             </label>
@@ -189,103 +151,50 @@ const Edit: React.FC = () => {
                                                     type="radio"
                                                     name="event_type"
                                                     value="offline"
-                                                    checked={
-                                                        get_value('status') ===
-                                                        'offline'
-                                                    }
-                                                    onChange={(e) => {
-                                                        const formData =
-                                                            new FormData();
-                                                        formData.set(
-                                                            'status',
-                                                            e.target.value,
-                                                        );
+                                                    checked={get_value('status') === 'offline'}
+                                                    onChange={(e) =>
                                                         dispatch(
-                                                            storeSlice.actions.set_item(
-                                                                {
-                                                                    ...state.item,
-                                                                    status: e
-                                                                        .target
-                                                                        .value,
-                                                                },
-                                                            ),
-                                                        );
-                                                    }}
+                                                            storeSlice.actions.set_item({
+                                                                ...state.item,
+                                                                status: e.target.value,
+                                                            }),
+                                                        )
+                                                    }
                                                 />
                                                 Offline
                                             </label>
                                         </div>
 
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <label>Reg Start Date</label>
-                                            <DateEl
-                                                value={get_value(
-                                                    'reg_start_date',
-                                                )}
-                                                name="reg_start_date"
-                                                handler={() =>
-                                                    console.log('Date changed')
-                                                }
-                                            />
-                                        </div>
-
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <label>Reg End Date</label>
-                                            <DateEl
-                                                value={get_value(
-                                                    'reg_end_date',
-                                                )}
-                                                name="reg_end_date"
-                                                handler={() =>
-                                                    console.log('Date changed')
-                                                }
-                                            />
-                                        </div>
-
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <label>
-                                                Session Start Date Time
-                                            </label>
-                                            <DateTime
-                                                value={get_value(
-                                                    'session_start_date_time',
-                                                )}
-                                                name={'session_start_date_time'}
-                                                handler={() => {
-                                                    console.log('arguments');
-                                                }}
-                                            ></DateTime>
-                                        </div>
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <label>Session End Date Time</label>
-                                            <DateTime
-                                                value={get_value(
-                                                    'session_end_date_time',
-                                                )}
-                                                name={'session_end_date_time'}
-                                                handler={() => {
-                                                    console.log('arguments');
-                                                }}
-                                            ></DateTime>
-                                        </div>
-
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <InputImage
-                                                defalut_preview={get_value(
-                                                    'poster',
-                                                )}
-                                                label="Poster"
-                                                name="poster"
-                                            />
-                                        </div>
+                                        {/* Additional Form Fields */}
+                                        <DateEl
+                                            value={get_value('reg_start_date')}
+                                            name="reg_start_date"
+                                            handler={() => console.log('Date changed')}
+                                        />
+                                        <DateEl
+                                            value={get_value('reg_end_date')}
+                                            name="reg_end_date"
+                                            handler={() => console.log('Date changed')}
+                                        />
+                                        <DateTime
+                                            value={get_value('session_start_date_time')}
+                                            name="session_start_date_time"
+                                            handler={() => console.log('DateTime changed')}
+                                        />
+                                        <DateTime
+                                            value={get_value('session_end_date_time')}
+                                            name="session_end_date_time"
+                                            handler={() => console.log('DateTime changed')}
+                                        />
+                                        <InputImage
+                                            defalut_preview={get_value('poster')}
+                                            label="Poster"
+                                            name="poster"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <div className="form-group form-vertical">
-                                <button className="btn btn-outline-info">
-                                    Submit
-                                </button>
-                            </div>
+                            <button className="btn btn-outline-info">Submit</button>
                         </form>
                     </div>
                 )}
@@ -296,9 +205,7 @@ const Edit: React.FC = () => {
                                 to={`/${setup.route_prefix}/details/${state.item.id}`}
                                 className="outline"
                             >
-                                <span className="material-symbols-outlined fill">
-                                    visibility
-                                </span>
+                                <span className="material-symbols-outlined fill">visibility</span>
                                 <div className="text">Details</div>
                             </Link>
                         </li>
