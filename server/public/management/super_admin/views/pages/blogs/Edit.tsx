@@ -22,8 +22,8 @@ const Edit: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
-    const editorRef = useRef<any>(null); // Ref to hold the CKEditor instance
-    const [data, setData] = useState<anyObject>({});
+     const editorRef = useRef<any>(null); // Ref for CKEditor instance
+        const [data, setData] = useState<string>(''); // State for CKEditor content
 
     const [slug, setSlug] = useState('');
 
@@ -35,26 +35,28 @@ const Edit: React.FC = () => {
 
     // Initialize CKEditor
     useEffect(() => {
-        const fullDescriptionElement = document.querySelector(
-            '[data-name="fullDescription"]',
-        );
+        const fullDescriptionElement = document.querySelector('[data-name="fullDescription"]');
         if (fullDescriptionElement && !editorRef.current) {
-            const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
-            editorRef.current = editor; // Save the instance to the ref
-
+            const editor = CKEDITOR.replace('full_description'); // Replace with the correct element ID
+            editorRef.current = editor; // Store the CKEditor instance in ref
+    
+            // Set initial data for the editor
             const defaultValue = get_value('full_description');
             if (defaultValue) {
                 editor.setData(defaultValue);
             }
-
-            // Cleanup function to destroy the editor on component unmount
+    
+            // Cleanup to avoid memory leaks
             return () => {
-                editor.destroy();
-                editorRef.current = null;
+                if (editor) {
+                    editor.destroy();
+                    editorRef.current = null;
+                }
             };
         }
     }, [state.item]);
-
+    
+    
     // Generate slug
     const generateSlug = (title: string): string =>
         title
@@ -69,25 +71,33 @@ const Edit: React.FC = () => {
     };
 
     // Handle form submission
-    async function handle_submit(e) {
+    async function handle_submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        let form_data = new FormData(e.target);
-
+        const form_data = new FormData(e.currentTarget);
+    
         // Generate the slug from the title
         const title = form_data.get('title') as string;
         let slug = generateSlug(title);
-
+    
         // Check slug uniqueness
         const isUnique = await checkSlugUniqueness(slug);
         if (!isUnique) {
             slug = `${slug}-${Date.now()}`; // Append timestamp for uniqueness
         }
         form_data.set('slug', slug);
-        form_data.append('full_description', data.getData());
-
+    
+        // Get the editor data
+        if (editorRef.current) {
+            form_data.append('full_description', editorRef.current.getData()); // Access CKEditor instance correctly
+        } else {
+            console.error('CKEditor instance is not available');
+        }
+    
+        // Dispatch the update action
         const response = await dispatch(update(form_data) as any);
         console.log('RESPONSE', response);
     }
+    
 
     // Get value helper
     const get_value = (key: string): string => {
