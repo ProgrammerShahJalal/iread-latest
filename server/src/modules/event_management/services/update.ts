@@ -77,7 +77,7 @@ async function update(
                 body['poster'].name;
             await (fastify_instance as any).upload(body['poster'], image_path);
         }
-
+        
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
             reg_start_date: body.reg_start_date || data?.reg_start_date,
