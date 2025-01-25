@@ -15,6 +15,7 @@ import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import DateTime from '../../components/DateTime';
 import moment from 'moment/moment';
+import { anyObject } from '../../../common_types/object';
 
 const Edit: React.FC = () => {
     const state: typeof initialState = useSelector(
@@ -23,7 +24,7 @@ const Edit: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
-    const editorRef = useRef<any>(null); // Ref for CKEditor instance
+    const editorRef = useRef<any>(null); // Ref to hold the CKEditor instance
     const [data, setData] = useState<string>(''); // State for CKEditor content
 
     // Fetch details on component mount
@@ -32,20 +33,21 @@ const Edit: React.FC = () => {
         dispatch(details({ id: params.id }) as any);
     }, [dispatch, params.id]);
 
-    // Initialize CKEditor
-    useEffect(() => {
+      // Initialize CKEditor
+      useEffect(() => {
         const fullDescriptionElement = document.querySelector(
             '[data-name="fullDescription"]',
         );
         if (fullDescriptionElement && !editorRef.current) {
-            const editor = CKEDITOR.replace('full_description');
-            editorRef.current = editor;
-    
+            const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
+            editorRef.current = editor; // Save the instance to the ref
+
             const defaultValue = get_value('full_description');
             if (defaultValue) {
-                editor?.setData(defaultValue);
+                editor.setData(defaultValue);
             }
-    
+
+            // Cleanup function to destroy the editor on component unmount
             return () => {
                 editor.destroy();
                 editorRef.current = null;
@@ -54,7 +56,6 @@ const Edit: React.FC = () => {
     }, [state.item]);
     
 
-    // Handle form submission
     const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -133,30 +134,30 @@ const Edit: React.FC = () => {
                                                     type="radio"
                                                     name="event_type"
                                                     value="online"
-                                                    checked={get_value('status') === 'online'}
+                                                    checked={get_value('event_type') === 'online'}
                                                     onChange={(e) =>
                                                         dispatch(
                                                             storeSlice.actions.set_item({
                                                                 ...state.item,
-                                                                status: e.target.value,
+                                                                event_type: e.target.value,
                                                             }),
                                                         )
                                                     }
                                                 />
                                                 Online
-                                            </label>
+                                            </label>  
                                             <br />
                                             <label>
                                                 <input
                                                     type="radio"
                                                     name="event_type"
                                                     value="offline"
-                                                    checked={get_value('status') === 'offline'}
+                                                    checked={get_value('event_type') === 'offline'}
                                                     onChange={(e) =>
                                                         dispatch(
                                                             storeSlice.actions.set_item({
                                                                 ...state.item,
-                                                                status: e.target.value,
+                                                                event_type: e.target.value,
                                                             }),
                                                         )
                                                     }
