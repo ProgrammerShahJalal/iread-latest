@@ -31,7 +31,7 @@ const Edit: React.FC = () => {
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
-    }, [dispatch, params.id]);
+    }, [dispatch, params.id]); 
 
       // Initialize CKEditor
       useEffect(() => {
@@ -53,7 +53,7 @@ const Edit: React.FC = () => {
                 editorRef.current = null;
             };
         }
-    }, [state.item]);
+    }, [state.item?.id]);
     
 
     const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
