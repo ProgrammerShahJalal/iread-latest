@@ -59,14 +59,7 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let image_path = 'avatar.png';
-    if (body['poster']?.ext) {
-        image_path =
-            'uploads/events/' +
-            moment().format('YYYYMMDDHHmmss') +
-            body['poster'].name;
-        await (fastify_instance as any).upload(body['poster'], image_path);
-    }
+
 
     /** print request data into console */
     // console.clear();
@@ -75,6 +68,16 @@ async function update(
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+
+        let image_path = data?.poster || 'avatar.png';
+        if (body['poster']?.ext) {
+            image_path =
+                'uploads/events/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body['poster'].name;
+            await (fastify_instance as any).upload(body['poster'], image_path);
+        }
+
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
             reg_start_date: body.reg_start_date || data?.reg_start_date,
@@ -91,11 +94,11 @@ async function update(
             terms_and_conditions:
                 body.terms_and_conditions || data?.terms_and_conditions,
             event_type: body.event_type || data?.event_type,
-            poster: image_path || (data?.poster as string),
+            poster: image_path || data?.poster as string,
             price: body.price || data?.price,
             discount_price: body.discount_price || data?.discount_price,
         };
-        console.log('body', body);
+        // console.log('body', body);
         if (data) {
             data.update(inputs);
             await data.save();
