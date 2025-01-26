@@ -18,26 +18,19 @@ const Filter: React.FC<Props> = (props: Props) => {
 
     const dispatch = useAppDispatch();
 
-    
-    const filterCriteria = {
-        start_date: '',
-        end_date: '',
-    };
-
     function get_data(data: { [key: string]: any }): void {
-        // Ensure `key` and `value` exist and process them
-        console.log('data', data);
-        if (data.key && data.value) {
-            const formattedDate = data.value.split('T')[0]; // Extract the date part
-            filterCriteria[data.key] = formattedDate;
-        }
+        // console.log(data);
+        set_filter({
+            key: data.key,
+            value: data.value,
+        });
     }
-    
-    function close_filter(action = true) {
+
+    function close_filter(action: boolean = true) {
         dispatch(storeSlice.actions.set_show_filter_canvas(action));
     }
 
-    function set_filter(data: { key: string; value: string }) {
+    function set_filter(data: { key: string; value: string | number }) {
         dispatch(
             storeSlice.actions.set_filter_criteria({
                 key: data.key,
@@ -47,12 +40,8 @@ const Filter: React.FC<Props> = (props: Props) => {
     }
 
     function submit() {
-        // Apply the date filter
-
-        set_filter({ key: 'start_date', value: filterCriteria.start_date });
-        set_filter({ key: 'end_date', value: filterCriteria.end_date });
+        dispatch(storeSlice.actions.set_only_latest_data(true));
         dispatch(all({}) as any);
-        close_filter(false);
     }
 
     if (modalRoot && state.show_filter_canvas) {
