@@ -31,10 +31,10 @@ const Edit: React.FC = () => {
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
-    }, [dispatch, params.id]); 
+    }, [dispatch, params.id]);
 
-      // Initialize CKEditor
-      useEffect(() => {
+    // Initialize CKEditor
+    useEffect(() => {
         const fullDescriptionElement = document.querySelector(
             '[data-name="fullDescription"]',
         );
@@ -54,7 +54,7 @@ const Edit: React.FC = () => {
             };
         }
     }, [state.item?.id]);
-    
+
 
     const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -145,7 +145,7 @@ const Edit: React.FC = () => {
                                                     }
                                                 />
                                                 Online
-                                            </label>  
+                                            </label>
                                             <br />
                                             <label>
                                                 <input
@@ -167,31 +167,50 @@ const Edit: React.FC = () => {
                                         </div>
 
                                         {/* Additional Form Fields */}
-                                        <DateEl
-                                            value={get_value('reg_start_date')}
-                                            name="reg_start_date"
-                                            handler={() => console.log('Date changed')}
-                                        />
-                                        <DateEl
-                                            value={get_value('reg_end_date')}
-                                            name="reg_end_date"
-                                            handler={() => console.log('Date changed')}
-                                        />
-                                        <DateTime
-                                            value={get_value('session_start_date_time')}
-                                            name="session_start_date_time"
-                                            handler={() => console.log('DateTime changed')}
-                                        />
-                                        <DateTime
-                                            value={get_value('session_end_date_time')}
-                                            name="session_end_date_time"
-                                            handler={() => console.log('DateTime changed')}
-                                        />
-                                        <InputImage
-                                            defalut_preview={get_value('poster')}
-                                            label="Poster"
-                                            name="poster"
-                                        />
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>Reg Start Date</label>
+                                            <DateEl
+                                                value={get_value('reg_start_date')}
+                                                name="reg_start_date"
+                                                handler={() => console.log('Date changed')}
+                                            />
+                                        </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>Reg End Date</label>
+                                            <DateEl
+                                                value={get_value('reg_end_date')}
+                                                name="reg_end_date"
+                                                handler={() => console.log('Date changed')}
+                                            />
+                                        </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>Session Start Date Time</label>
+                                            <DateTime
+                                                value={get_value('session_start_date_time')}
+                                                name="session_start_date_time"
+                                                handler={() => console.log('DateTime changed')}
+                                            />
+                                        </div>
+
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <label>Session End Date Time</label>
+                                            <DateTime
+                                                value={get_value('session_end_date_time')}
+                                                name="session_end_date_time"
+                                                handler={() => console.log('DateTime changed')}
+                                            />
+                                        </div>
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <InputImage
+                                                defalut_preview={get_value('poster')}
+                                                label="Poster"
+                                                name="poster"
+                                            />
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

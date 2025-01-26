@@ -7,7 +7,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { InferCreationAttributes } from 'sequelize';
-import moment from 'moment';
+import moment from 'moment/moment';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
@@ -36,33 +36,12 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
 
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -78,23 +57,20 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
     
-    let inputs: InferCreationAttributes<typeof data> = {
-     
-        user_id: body.user_id,
-        event_id: body.event_id,
-        scores: body.scores,
-        grade: body.grade,
-        date: body.date,
-        is_submitted: body.is_submitted,
-    };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {
+        let inputs: InferCreationAttributes<typeof data> = {
+     
+            user_id: body.user_id,
+            event_id: body.events?.[1],
+            scores: body.scores,
+            grade: body.grade,
+            date: body.date,
+            is_submitted: body.is_submitted,
+        };
         (await data.update(inputs)).save();
+
 
         return response(201, 'data created', {
             data,
