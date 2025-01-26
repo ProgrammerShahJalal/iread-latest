@@ -24,6 +24,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 <MenuSingle to="/events" icon="fa fa-book" label="Events" />
                 <MenuSingle to="/event-categories" icon="fa fa-th-list" label="Event Category" />
                 <MenuSingle to="/event-tags" icon="fa fa-tags" label="Event Tags" />
+                <MenuSingle to="/event-certified-users" icon="fa fa-graduation-cap" label="Event Certified Users" />
                 {/* HRM  */}
                 <MenuDropDown
                     section_title="Management"

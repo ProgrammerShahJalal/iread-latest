@@ -72,19 +72,19 @@ function init(sequelize: Sequelize) {
             },
 
             reg_start_date: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             reg_end_date: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             session_start_date_time: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             session_end_date_time: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             place: {

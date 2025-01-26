@@ -185,7 +185,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_start_date'}
-                                                    handler={() => { console.log('arguments') }}
+                                                    handler={(data) => { console.log('arguments', data) }}
                                                 ></DateEl>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
@@ -193,7 +193,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_end_date'}
-                                                    handler={() => { console.log('arguments') }}
+                                                    handler={(data) => { console.log('arguments', data) }}
                                                 ></DateEl>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
@@ -201,7 +201,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <DateTime
                                                     value={''}
                                                     name={'session_start_date_time'}
-                                                    handler={() => { console.log('arguments') }}
+                                                    handler={(data) => { console.log('arguments', data) }}
                                                 ></DateTime>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
@@ -209,7 +209,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <DateTime
                                                     value={''}
                                                     name={'session_end_date_time'}
-                                                    handler={() => { console.log('arguments') }}
+                                                    handler={(data) => { console.log('arguments', data) }}
                                                 ></DateTime>
                                             </div>
 
