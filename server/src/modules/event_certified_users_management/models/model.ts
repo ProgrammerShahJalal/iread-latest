@@ -58,7 +58,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             event_id: {
-                type: DataTypes.BIGINT.UNSIGNED,
+                type: DataTypes.BIGINT().UNSIGNED,
                 allowNull: true,
             },
             scores: {

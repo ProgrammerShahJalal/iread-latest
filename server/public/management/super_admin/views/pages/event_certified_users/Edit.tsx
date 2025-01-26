@@ -11,6 +11,8 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import Select from 'react-select';
+import DateEl from '../../components/DateEl';
+import EventDropDown from "../events/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -74,58 +76,44 @@ const Edit: React.FC<Props> = (props: Props) => {
                                         Input Data
                                     </h5>
                                     <div className="form_auto_fit">
+                    
+                                    <div className="form-group form-vertical">
+                                        <label>Events</label>
+                                        <EventDropDown name="events"
+                                            multiple={false}
+                                            get_selected_data={(data) => {
+                                                console.log(data)
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="form-group form-vertical">
+                                        <Input name='user_id' value={get_value('user_id')} />
+                                    </div>
+                                      
                                         {[
-                                            'title',
+                                            'scores',
+                                            'grade',
+                                            'date',
 
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input
-                                                    name={i}
-                                                    value={get_value(i)}
-                                                />
+                                                {
+                                                    i === 'date' ? (
+                                                        <><label>Date</label><DateEl
+                                                            value={get_value('date')}
+                                                            name="date"
+                                                            handler={() => console.log('Date added')} /></>
+                                                    ) : (
+                                                        <Input
+                                                            name={i}
+                                                            value={get_value(i)}
+                                                        />
+                                                    )
+                                                }
                                             </div>
                                         ))}
 
                                     </div>
-
-                                    {/* DROPDOWN SELECT OPTIONS */}
-                                    {/* <Select
-                                        name="status"
-                                        options={statusOptions}
-                                        value={statusOptions.find((option) => option.value === get_value('status'))}
-                                        onChange={(selectedOption: { value: string; label: string } | null) => {
-                                            const formData = new FormData();
-                                            if (selectedOption) {
-                                                formData.set('status', selectedOption.value);
-                                                dispatch(
-                                                    storeSlice.actions.set_item({
-                                                        ...state.item,
-                                                        status: selectedOption.value,
-                                                    })
-                                                );
-                                            }
-                                        }}
-                                        styles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Default text color for the input
-                                            }),
-                                            singleValue: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for selected value
-                                            }),
-                                            menu: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for dropdown options
-                                            }),
-                                            option: (provided, state) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for each dropdown option
-                                                backgroundColor: state.isFocused ? '#f1f1f1' : 'white', // Highlight color for focused options
-                                            }),
-                                        }}
-                                    /> */}
-
 
 
 

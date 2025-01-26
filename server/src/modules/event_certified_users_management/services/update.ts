@@ -39,12 +39,6 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -61,25 +55,21 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        user_id: body.user_id,
-        event_id: body.event_id,
-        scores: body.scores,
-        grade: body.grade,
-        date: body.date,
-        is_submitted: body.is_submitted,
-    };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
-            data.update(inputs);
-            await data.save();
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                user_id: body.user_id || data?.user_id,
+                event_id: body.events?.[1] || data?.event_id,
+                scores: body.scores || data?.scores,
+                grade: body.grade || data?.grade,
+                date: body.date || data?.date,
+                is_submitted: body.is_submitted || data?.is_submitted,
+            };
+            (await data.update(inputs)).save();
+            
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

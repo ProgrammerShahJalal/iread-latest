@@ -130,8 +130,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                         </div>
 
                                         {[
-
-
                                             'seo_title',
                                             'seo_keyword',
                                             'seo_description',

@@ -2,18 +2,25 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import setup from './config/setup';
-import { useAppDispatch } from '../../../store';
+import { RootState, useAppDispatch } from '../../../store';
 import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import Select from './components/management_data_page/Select';
 import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
 import DropDown from './components/dropdown/DropDown';
+import DateEl from '../../components/DateEl';
+import { initialState } from './config/store/inital_state';
+import { useSelector } from 'react-redux';
+import EventDropDown from "../events/components/dropdown/DropDown";
 
 export interface Props { }
 
 
 const Create: React.FC<Props> = (props: Props) => {
+    const state: typeof initialState = useSelector(
+        (state: RootState) => state[setup.module_name],
+    );
     const dispatch = useAppDispatch();
 
     async function handle_submit(e) {
@@ -26,6 +33,18 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
+
+    function get_value(key) {
+        try {
+            if (state.item[key]) return state.item[key];
+            if (state.item?.info[key]) return state.item?.info[key];
+        } catch (error) {
+            return '';
+        }
+        return '';
+    }
+
+
     return (
         <>
             <div className="page_content">
@@ -37,33 +56,72 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-                                {/* <DropDown
-                                    multiple={false}
-                                    get_selected_data={(result) =>
-                                        console.log(result)
-                                    }
-                                    name={`contact_messages_list`}
-                                /> */}
 
-                                <h5 className="mb-4">Tags Informations</h5>
+                                <h5 className="mb-4">Event Certified Users Informations</h5>
                                 <div className="form_auto_fit">
 
+                                    <div className="form-group form-vertical">
+                                        <label>Events</label>
+                                        <EventDropDown name="events"
+                                            multiple={false}
+                                            get_selected_data={(data) => {
+                                                console.log(data)
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="form-group form-vertical">
+                                        <Input name='user_id' value={get_value('user_id')} />
+                                    </div>
+
                                     {[
-                                        'title',
+                                        'scores',
+                                        'grade',
+                                        'date',
+                                        'is_submitted',
                                     ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                        <div key={i} className="form-group form-vertical">
+                                            {i === 'date' ? (
+                                                <>
+                                                    <label>Date</label>
+                                                    <DateEl
+                                                        value={get_value('date')}
+                                                        name="date"
+                                                        handler={() => console.log('Date added')}
+                                                    />
+                                                </>
+                                            ) : i === 'is_submitted' ? (
+                                                <>
+                                                    <label>Is Submitted?</label>
+                                                    <div className='flex flex-1'>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name="is_submitted"
+                                                                value="1"
+                                                                defaultChecked={get_value('is_submitted') === '1'}
+                                                            />{' '}
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name="is_submitted"
+                                                                value="0"
+                                                                defaultChecked={get_value('is_submitted') === '0'}
+                                                            />{' '}
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Input name={i} value={get_value(i)} />
+                                                </>
+                                            )}
                                         </div>
                                     ))}
-
-                                    {/* <div className="form-group grid_full_width form-vertical">
-                                        <InputImage
-                                            label={'image'}
-                                            name={'image'}
-                                        />
-                                    </div> */}
-
                                 </div>
+
                             </div>
 
                             <div className="form-group form-vertical">
