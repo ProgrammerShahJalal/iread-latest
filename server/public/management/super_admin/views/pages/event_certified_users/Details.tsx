@@ -9,6 +9,7 @@ import { details } from './config/store/async_actions/details';
 import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
+import moment from 'moment/moment';
 export interface Props {}
 
 const Details: React.FC<Props> = (props: Props) => {
@@ -34,6 +35,10 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+    let  formateDate = (date: string) => {
+        return moment.utc(date).format('Do MMM YY');
+        }
+
     return (
         <>
             <div className="page_content">
@@ -46,13 +51,23 @@ const Details: React.FC<Props> = (props: Props) => {
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'title',
+                                        'event_id',
+                                        'user_id',
+                                        'scores',
+                                        'grade',
+                                        'date',
                                         'status',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                            <td>{get_value(i)}</td>
+                                            {
+                                                i === 'date' ? (
+                                                    <td>{formateDate(get_value(i))}</td>
+                                                ) : (
+                                                    <td>{get_value(i)}</td>
+                                                )
+                                            }
                                         </tr>
                                     ))}
                                 </tbody>
