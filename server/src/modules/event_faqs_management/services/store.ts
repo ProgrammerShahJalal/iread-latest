@@ -35,33 +35,12 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
 
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -79,14 +58,11 @@ async function store(
     
     let inputs: InferCreationAttributes<typeof data> = {
      
-        event_id: body.event_id,
+        event_id: body.events?.[1],
         title: body.title,
         description: body.description,
     };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {

@@ -15,6 +15,7 @@ import event_tags from '../views/pages/event_tags/config/routes';
 import events from '../views/pages/events/config/routes';
 import event_certified_users from '../views/pages/event_certified_users/config/routes';
 import event_resources from '../views/pages/event_resources/config/routes';
+import event_faqs from '../views/pages/event_faqs/config/routes';
 
 
 interface RouteTypes extends NonIndexRouteObject {}
@@ -37,6 +38,7 @@ const router: RouteTypes[] = [
             events,
             event_certified_users,
             event_resources,
+            event_faqs,
         ],
     },
 ];
