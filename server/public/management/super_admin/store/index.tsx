@@ -13,6 +13,7 @@ import event_category from '../views/pages/event_category/config/store';
 import event_tags from '../views/pages/event_tags/config/store';
 import events from '../views/pages/events/config/store';
 import event_certified_users from '../views/pages/event_certified_users/config/store';
+import event_resources from '../views/pages/event_resources/config/store';
 
 const store = configureStore({
     reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
         event_tags: event_tags.reducer,
         events: events.reducer,
         event_certified_users: event_certified_users.reducer,
+        event_resources: event_resources.reducer,
     },
     devTools: true,
 });

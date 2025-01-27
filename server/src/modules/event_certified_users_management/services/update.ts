@@ -61,7 +61,7 @@ async function update(
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                user_id: body.user_id || data?.user_id,
+                user_id: body.users?.[1] || data?.user_id,
                 event_id: body.events?.[1] || data?.event_id,
                 scores: body.scores || data?.scores,
                 grade: body.grade || data?.grade,
