@@ -17,41 +17,72 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 {/* Dashboard  */}
                 <MenuSingle to="/" icon="icon-dashboard" label="Dashboard" />
                 {/* Blogs */}
-                <MenuSingle to="/blogs" icon="fa fa-book" label="Blogs" />
+                {/* <MenuSingle to="/blogs" icon="fa fa-book" label="Blogs" />
                 <MenuSingle to="/blog-categories" icon="fa fa-th-list" label="Blog Category" />
-                <MenuSingle to="/blog-tags" icon="fa fa-tags" label="Blog Tags" />
+                <MenuSingle to="/blog-tags" icon="fa fa-tags" label="Blog Tags" /> */}
                 {/* Events */}
-                <MenuSingle to="/events" icon="fa fa-calendar" label="Events" />
+                {/* <MenuSingle to="/events" icon="fa fa-calendar" label="Events" />
                 <MenuSingle to="/event-categories" icon="fa fa-columns" label="Event Category" />
                 <MenuSingle to="/event-tags" icon="fa fa-hashtag" label="Event Tags" />
                 <MenuSingle to="/event-certified-users" icon="fa fa-graduation-cap" label="Event Certified Users" />
                 <MenuSingle to="/event-resources" icon="fa fa-folder" label="Event Resources" />
-                {/* HRM  */}
+                <MenuSingle to="/event-faqs" icon="fa fa-comments" label="Event FAQs" /> */}
+                {/* BLOG  */}
                 <MenuDropDown
                     section_title="Management"
-                    group_title="HRM"
-                    icon="icon-desktop"
+                    group_title="Blog"
+                    icon="fa fa-book"
                 >
-                    <MenuDropDownItem label="All User" to="/users" />
+                    <MenuDropDownItem label="Blogs" to="/blogs" />
                     <MenuDropDownItem
-                        label="Create User"
-                        to="/users/create"
+                        label="Blog Category"
+                        to="/blog-categories"
                     />
                     <MenuDropDownItem
-                        label="Employee History"
-                        to="/users/history"
+                        label="Blog Tags"
+                        to="/blog-tags"
+                    />
+                </MenuDropDown>
+                {/* EVENT  */}
+                <MenuDropDown
+                    group_title="Event"
+                    icon="fa fa-calendar"
+                >
+                    <MenuDropDownItem
+                        label="Events"
+                        to="/events"
+                    />
+                    <MenuDropDownItem
+                        label="Event Category"
+                        to="/event-categories"
+                    />
+                    <MenuDropDownItem
+                        label="Event Tags"
+                        to="/event-tags"
+                    />
+                    <MenuDropDownItem
+                        label="Event Certified Users"
+                        to="/event-certified-users"
+                    />
+                    <MenuDropDownItem
+                        label="Event Resources"
+                        to="/event-resources"
+                    />
+                    <MenuDropDownItem
+                        label="Event FAQs"
+                        to="/event-faqs"
                     />
                 </MenuDropDown>
                 {/* Booking  */}
-                <MenuDropDown group_title="Projects" icon="icon-desktop">
+                {/* <MenuDropDown group_title="Projects" icon="icon-desktop">
                     <MenuDropDownItem label="All Projects" to="/project" />
                     <MenuDropDownItem label="Create Project" to="/project/create" />
                     <MenuDropDownItem label="All Bookings" to="/booking" />
                     <MenuDropDownItem label="Create Booking" to="/booking/create" />
                     <MenuDropDownItem label="Project Payment" to="/project_payment" />
-                </MenuDropDown>
+                </MenuDropDown> */}
                 {/* Account  */}
-                <MenuDropDown group_title="Account" icon="icon-desktop">
+                {/* <MenuDropDown group_title="Account" icon="icon-desktop">
                     <MenuDropDownItem label="Incomes" to="/accounts/incomes" />
                     <MenuDropDownItem label="Expenses" to="/accounts/expense" />
                     <MenuDropDownItem label="Expense Entry" to="/accounts/new-expense" />
@@ -59,7 +90,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     <MenuDropDownItem label="All Account Number" to="/account_numbers" />
                     <MenuDropDownItem label="All Account Categories" to="/account_categories" />
                     <MenuDropDownItem label="Debit Credit" to="/debit_credit" />
-                </MenuDropDown>
+                </MenuDropDown> */}
                 {/* Reports  */}
                 {/* <MenuDropDown group_title="Reports" icon="icon-desktop">
                     <MenuDropDownItem label="Income Statement" to="/income_statement" />
