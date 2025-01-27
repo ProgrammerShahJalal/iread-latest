@@ -15,7 +15,7 @@ const MenuDropDown: React.FC<Props> = (props: Props) => {
                 {props.section_title && (
                     <div className="sidebar-title">{props.section_title}</div>
                 )}
-                <a href="javascript:void(0)" className="sidebar-header">
+                <a className="sidebar-header">
                     <i className={props.icon} />
                     <span>{props.group_title}</span>
                     <i className="fa fa-angle-right pull-right" />
