@@ -87,36 +87,17 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="users"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
                                       
                                         {[
-                                            'scores',
-                                            'grade',
-                                            'date',
+                                            'title',
+                                            'url',
 
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                {
-                                                    i === 'date' ? (
-                                                        <><label>Date</label><DateEl
-                                                            value={get_value('date')}
-                                                            name="date"
-                                                            handler={() => console.log('Date added')} /></>
-                                                    ) : (
                                                         <Input
                                                             name={i}
                                                             value={get_value(i)}
                                                         />
-                                                    )
-                                                }
                                             </div>
                                         ))}
 

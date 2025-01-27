@@ -35,9 +35,6 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    let  formateDate = (date: string) => {
-        return moment.utc(date).format('Do MMM YY');
-        }
 
     return (
         <>
@@ -52,22 +49,14 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'event_id',
-                                        'user_id',
-                                        'scores',
-                                        'grade',
-                                        'date',
+                                        'title',
+                                        'url',
                                         'status',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                            {
-                                                i === 'date' ? (
-                                                    <td>{formateDate(get_value(i))}</td>
-                                                ) : (
                                                     <td>{get_value(i)}</td>
-                                                )
-                                            }
                                         </tr>
                                     ))}
                                 </tbody>

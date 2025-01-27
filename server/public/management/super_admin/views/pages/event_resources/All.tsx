@@ -105,7 +105,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.id}</td>
                                                     <td>{i.event_id}</td>
-                                                    <td>{i.title}</td>
 
                                                     <td>
                                                         <span
@@ -114,8 +113,11 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.url}
+                                                            {i.title}
                                                         </span>
+                                                    </td> 
+                                                    <td>
+                                                            {i.url}
                                                     </td> 
 
                                                     <td>
