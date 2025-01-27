@@ -13,6 +13,7 @@ import DateEl from '../../components/DateEl';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
+import UserDropDown from "../users/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -70,7 +71,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <Input name='user_id' value={get_value('user_id')} />
+                                        <label>Users</label>
+                                        <UserDropDown name="users"
+                                            multiple={false}
+                                            get_selected_data={(data) => {
+                                                console.log(data)
+                                            }}
+                                        />
                                     </div>
 
                                     {[

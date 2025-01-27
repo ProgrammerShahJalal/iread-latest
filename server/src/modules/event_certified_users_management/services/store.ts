@@ -62,7 +62,7 @@ async function store(
     try {
         let inputs: InferCreationAttributes<typeof data> = {
      
-            user_id: body.user_id,
+            user_id: body.users?.[1],
             event_id: body.events?.[1],
             scores: body.scores,
             grade: body.grade,

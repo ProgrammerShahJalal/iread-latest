@@ -24,8 +24,8 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
     );
     const dispatch = useAppDispatch();
     useEffect(() => {
-        // dispatch(storeSlice.actions.set_only_latest_data(true));
-        // dispatch(all({}));
+        dispatch(storeSlice.actions.set_only_latest_data(true));
+        dispatch(all({}));
         if (default_value) {
             setSelectedList(default_value);
         }
@@ -48,14 +48,6 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
             get_selected_data({ selectedList, ids });
         }
     }, [selectedList]);
-
-    let users = [
-        { id: 1, name: 'John' },
-        { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' },
-        { id: 4, name: 'Alice' },
-        { id: 5, name: 'Charlie' },
-    ]
 
     return (
         <>
@@ -86,8 +78,7 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                         </div>
 
                         <ul className="option_list custom_scroll">
-                            {/* {(state.all as anyObject)?.data?.map( */}
-                            {(users as anyObject)?.map(
+                            {(state.all as anyObject)?.data?.map(
                                 (i: anyObject) => {
                                     return (
                                         <li className="option_item" key={i.id}>
@@ -107,7 +98,7 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                                                     />
                                                 </div>
                                                 <div className="label">
-                                                    {/* {i.uid} - */}
+                                                    {i.uid} -
                                                     {i.name}
                                                 </div>
                                             </label>

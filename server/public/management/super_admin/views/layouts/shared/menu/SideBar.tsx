@@ -21,10 +21,11 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 <MenuSingle to="/blog-categories" icon="fa fa-th-list" label="Blog Category" />
                 <MenuSingle to="/blog-tags" icon="fa fa-tags" label="Blog Tags" />
                 {/* Events */}
-                <MenuSingle to="/events" icon="fa fa-book" label="Events" />
-                <MenuSingle to="/event-categories" icon="fa fa-th-list" label="Event Category" />
-                <MenuSingle to="/event-tags" icon="fa fa-tags" label="Event Tags" />
+                <MenuSingle to="/events" icon="fa fa-calendar" label="Events" />
+                <MenuSingle to="/event-categories" icon="fa fa-columns" label="Event Category" />
+                <MenuSingle to="/event-tags" icon="fa fa-hashtag" label="Event Tags" />
                 <MenuSingle to="/event-certified-users" icon="fa fa-graduation-cap" label="Event Certified Users" />
+                <MenuSingle to="/event-resources" icon="fa fa-folder" label="Event Resources" />
                 {/* HRM  */}
                 <MenuDropDown
                     section_title="Management"
