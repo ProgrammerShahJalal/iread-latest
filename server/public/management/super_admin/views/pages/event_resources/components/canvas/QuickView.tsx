@@ -20,9 +20,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
     function close_canvas(action: boolean = true) {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
-    let  formateDate = (date: string) => {
-        return moment.utc(date).format('Do MMM YY');
-        }
 
 
     if (modalRoot && state.show_quick_view_canvas) {
@@ -50,24 +47,14 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.event_id}</th>
                                 </tr>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>Title</th>
                                     <th>:</th>
-                                    <th>{state.item.user_id}</th>
+                                    <th>{state.item.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Scores</th>
+                                    <th>URL</th>
                                     <th>:</th>
-                                    <th>{state.item.scores}</th>
-                                </tr>
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>:</th>
-                                    <th>{state.item.grade}</th>
-                                </tr>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>:</th>
-                                    <th>{formateDate(state.item.date)}</th>
+                                    <th>{state.item.url}</th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

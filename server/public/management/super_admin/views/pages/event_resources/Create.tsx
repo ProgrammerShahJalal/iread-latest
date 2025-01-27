@@ -5,15 +5,10 @@ import setup from './config/setup';
 import { RootState, useAppDispatch } from '../../../store';
 import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
-import Select from './components/management_data_page/Select';
-import InputImage from './components/management_data_page/InputImage';
-import { anyObject } from '../../../common_types/object';
-import DropDown from './components/dropdown/DropDown';
-import DateEl from '../../components/DateEl';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+
 
 export interface Props { }
 
@@ -58,7 +53,7 @@ const Create: React.FC<Props> = (props: Props) => {
                         >
                             <div>
 
-                                <h5 className="mb-4">Event Certified Users Informations</h5>
+                                <h5 className="mb-4">Event Resources Informations</h5>
                                 <div className="form_auto_fit">
 
                                     <div className="form-group form-vertical">
@@ -70,61 +65,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="users"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
 
                                     {[
-                                        'scores',
-                                        'grade',
-                                        'date',
-                                        'is_submitted',
+                                        'title',
+                                        'url',
                                     ].map((i) => (
                                         <div key={i} className="form-group form-vertical">
-                                            {i === 'date' ? (
-                                                <>
-                                                    <label>Date</label>
-                                                    <DateEl
-                                                        value={get_value('date')}
-                                                        name="date"
-                                                        handler={() => console.log('Date added')}
-                                                    />
-                                                </>
-                                            ) : i === 'is_submitted' ? (
-                                                <>
-                                                    <label>Is Submitted?</label>
-                                                    <div className='flex flex-1'>
-                                                        <label>
-                                                            <input
-                                                                type="radio"
-                                                                name="is_submitted"
-                                                                value="1"
-                                                                defaultChecked={get_value('is_submitted') === '1'}
-                                                            />{' '}
-                                                            Yes
-                                                        </label>
-                                                        <label>
-                                                            <input
-                                                                type="radio"
-                                                                name="is_submitted"
-                                                                value="0"
-                                                                defaultChecked={get_value('is_submitted') === '0'}
-                                                            />{' '}
-                                                            No
-                                                        </label>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Input name={i} value={get_value(i)} />
-                                                </>
-                                            )}
+                                            <Input name={i} value={get_value(i)} />
                                         </div>
                                     ))}
                                 </div>
