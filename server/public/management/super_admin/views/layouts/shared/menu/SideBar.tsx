@@ -80,6 +80,10 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         label="Event Sessions Assesments"
                         to="/event-session-assesments"
                     />
+                    <MenuDropDownItem
+                        label="Event Session Assesment Submissions"
+                        to="/event-session-assesment-submissions"
+                    />
                 </MenuDropDown>
                 {/* Booking  */}
                 {/* <MenuDropDown group_title="Projects" icon="icon-desktop">

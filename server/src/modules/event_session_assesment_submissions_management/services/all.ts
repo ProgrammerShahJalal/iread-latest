@@ -70,7 +70,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'mark', 'status'];
+        select_fields = ['id','event_id','event_session_id','event_session_assesment_id','submitted_content','mark','obtained_mark','grade','status'];
     }
 
     let query: FindAndCountOptions = {
@@ -94,8 +94,7 @@ async function all(
         query.where = {
             ...query.where,
             [Op.or]: [
-                { full_name: { [Op.like]: `%${search_key}%` } },
-                { email: { [Op.like]: `%${search_key}%` } },
+                { mark: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
             ],
