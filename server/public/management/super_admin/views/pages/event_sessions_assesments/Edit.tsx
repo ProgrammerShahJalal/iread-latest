@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,8 @@ import Input from './components/management_data_page/Input';
 import Select from 'react-select';
 import DateEl from '../../components/DateEl';
 import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import SessionDropDown from "../event_sessions/components/dropdown/DropDown";
+
 
 export interface Props { }
 
@@ -24,11 +25,37 @@ const Edit: React.FC<Props> = (props: Props) => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
+    const editorRef = useRef<any>(null); // Ref for CKEditor instance
+    const [data, setData] = useState<string>(''); // State for CKEditor content
 
-    useEffect(() => {
-        dispatch(storeSlice.actions.set_item({}));
-        dispatch(details({ id: params.id }) as any);
-    }, []);
+   // Fetch details when component mounts
+   useEffect(() => {
+    dispatch(storeSlice.actions.set_item({}));
+    dispatch(details({ id: params.id }) as any);
+}, [dispatch, params.id]);
+
+// Initialize CKEditor
+useEffect(() => {
+    const fullDescriptionElement = document.querySelector('[data-name="description"]');
+    if (fullDescriptionElement && !editorRef.current) {
+        const editor = CKEDITOR.replace('description'); // Replace with the correct element ID
+        editorRef.current = editor; // Store the CKEditor instance in ref
+
+        // Set initial data for the editor
+        const defaultValue = get_value('description');
+        if (defaultValue) {
+            editor.setData(defaultValue);
+        }
+
+        // Cleanup to avoid memory leaks
+        return () => {
+            if (editor) {
+                editor.destroy();
+                editorRef.current = null;
+            }
+        };
+    }
+}, [state.item]);
 
 
     let statusOptions = [
@@ -55,7 +82,6 @@ const Edit: React.FC<Props> = (props: Props) => {
     }
 
 
-    console.log('events default value', state.item.event_id);
     return (
         <>
             <div className="page_content">
@@ -78,53 +104,73 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     <h5 className="mb-4">
                                         Input Data
                                     </h5>
-                                    <div className="form_auto_fit">
-                    
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        
-                                        <EventDropDown name="events"
-                                            multiple={false}
-                                            default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                      
+                                    <div className="row">
+
+                                    <div className='col-8'>
+
+
+                                        <label className='mb-4'>Description</label>
+                                        {state.item && (
+                                            <div
+                                                data-name="description"
+                                                id="description"
+                                            ></div>
+                                        )}
+
                                         {[
                                             'title',
-                                            'topics',
+                                            'mark',
+                                            'pass_mark',
+                                        ].map((i) => (
+                                            <div className="form-group form-vertical">
+                                                    <Input name={i} value={get_value(i)} />
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+                                    <div className='col-4'>
+
+                                        <div className="form_auto_fit">
+
+                                            <div className="form-group form-vertical">
+                                                <label>Events</label>
+                                                <EventDropDown name="events"
+                                                    multiple={false}
+                                                    default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="form-group form-vertical">
+                                                <label>Sessions</label>
+                                                <SessionDropDown name="sessions"
+                                                    multiple={false}
+                                                    default_value={get_value('event_session_id') ? [{ id: get_value('event_session_id') }] : []}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
+                                                />
+                                            </div>
+
+                                            {[
                                             'start',
                                             'end',
-                                            'total_time',
-
                                         ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                           {
-                                            i === 'start' || i === 'end' ? (
+                                            <div className="form-group form-vertical">
                                                 <Input
                                                 type='time'
                                                 name={i}
                                                 value={get_value(i)}
                                                 />
-                                            ): (
-                                                i === 'total_time' ? (
-                                                    <Input 
-                                                    name={i} 
-                                                    value={get_value(i)}
-                                                    placeholder="Enter total time in minutes"
-                                                    />
-                                                ):
-                                                (
-                                                    <Input name={i} value={get_value(i)} />
-                                                )
-                                            )
-                                           }
-                                        </div>
+                                               
+                                            </div>
                                         ))}
-
+                                        </div>
                                     </div>
+
+                                </div>
 
 
 

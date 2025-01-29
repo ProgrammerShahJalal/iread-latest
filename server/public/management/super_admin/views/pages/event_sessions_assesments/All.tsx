@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,title,topics,start,end,total_time,status',
+                'id,event_id,event_session_id,title,description,mark,pass_mark,start,end,status',
             ),
         );
         dispatch(all({}));
@@ -48,6 +48,7 @@ const All: React.FC<Props> = (props: Props) => {
     let formatTime = (time: string) => {
         return moment.utc(time, 'HH:mm').format('h:mmA');
     };
+    
 
     return (
         <div className="page_content">
@@ -75,13 +76,18 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Title`}
-                                            col_name={`title`}
+                                            label={`Event Session ID`}
+                                            col_name={`event_session_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Topics`}
-                                            col_name={`topics`}
+                                            label={`Title`}
+                                            col_name={`title`}
+                                            sort={false}
+                                        />
+                                        <TableHeading
+                                            label={`Mark`}
+                                            col_name={`mark`}
                                             sort={true}
                                         />
                                         <TableHeading
@@ -94,11 +100,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`end`}
                                             sort={true}
                                         />
-                                        <TableHeading
-                                            label={`Total Time`}
-                                            col_name={`total_time`}
-                                            sort={true}
-                                        />
+                                    
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -124,6 +126,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.id}</td>
                                                     <td>{i.event_id}</td>
+                                                    <td>{i.event_session_id}</td>
 
                                                     <td>
                                                         <span
@@ -135,10 +138,9 @@ const All: React.FC<Props> = (props: Props) => {
                                                             {i.title}
                                                         </span>
                                                     </td> 
-                                                    <td>{i.topics}</td> 
-                                                    <td>{formatTime(i.start)}</td> 
-                                                    <td>{formatTime(i.end)}</td> 
-                                                    <td>{i.total_time} Minutes</td> 
+                                                    <td>{i.mark}</td> 
+                                                    <td>{formatTime(i.start)}</td>
+                                                    <td>{formatTime(i.end)}</td>
                                                     <td>{i.status}</td>
                                                 </tr>
                                             );

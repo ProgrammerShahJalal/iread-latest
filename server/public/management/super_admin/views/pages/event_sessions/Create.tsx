@@ -53,7 +53,7 @@ const Create: React.FC<Props> = (props: Props) => {
                         >
                             <div>
 
-                                <h5 className="mb-4">Event FAQs Informations</h5>
+                                <h5 className="mb-4">Event Session Informations</h5>
                                 <div className="form_auto_fit">
 
                                     <div className="form-group form-vertical">
@@ -79,10 +79,17 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <Input
                                                 type='time'
                                                 name={i}
-                                                value={get_value(i)}
                                                 />
                                             ): (
-                                                <Input name={i} value={get_value(i)} />
+                                                i === 'total_time' ? (
+                                                    <Input 
+                                                    name={i} 
+                                                    placeholder="Enter total time in minutes"
+                                                    />
+                                                ):
+                                                (
+                                                    <Input name={i}/>
+                                                )
                                             )
                                            }
                                         </div>
