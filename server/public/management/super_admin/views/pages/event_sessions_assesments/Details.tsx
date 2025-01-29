@@ -35,9 +35,9 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    let formatTime = (time: string) => {
-        return moment.utc(time, 'HH:mm').format('h:mmA');
-    };
+       let formatTime = (time: string) => {
+            return moment.utc(time, 'HH:mm').format('h:mmA');
+        };
 
 
     return (
@@ -53,11 +53,12 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'event_id',
+                                        'event_session_id',
                                         'title',
-                                        'topics',
+                                        'mark',
+                                        'pass_mark',
                                         'start',
                                         'end',
-                                        'total_time',
                                         'status',
                                     ].map((i) => (
                                         <tr>

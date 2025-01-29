@@ -10,6 +10,12 @@ export interface Props { }
 
 const modalRoot = document.getElementById('filter-root');
 
+let formatTime = (time: string) => {
+    return moment.utc(time, 'HH:mm').format('h:mmA');
+};
+
+
+
 const QuickView: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
@@ -21,9 +27,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
 
-      let formatTime = (time: string) => {
-            return moment.utc(time, 'HH:mm').format('h:mmA');
-        };
 
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
@@ -50,14 +53,24 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.event_id}</th>
                                 </tr>
                                 <tr>
+                                    <th>Event Session ID</th>
+                                    <th>:</th>
+                                    <th>{state.item.event_session_id}</th>
+                                </tr>
+                                <tr>
                                     <th>Title</th>
                                     <th>:</th>
                                     <th>{state.item.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Topics</th>
+                                    <th>Mark</th>
                                     <th>:</th>
-                                    <th>{state.item.topics}</th>
+                                    <th>{state.item.mark}</th>
+                                </tr>
+                                <tr>
+                                    <th>Pass Mark</th>
+                                    <th>:</th>
+                                    <th>{state.item.pass_mark}</th>
                                 </tr>
                                 <tr>
                                     <th>Start</th>
@@ -69,11 +82,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>:</th>
                                     <th>{formatTime(state.item.end)}</th>
                                 </tr>
-                                <tr>
-                                    <th>Total Time</th>
-                                    <th>:</th>
-                                    <th>{state.item.total_time} Minutes</th>
-                                </tr>
+                                
                                 <tr>
                                     <th>Status</th>
                                     <th>:</th>
