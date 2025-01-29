@@ -15,6 +15,7 @@ import events from '../views/pages/events/config/store';
 import event_certified_users from '../views/pages/event_certified_users/config/store';
 import event_resources from '../views/pages/event_resources/config/store';
 import event_faqs from '../views/pages/event_faqs/config/store';
+import event_sessions from '../views/pages/event_sessions/config/store';
 
 const store = configureStore({
     reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
         event_certified_users: event_certified_users.reducer,
         event_resources: event_resources.reducer,
         event_faqs: event_faqs.reducer,
+        event_sessions: event_sessions.reducer,
     },
     devTools: true,
 });
