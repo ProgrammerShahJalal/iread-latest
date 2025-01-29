@@ -17,6 +17,8 @@ import event_resources from '../views/pages/event_resources/config/store';
 import event_faqs from '../views/pages/event_faqs/config/store';
 import event_sessions from '../views/pages/event_sessions/config/store';
 import event_sessions_assesments from '../views/pages/event_sessions_assesments/config/store';
+import event_session_assesment_submissions from '../views/pages/event_session_assesment_submissions/config/store';
+
 
 const store = configureStore({
     reducer: {
