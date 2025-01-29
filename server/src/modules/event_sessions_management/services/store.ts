@@ -19,6 +19,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
+        'events',
         'title',
         'topics',
         'start',
@@ -39,8 +40,6 @@ async function validate(req: Request) {
     let models = Models.get();
     // Retrieve request data
     const bodyData = req.body as anyObject;
-    const startTime = moment(bodyData.start, 'hh:mmA');
-    const endTime = moment(bodyData.end, 'hh:mmA');
 
     // Validate start and end times
     if (bodyData?.start && bodyData?.end) {
@@ -104,21 +103,23 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let data = new models[modelName]();
-
-    let inputs: InferCreationAttributes<typeof data> = {
-
-        event_id: body.event_id,
-        title: body.title,
-        topics: body.topics,
-        start: body.start,
-        end: body.end,
-        total_time: body.total_time,
-    };
-
+   
 
     /** store data into database */
     try {
+        let data = new models[modelName]();
+
+        let inputs: InferCreationAttributes<typeof data> = {
+
+            event_id: body.events?.[1],
+            title: body.title,
+            topics: body.topics,
+            start: body.start,
+            end: body.end,
+            total_time: body.total_time,
+        };
+
+
         (await data.update(inputs)).save();
 
         return response(201, 'data created', {
