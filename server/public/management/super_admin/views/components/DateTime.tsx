@@ -13,11 +13,12 @@ interface TargetWithPicker {
 // Format date and time
 export function formattedDateTime(value: string | null): string {
     if (value) {
-        return moment.utc(value).format('Do MMM YY, h:mm A');
+        return moment(value).format('Do MMM YY, h:mm A'); 
     } else {
-        return moment.utc().format('Do MMM YY, h:mm A');
+        return moment().format('Do MMM YY, h:mm A');
     }
 }
+
 
 const DateTime: React.FC<Props> = ({ value, name, handler }: Props) => {
     const dateTimeInput = useRef<HTMLInputElement>(null);
@@ -34,14 +35,17 @@ const DateTime: React.FC<Props> = ({ value, name, handler }: Props) => {
     function dateTimeHandler() {
         if (dateTimeInput.current) {
             const inputValue = dateTimeInput.current.value;
-            setInputValue(inputValue);
+            const formattedTime = moment(inputValue).format('YYYY-MM-DD HH:mm:ss'); // Removes "T" and "Z"
+            
             handler({
-                [name]: inputValue,
+                [name]: formattedTime,
                 key: name,
-                value: inputValue,
+                value: formattedTime,
             });
         }
     }
+        
+    
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         const target = event.target as TargetWithPicker | null;

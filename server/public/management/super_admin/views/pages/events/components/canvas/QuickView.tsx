@@ -21,11 +21,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
 
- let formateDateTimeUTC = (date: string) => {
-        return moment.utc(date).format('Do MMM YY, h:mm:ss A');
+ let formateDateTime = (date: string) => {
+        return moment(date).format('Do MMM YY, h:mm:ss A');
     };
  let formateDate = (date: string) => {
-         return moment.utc(date).format('Do MMM YY');
+         return moment(date).format('Do MMM YY');
     }
 
     if (modalRoot && state.show_quick_view_canvas) {
@@ -86,12 +86,12 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Session Start Date Time</th>
                                     <th>:</th>
-                                    <th> { formateDateTimeUTC(state.item.session_start_date_time)}</th>
+                                    <th> { formateDateTime(state.item.session_start_date_time)}</th>
                                 </tr>
                                 <tr>
                                     <th>Session End Date Time</th>
                                     <th>:</th>
-                                    <th> { formateDateTimeUTC(state.item.session_end_date_time)}</th>
+                                    <th> { formateDateTime(state.item.session_end_date_time)}</th>
                                 </tr>
                                 <tr>
                                     <th>Registration Start Date</th>

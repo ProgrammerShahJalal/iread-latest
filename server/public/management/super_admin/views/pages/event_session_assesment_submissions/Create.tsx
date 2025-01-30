@@ -16,6 +16,7 @@ import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
 import SessionDropDown from "../event_sessions/components/dropdown/DropDown";
+import AssesmentDropDown from "../event_sessions_assesments/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -96,9 +97,9 @@ const Create: React.FC<Props> = (props: Props) => {
                                         </div>
 
                                         {[
-                                            'title',
+                                            'submitted_content',
                                             'mark',
-                                            'pass_mark',
+                                            'obtained_mark',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
                                                     <Input name={i} />
@@ -129,19 +130,15 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     }}
                                                 />
                                             </div>
-
-                                            {[
-                                            'start',
-                                            'end',
-                                        ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input
-                                                type='time'
-                                                name={i}
+                                                <label>Assesments</label>
+                                                <AssesmentDropDown name="assesments"
+                                                    multiple={false}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
                                                 />
-                                               
                                             </div>
-                                        ))}
                                         </div>
                                     </div>
 
