@@ -18,6 +18,7 @@ import event_faqs from '../views/pages/event_faqs/config/store';
 import event_sessions from '../views/pages/event_sessions/config/store';
 import event_sessions_assesments from '../views/pages/event_sessions_assesments/config/store';
 import event_session_assesment_submissions from '../views/pages/event_session_assesment_submissions/config/store';
+import event_attendance from '../views/pages/event_attendance/config/store';
 
 
 const store = configureStore({
@@ -36,6 +37,8 @@ const store = configureStore({
         event_faqs: event_faqs.reducer,
         event_sessions: event_sessions.reducer,
         event_sessions_assesments: event_sessions_assesments.reducer,
+        event_session_assesment_submissions: event_session_assesment_submissions.reducer,
+        event_attendance: event_attendance.reducer,
     },
     devTools: true,
 });

@@ -34,33 +34,13 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
+
 
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -76,17 +56,17 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
     
+     // Format the date_time to remove "T" and "Z"
+     let formattedDateTime = moment(body.date_time, moment.ISO_8601).format('YYYY-MM-DD HH:mm:ss');
+
     let inputs: InferCreationAttributes<typeof data> = {
      
-        event_id: body.event_id,
-        event_session_id: body.event_session_id,
-        user_id: body.user_id,
-        date_time: body.date_time,
+        event_id:  body.events?.[1],
+        event_session_id: body.sessions?.[1] ,
+        user_id: body.users?.[1],
+        date_time: formattedDateTime,
     };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {

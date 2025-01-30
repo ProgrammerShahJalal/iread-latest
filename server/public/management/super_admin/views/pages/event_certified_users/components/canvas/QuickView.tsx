@@ -21,7 +21,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
     let  formateDate = (date: string) => {
-        return moment.utc(date).format('Do MMM YY');
+        return moment(date).format('Do MMM YY');
         }
 
 

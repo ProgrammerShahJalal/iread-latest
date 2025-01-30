@@ -63,7 +63,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             date_time: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
 

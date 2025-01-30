@@ -13,9 +13,9 @@ interface TargetWithPicker {
 
 export function formated_date(value) {
     if (value) {
-        return moment.utc(value).format('DD MMMM YYYY');
+        return moment(value).format('DD MMMM YYYY');
     } else {
-        return moment.utc().format('DD MMMM YYYY');
+        return moment().format('DD MMMM YYYY');
     }
 }
 
