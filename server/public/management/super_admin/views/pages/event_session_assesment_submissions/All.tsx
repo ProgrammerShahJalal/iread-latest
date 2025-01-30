@@ -25,8 +25,6 @@ const All: React.FC<Props> = (props: Props) => {
         (state: RootState) => state[setup.module_name],
     );
 
-    console.log('all====', state);
-
     const dispatch = useAppDispatch();
     let [searchParams] = useSearchParams();
 

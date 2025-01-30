@@ -55,8 +55,8 @@ const All: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    let formateDateTimeUTC = (date: string) => {
-           return moment.utc(date).format('Do MMM YY, h:mm:ss A');
+    let formateDateTime = (date: string) => {
+           return moment(date).format('Do MMM YY, h:mm:ss A');
        };
 
     return (
@@ -180,10 +180,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
 
                                                     <td>
-                                                    {formateDateTimeUTC(i.session_start_date_time)}
+                                                    {formateDateTime(i.session_start_date_time)}
                                                     </td>
                                                     {/* <td>
-                                                    {formateDateTimeUTC(i.session_end_date_time)}
+                                                    {formateDateTime(i.session_end_date_time)}
                                                     </td> */}
                                                     <td>
                                                         ${i.price}

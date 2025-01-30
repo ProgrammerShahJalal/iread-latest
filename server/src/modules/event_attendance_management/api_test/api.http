@@ -1,4 +1,4 @@
-@hostname = http://127.0.0.1:5001/api/v1/event_attendance
+@hostname = http://127.0.0.1:5001/api/v1/event-attendance
 
 # all
 ###

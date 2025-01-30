@@ -36,7 +36,7 @@ const Details: React.FC<Props> = (props: Props) => {
     }
 
        let formatTime = (time: string) => {
-            return moment.utc(time, 'HH:mm').format('h:mmA');
+            return moment(time, 'HH:mm').format('h:mmA');
         };
 
 

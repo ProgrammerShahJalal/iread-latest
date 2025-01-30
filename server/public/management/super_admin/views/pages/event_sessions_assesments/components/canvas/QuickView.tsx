@@ -11,7 +11,7 @@ export interface Props { }
 const modalRoot = document.getElementById('filter-root');
 
 let formatTime = (time: string) => {
-    return moment.utc(time, 'HH:mm').format('h:mmA');
+    return moment(time, 'HH:mm').format('h:mmA');
 };
 
 
