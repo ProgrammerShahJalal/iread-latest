@@ -20,6 +20,7 @@ import event_sessions from '../views/pages/event_sessions/config/routes';
 import event_sessions_assesments from '../views/pages/event_sessions_assesments/config/routes';
 import event_session_assesment_submissions from '../views/pages/event_session_assesment_submissions/config/routes';
 import event_attendance from '../views/pages/event_attendance/config/routes';
+import event_enrollments from '../views/pages/event_enrollments/config/routes';
 
 
 interface RouteTypes extends NonIndexRouteObject {}
@@ -47,6 +48,7 @@ const router: RouteTypes[] = [
             event_sessions_assesments,
             event_session_assesment_submissions,
             event_attendance,
+            event_enrollments,
         ],
     },
 ];
