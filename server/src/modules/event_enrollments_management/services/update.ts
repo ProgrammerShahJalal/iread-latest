@@ -39,12 +39,7 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -66,6 +61,7 @@ async function update(
         user_id: body.user_id,
         date: body.date,
         is_paid: body.is_paid,
+        status: body.status,
     };
 
     /** print request data into console */
