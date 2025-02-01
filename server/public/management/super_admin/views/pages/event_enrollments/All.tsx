@@ -25,7 +25,6 @@ const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
-    console.log('state all', state?.all?.data)
 
     const dispatch = useAppDispatch();
     let [searchParams] = useSearchParams();
@@ -46,8 +45,8 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
 
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+    let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
     };
 
     return (
@@ -124,13 +123,13 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {formateDateTime(i.date)}
+                                                            {formateDate(i.date)}
                                                         </span>
                                                     </td>
 
 
                                                     <td>
-                                                        {i.is_paid}
+                                                        {i.is_paid === '1' ? 'Yes' : 'No'}
                                                     </td>
                                                     <td>
                                                         {i.status}

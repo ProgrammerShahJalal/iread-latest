@@ -22,8 +22,8 @@ const QuickView: React.FC<Props> = (props: Props) => {
     }
 
 
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+    let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
     };
 
     if (modalRoot && state.show_quick_view_canvas) {
@@ -50,20 +50,21 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>:</th>
                                     <th>{state.item.event_id}</th>
                                 </tr>
-                                <tr>
-                                    <th>Event Session ID</th>
-                                    <th>:</th>
-                                    <th>{state.item.event_session_id}</th>
-                                </tr>
+                             
                                 <tr>
                                     <th>User ID</th>
                                     <th>:</th>
                                     <th>{state.item.user_id}</th>
                                 </tr>
                                 <tr>
-                                    <th>Date Time</th>
+                                    <th>Date</th>
                                     <th>:</th>
-                                    <th>{formateDateTime(state.item.date_time)}</th>
+                                    <th>{formateDate(state.item.date)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Is Paid?</th>
+                                    <th>:</th>
+                                    <th>{state.item.is_paid === '1' ? 'Yes' : 'No'}</th>
                                 </tr>
                                 
                                 <tr>

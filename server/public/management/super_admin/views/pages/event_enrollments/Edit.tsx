@@ -9,13 +9,9 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
-import Input from './components/management_data_page/Input';
-import Select from 'react-select';
 import DateEl from '../../components/DateEl';
 import EventDropDown from "../events/components/dropdown/DropDown";
-import SessionDropDown from "../event_sessions/components/dropdown/DropDown";
 import UserDropDown from "../users/components/dropdown/DropDown";
-import DateTime from '../../components/DateTime';
 
 export interface Props { }
 
@@ -31,13 +27,6 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
-
-
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
-
 
 
     async function handle_submit(e) {
@@ -90,16 +79,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 }}
                                             />
                                         </div>
-                                        <div className="form-group form-vertical">
-                                            <label>Sessions</label>
-                                            <SessionDropDown name="sessions"
-                                                multiple={false}
-                                                default_value={get_value('event_session_id') ? [{ id: get_value('event_session_id') }] : []}
-                                                get_selected_data={(data) => {
-                                                    console.log(data)
-                                                }}
-                                            />
-                                        </div>
+
                                         <div className="form-group form-vertical">
                                             <label>Users</label>
                                             <UserDropDown name="users"
@@ -110,12 +90,25 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 }}
                                             />
                                         </div>
+                                        <div className="form-group form-vertical">
+                                            <label>Status</label>
+                                            <select
+                                                name="status"
+                                                className="form-control"
+                                                defaultValue={get_value('status')}
+                                                onChange={(e) => console.log('Status Changed', e.target.value)}
+                                            >
+                                                <option value="pending">Pending</option>
+                                                <option value="rejected">Rejected</option>
+                                                <option value="accepted">Accepted</option>
+                                            </select>
+                                        </div>
 
                                         <div className="form-group form-vertical">
-                                            <DateTime
-                                                name={"date_time"}
-                                                value={get_value('date_time')}
-                                                handler={(data) => console.log('Date Time Changed', data)}
+                                            <DateEl
+                                                name={"date"}
+                                                value={get_value('date')}
+                                                handler={(data) => console.log('Date Changed', data)}
                                             />
                                         </div>
 
