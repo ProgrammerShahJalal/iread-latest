@@ -60,14 +60,13 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             date: {
-                type: DataTypes.STRING,
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             is_paid: {
                 type: new DataTypes.ENUM('0', '1'),
                 defaultValue: '0',
             },
-
 
             status: {
                 type: new DataTypes.ENUM('pending', 'accepted', 'rejected'),
