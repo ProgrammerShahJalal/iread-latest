@@ -92,6 +92,14 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         label="Event Enrollments"
                         to="/event-enrollments"
                     />
+                    <MenuDropDownItem
+                        label="Event Payments"
+                        to="/event-payments"
+                    />
+                    <MenuDropDownItem
+                        label="Event Payment Refunds"
+                        to="/event-payment-refunds"
+                    />
                 </MenuDropDown>
                 {/* Booking  */}
                 {/* <MenuDropDown group_title="Projects" icon="icon-desktop">

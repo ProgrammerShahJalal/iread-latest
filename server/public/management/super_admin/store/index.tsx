@@ -20,6 +20,8 @@ import event_sessions_assesments from '../views/pages/event_sessions_assesments/
 import event_session_assesment_submissions from '../views/pages/event_session_assesment_submissions/config/store';
 import event_attendance from '../views/pages/event_attendance/config/store';
 import event_enrollments from '../views/pages/event_enrollments/config/store';
+import event_payments from '../views/pages/event_payments/config/store';
+import event_payment_refunds from '../views/pages/event_payment_refunds/config/store';
 
 
 
@@ -42,6 +44,8 @@ const store = configureStore({
         event_session_assesment_submissions: event_session_assesment_submissions.reducer,
         event_attendance: event_attendance.reducer,
         event_enrollments: event_enrollments.reducer,
+        event_payments: event_payments.reducer,
+        event_payment_refunds: event_payment_refunds.reducer,
     },
     devTools: true,
 });
