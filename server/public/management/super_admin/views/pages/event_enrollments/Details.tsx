@@ -37,8 +37,8 @@ const Details: React.FC<Props> = (props: Props) => {
 
 
     
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+    let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
     };
 
 
@@ -55,19 +55,23 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'event_id',
-                                        'event_session_id',
                                         'user_id',
-                                        'date_time',
+                                        'date',
+                                        'is_paid',
                                         'status',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
                                                    {
-                                                    i === 'date_time' ? (
-                                                        <td>{formateDateTime(get_value(i))}</td>
+                                                    i === 'date' ? (
+                                                        <td>{formateDate(get_value(i))}</td>
                                                     ) : (
+                                                       i === 'is_paid' ? (
+                                                        <td>{get_value(i) === '1' ? 'Yes' : 'No'}</td>
+                                                       ) : (
                                                         <td>{get_value(i)}</td>
+                                                       )
                                                     )
                                                    }
                                         </tr>

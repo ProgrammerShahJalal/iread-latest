@@ -68,16 +68,16 @@ async function all(
 
     if (query_param.select_fields) {
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
-        select_fields = [...select_fields, 'id', 'status'];
+        select_fields = [...select_fields, 'id', 'date', 'status'];
     } else {
         select_fields = ['id', 'date', 'status'];
     }
 
     let query: FindAndCountOptions = {
         order: [[orderByCol, orderByAsc == 'true' ? 'ASC' : 'DESC']],
-        where: {
-            status: show_active_data == 'true' ? 'accepted' : 'rejected',
-        },
+        // where: {
+        //     status: show_active_data == 'true' ? 'pending' || 'active' : 'rejected',
+        // },
         // include: [models.Project],
     };
 
