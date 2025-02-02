@@ -55,7 +55,9 @@ const Edit: React.FC = () => {
             }
         }, [state.item?.id]);
     
-    
+    if(state){
+        console.log('blog categories', state.item.blog_categories);
+    }
     // Generate slug
     const generateSlug = (title: string): string =>
         title
@@ -112,6 +114,7 @@ const Edit: React.FC = () => {
         setSlug(generateSlug(title));
     };
 
+    // id : [1]
 
     let blogCaetories = get_value('seo_title');
     console.log('blog categories', blogCaetories);
@@ -184,7 +187,7 @@ const Edit: React.FC = () => {
                                         <BlogCategoryDropDown
                                             name="blog_categories"
                                             multiple={true}
-                                            default_value={get_value('blog_category_id') ? [{ id: get_value('blog_category_id') }] : []}
+                                            default_value={get_value('blog_categories') ? [{ id: get_value('blog_categories') }] : []}
                                             get_selected_data={(data) =>
                                                 console.log(data)
                                             }
