@@ -69,10 +69,9 @@ const Create: React.FC<Props> = (props: Props) => {
                         >
                             <div>
 
-                                <h5 className="mb-4">Event Feedback Form Fields Informations</h5>
-                                <div className="form_auto_fit">
+                                <div >
 
-                                    {/* <div className="form-group form-vertical">
+                                    <div className="form-group form-vertical">
                                         <label>Events</label>
                                         <EventDropDown name="events"
                                             multiple={false}
@@ -81,23 +80,26 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 console.log(data)
                                             }}
                                         />
-                                    </div> */}
-                                    <div className="form-group form-vertical">
+                                    </div>
+
                                     <div
+                                    className="header2"
                                         id="build-wrap"
                                         style={{
                                             padding: 0,
                                             margin: "10px 0",
-                                            backgroundColor: "#f2f2f2",
+                                            backgroundColor: "#423050",
                                             backgroundImage: 'url("https://formbuilder.online/assets/img/noise.png")',
                                             backgroundRepeat: "repeat",
                                         }}
                                     >
-                                           <div id="fb-editor"></div>
+                                        <div id="fb-editor"
+                                        
+                                        ></div>
                                     </div>
-                                    </div>
+                                </div>
 
-                                    {/* {[
+                                {/* {[
                                         'label',
                                         'type',
                                         'select_options',
@@ -109,7 +111,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                     ))} */}
 
 
-                                </div>
+
 
                             </div>
 
