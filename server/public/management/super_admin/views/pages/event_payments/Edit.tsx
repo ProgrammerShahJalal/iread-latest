@@ -155,6 +155,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                                 >
                                                                     <option value="false">False</option>
                                                                     <option value="true">True</option>
+                    
                                                                 </select>
                                                             </>
                                                         ) : (

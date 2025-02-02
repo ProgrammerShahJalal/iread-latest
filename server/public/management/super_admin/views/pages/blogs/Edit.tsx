@@ -8,7 +8,7 @@ import storeSlice from './config/store';
 import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
 import DateEl from '../../components/DateEl';
-import CategoryDropDown from '../blog_category/components/dropdown/DropDown';
+import BlogCategoryDropDown from '../blog_category/components/dropdown/DropDown';
 import { initialState } from './config/store/inital_state';
 import setup from './config/setup';
 import Header from './components/management_data_page/Header';
@@ -33,28 +33,27 @@ const Edit: React.FC = () => {
         dispatch(details({ id: params.id }) as any);
     }, [dispatch, params.id]);
 
-    // Initialize CKEditor
-    useEffect(() => {
-        const fullDescriptionElement = document.querySelector('[data-name="fullDescription"]');
-        if (fullDescriptionElement && !editorRef.current) {
-            const editor = CKEDITOR.replace('full_description'); // Replace with the correct element ID
-            editorRef.current = editor; // Store the CKEditor instance in ref
+     // Initialize CKEditor
+        useEffect(() => {
+            const fullDescriptionElement = document.querySelector(
+                '[data-name="fullDescription"]',
+            );
+            if (fullDescriptionElement && !editorRef.current) {
+                const editor = CKEDITOR.replace('full_description'); // Initialize CKEditor
+                editorRef.current = editor; // Save the instance to the ref
     
-            // Set initial data for the editor
-            const defaultValue = get_value('full_description');
-            if (defaultValue) {
-                editor.setData(defaultValue);
-            }
+                const defaultValue = get_value('full_description');
+                if (defaultValue) {
+                    editor.setData(defaultValue);
+                }
     
-            // Cleanup to avoid memory leaks
-            return () => {
-                if (editor) {
+                // Cleanup function to destroy the editor on component unmount
+                return () => {
                     editor.destroy();
                     editorRef.current = null;
-                }
-            };
-        }
-    }, [state.item]);
+                };
+            }
+        }, [state.item?.id]);
     
     
     // Generate slug
@@ -94,8 +93,7 @@ const Edit: React.FC = () => {
         }
     
         // Dispatch the update action
-        const response = await dispatch(update(form_data) as any);
-        console.log('RESPONSE', response);
+        await dispatch(update(form_data) as any);
     }
     
 
@@ -113,6 +111,10 @@ const Edit: React.FC = () => {
         const title = e.target.value;
         setSlug(generateSlug(title));
     };
+
+
+    let blogCaetories = get_value('seo_title');
+    console.log('blog categories', blogCaetories);
 
     return (
         <div className="page_content">
@@ -179,9 +181,10 @@ const Edit: React.FC = () => {
                                             name="slug"
                                         />
                                         <label>Blog Categories</label>
-                                        <CategoryDropDown
+                                        <BlogCategoryDropDown
                                             name="blog_categories"
                                             multiple={true}
+                                            default_value={get_value('blog_category_id') ? [{ id: get_value('blog_category_id') }] : []}
                                             get_selected_data={(data) =>
                                                 console.log(data)
                                             }
@@ -200,21 +203,21 @@ const Edit: React.FC = () => {
                                                     name="is_published"
                                                     value="publish"
                                                     checked={
-                                                        get_value('status') ===
+                                                        get_value('is_published') ===
                                                         'publish'
                                                     }
                                                     onChange={(e) => {
                                                         const formData =
                                                             new FormData();
                                                         formData.set(
-                                                            'status',
+                                                            'is_published',
                                                             e.target.value,
                                                         );
                                                         dispatch(
                                                             storeSlice.actions.set_item(
                                                                 {
                                                                     ...state.item,
-                                                                    status: e
+                                                                    is_published: e
                                                                         .target
                                                                         .value,
                                                                 },
@@ -231,21 +234,21 @@ const Edit: React.FC = () => {
                                                     name="is_published"
                                                     value="draft"
                                                     checked={
-                                                        get_value('status') ===
+                                                        get_value('is_published') ===
                                                         'draft'
                                                     }
                                                     onChange={(e) => {
                                                         const formData =
                                                             new FormData();
                                                         formData.set(
-                                                            'status',
+                                                            'is_published',
                                                             e.target.value,
                                                         );
                                                         dispatch(
                                                             storeSlice.actions.set_item(
                                                                 {
                                                                     ...state.item,
-                                                                    status: e
+                                                                    is_published: e
                                                                         .target
                                                                         .value,
                                                                 },
