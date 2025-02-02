@@ -28,7 +28,6 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(all({}));
     }, []);
 
-    console.log('def', default_value);
     useEffect(() => {
         if (default_value?.length && state.all?.data?.length) {
             setSelectedList((prevSelectedList) => {
