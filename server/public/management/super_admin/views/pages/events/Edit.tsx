@@ -16,7 +16,6 @@ import Footer from './components/management_data_page/Footer';
 import DateTime from '../../components/DateTime';
 import moment from 'moment/moment';
 import { anyObject } from '../../../common_types/object';
-
 const Edit: React.FC = () => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],

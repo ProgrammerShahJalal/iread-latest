@@ -94,10 +94,10 @@ async function all(
         query.where = {
             ...query.where,
             [Op.or]: [
-                { full_name: { [Op.like]: `%${search_key}%` } },
-                { email: { [Op.like]: `%${search_key}%` } },
+                { amount: { [Op.like]: `%${search_key}%` } },
+                { user_id: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
-                { id: { [Op.like]: `%${search_key}%` } },
+                // { id: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }

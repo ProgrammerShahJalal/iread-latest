@@ -21,6 +21,9 @@ import event_sessions_assesments from '../views/pages/event_sessions_assesments/
 import event_session_assesment_submissions from '../views/pages/event_session_assesment_submissions/config/routes';
 import event_attendance from '../views/pages/event_attendance/config/routes';
 import event_enrollments from '../views/pages/event_enrollments/config/routes';
+import event_payments from '../views/pages/event_payments/config/routes';
+import event_payment_refunds from '../views/pages/event_payment_refunds/config/routes';
+import event_feedback_form_fields from '../views/pages/event_feedback_form_fields/config/routes';
 
 
 interface RouteTypes extends NonIndexRouteObject {}
@@ -49,6 +52,9 @@ const router: RouteTypes[] = [
             event_session_assesment_submissions,
             event_attendance,
             event_enrollments,
+            event_payments,
+            event_payment_refunds,
+            event_feedback_form_fields,
         ],
     },
 ];
