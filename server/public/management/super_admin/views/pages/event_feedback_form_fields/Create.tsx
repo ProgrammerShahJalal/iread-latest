@@ -1,3 +1,5 @@
+import $ from "jquery";
+import "formBuilder";
 import React, { useEffect, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
@@ -7,19 +9,33 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import $ from "jquery";
-import "formBuilder";
 import EventDropDown from "../events/components/dropdown/DropDown";
 
 
 export interface Props { }
-
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
     const dispatch = useAppDispatch();
+
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const fbTemplate = $("#build-wrap");
+
+            setTimeout(() => {
+                if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
+                    fbTemplate.formBuilder();
+                } else {
+                    console.error("formBuilder is not available.");
+                }
+            }, 1500); // Delay by 1500ms to allow formBuilder to load
+        }
+    }, []);
+
+
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -41,20 +57,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
-
-
-    useEffect(() => {
-        // Ensure jQuery is ready before running formBuilder
-        if (typeof window !== "undefined") {
-            const fbTemplate = $("#build-wrap");
-            if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
-                fbTemplate.formBuilder();
-            } else {
-                console.error("formBuilder is not available. Make sure it is correctly imported.");
-            }
-        }
-    }, []);
-
 
 
     return (
@@ -83,7 +85,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                     </div>
 
                                     <div
-                                    className="header2"
+                                        className="header2"
                                         id="build-wrap"
                                         style={{
                                             padding: 0,
@@ -94,33 +96,15 @@ const Create: React.FC<Props> = (props: Props) => {
                                         }}
                                     >
                                         <div id="fb-editor"
-                                        
+
                                         ></div>
                                     </div>
                                 </div>
-
-                                {/* {[
-                                        'label',
-                                        'type',
-                                        'select_options',
-                                        'serial',
-                                    ].map((i) => (
-                                        <div key={i} className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))} */}
-
-
-
-
                             </div>
 
                             <div className="form-group form-vertical">
-                                <label></label>
-                                <div className="form_elements">
-                                    <button className="btn btn_1 btn-outline-info">
-                                        submit
-                                    </button>
+                                <div className="saveDataWrap">
+                                    <button id="saveData" className="btn btn_1 btn-outline-info" type="button">Submit</button>
                                 </div>
                             </div>
                         </form>
