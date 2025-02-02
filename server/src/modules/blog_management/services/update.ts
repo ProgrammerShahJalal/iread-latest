@@ -68,6 +68,9 @@ async function update(
     // (fastify_instance as any).print(inputs);
 
     /** store data into database */
+    let blogCategoryBlogModel = models.BlogCategoryBlogModel;
+
+    let categories: number[] = JSON.parse(body['blog_categories']) || [];
     try {
         let data = await models[modelName].findByPk(body.id);
         let inputs: InferCreationAttributes<typeof user_model> = {
@@ -88,6 +91,21 @@ async function update(
         if (data) {
             data.update(inputs);
             await data.save();
+
+            await blogCategoryBlogModel.destroy({
+                where: { blog_id: data.id }
+            });
+            
+            await Promise.all(
+                categories.map(async (categoryId) => {
+                    await blogCategoryBlogModel.create({
+                        blog_id: data.id || 1,
+                        blog_category_id: categoryId,
+                    });
+                })
+            );
+            
+            
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

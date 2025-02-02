@@ -28,12 +28,12 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(all({}));
     }, []);
 
-    
+    console.log('def', default_value);
     useEffect(() => {
         if (default_value?.length && state.all?.data?.length) {
             setSelectedList((prevSelectedList) => {
-                const enrichedList = default_value.map((defaultItem) => {
-                    const fullItem = state.all.data.find((item) => item.id === defaultItem.id);
+                const enrichedList = default_value[0].id.map((defaultItem) => {
+                    const fullItem = state.all.data.find((item) => item.id === defaultItem.blog_category_id);
                     return fullItem || defaultItem;
                 });
     
