@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,status',
+                'id,event_id,status',
             ),
         );
         dispatch(all({}));
@@ -70,7 +70,6 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`event_id`}
                                             sort={true}
                                         />
-                                       
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -95,17 +94,21 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>
+                                                    <td>{i.event_id}</td>
+
+                                                    {/* <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                              <td>{i.event_id}</td>
+                                                             <td>{i.event_id}</td>
                                                         </span>
-                                                    </td> 
-                                                    <td>{i.status}</td>
+                                                    </td>  */}
+                                                    <td>
+                                                        {i.status}
+                                                    </td>
                                                 </tr>
                                             );
                                         },
