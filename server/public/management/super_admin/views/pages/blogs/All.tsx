@@ -99,7 +99,6 @@ const All: React.FC<Props> = (props: Props) => {
                                 <tbody id="all_list">
                                     {(state.all as any)?.data?.map(
                                         (i: { [key: string]: any }) => {
-                                            console.log('Publish Date:', i.publish_date);
                                             return (
                                                 <tr
                                                     key={i.id}
