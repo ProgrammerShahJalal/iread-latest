@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,label,type,select_options,serial,status',
+                'event_id,status',
             ),
         );
         dispatch(all({}));
@@ -70,26 +70,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`event_id`}
                                             sort={true}
                                         />
-                                        <TableHeading
-                                            label={`Label`}
-                                            col_name={`label`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Type`}
-                                            col_name={`type`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Select Options`}
-                                            col_name={`select_options`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Serial`}
-                                            col_name={`serial`}
-                                            sort={true}
-                                        />
+                                       
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -114,8 +95,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -123,22 +102,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.label}
+                                                              <td>{i.event_id}</td>
                                                         </span>
                                                     </td> 
-                                                    <td>
-                                                            {i.type}
-                                                    </td> 
-
-                                                    <td>
-                                                        {i.select_options}
-                                                    </td>
-                                                    <td>
-                                                        {i.serial}
-                                                    </td>
-                                                    <td>
-                                                        {i.status}
-                                                    </td>
+                                                    <td>{i.status}</td>
                                                 </tr>
                                             );
                                         },

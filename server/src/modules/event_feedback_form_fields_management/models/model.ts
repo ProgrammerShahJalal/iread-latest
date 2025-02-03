@@ -37,10 +37,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
-    declare label: string;
-    declare type: type;
-    declare select_options: SelectOption[];
-    declare serial: number;
+   declare fields: JSON;
 
     declare status?: status;
     declare creator?: number;
@@ -61,23 +58,10 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            label: {
-                type: DataTypes.STRING,
-                allowNull: true,
-            },
-            type: {
-                type: new DataTypes.ENUM('text', 'date', 'number', 'textarea', 'select', 'checkbox'),
-                defaultValue: 'text',
-            },
-            select_options: {
+            fields: {
                 type: DataTypes.JSON,
                 allowNull: true,
             },
-            serial: {
-                type: DataTypes.INTEGER,
-                allowNull: true,
-            },
-
 
             status: {
                 type: new DataTypes.ENUM('active', 'deactive'),

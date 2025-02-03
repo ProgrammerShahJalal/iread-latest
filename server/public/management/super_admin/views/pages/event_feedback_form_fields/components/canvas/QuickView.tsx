@@ -46,26 +46,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>:</th>
                                     <th>{state.item.event_id}</th>
                                 </tr>
-                                <tr>
-                                    <th>Label</th>
-                                    <th>:</th>
-                                    <th>{state.item.label}</th>
-                                </tr>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>:</th>
-                                    <th>{state.item.type}</th>
-                                </tr>
-                                <tr>
-                                    <th>Select Options</th>
-                                    <th>:</th>
-                                    <th>{state.item.select_options}</th>
-                                </tr>
-                                <tr>
-                                    <th>Serial</th>
-                                    <th>:</th>
-                                    <th>{state.item.serial}</th>
-                                </tr>
+                               
                                 <tr>
                                     <th>Status</th>
                                     <th>:</th>
