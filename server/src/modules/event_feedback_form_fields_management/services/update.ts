@@ -62,10 +62,7 @@ async function update(
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
                 event_id: body.events?.[1] || data.event_id,
-                label: body.label || data.label,
-                type: body.type || data.type,
-                select_options: body.select_options || data.select_options,
-                serial: body.serial || data.serial,
+                fields: body.fields || data.fields,
             };
             data.update(inputs);
             await data.save();

@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,label,type,select_options,serial,status',
+                'id,event_id,status',
             ),
         );
         dispatch(all({}));
@@ -71,26 +71,6 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Label`}
-                                            col_name={`label`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Type`}
-                                            col_name={`type`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Select Options`}
-                                            col_name={`select_options`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Serial`}
-                                            col_name={`serial`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
@@ -116,26 +96,16 @@ const All: React.FC<Props> = (props: Props) => {
                                                     <td>{i.id}</td>
                                                     <td>{i.event_id}</td>
 
-                                                    <td>
+                                                    {/* <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.label}
+                                                             <td>{i.event_id}</td>
                                                         </span>
-                                                    </td> 
-                                                    <td>
-                                                            {i.type}
-                                                    </td> 
-
-                                                    <td>
-                                                        {i.select_options}
-                                                    </td>
-                                                    <td>
-                                                        {i.serial}
-                                                    </td>
+                                                    </td>  */}
                                                     <td>
                                                         {i.status}
                                                     </td>

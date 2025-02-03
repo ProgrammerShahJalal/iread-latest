@@ -24,7 +24,7 @@ const Create: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const fbTemplate = $("#build-wrap");
-
+    
             setTimeout(() => {
                 if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
                     fbTemplate.formBuilder();
@@ -33,19 +33,47 @@ const Create: React.FC<Props> = (props: Props) => {
                 }
             }, 1500); // Delay by 1500ms to allow formBuilder to load
         }
+    
+        jQuery(($) => {
+            const fbEditor = document.getElementById("build-wrap");
+            const formBuilder = $(fbEditor).formBuilder();
+    
+            document.getElementById("saveData")?.addEventListener("click", () => {
+                console.log("external save clicked");
+                const result = formBuilder.actions.save();
+                console.log("result:", result);
+    
+                // Store result globally to use in form submission
+                localStorage.setItem("formBuilderData", JSON.stringify(result));
+            });
+        });
     }, []);
+    
 
 
 
     async function handle_submit(e) {
         e.preventDefault();
+    
+        // Retrieve the saved formBuilder data
+        const savedData = localStorage.getItem("formBuilderData");
+        const parsedData = savedData ? JSON.parse(savedData) : null;
+    
         let form_data = new FormData(e.target);
+    
+        // Append the saved formBuilder data
+        if (parsedData) {
+            form_data.append("fields", JSON.stringify(parsedData));
+        }
+    
         const response = await dispatch(store(form_data) as any);
+        
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
-            // init_nominee();
+            localStorage.removeItem("formBuilderData"); // Clear saved data
         }
     }
+    
 
 
     function get_value(key) {
@@ -77,7 +105,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <label>Events</label>
                                         <EventDropDown name="events"
                                             multiple={false}
-                                            default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
                                             get_selected_data={(data) => {
                                                 console.log(data)
                                             }}
@@ -104,7 +131,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
                             <div className="form-group form-vertical">
                                 <div className="saveDataWrap">
-                                    <button id="saveData" className="btn btn_1 btn-outline-info" type="button">Submit</button>
+                                    <button id="saveData" className="btn btn_1 btn-outline-info" type="submit">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -117,3 +144,5 @@ const Create: React.FC<Props> = (props: Props) => {
 };
 
 export default Create;
+
+

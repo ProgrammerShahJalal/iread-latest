@@ -1,16 +1,20 @@
+import $ from "jquery";
+import "formBuilder";
 import React, { useEffect, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
-import { useSelector } from 'react-redux';
 import setup from './config/setup';
 import { RootState, useAppDispatch } from '../../../store';
-import { details } from './config/store/async_actions/details';
-import { initialState } from './config/store/inital_state';
-import { Link, useParams } from 'react-router-dom';
-import storeSlice from './config/store';
-import { update } from './config/store/async_actions/update';
+import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
+import { initialState } from './config/store/inital_state';
+import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
+import { update } from "./config/store/async_actions/update";
+import { useParams } from "react-router-dom";
+import storeSlice from "./config/store";
+import { details } from "./config/store/async_actions/details";
+
 
 export interface Props { }
 
@@ -21,19 +25,74 @@ const Edit: React.FC<Props> = (props: Props) => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
+    const [formData, setFormData] = useState(null);
 
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
 
+    useEffect(() => {
+        if (state.item && state.item.fields) {
+            setFormData(JSON.parse(state.item.fields));
+        }
+    }, [state.item]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const fbTemplate = $("#build-wrap");
+    
+            setTimeout(() => {
+                if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
+                    fbTemplate.formBuilder();
+                } else {
+                    console.error("formBuilder is not available.");
+                }
+            }, 500); // Delay by 500ms to allow formBuilder to load
+        }
+    
+        jQuery(($) => {
+            const fbEditor = document.getElementById("build-wrap");
+            const formBuilder = $(fbEditor).formBuilder({ formData });
+    
+            document.getElementById("saveData")?.addEventListener("click", () => {
+                console.log("external save clicked");
+                const result = formBuilder.actions.save();
+                console.log("result:", result);
+    
+                // Store result globally to use in form submission
+                localStorage.setItem("formBuilderData", JSON.stringify(result));
+            });
+        });
+    }, [formData]);
+    
+
+
 
 
     async function handle_submit(e) {
         e.preventDefault();
+    
+        // Retrieve the saved formBuilder data
+        const savedData = localStorage.getItem("formBuilderData");
+        const parsedData = savedData ? JSON.parse(savedData) : null;
+    
         let form_data = new FormData(e.target);
+    
+        // Append the saved formBuilder data
+        if (parsedData) {
+            form_data.append("fields", JSON.stringify(parsedData));
+        }
+    
         const response = await dispatch(update(form_data) as any);
+        
+        if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+            e.target.reset();
+            localStorage.removeItem("formBuilderData"); // Clear saved data
+        }
     }
+    
+
 
     function get_value(key) {
         try {
@@ -45,31 +104,28 @@ const Edit: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+
     return (
         <>
             <div className="page_content">
                 <div className="explore_window fixed_size">
-                    <Header page_title={setup.edit_page_title}></Header>
-
-                    {Object.keys(state.item).length && (
-                        <div className="content_body custom_scroll">
-                            <form
-                                onSubmit={(e) => handle_submit(e)}
-                                className="mx-auto pt-3"
-                            >
-                                <input
+                    <Header page_title={setup.create_page_title}></Header>
+                    <div className="content_body custom_scroll">
+                        <form
+                            onSubmit={(e) => handle_submit(e)}
+                            className="mx-auto pt-3"
+                        >
+                             <input
                                     type="hidden"
                                     name="id"
                                     defaultValue={get_value(`id`)}
                                 />
+                            <div>
 
-                                <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
-                                    <div className="form_auto_fit">
-                    
+                                <div >
+
                                     <div className="form-group form-vertical">
+                                        
                                         <label>Events</label>
                                         <EventDropDown name="events"
                                             multiple={false}
@@ -79,55 +135,33 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                      
-                                        {[
-                                            'label',
-                                            'type',
-                                            'select_options',
-                                            'serial',
 
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                        <Input
-                                                            name={i}
-                                                            value={get_value(i)}
-                                                        />
-                                            </div>
-                                        ))}
+                                    <div
+                                        className="header2"
+                                        id="build-wrap"
+                                        style={{
+                                            padding: 0,
+                                            margin: "10px 0",
+                                            backgroundColor: "#423050",
+                                            backgroundImage: 'url("https://formbuilder.online/assets/img/noise.png")',
+                                            backgroundRepeat: "repeat",
+                                        }}
+                                    >
+                                        <div id="fb-editor"
 
-                                    </div>
-
-
-
-                                </div>
-
-                                <div className="form-group form-vertical">
-                                    <label></label>
-                                    <div className="form_elements">
-                                        <button className="btn btn-outline-info">
-                                            submit
-                                        </button>
+                                        ></div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    )}
+                            </div>
 
-                    <Footer>
-                        {state?.item?.id && (
-                            <li>
-                                <Link
-                                    to={`/${setup.route_prefix}/details/${state.item?.id}`}
-                                    className="outline"
-                                >
-                                    <span className="material-symbols-outlined fill">
-                                        visibility
-                                    </span>
-                                    <div className="text">Details</div>
-                                </Link>
-                            </li>
-                        )}
-                    </Footer>
+                            <div className="form-group form-vertical">
+                                <div className="saveDataWrap">
+                                    <button id="saveData" className="btn btn_1 btn-outline-info" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <Footer></Footer>
                 </div>
             </div>
         </>
@@ -135,3 +169,5 @@ const Edit: React.FC<Props> = (props: Props) => {
 };
 
 export default Edit;
+
+

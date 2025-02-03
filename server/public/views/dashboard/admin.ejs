@@ -74,19 +74,6 @@
     <script src="https://formbuilder.online/assets/js/form-render.min.js" defer></script>
 
 
-    <script>
-        jQuery(($) => {
-            const fbEditor = document.getElementById("build-wrap");
-            const formBuilder = $(fbEditor).formBuilder();
-
-            document.getElementById("saveData").addEventListener("click", () => {
-                console.log("external save clicked");
-                const result = formBuilder.actions.save();
-                console.log("result:", result);
-            });
-        });
-    </script>
-
 
     <form action="/logout" enctype="multipart/form-data" method="POST" id="logout_form"></form>
 

@@ -49,10 +49,6 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'event_id',
-                                        'label',
-                                        'type',
-                                        'select_options',
-                                        'serial',
                                         'status',
                                     ].map((i) => (
                                         <tr>

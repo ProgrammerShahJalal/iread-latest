@@ -9,7 +9,7 @@ const setup: setup_type = {
 
     api_host: location.origin,
     api_prefix: 'event-feedback-form-fields', // api route
-    select_fields: 'id,label,status',
+    select_fields: 'id,event_id,status',
 
     store_prefix: 'event_feedback_form_fields',
     layout_title: prefix + ' Management',

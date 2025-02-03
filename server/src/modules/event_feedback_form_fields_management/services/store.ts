@@ -21,8 +21,6 @@ async function validate(req: Request) {
     let field = '';
     let fields = [
         'events',
-        'label',
-        'type',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -59,13 +57,11 @@ async function store(
     let inputs: InferCreationAttributes<typeof data> = {
      
         event_id: body.events?.[1],
-        label: body.label,
-        type: body.type,
-        select_options: body.select_options,
-        serial: body.serial,
+        fields: body.fields,
     };
 
 
+    
     /** store data into database */
     try {
         (await data.update(inputs)).save();
