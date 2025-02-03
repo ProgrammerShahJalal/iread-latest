@@ -48,7 +48,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                 } else {
                     console.error("formBuilder is not available.");
                 }
-            }, 1500); // Delay by 1500ms to allow formBuilder to load
+            }, 500); // Delay by 500ms to allow formBuilder to load
         }
     
         jQuery(($) => {
@@ -147,9 +147,9 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             backgroundRepeat: "repeat",
                                         }}
                                     >
-                                        {/* <div id="fb-editor"
+                                        <div id="fb-editor"
 
-                                        ></div> */}
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
