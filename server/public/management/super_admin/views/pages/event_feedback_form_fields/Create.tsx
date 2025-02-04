@@ -29,9 +29,9 @@ const Create: React.FC<Props> = (props: Props) => {
                 if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
                     fbTemplate.formBuilder();
                 } else {
-                    console.error("formBuilder is not available.");
+                    console.info("formBuilder is intializing...");
                 }
-            }, 1500); // Delay by 1500ms to allow formBuilder to load
+            }, 500); // Delay by 500ms to allow formBuilder to load
         }
     
         jQuery(($) => {
@@ -39,9 +39,9 @@ const Create: React.FC<Props> = (props: Props) => {
             const formBuilder = $(fbEditor).formBuilder();
     
             document.getElementById("saveData")?.addEventListener("click", () => {
-                console.log("external save clicked");
+                // console.log("external save clicked");
                 const result = formBuilder.actions.save();
-                console.log("result:", result);
+                // console.log("result:", result);
     
                 // Store result globally to use in form submission
                 localStorage.setItem("formBuilderData", JSON.stringify(result));

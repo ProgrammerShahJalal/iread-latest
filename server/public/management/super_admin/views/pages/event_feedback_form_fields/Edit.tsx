@@ -1,6 +1,6 @@
 import $ from "jquery";
 import "formBuilder";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import setup from './config/setup';
@@ -26,6 +26,8 @@ const Edit: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const [formData, setFormData] = useState(null);
+    const isInitialized = useRef(false);
+
 
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
@@ -39,31 +41,40 @@ const Edit: React.FC<Props> = (props: Props) => {
     }, [state.item]);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== "undefined" && formData && !isInitialized.current) {
             const fbTemplate = $("#build-wrap");
-    
+
             setTimeout(() => {
                 if (fbTemplate.length > 0 && typeof fbTemplate.formBuilder === "function") {
                     fbTemplate.formBuilder();
                 } else {
-                    console.error("formBuilder is not available.");
+                    console.info("formBuilder is intializing...");
                 }
             }, 500); // Delay by 500ms to allow formBuilder to load
-        }
-    
-        jQuery(($) => {
-            const fbEditor = document.getElementById("build-wrap");
-            const formBuilder = $(fbEditor).formBuilder({ formData });
-    
-            document.getElementById("saveData")?.addEventListener("click", () => {
-                console.log("external save clicked");
-                const result = formBuilder.actions.save();
-                console.log("result:", result);
-    
-                // Store result globally to use in form submission
-                localStorage.setItem("formBuilderData", JSON.stringify(result));
+
+            jQuery(($) => {
+                const fbEditor = document.getElementById("build-wrap");
+                const formBuilder = $(fbEditor).formBuilder({ formData });
+
+                const handleSaveClick = () => {
+                    // console.log("external save clicked");
+                    const result = formBuilder.actions.save();
+                    // console.log("result:", result);
+
+                    // Store result globally to use in form submission
+                    localStorage.setItem("formBuilderData", JSON.stringify(result));
+                };
+
+                document.getElementById("saveData")?.addEventListener("click", handleSaveClick);
+
+                // Cleanup function to remove event listener
+                return () => {
+                    document.getElementById("saveData")?.removeEventListener("click", handleSaveClick);
+                };
             });
-        });
+
+            isInitialized.current = true;
+        }
     }, [formData]);
     
 
@@ -109,7 +120,7 @@ const Edit: React.FC<Props> = (props: Props) => {
         <>
             <div className="page_content">
                 <div className="explore_window fixed_size">
-                    <Header page_title={setup.create_page_title}></Header>
+                    <Header page_title={setup.edit_page_title}></Header>
                     <div className="content_body custom_scroll">
                         <form
                             onSubmit={(e) => handle_submit(e)}
