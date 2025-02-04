@@ -20,7 +20,7 @@ const DashboardLayout: React.FC<Props> = (props: Props) => {
                         <div>
                             <img
                                 className="img-50 rounded-circle"
-                                src="/assets/dashboard_uni/1.jpg"
+                                src="https://avatars.githubusercontent.com/u/79104097"
                                 alt="#"
                             />
                         </div>
