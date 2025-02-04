@@ -1,6 +1,7 @@
+'use client';
 import { blogs } from "@/data/blogs";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 
@@ -11,7 +12,7 @@ const BlogsPage = () => {
         const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
         return date.toLocaleDateString('en-GB', options);
     };
-
+    
     return (
         <section>
             <section
