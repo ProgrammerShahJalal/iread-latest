@@ -63,39 +63,44 @@ async function update(
 
 
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
     /** store data into database */
     let blogCategoryBlogModel = models.BlogCategoryBlogModel;
 
     let categories: number[] = JSON.parse(body['blog_categories']) || [];
     try {
         let data = await models[modelName].findByPk(body.id);
-        let inputs: InferCreationAttributes<typeof user_model> = {
-            title: body.title || data?.title,
-            author_id: body.author_id || data?.author_id,
-            short_description: body.short_description || data?.short_description,
-            full_description: body.full_description || data?.full_description,
-            cover_image: body.cover_image || data?.cover_image,
-    
-            is_published: body.is_published || data?.is_published,
-            publish_date: body.publish_date || data?.publish_date,
-    
-            slug: body.slug || data?.slug,
-            seo_title: body.seo_title || data?.seo_title,
-            seo_keyword: body.seo_keyword || data?.seo_keyword,
-            seo_description: body.seo_description || data?.seo_description,
-        };
+        let image_path = data?.cover_image ||'avatar.png';
+        if (body['cover_image']?.ext) {
+            image_path =
+                'uploads/blogs/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body['cover_image'].name;
+            await (fastify_instance as any).upload(body['cover_image'], image_path);
+        }
+        
         if (data) {
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                title: body.title || data?.title,
+                author_id: body.author_id || data?.author_id,
+                short_description: body.short_description || data?.short_description,
+                full_description: body.full_description || data?.full_description,
+                cover_image: image_path || data.cover_image,
+
+                is_published: body.is_published || data?.is_published,
+                publish_date: body.publish_date || data?.publish_date,
+
+                slug: body.slug || data?.slug,
+                seo_title: body.seo_title || data?.seo_title,
+                seo_keyword: body.seo_keyword || data?.seo_keyword,
+                seo_description: body.seo_description || data?.seo_description,
+            };
             data.update(inputs);
             await data.save();
 
             await blogCategoryBlogModel.destroy({
                 where: { blog_id: data.id }
             });
-            
+
             await Promise.all(
                 categories.map(async (categoryId) => {
                     await blogCategoryBlogModel.create({
@@ -104,8 +109,8 @@ async function update(
                     });
                 })
             );
-            
-            
+
+
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

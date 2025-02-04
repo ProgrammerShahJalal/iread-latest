@@ -9,7 +9,7 @@ const setup: setup_type = {
 
     api_host: location.origin,
     api_prefix: 'blogs', // api route
-    select_fields: 'id,title,short_description,full_description,cover_image,is_publised,status',
+    select_fields: 'id,title,short_description,full_description,cover_image,is_published,status',
 
     store_prefix: 'blogs',
     layout_title: prefix + ' Management',
