@@ -1,18 +1,31 @@
-'use client';
-import { blogs } from "@/data/blogs";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { getBlogs } from "../../api/api";
 
 
+// Define Blog Type
+interface Blog {
+    id: number;
+    title: string;
+    short_description: string;
+    publish_date: string;
+    cover_image?: string;
+}
 
 
-const BlogsPage = () => {
+const BlogsPage: React.FC = async() => {
     const formatDate = (isoDate: string): string => {
         const date = new Date(isoDate);
-        const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-        return date.toLocaleDateString('en-GB', options);
+        const options: Intl.DateTimeFormatOptions = {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        };
+        return date.toLocaleDateString("en-GB", options);
     };
-    
+
+  let blogsData: Blog[] = await getBlogs();
+
     return (
         <section>
             <section
@@ -28,34 +41,33 @@ const BlogsPage = () => {
                     <h2 className="title text-white">Blogs</h2>
                 </div>
             </section>
+
+            {/* Blogs List */}
             <section id="news">
                 <div className="container">
                     <div className="row">
-                        {blogs.map((blog) => (
+
+                        {blogsData.map((blog) => (
                             <div key={blog.id} className="col-sm-6 col-md-4">
                                 <article className="post mb-30">
                                     <div className="entry-header">
-                                        {
-                                            blog?.cover_image && (
-                                                <Image
-                                                    src={blog.cover_image}
-                                                    alt={blog.title}
-                                                    className="w-full h-64 object-cover rounded-md"
-                                                    width={400}
-                                                    height={250}
-                                                />
-                                            )
-                                        }
+                                        {blog.cover_image && (
+                                            <Image
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                                                alt={blog.title}
+                                                className="w-full h-64 object-cover rounded-md"
+                                                width={400}
+                                                height={250}
+                                            />
+                                        )}
                                     </div>
                                     <div className="entry-content p-20 bg-lighter">
                                         <div className="entry-meta">
                                             <div className="flex justify-between items-center text-center">
                                                 <ul className="bg-theme-colored px-4 py-2 rounded-md w-24 h-16 flex items-center justify-center">
-                                                    {blog?.publish_date && (
-                                                        <li className="text-white text-sm">
-                                                            {formatDate(blog.publish_date)}
-                                                        </li>
-                                                    )}
+                                                    <li className="text-white text-sm">
+                                                        {formatDate(blog.publish_date)}
+                                                    </li>
                                                 </ul>
 
                                                 <div className="text-right">
@@ -64,10 +76,10 @@ const BlogsPage = () => {
                                                     </h4>
                                                 </div>
                                             </div>
-
-
                                         </div>
-                                        <p className="text-justify mt-3">{blog.short_description}</p>
+                                        <p className="text-justify mt-3">
+                                            {blog.short_description}
+                                        </p>
                                         <a href={`/blogs/${blog.id}`} className="btn-read-more">
                                             Read more
                                         </a>
@@ -83,3 +95,7 @@ const BlogsPage = () => {
 };
 
 export default BlogsPage;
+function query(arg0: string): any {
+    throw new Error("Function not implemented.");
+}
+
