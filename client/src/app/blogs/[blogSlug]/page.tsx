@@ -76,7 +76,7 @@ console.log('blog', blog)
                 </div>
                 <div className="container mt-5">
                   <h3 className="font-semibold text-2xl md:text-lg text-[#555555]">About the Author</h3>
-                  <p>{blog.author? blog.author.name : 'Admin'}</p>
+                  <p className="text-theme-color-2">{blog.author? blog.author.name : 'Admin'}</p>
                 </div>
               </article>
             </div>

@@ -145,6 +145,16 @@ img {
   margin-bottom: 1rem;
 }
 
+/* Style for unordered list */
+.post-content ul {
+  list-style-type: disc; 
+}
+
+/* Style for ordered list */
+.post-content ol {
+  list-style-type: decimal; 
+}
+
 .post-content li {
   margin-bottom: 0.5rem;
 }
@@ -160,6 +170,34 @@ img {
 .post-content .marker {
   background-color: yellow;
   font-weight: bold;
+}
+
+/* ==== Table Styling ==== */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  border: 2px solid #ddd; 
+}
+
+.post-content th,
+.post-content td {
+  border: 2px solid #ddd; 
+  padding: 10px;
+  text-align: left;
+}
+
+.post-content th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.post-content tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.post-content tr:hover {
+  background-color: #f1f1f1;
 }
 
 /* ====blog full description style end==== */
