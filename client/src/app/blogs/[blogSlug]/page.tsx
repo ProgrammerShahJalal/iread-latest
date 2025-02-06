@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getBlogs } from "../../../api/api";
+import { getBlogs } from "../../../api/blogApi";
 
 
 const formatDate = (isoDate: string): string => {

@@ -68,9 +68,9 @@ async function all(
 
     if (query_param.select_fields) {
         select_fields = query_param?.select_fields?.replace(/\s/g, '').split(',');
-        select_fields = [...select_fields, 'id','title','place','status',];
+        select_fields = [...select_fields, 'id','status',];
     } else {
-        select_fields = ['id','user_id','date','status',];
+        select_fields = ['id','title','reg_start_date','reg_end_date','session_start_date_time','session_end_date_time','place','short_description','full_description','pre_requisities','terms_and_conditions','event_type','poster','price','discount_price','status',];
     }
 
     let query: FindAndCountOptions = {
