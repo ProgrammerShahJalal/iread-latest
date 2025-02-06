@@ -78,7 +78,7 @@ async function store(
         await (fastify_instance as any).upload(body['poster'], image_path);
     }
 
-    console.log('body', body);
+    // console.log('body', body);
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,

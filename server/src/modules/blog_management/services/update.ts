@@ -65,8 +65,11 @@ async function update(
 
     /** store data into database */
     let blogCategoryBlogModel = models.BlogCategoryBlogModel;
+    let blogTagBlogModel = models.BlogTagBlogModel;
 
     let categories: number[] = JSON.parse(body['blog_categories']) || [];
+    let tags: number[] = JSON.parse(body['blog_tags']) || [];
+
     try {
         let data = await models[modelName].findByPk(body.id);
         let image_path = data?.cover_image ||'avatar.png';
@@ -106,6 +109,19 @@ async function update(
                     await blogCategoryBlogModel.create({
                         blog_id: data.id || 1,
                         blog_category_id: categoryId,
+                    });
+                })
+            );
+
+            await blogTagBlogModel.destroy({
+                where: { blog_id: data.id }
+            });
+
+            await Promise.all(
+                tags.map(async (tagId) => {
+                    await blogTagBlogModel.create({
+                        blog_id: data.id || 1,
+                        blog_tag_id: tagId,
                     });
                 })
             );

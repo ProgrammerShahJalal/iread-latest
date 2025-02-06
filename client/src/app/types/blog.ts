@@ -3,6 +3,10 @@ interface BlogCategory{
     image: string;
 }
 
+interface BlogTag{
+    title: string;
+}
+
 interface Blog {
     blog_id: number;
     title: string;
@@ -16,5 +20,6 @@ interface Blog {
     seo_keyword: string;
     seo_description: string;
     categories: BlogCategory[];
+    tags: BlogTag[];
 }
 
