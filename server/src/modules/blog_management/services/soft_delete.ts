@@ -48,6 +48,7 @@ async function soft_delete(
             //     status: 0,
             // });
             data.status = 'deactive';
+            data.is_published = 'draft';
             await data.save();
             return response(200, 'data deactivated', data);
         } else {

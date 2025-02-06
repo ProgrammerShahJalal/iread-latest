@@ -44,10 +44,8 @@ async function restore(
         });
 
         if (data) {
-            // await data.update({
-            //     status: 'active',
-            // });
             data.status = 'active';
+            data.is_published = 'publish';
             await data.save();
             return response(205, 'data restored', data);
         } else {
