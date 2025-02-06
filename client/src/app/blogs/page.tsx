@@ -3,15 +3,6 @@ import React from "react";
 import { getBlogs } from "../../api/api";
 
 
-// Define Blog Type
-interface Blog {
-    id: number;
-    title: string;
-    short_description: string;
-    publish_date: string;
-    cover_image?: string;
-}
-
 
 const BlogsPage: React.FC = async() => {
     const formatDate = (isoDate: string): string => {
@@ -25,6 +16,8 @@ const BlogsPage: React.FC = async() => {
     };
 
   let blogsData: Blog[] = await getBlogs();
+
+//   console.log('blogs', blogsData);
 
     return (
         <section>
@@ -48,7 +41,7 @@ const BlogsPage: React.FC = async() => {
                     <div className="row">
 
                         {blogsData.map((blog) => (
-                            <div key={blog.id} className="col-sm-6 col-md-4">
+                            <div key={blog.blog_id} className="col-sm-6 col-md-4">
                                 <article className="post mb-30">
                                     <div className="entry-header">
                                         {blog.cover_image && (
@@ -72,7 +65,7 @@ const BlogsPage: React.FC = async() => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <a href={`/blogs/${blog.id}`}>{blog.title}</a>
+                                                        <a href={`/blogs/${blog.slug}`}>{blog.title}</a>
                                                     </h4>
                                                 </div>
                                             </div>
@@ -80,7 +73,7 @@ const BlogsPage: React.FC = async() => {
                                         <p className="text-justify mt-3">
                                             {blog.short_description}
                                         </p>
-                                        <a href={`/blogs/${blog.id}`} className="btn-read-more">
+                                        <a href={`/blogs/${blog.slug}`} className="btn-read-more">
                                             Read more
                                         </a>
                                     </div>
