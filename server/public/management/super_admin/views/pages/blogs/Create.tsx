@@ -15,7 +15,8 @@ import { details } from './config/store/async_actions/details';
 import Select from 'react-select';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import CategoryDropDown from "../blog_category/components/dropdown/DropDown";
+import BlogCategoryDropDown from "../blog_category/components/dropdown/DropDown";
+import BlogTagDropDown from "../blog_tags/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -158,7 +159,16 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                             <div className="form-group form-vertical">
                                                 <label>Blog Categories</label>
-                                                <CategoryDropDown name="blog_categories"
+                                                <BlogCategoryDropDown name="blog_categories"
+                                                    multiple={true}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="form-group form-vertical">
+                                                <label>Blog Tags</label>
+                                                <BlogTagDropDown name="blog_tags"
                                                     multiple={true}
                                                     get_selected_data={(data) => {
                                                         console.log(data)

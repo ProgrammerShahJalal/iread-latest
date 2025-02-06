@@ -30,6 +30,10 @@ async function details(
                 {
                     model: models.BlogCategoryBlogModel,
                     as: 'blog_categories',
+                },
+                {
+                    model: models.BlogTagBlogModel,
+                    as: 'blog_tags',
                 }
             ]
         });

@@ -63,6 +63,7 @@ async function store(
     let data = new models[modelName]();
 
     let blogCategoryBlogModel = models.BlogCategoryBlogModel;
+    let blogTagBlogModel = models.BlogTagBlogModel;
 
     let image_path = 'avatar.png';
     if (body['cover_image']?.ext) {
@@ -74,6 +75,7 @@ async function store(
     }
 
     let categories: number[] = JSON.parse(body['blog_categories']) || [];
+    let tags: number[] = JSON.parse(body['blog_tags']) || [];
 
 
     let inputs: InferCreationAttributes<typeof data> = {
@@ -106,6 +108,15 @@ async function store(
                 await blogCategoryBlogModel.create({
                     blog_id: data.id || 1,
                     blog_category_id: categoryId,
+                });
+            })
+        );
+
+        await Promise.all(
+            tags.map(async (tagId) => {
+                await blogTagBlogModel.create({
+                    blog_id: data.id || 1,
+                    blog_tag_id: tagId,
                 });
             })
         );

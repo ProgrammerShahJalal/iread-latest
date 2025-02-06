@@ -5,6 +5,7 @@ import * as BlogModel from "../modules/blog_management/models/model";
 import * as BlogCategoriesModel from "../modules/blog_categories_management/models/model";
 import * as BlogCategoryBlogModel from "../modules/blog_categories_management/models/blog_category_blog.model";
 import * as BlogTagsModel from "../modules/blog_tags_management/models/model";
+import * as BlogTagBlogModel from "../modules/blog_tags_management/models/blog_tag_blog.model";
 
 import * as BlogCommentModel from "../modules/blog_comment_management/models/model";
 import * as BlogLikeModel from "../modules/blog_likes_management/models/model";
@@ -43,6 +44,7 @@ export type model_types = {
     BlogCategoriesModel: typeof BlogCategoriesModel.DataModel;
     BlogCategoryBlogModel: typeof BlogCategoryBlogModel.DataModel;
     BlogTagsModel: typeof BlogTagsModel.DataModel;
+    BlogTagBlogModel: typeof BlogTagBlogModel.DataModel;
 
 
     BlogCommentModel: typeof BlogCommentModel.DataModel;
