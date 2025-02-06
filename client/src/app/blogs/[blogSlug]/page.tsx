@@ -30,7 +30,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
         </div>
       );
     }
-console.log('blog', blog)
+
     return (
       <section>
         <div className="container my-10">
