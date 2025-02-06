@@ -9,6 +9,7 @@ import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
 import DateEl from '../../components/DateEl';
 import BlogCategoryDropDown from '../blog_category/components/dropdown/DropDown';
+import BlogTagDropDown from '../blog_tags/components/dropdown/DropDown';
 import { initialState } from './config/store/inital_state';
 import setup from './config/setup';
 import Header from './components/management_data_page/Header';
@@ -55,9 +56,6 @@ const Edit: React.FC = () => {
             }
         }, [state.item?.id]);
     
-    if(state){
-        console.log('blog categories', state.item.blog_categories);
-    }
     // Generate slug
     const generateSlug = (title: string): string =>
         title
@@ -114,10 +112,6 @@ const Edit: React.FC = () => {
         setSlug(generateSlug(title));
     };
 
-    // id : [1]
-
-    let blogCaetories = get_value('seo_title');
-    console.log('blog categories', blogCaetories);
 
     return (
         <div className="page_content">
@@ -188,6 +182,15 @@ const Edit: React.FC = () => {
                                             name="blog_categories"
                                             multiple={true}
                                             default_value={get_value('blog_categories') ? [{ id: get_value('blog_categories') }] : []}
+                                            get_selected_data={(data) =>
+                                                console.log(data)
+                                            }
+                                        />
+                                        <label>Blog Tags</label>
+                                        <BlogTagDropDown
+                                            name="blog_tags"
+                                            multiple={true}
+                                            default_value={get_value('blog_tags') ? [{ id: get_value('blog_tags') }] : []}
                                             get_selected_data={(data) =>
                                                 console.log(data)
                                             }

@@ -63,6 +63,9 @@ console.log('blog', blog)
                     <li>
                       Categories: <span className="text-theme-color-2">{blog.categories?.map((category: BlogCategory)=> category.title).join(', ')}</span>
                     </li>
+                    <li>
+                      Tags: <span className="text-theme-color-2">{blog.tags?.map((tag: BlogTag)=> tag.title).join(', ')}</span>
+                    </li>
                   </ul>
                 </div>
                 <div className="post-content mt-10">
@@ -73,7 +76,7 @@ console.log('blog', blog)
                 </div>
                 <div className="container mt-5">
                   <h3 className="font-semibold text-2xl md:text-lg text-[#555555]">About the Author</h3>
-                  <p>{blog.author? blog.author.name : 'Admin'}</p>
+                  <p className="text-theme-color-2">{blog.author? blog.author.name : 'Admin'}</p>
                 </div>
               </article>
             </div>
