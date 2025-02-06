@@ -2,12 +2,15 @@ import { events } from '@/data/events';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
+import { getEvents } from '../../api/eventApi';
 
-const EventsPage = () => {
+const EventsPage = async() => {
     
 
+  let eventsData: Event[] = await getEvents();
 
-
+console.log('events', eventsData);
+//  console.log('events', events);
     return (
         <section>
 
