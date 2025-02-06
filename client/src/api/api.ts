@@ -10,9 +10,15 @@ let blog_query = `
    SELECT 
         b.id AS blog_id,
         b.title,
+        b.author_id,
         b.short_description,
+        b.full_description,
         b.publish_date,
         b.cover_image,
+        b.slug,
+        b.seo_title,
+        b.seo_keyword,
+        b.seo_description,
         JSON_ARRAYAGG(
             JSON_OBJECT(
                 'id', c.id,

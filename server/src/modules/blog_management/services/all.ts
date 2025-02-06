@@ -71,7 +71,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'cover_image', 'status',];
+        select_fields = ['id', 'title', 'author_id', 'short_description', 'full_description', 'cover_image', 'slug', 'seo_title', 'seo_keyword', 'seo_description', 'status',];
     }
 
     let query: FindAndCountOptions = {
