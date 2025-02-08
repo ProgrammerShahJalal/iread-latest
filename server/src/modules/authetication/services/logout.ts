@@ -15,9 +15,8 @@ async function logout(
     req: FastifyRequest,
 ): Promise<responseObject> {
     let models = await db();
-    console.log('auth account user id', (req as anyObject).user.id);
     let authUser = (req as anyObject).user;
-    console.log('auth account user id', authUser);
+    console.log('auth account user', authUser);
 
     try {
         if (authUser.user_type === 'parent') {

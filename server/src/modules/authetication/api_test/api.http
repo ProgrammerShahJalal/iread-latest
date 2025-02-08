@@ -16,16 +16,16 @@ POST {{hostname}}/register HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1,
-    "uid": "user1",
-    "role_serial": 1,
-    "first_name": "Salman",
-    "last_name": "Farshi",
-    "email": "salman@gmail.com",
-    "phone_number": "01894344124",
+    "id": 2,
+    "uid": "user2",
+    "role_serial": 2,
+    "first_name": "Farabi",
+    "last_name": "Khan",
+    "email": "farabi@gmail.com",
+    "phone_number": "01394322124",
     "photo": "https://avatars.githubusercontent.com/u/79104097",
     "password": "12345678",
-    "slug": "salman-farshi"
+    "slug": "farabi-khan"
 }
 
 # auth user
