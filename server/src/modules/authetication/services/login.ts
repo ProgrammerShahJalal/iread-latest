@@ -56,13 +56,11 @@ async function login(
             });
 
             if (data) {
-                console.log('body pass', body.password);
-                console.log('data pass', data.password);
                 let check_pass = await bcrypt.compare(
                     body.password,
                     data.password,
                 );
-console.log('check password', check_pass);
+
                 if (check_pass) {
                     let jwt = require('jsonwebtoken');
                     const secretKey = env.JTI;
@@ -72,7 +70,6 @@ console.log('check password', check_pass);
                         { id: data.id, token: secret, user_agent },
                         secretKey,
                     );
-                    console.log('token', token);
                     data.token = secret;
                     await data.save();
                 } else {
