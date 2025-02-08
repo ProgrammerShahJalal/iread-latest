@@ -39,13 +39,7 @@ const auth_middleware = async (
         const decoded = jwt.verify(token.slice(7), secretKey);
         let models = await db();
         let user: any = {};
-        if (decoded.user_type == 'account') {
-            user = await models.UserStaffsModel.findByPk(decoded.id);
-        } else if (decoded.user_type == 'staff') {
-            user = await models.UserStaffsModel.findByPk(decoded.id);
-        } else if (decoded.user_type == 'teacher') {
-            user = await models.UserTeachersModel.findByPk(decoded.id);
-        } else if (decoded.user_type == 'student') {
+       if (decoded.user_type == 'student') {
             user = await models.UserStudentsModel.findByPk(decoded.id);
         } else if (decoded.user_type == 'parent') {
             user = await models.UserParentsModel.findByPk(decoded.id);

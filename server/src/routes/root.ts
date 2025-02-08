@@ -10,11 +10,6 @@ module.exports = async function (fastify: FastifyInstance) {
         )
 
         .get('/login', async (_req: FastifyRequest, reply: FastifyReply) => {
-            return reply.view('auth/super_admin_login.ejs');
-        })
-
-
-        .get('/login', async (_req: FastifyRequest, reply: FastifyReply) => {
             // return reply.view('website/pages/login.ejs');
             return reply.view('auth/super_admin_login.ejs');
         })
