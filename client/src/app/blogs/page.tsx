@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { getBlogs } from "../../api/api";
+import { getBlogs } from "../../api/blogApi";
 
 
 
