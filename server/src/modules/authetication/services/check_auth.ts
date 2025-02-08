@@ -36,11 +36,7 @@ const check_auth = async (request: FastifyRequest, reply: FastifyReply) => {
         const decoded = jwt.verify(token.slice(7), secretKey);
         let models = await db();
         let user: any = {};
-        if (decoded.user_type == 'admin') {
-            user = await models.UserStaffsModel.findByPk(decoded.id);
-        } else {
             user = await models.User.findByPk(decoded.id);
-        }
 
         if (user && user.token == decoded.token) {
             (request as anyObject).user = decoded;

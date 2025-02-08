@@ -40,13 +40,12 @@ class DataModel extends Model<Infer, InferCreation> {
     declare whatsapp_number?: string | null;
     declare image?: string | null;
     declare password?: string;
-    declare status?: status;
     declare token?: string | null;
     declare forget_code?: string | null;
     declare user_agent?: string | null;
 
     declare creator?: number;
-
+    declare status?: status;
     declare created_at?: CreationOptional<Date>;
     declare updated_at?: CreationOptional<Date>;
 }
