@@ -1,12 +1,7 @@
 import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import response from '../helpers/response';
-
-import {
-    anyObject,
-    responseObject,
-    Request,
-} from '../../../common_types/object';
+import { anyObject, responseObject } from '../../../common_types/object';
 import custom_error from '../helpers/custom_error';
 import error_trace from '../helpers/error_trace';
 
@@ -14,83 +9,34 @@ async function logout(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = await db();
-    let authUser = (req as anyObject).user;
+    const models = await db();
+    const authUser = (req as anyObject).user;
     console.log('auth account user', authUser);
 
     try {
-        if (authUser.user_type === 'parent') {
-            let data = await models.UserParentsModel.findOne({
-                where: {
-                    id: (req as anyObject).user.id,
-                },
-            });
-            if (data) {
-                data.token = null;
-                data.user_agent = null;
-                await data.save();
-                return response(217, 'logout', {});
-                // return response(122, 'ghyhr', {});
-            } else {
-                throw new custom_error(
-                    'Expectation Failed',
-                    417,
-                    'action not possible',
-                );
-            }
-        } else if (authUser.user_type === 'student') {
-            let data = await models.UserStudentsModel.findOne({
-                where: {
-                    id: (req as anyObject).user.id,
-                },
-            });
-            if (data) {
-                data.token = null;
-                data.user_agent = null;
-                await data.save();
-                return response(217, 'logout', {});
-                // return response(122, 'ghyhr', {});
-            } else {
-                throw new custom_error(
-                    'Expectation Failed',
-                    417,
-                    'action not possible',
-                );
-            }
-        } else if (authUser.user_type === 'admin') {
-            let data = await models.UserStudentsModel.findOne({
-                where: {
-                    id: (req as anyObject).user.id,
-                },
-            });
-            if (data) {
-                data.token = null;
-                data.user_agent = null;
-                await data.save();
-                return response(217, 'logout', {});
-                // return response(122, 'ghyhr', {});
-            } else {
-                throw new custom_error(
-                    'Expectation Failed',
-                    417,
-                    'action not possible',
-                );
-            }
-        } else {
-            throw new custom_error(
-                'Expectation Failed',
-                417,
-                'action not possible',
-            );
+        const userModel = models.User || models.UserParentsModel || models.UserStudentsModel;
+        
+        if (!userModel) {
+            throw new custom_error('User model not found', 500, 'Invalid user model');
         }
+
+        const user = await userModel.findOne({
+            where: { id: authUser.id },
+        });
+
+        if (!user) {
+            throw new custom_error('Expectation Failed', 417, 'Action not possible');
+        }
+        user.token = "";
+        user.user_agent = "";
+        await user.save();
+
+        return response(217, 'logout', {});
     } catch (error: any) {
-        let uid = await error_trace(models, error, req.url, req.params);
-        if (error instanceof custom_error) {
-            error.uid = uid;
-        } else {
-            throw new custom_error('server error', 500, error.message, uid);
-        }
-        throw error;
+        const uid = await error_trace(models, error, req.url, req.params);
+        throw error instanceof custom_error
+            ? { ...error, uid }
+            : new custom_error('server error', 500, error.message, uid);
     }
 }
 

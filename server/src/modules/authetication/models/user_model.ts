@@ -32,6 +32,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare token: string;
     declare auth_code?: string | null;
     declare forget_code?: string | null;
+    user_agent?: string;
     declare is_verified?: verified;
     declare count_wrong_attempts?: number;
     declare is_blocked?: blocked;
@@ -100,6 +101,10 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.STRING(10),
                 allowNull: true,
             },
+            user_agent: {
+                type: DataTypes.STRING(255),
+                allowNull: true,
+            },
             is_verified: {
                 type: DataTypes.ENUM('0', '1'),
                 allowNull: false,
@@ -115,10 +120,10 @@ function init(sequelize: Sequelize) {
                 allowNull: false,
                 defaultValue: '0',
             },
-            status : {
+            status: {
                 type: DataTypes.ENUM('active', 'inactive'),
                 defaultValue: 'active'
-                },
+            },
             created_at: {
                 type: DataTypes.DATE,
                 allowNull: false,

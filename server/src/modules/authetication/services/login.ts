@@ -95,7 +95,7 @@ async function login(
                 ]);
             }
         }
-        return response(201, 'authentication success', { token });
+        return response(201, 'authentication success', { data });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.params);
         if (error instanceof custom_error) {

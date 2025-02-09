@@ -24,28 +24,33 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
-    
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      
+
       if (!response.ok) {
         throw new Error("Registration failed. Please try again.");
       }
-      
+
       const data = await response.json();
-      console.log("Registration successful:", data);
-      router.push("/profile");
+      // console.log("Registration successful:", data);
+
+      // Store user info in localStorage
+      const { first_name, last_name, email, phone_number, slug, photo } = data?.data;
+      localStorage.setItem("user", JSON.stringify({ first_name, last_name, email, phone_number, slug, photo }));
+
+      router.push(`/profile?slug=${slug}`);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="bg-slate-200 flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
