@@ -5,19 +5,30 @@ import { responseObject } from '../../../common_types/object';
 import response from '../helpers/response';
 import bcrypt from 'bcrypt';
 
-async function register(
-    fastify_instance: FastifyInstance,
-    req: FastifyRequest,
-): Promise<responseObject> {
+async function generateUniqueSlug(models: any, firstName: string, lastName: string): Promise<string> {
+    let baseSlug = `${firstName}-${lastName}`
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+        .replace(/^-+|-+$/g, ''); // Trim hyphens
+
+    let uniqueSlug = baseSlug;
+    let counter = 1;
+
+    // Check for existing slugs and make unique if necessary
+    while (await models.User.findOne({ where: { slug: uniqueSlug } })) {
+        uniqueSlug = `${baseSlug}-${counter}`;
+        counter++;
+    }
+
+    return uniqueSlug;
+}
+
+async function register(fastify_instance: FastifyInstance, req: FastifyRequest): Promise<responseObject> {
     let models = await db();
     let body = req.body as { [key: string]: any };
 
     // Check if user already exists
-    let existingUser = await models.User.findOne({
-        where: {
-            email: body.email,
-        },
-    });
+    let existingUser = await models.User.findOne({ where: { email: body.email } });
 
     if (existingUser) {
         return response(409, 'User already exists', {});
@@ -27,6 +38,9 @@ async function register(
         // Hash the password before storing it
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+
+        // Generate a unique slug
+        const slug = await generateUniqueSlug(models, body.first_name, body.last_name);
 
         // Create a new user record
         let newUser = await models.User.create({
@@ -38,7 +52,7 @@ async function register(
             phone_number: body.phone_number,
             photo: body.photo,
             password: hashedPassword, 
-            slug: body.slug,
+            slug: slug, // Assign the generated slug
             token: body.token,
         });
 
