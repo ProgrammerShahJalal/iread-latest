@@ -1,9 +1,22 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Navbar() {
+  const [user, setUser] = useState<any>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+
   useEffect(() => {
     const toggleButton = document.getElementById('menu-toggle');
     const menu = document.getElementById('menuzord-menu');
@@ -57,9 +70,6 @@ function Navbar() {
                   <Link href="/aiModels">AI Models</Link>
                 </li>
                 <li>
-                  <Link href="/profile">Profile</Link>
-                </li>
-                <li>
                   <Link href="/contact">Contact</Link>
                 </li>
               </ul>
@@ -75,6 +85,39 @@ function Navbar() {
                   </Link>
                 </li>
               </ul>
+              <div className="relative">
+                  {user?.email ? (
+                    <button onClick={() => setIsOpen(!isOpen)} className="flex items-center focus:outline-none">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
+                        alt="Profile Picture"
+                        className="border border-white rounded-full"
+                        width={32}
+                        height={32}
+                      />
+                    </button>
+                  ) : (
+                    <Link href="/login" className="text-white">
+                      Login
+                    </Link>
+                  )}
+
+                  {isOpen && user?.email && (
+                    <ul className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-lg overflow-hidden z-50">
+                      <li className="px-4 py-2 text-gray-700 font-semibold border-b">{user?.first_name + " " + user?.last_name}</li>
+                      <li>
+                        <Link href={`/profile?slug=${user?.slug}`} className="block px-4 py-2 hover:bg-gray-100">
+                          Your Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <button onClick={() => console.log("Logout")} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+                </div>
               <div id="top-search-bar" className="collapse">
                 <div className="container">
                   <form
