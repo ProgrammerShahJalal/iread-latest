@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
-
-  // State for form inputs
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -14,17 +12,39 @@ const RegisterPage: React.FC = () => {
     phone_number: "",
     password: "",
   });
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
-    router.push("/profile"); 
+    setLoading(true);
+    setError("");
+    
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Registration failed. Please try again.");
+      }
+      
+      const data = await response.json();
+      console.log("Registration successful:", data);
+      router.push("/profile");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,6 +56,7 @@ const RegisterPage: React.FC = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <InputField id="first_name" label="First Name" type="text" value={formData.first_name} onChange={handleChange} required />
           <InputField id="last_name" label="Last Name" type="text" value={formData.last_name} onChange={handleChange} required />
@@ -45,9 +66,10 @@ const RegisterPage: React.FC = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full rounded-md bg-indigo-600 px-3 py-2 text-white font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
@@ -62,7 +84,6 @@ const RegisterPage: React.FC = () => {
   );
 };
 
-// Reusable InputField Component with TypeScript Props
 interface InputFieldProps {
   id: string;
   label: string;
