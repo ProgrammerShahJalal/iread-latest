@@ -70,7 +70,6 @@ async function login(
                         { id: data.id, token: secret, user_agent },
                         secretKey,
                     );
-
                     data.token = secret;
                     await data.save();
                 } else {

@@ -15,9 +15,8 @@ async function logout(
     req: FastifyRequest,
 ): Promise<responseObject> {
     let models = await db();
-    console.log('auth account user id', (req as anyObject).user.id);
     let authUser = (req as anyObject).user;
-    console.log('auth account user id', authUser);
+    console.log('auth account user', authUser);
 
     try {
         if (authUser.user_type === 'parent') {
@@ -40,6 +39,25 @@ async function logout(
                 );
             }
         } else if (authUser.user_type === 'student') {
+            let data = await models.UserStudentsModel.findOne({
+                where: {
+                    id: (req as anyObject).user.id,
+                },
+            });
+            if (data) {
+                data.token = null;
+                data.user_agent = null;
+                await data.save();
+                return response(217, 'logout', {});
+                // return response(122, 'ghyhr', {});
+            } else {
+                throw new custom_error(
+                    'Expectation Failed',
+                    417,
+                    'action not possible',
+                );
+            }
+        } else if (authUser.user_type === 'admin') {
             let data = await models.UserStudentsModel.findOne({
                 where: {
                     id: (req as anyObject).user.id,
