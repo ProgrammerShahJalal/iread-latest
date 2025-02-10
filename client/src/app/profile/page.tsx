@@ -24,6 +24,7 @@ const Dashboard = () => {
     }
   };
 
+  
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
