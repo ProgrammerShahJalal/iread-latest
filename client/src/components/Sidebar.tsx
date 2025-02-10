@@ -1,19 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Sidebar = () => {
+   const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
+   const router = useRouter();
 
   const navLinks = [
-    { name: "Profile", path: "/profile" },
+    { name: "MyProfile", path: "/profile" },
     { name: "My Courses", path: "/profile/myCourses" },
     { name: "Settings", path: "/profile/settings" },
   ];
 
+  useEffect(() => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Remove user from localStorage
+    setUser(null); // Reset user state
+    router.push("/login"); // Redirect to login page
+  };
+
   return (
-    <div className="w-64 h-screen bg-gray-800">
+    <div className="w-64 h-screen">
       <nav className="mt-4">
         {navLinks.map((link) => (
           <Link
@@ -27,6 +43,9 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
+      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Logout
+                      </button>
     </div>
   );
 };
