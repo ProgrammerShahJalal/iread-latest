@@ -9,7 +9,7 @@ const ProfileLayout = ({ children }: LayoutProps) => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-6">{children}</div>
+      <div className="bg-slate-200 flex-1 p-6">{children}</div>
     </div>
   );
 };
