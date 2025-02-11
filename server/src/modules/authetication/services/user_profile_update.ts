@@ -76,7 +76,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
              // Generate a unique slug
         const slug = await generateUniqueSlug(models, body.first_name, body.last_name) || data.slug;
 
-            let image_path =data.photo || 'avatar.png';
+            let image_path ='avatar.png';
             if (body['photo']?.ext) {
                 image_path =
                     'uploads/users/' +
@@ -90,7 +90,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
             first_name: body.first_name || data.first_name,
             last_name: body.last_name || data.last_name,
             phone_number: body.phone_number || data.phone_number,
-            photo:image_path || data.photo,
+            photo: image_path || data.photo,
             password: hashedPassword || data.password,
             slug: slug || data.slug,
         });

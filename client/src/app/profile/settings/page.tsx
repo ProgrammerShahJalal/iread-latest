@@ -1,13 +1,28 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ProfileLayout from "../../../components/ProfileLayout";
+import toast from "react-hot-toast";
 
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  photo: string;
+}
 
 const ProfileSettingPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -24,26 +39,69 @@ const ProfileSettingPage = () => {
     }
   };
 
-  
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreview(objectUrl);
+      }
       const reader = new FileReader();
       reader.onload = (event) => {
         if (formData) {
           setFormData({ ...formData, photo: event.target?.result as string });
         }
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSave = () => {
-    if (formData) {
-      setUser(formData);
-      localStorage.setItem("user", JSON.stringify(formData));
+  const handleSave = async () => {
+    if (!formData) return;
+
+    setLoading(true);
+    try {
+      const formDataPayload = new FormData();
+      formDataPayload.append('id', formData.id.toString());
+      formDataPayload.append('first_name', formData.first_name);
+      formDataPayload.append('last_name', formData.last_name);
+      formDataPayload.append('phone_number', formData.phone_number);
+
+      if (fileInputRef.current?.files?.[0]) {
+        formDataPayload.append('photo', fileInputRef.current.files[0]);
+      }
+
+      const response = await fetch(`${API_URL}/api/v1/auth/update`, {
+        method: 'POST',
+        body: formDataPayload,
+      });
+
+      const res = await response.json();
+      const result = res.data;
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to update profile.');
+      }
+
+      console.log("result", result);
+
+      // Ensure we store the correct photo path, not Base64
+      const updatedUser = { ...formData, photo: result.photo };
+
+      // Update the user state and local storage
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
       setEditMode(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
+
+
 
   return (
     <ProfileLayout>
@@ -52,51 +110,77 @@ const ProfileSettingPage = () => {
 
         {user ? (
           <div className="flex flex-col items-center space-y-6">
+            <input
+              type="hidden"
+              name="id"
+              defaultValue={user.id}
+            />
             {/* Profile Image */}
-            <div className="relative">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo}`|| `${process.env.NEXT_PUBLIC_BACKEND_URL}/${user.photo}`}
-                alt="Profile"
-                width={64}
-                height={64}
-                className="w-20 h-20 rounded-full object-cover border border-gray-300"
-              />
-              {editMode && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                  onChange={handleImageChange}
+            <div className="relative flex flex-col items-center">
+              {preview ? (
+                <Image
+                  src={preview}
+                  alt="Preview"
+                  width={64}
+                  height={64}
+                  className="w-20 h-20 object-cover rounded-full shadow-md"
+                />
+              ) : (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
+                  alt="Profile"
+                  width={64}
+                  height={64}
+                  className="w-20 h-20 rounded-full object-cover border border-gray-300"
                 />
               )}
+              {editMode && (
+                <div className="text-center mt-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                  <button
+                    type="button"
+                    className="px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Change Photo
+                  </button>
+                </div>
+              )}
             </div>
+
 
             {/* Profile Details */}
             <div className="w-full space-y-4">
               <div className="flex justify-between items-center gap-5">
-              <label className="block">
-                <span className="text-gray-700">First Name</span>
-                <input
-                  type="text"
-                  name="first_name"
-                  value={formData?.first_name || ""}
-                  onChange={handleChange}
-                  disabled={!editMode}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                />
-              </label>
+                <label className="block w-full">
+                  <span className="text-gray-700">First Name</span>
+                  <input
+                    type="text"
+                    name="first_name"
+                    value={formData?.first_name ?? ""}
+                    onChange={handleChange}
+                    disabled={!editMode}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </label>
 
-              <label className="block">
-                <span className="text-gray-700">Last Name</span>
-                <input
-                  type="text"
-                  name="last_name"
-                  value={formData?.last_name || ""}
-                  onChange={handleChange}
-                  disabled={!editMode}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                />
-              </label>
+                <label className="block w-full">
+                  <span className="text-gray-700">Last Name</span>
+                  <input
+                    type="text"
+                    name="last_name"
+                    value={formData?.last_name ?? ""}
+                    onChange={handleChange}
+                    disabled={!editMode}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </label>
               </div>
 
               <label className="block">
@@ -104,6 +188,7 @@ const ProfileSettingPage = () => {
                 <input
                   type="email"
                   value={user.email}
+                  readOnly
                   disabled
                   className="w-full p-2 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed"
                 />
@@ -114,7 +199,7 @@ const ProfileSettingPage = () => {
                 <input
                   type="text"
                   name="phone_number"
-                  value={formData?.phone_number || ""}
+                  value={formData?.phone_number ?? ""}
                   onChange={handleChange}
                   disabled={!editMode}
                   className="w-full p-2 border border-gray-300 rounded-md"
@@ -126,14 +211,16 @@ const ProfileSettingPage = () => {
             {editMode ? (
               <div className="flex gap-4">
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400"
                   onClick={handleSave}
+                  disabled={loading}
                 >
-                  Save Changes
+                  {loading ? "Saving..." : "Save Changes"}
                 </button>
                 <button
                   className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
                   onClick={() => setEditMode(false)}
+                  disabled={loading}
                 >
                   Cancel
                 </button>
