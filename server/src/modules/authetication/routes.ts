@@ -18,6 +18,7 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(`/parent/login`, controllerInstance.parent_login)
                 .post(`/login`, controllerInstance.login)
                 .post(`/register`, controllerInstance.register)
+                .post(`/update`, controllerInstance.update)
                 .post(`/forget`, controllerInstance.forget);
         },
         { prefix },
