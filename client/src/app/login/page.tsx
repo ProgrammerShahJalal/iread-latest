@@ -33,8 +33,8 @@ const LoginPage: React.FC = () => {
       // console.log("Login successful:", data);
 
       // Store user info in localStorage
-      const { first_name, last_name, email, phone_number, slug, photo } = data?.data?.data;
-      localStorage.setItem("user", JSON.stringify({ first_name, last_name, email, phone_number, slug, photo }));
+      const {id, first_name, last_name, email, phone_number, slug, photo } = data?.data?.data;
+      localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo }));
 
       router.push(`/profile?slug=${slug}`);
     } catch (err: any) {
