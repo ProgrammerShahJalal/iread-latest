@@ -10,7 +10,7 @@ const Sidebar = () => {
    const router = useRouter();
 
   const navLinks = [
-    { name: "MyProfile", path: "/profile" },
+    { name: "My Profile", path: "/profile" },
     { name: "My Courses", path: "/profile/myCourses" },
     { name: "Settings", path: "/profile/settings" },
   ];
