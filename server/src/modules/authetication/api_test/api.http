@@ -23,6 +23,18 @@ content-type: application/json
     "photo": "https://avatars.githubusercontent.com/u/79104097",
     "password": "12345678"
 }
+# update
+###
+POST {{hostname}}/update HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "first_name": "Farabi",
+    "last_name": "Abdullah",
+    "phone_number": "01394322124",
+    "photo": "https://avatars.githubusercontent.com/u/79104097?v=4"
+}
 
 # auth user
 ###

@@ -8,6 +8,7 @@ import auth_user from './services/auth_user';
 import logout from './services/logout';
 import parent_login from './services/parent_login';
 import student_login from './services/student_login';
+import user_profile_update from './services/user_profile_update';
 const { serialize, parse } = require('@fastify/cookie');
 
 export default function (fastify: FastifyInstance) {
@@ -69,6 +70,10 @@ export default function (fastify: FastifyInstance) {
 
         register: async function (req: FastifyRequest, res: FastifyReply) {
             let data = await register(fastify, req);
+            res.code(data.status).send(data);
+        },
+        update: async function (req: FastifyRequest, res: FastifyReply) {
+            let data: responseObject = await user_profile_update(fastify, req);
             res.code(data.status).send(data);
         },
 
