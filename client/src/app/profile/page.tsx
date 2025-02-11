@@ -19,7 +19,7 @@ const ProfilePage = () => {
   return (
     <ProfileLayout>
       <div className="bg-white p-6 my-12 mx-auto max-w-lg rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Profile Settings</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Profile Information</h1>
 
           <div className="flex flex-col items-center space-y-6">
             {/* Profile Image */}
@@ -42,7 +42,8 @@ const ProfilePage = () => {
                 <input
                   type="text"
                   name="first_name"
-                  value={user?.first_name || ""}
+                  value={user?.first_name ?? ""}
+                  readOnly
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </label>
@@ -52,7 +53,8 @@ const ProfilePage = () => {
                 <input
                   type="text"
                   name="last_name"
-                  value={user?.last_name || ""}
+                  value={user?.last_name ?? ""}
+                  readOnly
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </label>
@@ -63,6 +65,7 @@ const ProfilePage = () => {
                 <input
                   type="email"
                   value={user?.email}
+                  readOnly
                   disabled
                   className="w-full p-2 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed"
                 />
@@ -73,7 +76,8 @@ const ProfilePage = () => {
                 <input
                   type="text"
                   name="phone_number"
-                  value={user?.phone_number || ""}
+                  value={user?.phone_number ?? ""}
+                  readOnly
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </label>

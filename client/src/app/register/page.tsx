@@ -40,8 +40,8 @@ const RegisterPage: React.FC = () => {
       // console.log("Registration successful:", data);
 
       // Store user info in localStorage
-      const { first_name, last_name, email, phone_number, slug, photo } = data?.data;
-      localStorage.setItem("user", JSON.stringify({ first_name, last_name, email, phone_number, slug, photo }));
+      const {id, first_name, last_name, email, phone_number, slug, photo } = data?.data;
+      localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo }));
 
       router.push(`/profile?slug=${slug}`);
     } catch (err: any) {
