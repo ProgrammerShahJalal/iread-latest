@@ -21,6 +21,8 @@ const ProfileSettingPage = () => {
   const [formData, setFormData] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -40,6 +42,10 @@ const ProfileSettingPage = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreview(objectUrl);
+      }
       const reader = new FileReader();
       reader.onload = (event) => {
         if (formData) {
@@ -49,10 +55,10 @@ const ProfileSettingPage = () => {
       reader.readAsDataURL(file);
     }
   };
- 
+
   const handleSave = async () => {
     if (!formData) return;
-  
+
     setLoading(true);
     try {
       const formDataPayload = new FormData();
@@ -60,32 +66,32 @@ const ProfileSettingPage = () => {
       formDataPayload.append('first_name', formData.first_name);
       formDataPayload.append('last_name', formData.last_name);
       formDataPayload.append('phone_number', formData.phone_number);
-  
+
       if (fileInputRef.current?.files?.[0]) {
         formDataPayload.append('photo', fileInputRef.current.files[0]);
       }
-  
+
       const response = await fetch(`${API_URL}/api/v1/auth/update`, {
         method: 'POST',
         body: formDataPayload,
       });
-  
+
       const res = await response.json();
       const result = res.data;
-  
+
       if (!response.ok) {
         throw new Error(result.message || 'Failed to update profile.');
       }
-  
+
       console.log("result", result);
-  
+
       // Ensure we store the correct photo path, not Base64
-      const updatedUser = { ...formData, photo: result.photo }; 
-  
+      const updatedUser = { ...formData, photo: result.photo };
+
       // Update the user state and local storage
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
-  
+
       setEditMode(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -94,7 +100,7 @@ const ProfileSettingPage = () => {
       setLoading(false);
     }
   };
-  
+
 
 
   return (
@@ -110,33 +116,44 @@ const ProfileSettingPage = () => {
               defaultValue={user.id}
             />
             {/* Profile Image */}
-            <div className="relative">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
-                alt="Profile"
-                width={64}
-                height={64}
-                className="w-20 h-20 rounded-full object-cover border border-gray-300"
-              />
-              {editMode && (
-                <>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  className="hidden"
-                  onChange={handleImageChange}
+            <div className="relative flex flex-col items-center">
+              {preview ? (
+                <Image
+                  src={preview}
+                  alt="Preview"
+                  width={64}
+                  height={64}
+                  className="w-20 h-20 object-cover rounded-full shadow-md"
                 />
-                <button
-                  type="button"
-                  className="mt-2 px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  Change Photo
-                </button>
-              </>
+              ) : (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
+                  alt="Profile"
+                  width={64}
+                  height={64}
+                  className="w-20 h-20 rounded-full object-cover border border-gray-300"
+                />
+              )}
+              {editMode && (
+                <div className="text-center mt-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                  <button
+                    type="button"
+                    className="px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Change Photo
+                  </button>
+                </div>
               )}
             </div>
+
 
             {/* Profile Details */}
             <div className="w-full space-y-4">
