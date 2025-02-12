@@ -22,11 +22,11 @@ const Sidebar = () => {
       }
     }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user"); // Remove user from localStorage
-    setUser(null); // Reset user state
-    router.push("/login"); // Redirect to login page
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("user"); // Remove user from localStorage
+  //   setUser(null); // Reset user state
+  //   router.push("/login"); // Redirect to login page
+  // };
 
   return (
     <div className="w-64 h-screen">
@@ -43,9 +43,9 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
-      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+      {/* <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
                         Logout
-                      </button>
+                      </button> */}
     </div>
   );
 };
