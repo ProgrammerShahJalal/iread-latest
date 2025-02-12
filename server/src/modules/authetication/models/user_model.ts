@@ -32,6 +32,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare token: string;
     declare auth_code?: string | null;
     declare forget_code?: string | null;
+    declare forget_code_expiry?: Date | null;
     user_agent?: string;
     declare is_verified?: verified;
     declare count_wrong_attempts?: number;
@@ -94,11 +95,15 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             auth_code: {
-                type: DataTypes.STRING(10),
+                type: DataTypes.STRING(100),
                 allowNull: true,
             },
             forget_code: {
-                type: DataTypes.STRING(10),
+                type: DataTypes.STRING(100),
+                allowNull: true,
+            },
+            forget_code_expiry: {
+                type: DataTypes.DATE,
                 allowNull: true,
             },
             user_agent: {

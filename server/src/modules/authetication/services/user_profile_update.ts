@@ -76,7 +76,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
              // Generate a unique slug
         const slug = await generateUniqueSlug(models, body.first_name, body.last_name) || data.slug;
 
-            let image_path ='avatar.png';
+            let image_path = data.photo || 'avatar.png';
             if (body['photo']?.ext) {
                 image_path =
                     'uploads/users/' +

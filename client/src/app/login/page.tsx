@@ -24,9 +24,15 @@ const LoginPage: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Invalid credentials. Please try again.");
+        if (response.statusText === "Forbidden") {
+          throw new Error("Your account is blocked due to multiple failed login attempts");
+        }
+        else{
+          throw new Error( "Invalid credentials. Please try again.");
+        }
+        
       }
 
       const data = await response.json();

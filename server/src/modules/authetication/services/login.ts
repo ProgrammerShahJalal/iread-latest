@@ -4,6 +4,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import response from '../helpers/response';
 var bcrypt = require('bcrypt');
 import { body, validationResult } from 'express-validator';
+import crypto from 'crypto';
 
 import {
     anyObject,
@@ -54,6 +55,7 @@ async function login(
                     email: body.email,
                 },
             });
+            
 
             if (data) {
                 let check_pass = await bcrypt.compare(
@@ -61,18 +63,54 @@ async function login(
                     data.password,
                 );
 
+                 // Check if the user is blocked
+            if (data.is_blocked === "1") {
+                return response(403, 'Account blocked', [
+                    { type: 'field', msg: 'Your account is blocked due to multiple failed login attempts.', path: 'email', location: 'body' },
+                ]);
+            }
+
+
+                const generateSecureCode = () => crypto.randomBytes(32).toString('hex');
+
+                const hashCode = async (code: string) => {
+                    return await bcrypt.hash(code, 10);
+                };
+
+
                 if (check_pass) {
                     let jwt = require('jsonwebtoken');
                     const secretKey = env.JTI;
                     const user_agent = req.headers['user-agent'];
+
                     let secret = Math.random().toString(36).substring(2, 10);
+                    let auth_code = generateSecureCode();
+                    let forget_code = generateSecureCode();
                     token = await jwt.sign(
                         { id: data.id, token: secret, user_agent },
                         secretKey,
                     );
                     data.token = secret;
+                    data.user_agent = user_agent;
+                    data.auth_code = await hashCode(auth_code);
+                    data.forget_code = await hashCode(forget_code);
+                    data.forget_code_expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 min expiry
+                    
+                    //reset the count_wrong_attempts
+                    data.count_wrong_attempts = 0;
                     await data.save();
                 } else {
+
+                 // Increment failed attempts
+                 data.count_wrong_attempts = (data.count_wrong_attempts || 0) + 1;
+
+                 // Block the user if attempts exceed 5
+                 if (data.count_wrong_attempts > 5) {
+                     data.is_blocked = "1";
+                 }
+ 
+                 await data.save();
+
                     return response(422, 'wrong password', [
                         {
                             type: 'field',
