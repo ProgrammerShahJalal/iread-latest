@@ -12,6 +12,7 @@
     "@emailjs/browser": "^4.4.1",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@reduxjs/toolkit": "^2.5.1",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.5.0",
     "axios": "^1.7.9",
@@ -22,6 +23,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.5.1",
     "react-modal-video": "^2.0.2",
+    "react-redux": "^9.2.0",
     "react-to-pdf": "^1.0.1",
     "sequelize": "^6.37.5",
     "server-only": "^0.0.1"
