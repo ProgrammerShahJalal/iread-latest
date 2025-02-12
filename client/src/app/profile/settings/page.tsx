@@ -58,48 +58,48 @@ const ProfileSettingPage = () => {
 
   const handleSave = async () => {
     if (!formData) return;
-
+  
     setLoading(true);
     try {
       const formDataPayload = new FormData();
-      formDataPayload.append('id', formData.id.toString());
-      formDataPayload.append('first_name', formData.first_name);
-      formDataPayload.append('last_name', formData.last_name);
-      formDataPayload.append('phone_number', formData.phone_number);
-
+      formDataPayload.append("id", formData.id.toString());
+      formDataPayload.append("first_name", formData.first_name);
+      formDataPayload.append("last_name", formData.last_name);
+      formDataPayload.append("phone_number", formData.phone_number);
+  
       if (fileInputRef.current?.files?.[0]) {
-        formDataPayload.append('photo', fileInputRef.current.files[0]);
+        formDataPayload.append("photo", fileInputRef.current.files[0]);
       }
-
+  
       const response = await fetch(`${API_URL}/api/v1/auth/update`, {
-        method: 'POST',
+        method: "POST",
         body: formDataPayload,
       });
-
+  
       const res = await response.json();
       const result = res.data;
-
+  
       if (!response.ok) {
-        throw new Error(result.message || 'Failed to update profile.');
+        throw new Error(result.message || "Failed to update profile.");
       }
-
-      console.log("result", result);
-
-      // Ensure we store the correct photo path, not Base64
+  
       const updatedUser = { ...formData, photo: result.photo };
-
-      // Update the user state and local storage
+  
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+  
+      // Dispatch event to update Navbar
+      window.dispatchEvent(new Event("userUpdated"));
+  
       setEditMode(false);
-      toast.success('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'An error occurred');
+      toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setLoading(false);
     }
   };
+  
 
 
 
@@ -121,16 +121,16 @@ const ProfileSettingPage = () => {
                 <Image
                   src={preview}
                   alt="Preview"
-                  width={64}
-                  height={64}
-                  className="w-20 h-20 object-cover rounded-full shadow-md"
+                  width={300}
+                  height={300}
+                  className="w-20 h-20 object-center rounded-full shadow-md"
                 />
               ) : (
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
                   alt="Profile"
-                  width={64}
-                  height={64}
+                  width={300}
+                  height={300}
                   className="w-20 h-20 rounded-full object-cover border border-gray-300"
                 />
               )}

@@ -11,16 +11,30 @@ function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    // Function to update user state from localStorage
+    const fetchUser = () => {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
+
+    fetchUser(); // Initial fetch
+
+    // Listen for localStorage changes (profile update)
+    const handleStorageChange = () => fetchUser();
+    window.addEventListener("userUpdated", handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("userUpdated", handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user"); // Remove user from localStorage
-    setUser(null); // Reset user state
-    setIsOpen(false); // Close dropdown menu
+    window.dispatchEvent(new Event("userUpdated")); // Dispatch event
+    setUser(null);
+    setIsOpen(false);
     router.push("/login"); // Redirect to login page
   };
 
