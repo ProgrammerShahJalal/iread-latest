@@ -27,8 +27,8 @@ const ProfilePage = () => {
               <Image
                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
                 alt="Profile"
-                width={64}
-                height={64}
+                width={300}
+                height={300}
                 className="w-20 h-20 rounded-full object-cover border border-gray-300"
               />
               
