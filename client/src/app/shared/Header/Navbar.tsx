@@ -79,9 +79,9 @@ function Navbar() {
                     <Image
                       src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
                       alt="Profile Picture"
-                      className="border border-white rounded-full"
-                      width={32}
-                      height={32}
+                      className="w-10 h-10 border border-white object-cover rounded-full"
+                      width={300}
+                      height={300}
                     />
                   </button>
                 ) : (

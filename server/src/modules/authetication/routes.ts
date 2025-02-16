@@ -14,12 +14,14 @@ module.exports = async function (fastify: FastifyInstance) {
     fastify.register(
         async (route, opts) => {
             route
+                .get(`/`, controllerInstance.all)
                 .post(`/student/login`, controllerInstance.student_login)
                 .post(`/parent/login`, controllerInstance.parent_login)
                 .post(`/login`, controllerInstance.login)
                 .post(`/register`, controllerInstance.register)
                 .post(`/update`, controllerInstance.update)
-                .post(`/forget`, controllerInstance.forget);
+                .post(`/forget`, controllerInstance.forget)
+                .get(`/:id`, controllerInstance.find)
         },
         { prefix },
     );
@@ -37,7 +39,7 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(
                     `/parent/logout`,
                     { preHandler: check_parent_auth },
-                    controllerInstance.logout,
+                    controllerInstance.logout, 
                 )
                 .post(
                     `/student/logout`,

@@ -45,8 +45,8 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>
                                         <img
                                             src={
-                                                state.item.image
-                                                    ? `/${state.item.image}`
+                                                state.item.photo
+                                                    ? `/${state.item.photo}`
                                                     : '/assets/dashboard/images/avatar.png'
                                             }
                                             alt=""
@@ -58,14 +58,14 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>First Name</th>
                                     <th>:</th>
-                                    <th>{state.item.name}</th>
+                                    <th>{state.item.first_name}</th>
                                 </tr>
                                 <tr>
-                                    <th>Role</th>
+                                    <th>Last Name</th>
                                     <th>:</th>
-                                    <th>{state.item.role}</th>
+                                    <th>{state.item.last_name}</th>
                                 </tr>
                                 <tr>
                                     <th>Email</th>

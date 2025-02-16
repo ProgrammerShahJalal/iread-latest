@@ -9,10 +9,27 @@ import logout from './services/logout';
 import parent_login from './services/parent_login';
 import student_login from './services/student_login';
 import user_profile_update from './services/user_profile_update';
+import all from './services/all';
+import user_detils from './services/details';
+import { send } from 'process';
+import details from './services/details';
 const { serialize, parse } = require('@fastify/cookie');
 
 export default function (fastify: FastifyInstance) {
     return {
+        all: async function (req: FastifyRequest, res: FastifyReply) {
+        
+            let data: responseObject = await all(fastify, req);
+            return res
+                .code(data.status)
+                .header('Cache-Control', 'public, max-age=30')
+                .send(data);
+        },
+        find: async function (req: FastifyRequest, res: FastifyReply) {
+            let data = await details(fastify, req);
+            res.code(data.status).send(data);
+        },
+        
         login: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await login(fastify, req);
 
