@@ -7,7 +7,7 @@ services:
     build:
       context: ./client
     ports:
-      - "8011:3000" # Map frontend to localhost:8005
+      - "8011:5012" # Map frontend to localhost:8011
     volumes:
       - ./client:/var/www
     command: npm start
@@ -18,7 +18,7 @@ services:
     build:
       context: ./server
     ports:
-      - "8012:5011" # Map backend to localhost:8006
+      - "8012:5011" # Map backend to localhost:8012
     volumes:
       - ./server:/var/www
     command: npm run server
