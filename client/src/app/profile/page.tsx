@@ -7,7 +7,6 @@ import Image from "next/image";
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
 
-
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -18,24 +17,24 @@ const ProfilePage = () => {
 
   return (
     <ProfileLayout>
-      <div className="bg-white p-6 my-12 mx-auto max-w-lg rounded-lg shadow-md">
+      <div className="bg-white p-6 my-12 mx-auto max-w-4xl rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">Profile Information</h1>
 
-          <div className="flex flex-col items-center space-y-6">
-            {/* Profile Image */}
-            <div className="relative">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
-                alt="Profile"
-                width={300}
-                height={300}
-                className="w-20 h-20 rounded-full object-cover border border-gray-300"
-              />
-              
-            </div>
+        <div className="flex flex-col items-center space-y-6">
+          {/* Profile Image */}
+          <div className="relative">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
+              alt="Profile"
+              width={300}
+              height={300}
+              className="w-20 h-20 rounded-full object-cover border border-gray-300"
+            />
 
-            {/* Profile Details */}
-            <div className="w-full space-y-4">
+          </div>
+
+           {/* Profile Details */}
+           <div className="w-full space-y-4">
               <div className="flex justify-between items-center gap-5">
               <label className="block">
                 <span className="text-gray-700">First Name</span>
@@ -82,8 +81,9 @@ const ProfilePage = () => {
                 />
               </label>
             </div>
-       
-      </div>
+
+
+        </div>
       </div>
 
     </ProfileLayout>

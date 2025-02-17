@@ -71,7 +71,6 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'first_name',
                                             'last_name',
                                             'phone_number',
-                                            'slug',
                                             'is_verified',
                                             'is_blocked',
                                             'photo',

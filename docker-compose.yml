@@ -7,7 +7,7 @@ services:
     build:
       context: ./client
     ports:
-      - "8005:3000" # Map frontend to localhost:8005
+      - "8011:3000" # Map frontend to localhost:8005
     volumes:
       - ./client:/var/www
     command: npm start
@@ -18,7 +18,7 @@ services:
     build:
       context: ./server
     ports:
-      - "8006:5003" # Map backend to localhost:8006
+      - "8012:5011" # Map backend to localhost:8006
     volumes:
       - ./server:/var/www
     command: npm run server
@@ -27,21 +27,21 @@ services:
     depends_on:
       - mysql # Ensures backend starts after MySQL
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql_container
-    ports:
-      - "3308:3306" # Expose MySQL on port 3308
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: iread
-      MYSQL_USER: iread
-      MYSQL_PASSWORD: $^&ADF232
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
-    volumes:
-      - ./mysql_data:/var/lib/mysql
-    networks:
-      - app_network
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql_container
+  #   ports:
+  #     - "3308:3306" # Expose MySQL on port 3308
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     MYSQL_DATABASE: iread
+  #     MYSQL_USER: iread
+  #     MYSQL_PASSWORD: $^&ADF232
+  #     MYSQL_ALLOW_EMPTY_PASSWORD: true
+  #   volumes:
+  #     - ./mysql_data:/var/lib/mysql
+  #   networks:
+  #     - app_network
 
 volumes:
   mysql_data:
