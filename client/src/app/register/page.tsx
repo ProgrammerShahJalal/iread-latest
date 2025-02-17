@@ -19,6 +19,9 @@ const RegisterPage: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const BASE_URL = process.env.NODE_ENV === "production"
+  ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+  : process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ const RegisterPage: React.FC = () => {
     setError("");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

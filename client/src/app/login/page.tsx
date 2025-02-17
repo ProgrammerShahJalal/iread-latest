@@ -12,6 +12,10 @@ const LoginPage: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+ 
+  const BASE_URL = process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,27 +23,27 @@ const LoginPage: React.FC = () => {
     setError("");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-  
+
       if (!response.ok) {
         if (response.statusText === "Forbidden") {
           throw new Error("Your account is blocked due to multiple failed login attempts");
         }
-        else{
-          throw new Error( "Invalid credentials. Please try again.");
+        else {
+          throw new Error("Invalid credentials. Please try again.");
         }
-        
+
       }
 
       const data = await response.json();
       // console.log("Login successful:", data);
 
       // Store user info in localStorage
-      const {id, first_name, last_name, email, phone_number, slug, photo } = data?.data?.data;
+      const { id, first_name, last_name, email, phone_number, slug, photo } = data?.data?.data;
       localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo }));
 
       router.push(`/profile?slug=${slug}`);

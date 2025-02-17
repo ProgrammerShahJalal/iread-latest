@@ -1,4 +1,5 @@
 import Blog from "./home/Blog";
+import ImageCarousel from "./home/Carousel";
 import Courses from "./home/Courses";
 import Gallery from "./home/Gallery";
 import HappyStudentAtAGlance from "./home/HappyStudentAtAGlance";
@@ -8,6 +9,7 @@ import OurTeachers from "./home/OurTeachers";
 export default function Home() {
     return (
         <>
+            <ImageCarousel/>
             <Hero />
             <Courses />
             <HappyStudentAtAGlance />
