@@ -74,6 +74,7 @@ const DonationSuccessContent = () => {
     if (email && !isEmailSent) {
       sendInvoiceEmail();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email, isEmailSent]);
 
   return (

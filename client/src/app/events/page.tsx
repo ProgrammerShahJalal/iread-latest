@@ -9,7 +9,7 @@ const EventsPage = async() => {
 
   let eventsData: Event[] = await getEvents();
 
-console.log('events', eventsData);
+// console.log('events', eventsData);
 //  console.log('events', events);
     return (
         <section>

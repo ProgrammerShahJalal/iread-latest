@@ -12,10 +12,13 @@ function Hero() {
     const openModal = () => {
         setIsOpen(true);
     };
+
+    const ModalVideoComponent = ModalVideo as any;
+
     return (
         <>
         {/* Modal Video */}
-        <ModalVideo
+        <ModalVideoComponent
         channel="youtube"
         isOpen={isOpen}
         videoId="pW1uVUg5wXM"

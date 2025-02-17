@@ -17,17 +17,14 @@ const T1: React.FC<Props> = (props: Props) => {
 
     return <div className="container">
         <div className="row my-4">
-            <div className="col-12">
-                <h3>Today's Approved Collection</h3>
-            </div>
             <div className="col-xl-3 col-lg-4">
                 <div className="card" data-intro="This is card">
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Booking Money</span>
+                                <span className="mb-2">Total Students</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.booking_money}
+                                    {collections.total_students}
                                 </h2>
                             </div>
                             <i className="icofont icofont-growth font-info align-self-center"></i>
@@ -40,9 +37,9 @@ const T1: React.FC<Props> = (props: Props) => {
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Down Payment</span>
+                                <span className="mb-2">Total Parents</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.down_payment}
+                                    {collections.total_parents}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-bar-graph font-primary align-self-center"></i>
@@ -55,9 +52,9 @@ const T1: React.FC<Props> = (props: Props) => {
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Installment</span>
+                                <span className="mb-2">Total Verified Users</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.installment}
+                                    {collections.total_verified_users}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-histogram font-secondary align-self-center"></i>
@@ -68,17 +65,15 @@ const T1: React.FC<Props> = (props: Props) => {
         </div>
 
         <div className="row my-4">
-            <div className="col-12">
-                <h3>Today's Not Approved Collection</h3>
-            </div>
+            
             <div className="col-xl-3 col-lg-4">
                 <div className="card" data-intro="This is card">
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Booking Money</span>
+                                <span className="mb-2">Total Blogs</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.not_approped_booking_money}
+                                    {collections.total_blogs}
                                 </h2>
                             </div>
                             <i className="icofont icofont-growth font-info align-self-center"></i>
@@ -91,9 +86,9 @@ const T1: React.FC<Props> = (props: Props) => {
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Down Payment</span>
+                                <span className="mb-2">Total Events</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.not_approped_down_payment}
+                                    {collections.total_events}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-bar-graph font-primary align-self-center"></i>
@@ -106,9 +101,9 @@ const T1: React.FC<Props> = (props: Props) => {
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Installment</span>
+                                <span className="mb-2">Total Comments</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.not_approped_installment}
+                                    {collections.total_comments}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-histogram font-secondary align-self-center"></i>
@@ -118,24 +113,7 @@ const T1: React.FC<Props> = (props: Props) => {
             </div>
         </div>
 
-        <div className="row my-2">
-            <div className="col-12">
-                <div className="card">
-                    <div className="card-header">
-                        <h3>
-                            Income chart (
-                            <span style={{ backgroundColor: '#d70206' }} className="p-2 ml-2"></span> booking money,
-                            <span style={{ backgroundColor: '#f05b4f' }} className="p-2 ml-2"></span> down payment,
-                            <span style={{ backgroundColor: '#f4c63d' }} className="p-2 ml-2"></span> installment
-                            )
-                        </h3>
-                    </div>
-                    <div className="card-body">
-                        <div id="my_chart" className="scatter-chart flot-chart-container"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>;
 };
 
