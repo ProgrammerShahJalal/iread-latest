@@ -134,11 +134,9 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     <MenuDropDownItem label="Incentive Report" to="/incentive_report" />
                 </MenuDropDown> */}
                 
-                {/* Project Visits  */}
-                <MenuDropDown group_title="Project Visits" icon="icon-desktop">
-                    <MenuDropDownItem label="Car Management" to="/car-management" />
-                    <MenuDropDownItem label="Car Schedules" to="/car-booking-schedules" />
-                    <MenuDropDownItem label="Car Bookings" to="/car-booking" />
+                {/* Users  */}
+                <MenuDropDown group_title="User" icon="icon-user">
+                    <MenuDropDownItem label="Users" to="/auth" />
                 </MenuDropDown>
 
                 <li>

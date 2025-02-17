@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useRef } from "react";
-import generatePDF from "react-to-pdf";
+import generatePDF, { PdfProps } from "react-to-pdf";
 
 
 interface InvoiceProps {
@@ -27,7 +27,20 @@ const Invoice: React.FC<InvoiceProps> = ({ name, email, phone, occupation, amoun
             <div className="mx-auto max-w-[768px] min-w-[320px]">
                 <div>
                     <div className="text-center">
-                        <button className="bg-green-600 px-3 py-2 rounded-md text-white" onClick={() => generatePDF(getTargetElement, { filename: 'invoice.pdf' }, )}>Download Invoice</button>
+                       {
+                        targetRef  &&  <button
+                        className="bg-green-600 px-3 py-2 rounded-md text-white"
+                        onClick={() => generatePDF({
+                            targetRef, filename: 'invoice.pdf',
+                            children: function (props: { toPdf: () => void; }): React.ReactNode {
+                                throw new Error("Function not implemented.");
+                            }
+                        })}
+                      >
+                        Download Invoice
+                      </button>
+    
+                       }
                     </div>
                     <div ref={targetRef} id="content-id" className="p-10 mb-24 rounded-md">
                         {/* Invoice Header */}

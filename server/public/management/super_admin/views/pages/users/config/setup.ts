@@ -1,14 +1,14 @@
 import setup_type from './setup_type';
 
-const prefix: string = 'Employee';
+const prefix: string = 'User';
 const setup: setup_type = {
     prefix,
     module_name: 'users',
 
-    route_prefix: 'users',
+    route_prefix: 'auth', //react route
 
     api_host: location.origin,
-    api_prefix: 'users',
+    api_prefix: 'auth', //api route 
 
     store_prefix: 'users',
     layout_title: prefix + ' Management',

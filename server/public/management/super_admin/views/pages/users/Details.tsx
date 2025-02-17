@@ -45,8 +45,8 @@ const Details: React.FC<Props> = (props: Props) => {
                             <div className="details_page_profile_image">
                                 <img
                                     src={
-                                        state.item.image
-                                            ? `/${state.item.image}`
+                                        state.item.photo
+                                            ? `/${state.item.photo}`
                                             : '/assets/dashboard/images/avatar.png'
                                     }
                                 />
@@ -55,10 +55,13 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'uid',
-                                        'name',
+                                        'role_serial',
+                                        'first_name',
+                                        'last_name',
                                         'email',
-                                        'designation',
                                         'phone_number',
+                                        'is_verified',
+                                        'is_blocked',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
@@ -66,28 +69,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                             <td>{get_value(i)}</td>
                                         </tr>
                                     ))}
-                                    {[
-                                        'father_name',
-                                        'mother_name',
-                                        'husband_spouse',
-                                        'nid',
-                                        'education',
-                                        'permanent_address',
-                                        'present_address',
-
-                                        'bank_name',
-                                        'branch_name',
-                                        'bank_account_no',
-                                        'bank_routing_no',
-                                        'mobile_banking_portal',
-                                        'mobile_banking_ac_no',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
-                                            <td>:</td>
-                                            <td>{get_value(i)}</td>
-                                        </tr>
-                                    ))}
+                                    
                                 </tbody>
                             </table>
                         </div>
