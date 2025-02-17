@@ -93,6 +93,8 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
             photo: image_path || data.photo,
             password: hashedPassword || data.password,
             slug: slug || data.slug,
+            is_verified: body.is_verified !== undefined ? body.is_verified : data.is_verified,
+            is_blocked: body.is_blocked !== undefined ? body.is_blocked : data.is_blocked,
         });
             await data.save();
 
