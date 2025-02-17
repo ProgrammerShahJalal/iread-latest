@@ -105,7 +105,7 @@ const ProfileSettingPage = () => {
 
   return (
     <ProfileLayout>
-      <div className="bg-white p-6 my-12 mx-auto max-w-lg rounded-lg shadow-md">
+      <div className="bg-white p-6 my-12 mx-auto max-w-4xl rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">Profile Settings</h1>
 
         {user ? (
