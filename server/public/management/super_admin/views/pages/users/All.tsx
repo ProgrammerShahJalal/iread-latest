@@ -41,7 +41,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'id,uid,role,designation,name,email,image,status'
+                'id,uid,role_serial,first_name,last_name,email,phone_number,photo,is_verified,is_blocked,status'
             ),
         );
         dispatch(all({}));
@@ -77,15 +77,40 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`uid`}
                                             sort={true}
                                         />
-                                        <th>Image</th>
                                         <TableHeading
-                                            label={`Name`}
-                                            col_name={`name`}
+                                            label={`Role Serial`}
+                                            col_name={`role_serial`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Photo`}
+                                            col_name={`photo`}
+                                            sort={true}
+                                        />
+                                       
+                                        <TableHeading
+                                            label={`First Name`}
+                                            col_name={`first_name`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Last Name`}
+                                            col_name={`last_name`}
                                             sort={true}
                                         />
                                         <TableHeading
                                             label={`Email`}
                                             col_name={`email`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Is Verified`}
+                                            col_name={`is_verified`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Is Blocked`}
+                                            col_name={`is_blocked`}
                                             sort={true}
                                         />
                                     </tr>
@@ -108,16 +133,21 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.id}</td>
                                                     <td>{i.uid || ''}</td>
+                                                    <td>{i.role_serial || ''}</td>
                                                     <td>
                                                         <img
                                                             src={
-                                                                i.image
-                                                                    ? `/${i.image}`
+                                                                i.photo
+                                                                    ? `/${i.photo}`
                                                                     : '/assets/dashboard/images/avatar.png'
                                                             }
                                                             alt=""
                                                             style={{
-                                                                height: 30,
+                                                                width: '50px',
+                                                                height: '50px',
+                                                                border: '1px solid #ddd',
+                                                                borderRadius: '50%',
+                                            
                                                             }}
                                                         />
                                                     </td>
@@ -128,10 +158,23 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.name}
+                                                            {i.first_name}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                        >
+                                                            {i.last_name}
                                                         </span>
                                                     </td>
                                                     <td>{i.email}</td>
+                                                  
+                                                    <td>{i.is_verified}</td>
+                                                    <td>{i.is_blocked}</td>
                                                 </tr>
                                             );
                                         },

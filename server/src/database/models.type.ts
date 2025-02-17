@@ -33,8 +33,10 @@ import * as DonationModel from "../modules/donation_management/models/model";
 
 import * as AppSettinsgModel from "../modules/app_setting_management/models/model";
 import * as AppSettingValuesModel from "../modules/app_setting_management/models/app_setting_values.model";
-
 import * as AppSubscribersModel from "../modules/app_subscribers_management/models/model";
+
+import * as UserModel from "../modules/authetication/models/user_model";
+
 
 export type model_types = {
     ContactModel: typeof ContactModel.DataModel;
@@ -73,6 +75,8 @@ export type model_types = {
 
     AppSettinsgModel: typeof AppSettinsgModel.DataModel;
     AppSettingValuesModel: typeof AppSettingValuesModel.DataModel;
-
     AppSubscribersModel: typeof AppSubscribersModel.DataModel;
+    
+    UserModel: typeof UserModel.DataModel;
+
 }
