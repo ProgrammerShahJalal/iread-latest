@@ -14,6 +14,7 @@ import {
 import { env } from 'process';
 import error_trace from '../helpers/error_trace';
 import custom_error from '../helpers/custom_error';
+import Models from '../../../database/models';
 
 async function validate(req: Request) {
     await body('email')
@@ -43,14 +44,15 @@ async function login(
         return response(422, 'validation error', validate_result.array());
     }
 
-    let models = await db();
+    // let models = await db();
+    let models = Models.get();
     let body: anyObject = req.body as anyObject;
 
     try {
         let data: anyObject | null = {};
         let token: anyObject = {};
         if (body) {
-            data = await models.User.findOne({
+            data = await models.UserModel.findOne({
                 where: {
                     email: body.email,
                 },

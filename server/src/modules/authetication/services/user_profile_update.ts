@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import moment from 'moment/moment';
 import custom_error from '../helpers/custom_error';
 import error_trace from '../helpers/error_trace';
+import Models from '../../../database/models';
 
 
 /** validation rules */
@@ -58,12 +59,13 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
         return response(422, 'validation error', validate_result.array());
     }
 
-    let models = await db();
+    // let models = await db();
+    let models = Models.get();
     let body = req.body as { [key: string]: any };
 
 
     try {
-        let data = await models.User.findByPk(body.id);
+        let data = await models.UserModel.findByPk(body.id);
 
         if (data) {
          // Hash the password before storing it
@@ -98,7 +100,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
         });
             await data.save();
 
-            return response(201, 'User profile successfully updated', data);
+            return response(201, 'User updated successfully', data);
         }
         else {
             throw new custom_error(

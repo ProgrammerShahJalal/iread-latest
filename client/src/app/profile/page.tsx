@@ -4,7 +4,9 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import ProfileLayout from "../../components/ProfileLayout";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = process.env.NODE_ENV === "production"
+? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface User {
   id: number;
@@ -127,7 +129,7 @@ const ProfileSettingPage = () => {
                 />
               ) : (
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
+                  src={`${BASE_URL}/${formData?.photo || user?.photo}`}
                   alt="Profile"
                   width={300}
                   height={300}

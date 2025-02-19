@@ -79,23 +79,25 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [{ model: UserModel.associations.role.target, as: "role" }],
+
     };
 
     query.attributes = select_fields;
 
- 
+
+    
 
     if (search_key) {
         query.where = {
             ...query.where,
             [Op.or]: [
+                { id: { [Op.like]: `%${search_key}%` } },
+                { uid: { [Op.like]: `%${search_key}%` } },
                 { first_name: { [Op.like]: `%${search_key}%` } },
                 { last_name: { [Op.like]: `%${search_key}%` } },
                 { email: { [Op.like]: `%${search_key}%` } },
                 { phone_number: { [Op.like]: `%${search_key}%` } },
-                // { status: { [Op.like]: `%${search_key}%` } },
-                { id: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }

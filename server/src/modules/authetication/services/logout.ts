@@ -4,17 +4,19 @@ import response from '../helpers/response';
 import { anyObject, responseObject } from '../../../common_types/object';
 import custom_error from '../helpers/custom_error';
 import error_trace from '../helpers/error_trace';
+import Models from '../../../database/models';
 
 async function logout(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    const models = await db();
+    // const models = await db();
+    let models = Models.get();
     const authUser = (req as anyObject).user;
     console.log('auth account user', authUser);
 
     try {
-        const userModel = models.User || models.UserParentsModel || models.UserStudentsModel;
+        const userModel = models.UserModel || models.UserParentsModel || models.UserStudentsModel;
         
         if (!userModel) {
             throw new custom_error('User model not found', 500, 'Invalid user model');

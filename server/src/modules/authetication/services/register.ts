@@ -5,6 +5,7 @@ import { responseObject } from '../../../common_types/object';
 import response from '../helpers/response';
 import bcrypt from 'bcrypt';
 import moment from 'moment/moment';
+import Models from '../../../database/models';
 
 async function generateUniqueSlug(models: any, firstName: string, lastName: string): Promise<string> {
     let baseSlug = `${firstName}-${lastName}`
@@ -25,11 +26,12 @@ async function generateUniqueSlug(models: any, firstName: string, lastName: stri
 }
 
 async function register(fastify_instance: FastifyInstance, req: FastifyRequest): Promise<responseObject> {
-    let models = await db();
+    // let models = await db();
+    let models = Models.get();
     let body = req.body as { [key: string]: any };
 
     // Check if user already exists
-    let existingUser = await models.User.findOne({ where: { email: body.email } });
+    let existingUser = await models.UserModel.findOne({ where: { email: body.email } });
 
     if (existingUser) {
         return response(409, 'User already exists', {});
@@ -44,14 +46,21 @@ async function register(fastify_instance: FastifyInstance, req: FastifyRequest):
         const slug = await generateUniqueSlug(models, body.first_name, body.last_name);
 
 
-        // generate a unique role serial
-        let roleSerial = 1;
+        let roleTitle = body.role || 'user';
+        let roleRecord = await models.UserRolesModel.findOne({ where: { title: roleTitle } });
 
-        while (await models.UserRolesModel.findOne({ where: { serial: roleSerial } })) {
-            roleSerial++;
+        if (!roleRecord) {
+            let roleSerial = 1;
+
+            while (await models.UserRolesModel.findOne({ where: { serial: roleSerial } })) {
+                roleSerial++;
+            }
+
+            roleRecord = await models.UserRolesModel.create({ title: roleTitle, serial: roleSerial });
         }
 
-        await models.UserRolesModel.create({ title: 'user', serial: roleSerial });
+        let roleSerial = roleRecord.serial;
+
 
 
         let image_path = 'avatar.png';
@@ -70,7 +79,7 @@ async function register(fastify_instance: FastifyInstance, req: FastifyRequest):
         let uid = datePrefix + uidCounter;
 
         // Ensure uid is unique
-        while (await models.User.findOne({ where: { uid: uid } })) {
+        while (await models.UserModel.findOne({ where: { uid: uid } })) {
             uidCounter++;
             uid = datePrefix + uidCounter;
         }
@@ -78,7 +87,7 @@ async function register(fastify_instance: FastifyInstance, req: FastifyRequest):
 
 
         // Create a new user record
-        let newUser = await models.User.create({
+        let newUser = await models.UserModel.create({
             uid: uid,
             role_serial: roleSerial,
             first_name: body.first_name,

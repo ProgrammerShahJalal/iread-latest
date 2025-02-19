@@ -39,12 +39,17 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(
                     `/parent/logout`,
                     { preHandler: check_parent_auth },
-                    controllerInstance.logout, 
+                    controllerInstance.logout,
                 )
                 .post(
                     `/student/logout`,
                     { preHandler: check_student_auth },
                     controllerInstance.logout,
+                )
+                .post(
+                    `/user/update-role`,
+                    { preHandler: auth_middleware },
+                    controllerInstance.role_update,
                 )
                 .get(`/info`, controllerInstance.auth_user);
         },

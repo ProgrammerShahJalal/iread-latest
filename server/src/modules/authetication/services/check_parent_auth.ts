@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { anyObject } from '../../../common_types/object';
 import db from '../models/db';
 import { env } from 'process';
+import Models from '../../../database/models';
 
 function parseCookieString(cookieString: any) {
     try {
@@ -27,7 +28,7 @@ const check_parent_auth = async (
     const token = parseCookieString(request.headers.cookie)?.token;
     // const user_agent = request.headers['user-agent'];
 
-    console.log('request cookies', token);
+    // console.log('request cookies', token);
 
     if (!token || !token.startsWith('Bearer ')) {
         return reply.redirect('/parent/login');
@@ -37,12 +38,13 @@ const check_parent_auth = async (
 
     try {
         const decoded = jwt.verify(token.slice(7), secretKey);
-        let models = await db();
+        // let models = await db();
+        let models = Models.get();
         let user: any = {};
-        if (decoded.user_type == 'parent') {
+        if (decoded.title == 'parent') {
             user = await models.UserParentsModel.findByPk(decoded.id);
         } else {
-            user = await models.User.findByPk(decoded.id);
+            user = await models.UserModel.findByPk(decoded.id);
         }
 
         if (user && user.token == decoded.token) {

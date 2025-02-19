@@ -51,7 +51,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-
+console.log('users', state.all.data)
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -173,8 +173,8 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.email}</td>
                                                   
-                                                    <td>{i.is_verified}</td>
-                                                    <td>{i.is_blocked}</td>
+                                                    <td>{i.is_verified === "1" ? 'Yes' : 'No'}</td>
+                                                    <td>{i.is_blocked === "1" ? 'Yes' : 'No'}</td>
                                                 </tr>
                                             );
                                         },

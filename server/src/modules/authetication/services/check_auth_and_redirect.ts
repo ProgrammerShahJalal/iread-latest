@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { anyObject } from '../../../common_types/object';
 import db from '../models/db';
 import { env } from 'process';
+import Models from '../../../database/models';
 
 const check_auth_and_redirect = async (
     request: FastifyRequest,
@@ -17,8 +18,10 @@ const check_auth_and_redirect = async (
     }
 
     const decoded = jwt.verify(token.slice(7), secretKey);
-    let models = await db();
-    let user = await models.User.findByPk(decoded.id);
+    // let models = await db();
+    let models = Models.get();
+    
+    let user = await models.UserModel.findByPk(decoded.id);
     if (user && user.token == decoded.token) {
         (request as anyObject).user = decoded;
         return;

@@ -36,6 +36,11 @@ function DonationPage() {
     }));
   };
 
+  const BASE_URL = process.env.NODE_ENV === "production"
+  ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+  : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -47,7 +52,7 @@ function DonationPage() {
     try {
       // console.log('from frontend', donationData)
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/donations/create-checkout-session`,
+        `${BASE_URL}/api/v1/donations/create-checkout-session`,
         donationData
       );
 

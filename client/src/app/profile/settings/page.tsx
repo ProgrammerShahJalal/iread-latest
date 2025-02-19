@@ -4,7 +4,9 @@ import Image from "next/image";
 import ProfileLayout from "../../../components/ProfileLayout";
 import toast from "react-hot-toast";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = process.env.NODE_ENV === "production"
+? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface User {
   id: number;
@@ -71,7 +73,7 @@ const ProfileSettingPage = () => {
         formDataPayload.append("photo", fileInputRef.current.files[0]);
       }
 
-      const response = await fetch(`${API_URL}/api/v1/auth/update`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/update`, {
         method: "POST",
         body: formDataPayload,
       });

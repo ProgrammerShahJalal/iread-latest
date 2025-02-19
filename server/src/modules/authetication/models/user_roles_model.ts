@@ -14,11 +14,12 @@ type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 
 type status = 'active' | 'deactive';
+type role = 'admin' | 'student' | 'parent';
 
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
-    declare title: string;
+    declare title: role;
     declare serial: number;
 
     declare status?: status;
@@ -35,8 +36,8 @@ function init(sequelize: Sequelize) {
                 primaryKey: true,
             },
             title: {
-                type: DataTypes.STRING,
-                allowNull: false,
+                type: DataTypes.ENUM('admin', 'student', 'parent'),
+                defaultValue: 'student',
             },
             serial: {
                 type: DataTypes.INTEGER.UNSIGNED,
