@@ -15,12 +15,12 @@ async function auth_user(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    // let models = await db();
-    let models = Models.get();
+    let models = await db();
+    // let models = Models.get();
     let headers: anyObject = req.headers as anyObject;
 
     try {
-        let data = await models.UserModel.findOne({
+        let data = await models.User.findOne({
             where: {
                 id: (req as anyObject).user.id,
             },

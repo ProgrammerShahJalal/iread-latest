@@ -98,6 +98,7 @@ class FastifyApp {
         console.log(`\n`);
     }
 
+
     private async registerPlugins(sequelizeInstance: Sequelize) {
         console.log('setting up db globally');
         this.fastify.decorate('db', sequelizeInstance);
@@ -157,11 +158,15 @@ class FastifyApp {
             root: path.resolve(path.join(__dirname), '../../public/views'),
         });
 
+        const FRONTEND_URL = process.env.NODE_ENV === "production"
+            ? process.env.FRONTEND_LIVE_URL
+            : process.env.FRONTEND_URL;
+
         this.fastify.register(fastifyCors, {
-            origin: 'http://localhost:5012', // Replace with your frontend's URL
+            origin: `${FRONTEND_URL}`, // Replace with your frontend's URL
             methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
             credentials: true, // Allow cookies/auth headers
-          });
+        });
     }
 
     private setHandlers(sequelizeInstance: Sequelize) {

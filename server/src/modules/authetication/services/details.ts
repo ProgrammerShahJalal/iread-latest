@@ -11,12 +11,13 @@ async function details(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = Models.get();
+    // let models = Models.get();
+    let models = await db();
 
     let params = req.params as any;
 
     try {
-        let data = await models.UserModel.findOne({
+        let data = await models.User.findOne({
             where: {
                 id: params.id,
             },

@@ -151,4 +151,4 @@ function init(sequelize: Sequelize) {
     return DataModel;
 }
 
-export { init, DataModel };
+export { init, DataModel, modelName }; 

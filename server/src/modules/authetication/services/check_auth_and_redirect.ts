@@ -18,10 +18,10 @@ const check_auth_and_redirect = async (
     }
 
     const decoded = jwt.verify(token.slice(7), secretKey);
-    // let models = await db();
-    let models = Models.get();
+    let models = await db();
+    // let models = Models.get();
     
-    let user = await models.UserModel.findByPk(decoded.id);
+    let user = await models.User.findByPk(decoded.id);
     if (user && user.token == decoded.token) {
         (request as anyObject).user = decoded;
         return;

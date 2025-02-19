@@ -44,15 +44,15 @@ async function login(
         return response(422, 'validation error', validate_result.array());
     }
 
-    // let models = await db();
-    let models = Models.get();
+    let models = await db();
+    // let models = Models.get();
     let body: anyObject = req.body as anyObject;
 
     try {
         let data: anyObject | null = {};
         let token: anyObject = {};
         if (body) {
-            data = await models.UserModel.findOne({
+            data = await models.User.findOne({
                 where: {
                     email: body.email,
                 },

@@ -5,6 +5,7 @@ import { body, validationResult } from 'express-validator';
 import custom_error from '../helpers/custom_error';
 import error_trace from '../helpers/error_trace';
 import Models from '../../../database/models';
+import db from '../models/db';
 
 async function validate(req: Request) {
     await body('user_id')
@@ -30,11 +31,12 @@ async function updateUserRole(fastify_instance: FastifyInstance, req: FastifyReq
         return response(422, 'Validation error', validate_result.array());
     }
 
-    let models = Models.get();
+    // let models = Models.get();
+    let models = await db();
     let body = req.body as { user_id: number; role: string };
 
     try {
-        let user = await models.UserModel.findByPk(body.user_id);
+        let user = await models.User.findByPk(body.user_id);
         
         if (!user) {
             return response(404, 'User not found', {});

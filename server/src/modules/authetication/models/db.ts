@@ -1,65 +1,44 @@
 import {
+    // Model,
     Sequelize,
 } from 'sequelize';
-import DB from '../../../bootstrap/db.sql';
-import * as user_module_model from './user_model';
-import * as roles_module_model from './user_roles_model';
-import * as parents_module_model from './user_parents_model';
-import * as students_module_model from './user_students_model';
+import * as user_model from './user_model';
+import * as user_students_model from './user_students_model';
+import * as user_parents_model from './user_parents_model';
+import * as user_roles_model from './user_roles_model';
 
+require('dotenv').config();
+
+let host = process?.env.DB_HOST || '';
+let post = process?.env.DB_PORT || '';
+let user = process?.env.DB_USER || '';
+let pass = process?.env.DB_PASSWORD || '';
+let database = process?.env.DB_DATABASE || '';
+
+const sequelize = new Sequelize(
+    `mysql://${user}:${pass}@${host}:${post}/${database}`,
+);
 
 interface models {
-    UserModel: typeof user_module_model.DataModel;
-    UserRolesModel: typeof roles_module_model.DataModel;
-    UserParentsModel: typeof parents_module_model.DataModel;
-    UserStudentsModel: typeof students_module_model.DataModel;
+    User: typeof user_model.DataModel;
+    UserStudentsModel: typeof user_students_model.DataModel;
+    UserParentsModel: typeof user_parents_model.DataModel;
+    UserRolesModel: typeof user_roles_model.DataModel;
     sequelize: Sequelize;
 }
 const db = async function (): Promise<models> {
-    const sequelize: Sequelize = await DB.connect();
-
+    const User = user_model.init(sequelize);
+    const UserStudentsModel = user_students_model.init(sequelize);
+    const UserParentsModel = user_parents_model.init(sequelize);
+    const UserRolesModel = user_roles_model.init(sequelize);
+    await sequelize.sync();
     let models: models = {
-        UserModel: user_module_model.init(sequelize),
-        UserRolesModel: roles_module_model.init(sequelize),
-        UserParentsModel: parents_module_model.init(sequelize),
-        UserStudentsModel: students_module_model.init(sequelize),
+        User,
+        UserStudentsModel,
+        UserParentsModel,
+        UserRolesModel,
         sequelize,
     };
-
-    await sequelize.sync({});
-
-    /*__ define relation start __*/
-
-    // models[module_model.modelName].hasMany(User, {
-    //     sourceKey: 'id',
-    //     foreignKey: 'user_id',
-    //     as: 'users',
-    // });
-
-    /*__ define relation end __*/
-
     return models;
 };
 export default db;
-
-/**
-    models.User.hasMany(Project, {
-        sourceKey: 'id',
-        foreignKey: 'user_id',
-        as: 'projects',
-    });
-
-    models.User.hasOne(Project, {
-        sourceKey: 'id',
-        foreignKey: 'user_id',
-        as: 'project',
-    });
-
-    models.Project.belongsToMany(User, {
-        through: 'project_user',
-    });
-    
-    models.User.belongsToMany(Project, {
-        through: 'project_user',
-    });
- */
