@@ -14,6 +14,7 @@ import all from './services/all';
 import user_detils from './services/details';
 import { send } from 'process';
 import details from './services/details';
+import destroy from './services/destroy';
 const { serialize, parse } = require('@fastify/cookie');
 
 export default function (fastify: FastifyInstance) {
@@ -97,6 +98,10 @@ export default function (fastify: FastifyInstance) {
 
         forget: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await forget(fastify, req);
+            res.code(data.status).send(data);
+        },
+        destroy: async function (req: FastifyRequest, res: FastifyReply) {
+            let data = await destroy(fastify, req);
             res.code(data.status).send(data);
         },
     };

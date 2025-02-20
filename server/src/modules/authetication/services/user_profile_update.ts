@@ -59,13 +59,13 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
         return response(422, 'validation error', validate_result.array());
     }
 
-    let models = await db();
-    // let models = Models.get();
+    // let models = await db();
+    let models = Models.get();
     let body = req.body as { [key: string]: any };
 
 
     try {
-        let data = await models.User.findByPk(body.id);
+        let data = await models.UserModel.findByPk(body.id);
 
         if (data) {
          // Hash the password before storing it

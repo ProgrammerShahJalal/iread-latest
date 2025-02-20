@@ -31,12 +31,12 @@ async function updateUserRole(fastify_instance: FastifyInstance, req: FastifyReq
         return response(422, 'Validation error', validate_result.array());
     }
 
-    // let models = Models.get();
-    let models = await db();
+    let models = Models.get();
+    // let models = await db();
     let body = req.body as { user_id: number; role: string };
 
     try {
-        let user = await models.User.findByPk(body.user_id);
+        let user = await models.UserModel.findByPk(body.user_id);
         
         if (!user) {
             return response(404, 'User not found', {});

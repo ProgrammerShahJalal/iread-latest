@@ -51,7 +51,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-console.log('users', state.all.data)
+(state.all as any).data?.map((i)=> console.log(i.role.title));
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -80,6 +80,11 @@ console.log('users', state.all.data)
                                         <TableHeading
                                             label={`Role Serial`}
                                             col_name={`role_serial`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Role`}
+                                            col_name={`role`}
                                             sort={true}
                                         />
                                         <TableHeading
@@ -134,6 +139,7 @@ console.log('users', state.all.data)
                                                     <td>{i.id}</td>
                                                     <td>{i.uid || ''}</td>
                                                     <td>{i.role_serial || ''}</td>
+                                                    <td>{i.role.title}</td>
                                                     <td>
                                                         <img
                                                             src={

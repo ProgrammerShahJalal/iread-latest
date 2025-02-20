@@ -46,6 +46,9 @@ module.exports = async function (fastify: FastifyInstance) {
                     { preHandler: check_student_auth },
                     controllerInstance.logout,
                 )
+                .post(`/destroy`, 
+                    // { preHandler: auth_middleware },
+                    controllerInstance.destroy)
                 .post(
                     `/user/update-role`,
                     { preHandler: auth_middleware },

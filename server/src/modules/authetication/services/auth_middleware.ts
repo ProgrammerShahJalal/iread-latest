@@ -38,15 +38,15 @@ const auth_middleware = async (
 
     try {
         const decoded = jwt.verify(token.slice(7), secretKey);
-        let models = await db();
-        // let models = Models.get();
+        // let models = await db();
+        let models = Models.get();
         let user: any = {};
        if (decoded.title== 'student') {
             user = await models.UserStudentsModel.findByPk(decoded.id);
         } else if (decoded.title == 'parent') {
             user = await models.UserParentsModel.findByPk(decoded.id);
         } else {
-            user = await models.User.findByPk(decoded.id);
+            user = await models.UserModel.findByPk(decoded.id);
         }
         console.log('decoded', decoded);
 

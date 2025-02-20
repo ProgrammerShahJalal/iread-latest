@@ -54,8 +54,8 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    // let models = Models.get();
-    let models = await db();
+    let models = Models.get();
+    // let models = await db();
     let query_param = req.query as any;
 // console.log('models', models);
     const { Op } = require('sequelize');
@@ -80,7 +80,7 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-         include: [{ model: models.UserRolesModel, as: "role" }], 
+        include: [{ model: models.UserRolesModel, as: "role" }]
 
     };
 
