@@ -36,7 +36,7 @@ import * as AppSettingValuesModel from "../modules/app_setting_management/models
 import * as AppSubscribersModel from "../modules/app_subscribers_management/models/model";
 
 import * as UserModel from "../modules/authetication/models/user_model";
-import * as UserRolesModel from "../modules/authetication/models/user_roles_model";
+import * as UserRolesModel from "../modules/user_roles/models/model";
 import * as UserParentsModel from "../modules/authetication/models/user_parents_model";
 import * as UserStudentsModel from "../modules/authetication/models/user_students_model";
 

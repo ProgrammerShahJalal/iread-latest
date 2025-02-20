@@ -3,7 +3,8 @@ import { NonIndexRouteObject } from 'react-router-dom';
 import DashboardLayout from '../views/layouts/DashboardLayout';
 import T1 from '../views/pages/T1';
 
-import user_branch_staff_routes from '../views/pages/users/config/routes';
+import users from '../views/pages/users/config/routes';
+import user_roles from '../views/pages/user_roles/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
@@ -36,7 +37,8 @@ const router: RouteTypes[] = [
                 path: '',
                 element: <T1 />,
             },
-            user_branch_staff_routes,
+            users,
+            user_roles,
             contact_messages,
             blog_category,
             blog_tags,

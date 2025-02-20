@@ -5,7 +5,7 @@ import {
 import * as user_model from './user_model';
 import * as user_students_model from './user_students_model';
 import * as user_parents_model from './user_parents_model';
-import * as user_roles_model from './user_roles_model';
+import * as user_roles_model from '../../user_roles/models/model';
 
 require('dotenv').config();
 

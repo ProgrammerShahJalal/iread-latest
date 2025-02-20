@@ -137,6 +137,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 {/* Users  */}
                 <MenuDropDown group_title="User" icon="icon-user">
                     <MenuDropDownItem label="Users" to="/auth" />
+                    <MenuDropDownItem label="User Roles" to="/user-roles" />
                 </MenuDropDown>
 
                 <li>
