@@ -9,7 +9,6 @@ import logout from './services/logout';
 import parent_login from './services/parent_login';
 import student_login from './services/student_login';
 import user_profile_update from './services/user_profile_update';
-import update_user_role from './services/update_user_role';
 import all from './services/all';
 import user_detils from './services/details';
 import { send } from 'process';
@@ -89,10 +88,6 @@ export default function (fastify: FastifyInstance) {
         },
         update: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await user_profile_update(fastify, req);
-            res.code(data.status).send(data);
-        },
-        role_update: async function (req: FastifyRequest, res: FastifyReply) {
-            let data: responseObject = await update_user_role(fastify, req);
             res.code(data.status).send(data);
         },
 

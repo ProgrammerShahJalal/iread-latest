@@ -71,44 +71,83 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'first_name',
                                             'last_name',
                                             'phone_number',
+                                            'role',
                                             'is_verified',
                                             'is_blocked',
                                             'photo',
                                         ].map((i) => (
                                             <div key={i} className="form-group form-vertical">
-                                                {i === 'first_name' || i === 'last_name' || i === 'phone_number' || i === 'slug' ? (
-                                                    <Input name={i} value={get_value(i)} />
+                                                {i === 'first_name' || i === 'last_name' || i === 'phone_number' ? (     
+                                                        <Input name={i} value={get_value(i)} />
                                                 ) : i === 'photo' ? (
 
-                                                    <div className="form-group grid_full_width form-vertical">
-                                                        <InputImage label="Photo" name="photo" defalut_preview={get_value('photo')} />
-                                                    </div>
+                                                <div className="form-group grid_full_width form-vertical">
+                                                    <InputImage label="Photo" name="photo" defalut_preview={get_value('photo')} />
+                                                </div>
 
                                                 ) : (
-                                                    <div>
-                                                        <label>{i}</label>
-                                                        <div>
-                                                            <label>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={i}
-                                                                    value="1"
-                                                                    checked={get_value(i) == "1"}
-                                                                    onChange={(e) => dispatch(storeSlice.actions.set_item({...state.item, [i]: e.target.value }))}
-                                                                /> Yes
-                                                            </label>
-                                                            <label className="">
-                                                                <input
-                                                                    type="radio"
-                                                                    name={i}
-                                                                    value="0"
-                                                                    checked={get_value(i) == "0"}
-                                                                    onChange={(e) => dispatch(storeSlice.actions.set_item({    ...state.item, [i]: e.target.value }))}
-                                                                /> No
-                                                            </label>
-                                                        </div>
 
+                                                    i === 'role' ? (
+                                                        <div>
+                                                    <label>{i}</label>
+                                                    <div>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name={i}
+                                                                value={3}
+                                                                // checked={(get_value(i).serial == 3)}
+                                                                onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
+                                                            /> Admin
+                                                        </label>
+                                                        <label className="">
+                                                            <input
+                                                                type="radio"
+                                                                name={i}
+                                                                value={1}
+                                                                // checked={get_value(i).serial == 1}
+                                                                onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
+                                                            /> Student
+                                                        </label>
+                                                        <label className="">
+                                                            <input
+                                                                type="radio"
+                                                                name={i}
+                                                                value={2}
+                                                                // checked={get_value(i).serial == 2}
+                                                                onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
+                                                            /> Parent
+                                                        </label>
                                                     </div>
+
+                                                </div>
+                                                    ) : (
+                                                        <div>
+                                                    <label>{i}</label>
+                                                    <div>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name={i}
+                                                                value="1"
+                                                                checked={get_value(i) == "1"}
+                                                                onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
+                                                            /> Yes
+                                                        </label>
+                                                        <label className="">
+                                                            <input
+                                                                type="radio"
+                                                                name={i}
+                                                                value="0"
+                                                                checked={get_value(i) == "0"}
+                                                                onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
+                                                            /> No
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                    )
+                                                
                                                 )}
                                             </div>
                                         ))}

@@ -49,11 +49,7 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(`/destroy`, 
                     // { preHandler: auth_middleware },
                     controllerInstance.destroy)
-                .post(
-                    `/user/update-role`,
-                    { preHandler: auth_middleware },
-                    controllerInstance.role_update,
-                )
+                
                 .get(`/info`, controllerInstance.auth_user);
         },
         { prefix },

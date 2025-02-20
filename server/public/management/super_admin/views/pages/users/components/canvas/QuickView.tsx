@@ -68,6 +68,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.last_name}</th>
                                 </tr>
                                 <tr>
+                                    <th>Role</th>
+                                    <th>:</th>
+                                    <th>{state.item.role.title}</th>
+                                </tr>
+                                <tr>
                                     <th>Email</th>
                                     <th>:</th>
                                     <th>{state.item.email}</th>
@@ -77,6 +82,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>:</th>
                                     <th>{state.item.phone_number}</th>
                                 </tr>
+                                
                             </tbody>
                         </table>
                     </div>

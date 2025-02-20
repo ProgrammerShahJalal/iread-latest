@@ -44,7 +44,7 @@ async function generateUniqueSlug(models: any, firstName: string, lastName: stri
     let counter = 1;
 
     // Check for existing slugs and make unique if necessary
-    while (await models.User.findOne({ where: { slug: uniqueSlug } })) {
+    while (await models.UserModel.findOne({ where: { slug: uniqueSlug } })) {
         uniqueSlug = `${baseSlug}-${counter}`;
         counter++;
     }
@@ -62,7 +62,6 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
     // let models = await db();
     let models = Models.get();
     let body = req.body as { [key: string]: any };
-
 
     try {
         let data = await models.UserModel.findByPk(body.id);
@@ -91,6 +90,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
         await data.update({
             first_name: body.first_name || data.first_name,
             last_name: body.last_name || data.last_name,
+            role_serial: body.role || data.role_serial,
             phone_number: body.phone_number || data.phone_number,
             photo: image_path || data.photo,
             password: hashedPassword || data.password,
@@ -99,6 +99,7 @@ async function user_profile_update(fastify_instance: FastifyInstance, req: Fasti
             is_blocked: body.is_blocked !== undefined ? body.is_blocked : data.is_blocked,
         });
             await data.save();
+
 
             return response(201, 'User updated successfully', data);
         }

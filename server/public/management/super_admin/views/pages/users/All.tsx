@@ -51,7 +51,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-(state.all as any).data?.map((i)=> console.log(i.role.title));
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -77,14 +77,16 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`uid`}
                                             sort={true}
                                         />
+                                        
                                         <TableHeading
                                             label={`Role Serial`}
                                             col_name={`role_serial`}
                                             sort={true}
                                         />
+
                                         <TableHeading
                                             label={`Role`}
-                                            col_name={`role`}
+                                            col_name={`role_serial`}
                                             sort={true}
                                         />
                                         <TableHeading
@@ -138,8 +140,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.id}</td>
                                                     <td>{i.uid || ''}</td>
-                                                    <td>{i.role_serial || ''}</td>
-                                                    <td>{i.role.title}</td>
+                                                    <td>{i.role_serial}</td>
+                                                    <td>{i.role_serial === 3 ? 'Admin' : (
+                                                        i.role_serial === 2 ? 'Parent' : 'Student'
+                                                    )}</td>
                                                     <td>
                                                         <img
                                                             src={

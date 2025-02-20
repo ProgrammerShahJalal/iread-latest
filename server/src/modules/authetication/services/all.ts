@@ -61,7 +61,7 @@ async function all(
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
     let orderByCol = query_param.orderByCol || 'id';
-    let role = query_param.role || null;
+    // let role = query_param.role || null;
     let orderByAsc = query_param.orderByAsc || 'true';
     let show_active_data = query_param.show_active_data || 'true';
     let paginate = parseInt((req.query as any).paginate) || 10;

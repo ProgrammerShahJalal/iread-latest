@@ -17,7 +17,7 @@ async function generateUniqueSlug(models: any, firstName: string, lastName: stri
     let counter = 1;
 
     // Check for existing slugs and make unique if necessary
-    while (await models.User.findOne({ where: { slug: uniqueSlug } })) {
+    while (await models.UserModel.findOne({ where: { slug: uniqueSlug } })) {
         uniqueSlug = `${baseSlug}-${counter}`;
         counter++;
     }
