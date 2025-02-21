@@ -14,7 +14,7 @@ import InputImage from './components/management_data_page/InputImage';
 import DropDown from './components/dropdown/DropDown';
 import Select from './components/management_data_page/Select';
 import { anyObject } from '../../../common_types/object';
-export interface Props { }
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -28,7 +28,6 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -67,108 +66,19 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 <div>
                                     <h5 className="mb-4">Input Data</h5>
                                     <div className="form_auto_fit">
-                                        {[
-                                            'first_name',
-                                            'last_name',
-                                            'phone_number',
-                                            'role',
-                                            'is_verified',
-                                            'is_blocked',
-                                            'photo',
-                                        ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                {i === 'first_name' || i === 'last_name' || i === 'phone_number' ? (
-                                                    <Input name={i} value={get_value(i)} />
-                                                ) : i === 'photo' ? (
-
-                                                    <div className="form-group grid_full_width form-vertical">
-                                                        <InputImage label="Photo" name="photo" defalut_preview={get_value('photo')} />
-                                                    </div>
-
-                                                ) : (
-
-                                                    i === 'role' ? (
-                                                        <div>
-                                                            <label>{i}</label>
-                                                            <div>
-                                                                <label>
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={i}
-                                                                        value="3"
-                                                                        checked={String(get_value(i)?.serial) === "3"}
-                                                                        onChange={(e) =>
-                                                                            dispatch(storeSlice.actions.set_item({
-                                                                                ...state.item,
-                                                                                [i]: { ...state.item[i], serial: Number(e.target.value) }
-                                                                            }))
-                                                                        }
-                                                                    /> Admin
-                                                                </label>
-                                                                <label className="">
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={i}
-                                                                        value="1"
-                                                                        checked={String(get_value(i)?.serial) === "1"}
-                                                                        onChange={(e) =>
-                                                                            dispatch(storeSlice.actions.set_item({
-                                                                                ...state.item,
-                                                                                [i]: { ...state.item[i], serial: Number(e.target.value) }
-                                                                            }))
-                                                                        }
-                                                                    /> Student
-                                                                </label>
-                                                                <label className="">
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={i}
-                                                                        value="2"
-                                                                        checked={String(get_value(i)?.serial) === "2"}
-                                                                        onChange={(e) =>
-                                                                            dispatch(storeSlice.actions.set_item({
-                                                                                ...state.item,
-                                                                                [i]: { ...state.item[i], serial: Number(e.target.value) }
-                                                                            }))
-                                                                        }
-                                                                    /> Parent
-                                                                </label>
-                                                            </div>
-
-                                                        </div>
-                                                    ) : (
-                                                        <div>
-                                                            <label>{i}</label>
-                                                            <div>
-                                                                <label>
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={i}
-                                                                        value="1"
-                                                                        checked={get_value(i) == "1"}
-                                                                        onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
-                                                                    /> Yes
-                                                                </label>
-                                                                <label className="">
-                                                                    <input
-                                                                        type="radio"
-                                                                        name={i}
-                                                                        value="0"
-                                                                        checked={get_value(i) == "0"}
-                                                                        onChange={(e) => dispatch(storeSlice.actions.set_item({ ...state.item, [i]: e.target.value }))}
-                                                                    /> No
-                                                                </label>
-                                                            </div>
-
-                                                        </div>
-                                                    )
-
-                                                )}
+                                        {['title'].map((i) => (
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                <Input
+                                                    name={i}
+                                                    value={get_value(i)}
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-
 
                                 <div className="form-group form-vertical">
                                     <label></label>

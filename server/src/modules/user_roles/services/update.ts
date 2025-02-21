@@ -19,9 +19,7 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'id',
-    ];
+    let fields = ['id'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -39,13 +37,6 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
-
 async function update(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -59,38 +50,37 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        title: body.title,
-        serial: body.serial,
-    };
-
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
-    /** store data into database */
     try {
-        let data = await models[modelName].findByPk(body.id);
-        if (data) {
-            data.update(inputs);
-            await data.save();
-            return response(201, 'data updated', { data });
-        } else {
+        /** Find the existing role */
+        let existingRole = await models[modelName].findByPk(body.id);
+        if (!existingRole) {
             throw new custom_error(
-                'data not found',
+                'Data not found',
                 404,
-                'operation not possible',
+                'Operation not possible',
             );
         }
+
+        /** Prepare updated values (title only) */
+        let inputs: InferCreationAttributes<typeof existingRole> = {
+            title: body.title ?? existingRole.title,
+            serial: existingRole.serial,
+        };
+
+        /** Update role */
+        await existingRole.update(inputs);
+        await existingRole.save();
+
+        return response(200, 'Role updated successfully', {
+            data: existingRole,
+        });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
         if (error instanceof custom_error) {
             error.uid = uid;
         } else {
-            throw new custom_error('server error', 500, error.message, uid);
+            throw new custom_error('Server error', 500, error.message, uid);
         }
         throw error;
     }

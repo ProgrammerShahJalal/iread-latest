@@ -16,7 +16,7 @@ export const initialState = {
 
     /* data filters */
     role: 'all',
-    select_fields: 'id,uid,role,designation,mo,agm,gm,ed,name,email,image,status',
+    select_fields: 'id,title,serial,status',
     filter_criteria: {} as anyObject,
     all_data_count: 0, // total data in database
     page: 1,

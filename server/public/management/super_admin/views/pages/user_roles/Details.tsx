@@ -42,34 +42,19 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            <div className="details_page_profile_image">
-                                <img
-                                    src={
-                                        state.item.photo
-                                            ? `/${state.item.photo}`
-                                            : '/assets/dashboard/images/avatar.png'
-                                    }
-                                />
-                            </div>
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
-                                    {[
-                                        'uid',
-                                        'role_serial',
-                                        'first_name',
-                                        'last_name',
-                                        'email',
-                                        'phone_number',
-                                        'is_verified',
-                                        'is_blocked',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
-                                            <td>:</td>
-                                            <td>{get_value(i)}</td>
-                                        </tr>
-                                    ))}
-                                    
+                                    {['id', 'serial', 'title', 'status'].map(
+                                        (i) => (
+                                            <tr key={i}>
+                                                <td>
+                                                    {i.replaceAll('_', ' ')}
+                                                </td>
+                                                <td>:</td>
+                                                <td>{get_value(i)}</td>
+                                            </tr>
+                                        ),
+                                    )}
                                 </tbody>
                             </table>
                         </div>

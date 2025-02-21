@@ -19,9 +19,7 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'title',
-    ];
+    let fields = ['title'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -34,33 +32,11 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
-
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -74,28 +50,24 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let data = new models[modelName]();
-    
-    let inputs: InferCreationAttributes<typeof data> = {
-        title: body.title,
-        serial: body.serial,
-    };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
-    /** store data into database */
     try {
-        (await data.update(inputs)).save();
+        /** Get the count of existing roles */
+        let existingRolesCount = await models[modelName].count();
 
-        return response(201, 'data created', {
-            data,
+        /** Assign serial dynamically */
+        let serialNumber = existingRolesCount + 1;
+
+        /** Create a new role */
+        let newRole = await models[modelName].create({
+            title: body.title,
+            serial: serialNumber,
         });
+
+        return response(201, 'Role created successfully', { data: newRole });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
-        throw new custom_error('server error', 500, error.message, uid);
-        // throw error;
+        throw new custom_error('Server error', 500, error.message, uid);
     }
 }
 
