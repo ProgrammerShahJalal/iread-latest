@@ -1,5 +1,3 @@
-import { Model } from 'sequelize';
-import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { responseObject } from '../../../common_types/object';
 import response from '../helpers/response';
@@ -7,7 +5,11 @@ import bcrypt from 'bcrypt';
 import moment from 'moment/moment';
 import Models from '../../../database/models';
 
-async function generateUniqueSlug(models: any, firstName: string, lastName: string): Promise<string> {
+async function generateUniqueSlug(
+    models: any,
+    firstName: string,
+    lastName: string,
+): Promise<string> {
     let baseSlug = `${firstName}-${lastName}`
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
@@ -16,7 +18,7 @@ async function generateUniqueSlug(models: any, firstName: string, lastName: stri
     let uniqueSlug = baseSlug;
     let counter = 1;
 
-    // Check for existing slugs and make unique if necessary
+    // Ensure slug is unique
     while (await models.UserModel.findOne({ where: { slug: uniqueSlug } })) {
         uniqueSlug = `${baseSlug}-${counter}`;
         counter++;
@@ -25,44 +27,54 @@ async function generateUniqueSlug(models: any, firstName: string, lastName: stri
     return uniqueSlug;
 }
 
-async function register(fastify_instance: FastifyInstance, req: FastifyRequest): Promise<responseObject> {
-    // let models = await db();
+async function register(
+    fastify_instance: FastifyInstance,
+    req: FastifyRequest,
+): Promise<responseObject> {
     let models = Models.get();
     let body = req.body as { [key: string]: any };
 
     // Check if user already exists
-    let existingUser = await models.UserModel.findOne({ where: { email: body.email } });
+    let existingUser = await models.UserModel.findOne({
+        where: { email: body.email },
+    });
 
     if (existingUser) {
         return response(409, 'User already exists', {});
     }
 
     try {
-        // Hash the password before storing it
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+        // Hash password
+        const hashedPassword = await bcrypt.hash(body.password, 10);
 
-        // Generate a unique slug
-        const slug = await generateUniqueSlug(models, body.first_name, body.last_name);
+        // Generate unique slug
+        const slug = await generateUniqueSlug(
+            models,
+            body.first_name,
+            body.last_name,
+        );
 
-
+        // Assign role serial dynamically
         let roleTitle = body.role || 'student';
-        let roleRecord = await models.UserRolesModel.findOne({ where: { title: roleTitle } });
+        let roleRecord = await models.UserRolesModel.findOne({
+            where: { title: roleTitle },
+        });
 
         if (!roleRecord) {
-            let roleSerial = 1;
+            // Assign the next available role serial
+            let nextSerial =
+                ((await models.UserRolesModel.max('serial')) as number) || 0;
+            nextSerial++;
 
-            while (await models.UserRolesModel.findOne({ where: { serial: roleSerial } })) {
-                roleSerial++;
-            }
-
-            roleRecord = await models.UserRolesModel.create({ title: roleTitle, serial: roleSerial });
+            roleRecord = await models.UserRolesModel.create({
+                title: roleTitle,
+                serial: nextSerial,
+            });
         }
 
         let roleSerial = roleRecord.serial;
 
-
-
+        // Handle profile image upload
         let image_path = 'avatar.png';
         if (body['photo']?.ext) {
             image_path =
@@ -72,21 +84,17 @@ async function register(fastify_instance: FastifyInstance, req: FastifyRequest):
             await (fastify_instance as any).upload(body['photo'], image_path);
         }
 
-
-        // uid is a unique identifier for the user like 2025-02-12-1001 (year-month-start from 1001)
+        // Generate unique UID
+        let uidPrefix = moment().format('YYYYMMDD');
         let uidCounter = 1001;
-        let datePrefix = moment().format('YYYYMMDD');
-        let uid = datePrefix + uidCounter;
+        let uid = uidPrefix + uidCounter;
 
-        // Ensure uid is unique
         while (await models.UserModel.findOne({ where: { uid: uid } })) {
             uidCounter++;
-            uid = datePrefix + uidCounter;
+            uid = uidPrefix + uidCounter;
         }
 
-
-
-        // Create a new user record
+        // Create user
         let newUser = await models.UserModel.create({
             uid: uid,
             role_serial: roleSerial,

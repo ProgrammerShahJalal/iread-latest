@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import setup from './config/setup';
 import { RootState, useAppDispatch } from '../../../store';
 import { all } from './config/store/async_actions/all';
 import setup from './config/setup';
@@ -18,14 +17,17 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
-const All: React.FC<Props> = (props: Props) => {
+const All: React.FC<Props> = () => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
 
     const [pageTitle, setPageTitle] = useState('');
+    const [userRolesMap, setUserRolesMap] = useState<{ [key: number]: string }>(
+        {},
+    );
 
     const dispatch = useAppDispatch();
     let [searchParams] = useSearchParams();
@@ -41,10 +43,26 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'id,uid,role_serial,first_name,last_name,email,phone_number,photo,is_verified,is_blocked,status'
+                'id,uid,role_serial,first_name,last_name,email,phone_number,photo,is_verified,is_blocked,status',
             ),
         );
         dispatch(all({}));
+
+        // Fetch user roles and store them in a map
+        fetch(
+            `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`,
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                const roleMap: { [key: number]: string } = {};
+                data?.data?.data?.forEach(
+                    (role: { serial: number; title: string }) => {
+                        roleMap[role.serial] = role.title;
+                    },
+                );
+                setUserRolesMap(roleMap);
+            })
+            .catch((err) => console.error('Error fetching user roles:', err));
     }, [searchParams]);
 
     function quick_view(data: anyObject = {}) {
@@ -55,7 +73,7 @@ const All: React.FC<Props> = (props: Props) => {
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
-                <Header title={pageTitle+' user'}></Header>
+                <Header title={pageTitle + ' user'} />
 
                 <div className="content_body">
                     <div className="data_list">
@@ -68,126 +86,127 @@ const All: React.FC<Props> = (props: Props) => {
                                             <SelectAll />
                                         </th>
                                         <TableHeading
-                                            label={`ID`}
-                                            col_name={`id`}
-                                            sort={true}
+                                            label="ID"
+                                            col_name="id"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`User ID`}
-                                            col_name={`uid`}
-                                            sort={true}
-                                        />
-                                        
-                                        <TableHeading
-                                            label={`Role Serial`}
-                                            col_name={`role_serial`}
-                                            sort={true}
-                                        />
-
-                                        <TableHeading
-                                            label={`Role`}
-                                            col_name={`role_serial`}
-                                            sort={true}
+                                            label="User ID"
+                                            col_name="uid"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`Photo`}
-                                            col_name={`photo`}
-                                            sort={true}
-                                        />
-                                       
-                                        <TableHeading
-                                            label={`First Name`}
-                                            col_name={`first_name`}
-                                            sort={true}
+                                            label="Role Serial"
+                                            col_name="role_serial"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`Last Name`}
-                                            col_name={`last_name`}
-                                            sort={true}
+                                            label="Role"
+                                            col_name="role_serial"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`Email`}
-                                            col_name={`email`}
-                                            sort={true}
+                                            label="Photo"
+                                            col_name="photo"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`Is Verified`}
-                                            col_name={`is_verified`}
-                                            sort={true}
+                                            label="First Name"
+                                            col_name="first_name"
+                                            sort
                                         />
                                         <TableHeading
-                                            label={`Is Blocked`}
-                                            col_name={`is_blocked`}
-                                            sort={true}
+                                            label="Last Name"
+                                            col_name="last_name"
+                                            sort
+                                        />
+                                        <TableHeading
+                                            label="Email"
+                                            col_name="email"
+                                            sort
+                                        />
+                                        <TableHeading
+                                            label="Is Verified"
+                                            col_name="is_verified"
+                                            sort
+                                        />
+                                        <TableHeading
+                                            label="Is Blocked"
+                                            col_name="is_blocked"
+                                            sort
                                         />
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
                                     {(state.all as any)?.data?.map(
-                                        (i: { [key: string]: any }) => {
-                                            return (
-                                                <tr
-                                                    key={i.id}
-                                                    className={`table_rows table_row_${i.id}`}
-                                                >
-                                                    <td>
-                                                        <TableRowAction
-                                                            item={i}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <SelectItem item={i} />
-                                                    </td>
-                                                    <td>{i.id}</td>
-                                                    <td>{i.uid || ''}</td>
-                                                    <td>{i.role_serial}</td>
-                                                    <td>{i.role_serial === 3 ? 'Admin' : (
-                                                        i.role_serial === 2 ? 'Parent' : 'Student'
-                                                    )}</td>
-                                                    <td>
-                                                        <img
-                                                            src={
-                                                                i.photo
-                                                                    ? `/${i.photo}`
-                                                                    : '/assets/dashboard/images/avatar.png'
-                                                            }
-                                                            alt=""
-                                                            style={{
-                                                                width: '50px',
-                                                                height: '50px',
-                                                                border: '1px solid #ddd',
-                                                                borderRadius: '50%',
-                                            
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {i.first_name}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {i.last_name}
-                                                        </span>
-                                                    </td>
-                                                    <td>{i.email}</td>
-                                                  
-                                                    <td>{i.is_verified === "1" ? 'Yes' : 'No'}</td>
-                                                    <td>{i.is_blocked === "1" ? 'Yes' : 'No'}</td>
-                                                </tr>
-                                            );
-                                        },
+                                        (i: { [key: string]: any }) => (
+                                            <tr
+                                                key={i.id}
+                                                className={`table_rows table_row_${i.id}`}
+                                            >
+                                                <td>
+                                                    <TableRowAction item={i} />
+                                                </td>
+                                                <td>
+                                                    <SelectItem item={i} />
+                                                </td>
+                                                <td>{i.id}</td>
+                                                <td>{i.uid || ''}</td>
+                                                <td>{i.role_serial}</td>
+                                                <td>
+                                                    {userRolesMap[
+                                                        i.role_serial
+                                                    ] || 'Unknown'}
+                                                </td>
+                                                <td>
+                                                    <img
+                                                        src={
+                                                            i.photo
+                                                                ? `/${i.photo}`
+                                                                : '/assets/dashboard/images/avatar.png'
+                                                        }
+                                                        alt=""
+                                                        style={{
+                                                            width: '50px',
+                                                            height: '50px',
+                                                            border: '1px solid #ddd',
+                                                            borderRadius: '50%',
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        className="quick_view_trigger"
+                                                        onClick={() =>
+                                                            quick_view(i)
+                                                        }
+                                                    >
+                                                        {i.first_name}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        className="quick_view_trigger"
+                                                        onClick={() =>
+                                                            quick_view(i)
+                                                        }
+                                                    >
+                                                        {i.last_name}
+                                                    </span>
+                                                </td>
+                                                <td>{i.email}</td>
+                                                <td>
+                                                    {i.is_verified === '1'
+                                                        ? 'Yes'
+                                                        : 'No'}
+                                                </td>
+                                                <td>
+                                                    {i.is_blocked === '1'
+                                                        ? 'Yes'
+                                                        : 'No'}
+                                                </td>
+                                            </tr>
+                                        ),
                                     )}
                                 </tbody>
                             </table>
@@ -200,14 +219,14 @@ const All: React.FC<Props> = (props: Props) => {
                             all={all}
                             data={state.all as any}
                             selected_paginate={state.paginate}
-                        ></Paginate>
+                        />
                     </div>
                 </div>
-                <TableFooter></TableFooter>
+                <TableFooter />
             </div>
 
-            <Filter></Filter>
-            <QuickView></QuickView>
+            <Filter />
+            <QuickView />
         </div>
     );
 };
