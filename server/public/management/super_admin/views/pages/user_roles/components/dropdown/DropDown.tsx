@@ -27,6 +27,12 @@ const DropDown: React.FC<Props> = ({
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
+
+    /** local states */
+    const [showDropDownList, setShowDropDownList] = useState(false);
+    const [selectedList, setSelectedList] = useState<anyObject[]>([]);
+    const selected_items_input = useRef<HTMLInputElement>(null);
+
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(storeSlice.actions.set_only_latest_data(true));
@@ -34,44 +40,39 @@ const DropDown: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        if (default_value?.length && state.all?.data?.length) {
-            setSelectedList((prevSelectedList) => {
-                const enrichedList = default_value[0].id.map((defaultItem) => {
+        if (
+            Array.isArray(default_value) &&
+            default_value.length > 0 &&
+            Array.isArray(state.all?.data) &&
+            state.all.data.length > 0
+        ) {
+            // Prevent overwriting user selections
+            if (selectedList.length === 0) {
+                const defaultItems = default_value.map((item) => ({
+                    serial: item.id?.serial || item.serial || null,
+                    title: item.id?.title || item.title || null,
+                }));
+
+                const enrichedList = defaultItems.map((defaultItem) => {
                     const fullItem = state.all.data.find(
                         (item) => item.role_serial === defaultItem.serial,
                     );
                     return fullItem || defaultItem;
                 });
 
-                // Avoid unnecessary state updates to prevent re-renders
-                if (
-                    JSON.stringify(prevSelectedList) !==
-                    JSON.stringify(enrichedList)
-                ) {
-                    return enrichedList;
-                }
-                return prevSelectedList;
-            });
+                setSelectedList(enrichedList);
+            }
         }
-    }, [default_value, state.all.data]);
-
-    /** local states */
-    const [showDropDownList, setShowDropDownList] = useState(false);
-    const [selectedList, setSelectedList] = useState<anyObject[]>([]);
-    const selected_items_input = useRef<HTMLInputElement>(null);
+    }, [default_value, state.all?.data]);
 
     /** update selected items */
     useEffect(() => {
-        // console.log(selectedList);
         const serial = selectedList.map((i) => i.serial).join(',');
-        if (selected_items_input && selected_items_input.current) {
-            selected_items_input.current.value = `${serial}`;
+        if (selected_items_input.current) {
+            selected_items_input.current.value = serial;
         }
-
-        if (typeof get_selected_data === 'function') {
-            get_selected_data({ selectedList, serial });
-        }
-    }, [selectedList]);
+        get_selected_data?.({ selectedList, serial });
+    }, [selectedList, get_selected_data]);
 
     return (
         <>

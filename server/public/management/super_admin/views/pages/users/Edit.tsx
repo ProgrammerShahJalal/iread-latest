@@ -11,9 +11,6 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
-import DropDown from './components/dropdown/DropDown';
-import Select from './components/management_data_page/Select';
-import { anyObject } from '../../../common_types/object';
 import UserRolesDropDown from '../user_roles/components/dropdown/DropDown';
 export interface Props {}
 
@@ -107,12 +104,12 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                             multiple={false}
                                                             default_value={
                                                                 get_value(
-                                                                    'user_role',
+                                                                    'role',
                                                                 )
                                                                     ? [
                                                                           {
                                                                               id: get_value(
-                                                                                  'user_roles',
+                                                                                  'role',
                                                                               ),
                                                                           },
                                                                       ]

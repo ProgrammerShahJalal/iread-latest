@@ -21,7 +21,7 @@ const DropDownCheckbox: React.FC<Props> = ({
         if (multiple === false) {
             temp = [];
         }
-        const checkExist = temp.findIndex((i) => i.id === item.id);
+        const checkExist = temp.findIndex((i) => i.serial === item.serial);
         if (checkExist >= 0) {
             temp.splice(checkExist, 1);
         } else {
@@ -31,7 +31,9 @@ const DropDownCheckbox: React.FC<Props> = ({
     }
 
     function is_checked(): boolean {
-        let check = selectedList.find((i) => i.id === item.id) ? true : false;
+        let check = selectedList.find((i) => i.serial === item.serial)
+            ? true
+            : false;
         if (!check && check_box_el.current) {
             check_box_el.current.checked = false;
         }

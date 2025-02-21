@@ -21,7 +21,7 @@ const DropDownSelectedItem: React.FC<Props> = ({
                     return (
                         <div id={i.id} key={index} className="selected_item">
                             {/* <div className="label">{i.name} - {i.uid}</div> */}
-                            <div className="label">{i.title}</div>
+                            <div className="label">{i.title}-</div>
                             <div
                                 onClick={() => remove_item(index)}
                                 className="remove"
