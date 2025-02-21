@@ -8,7 +8,7 @@ const setup: setup_type = {
     route_prefix: 'user-roles', //react route
 
     api_host: location.origin,
-    api_prefix: 'user-roles', //api route 
+    api_prefix: 'user-roles', //api route
 
     store_prefix: 'user_roles',
     layout_title: prefix + ' Management',

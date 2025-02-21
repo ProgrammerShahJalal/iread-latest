@@ -10,7 +10,7 @@ import {
     responseObject,
     Request,
 } from '../../../common_types/object';
-import { DataModel } from '../models/model';
+import { DataModel as UserRolesModel } from '../models/model';
 import Models from '../../../database/models';
 
 /** validation rules */
@@ -54,10 +54,10 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    // let models = Models.get();
-    let models = await db();
+    let models = Models.get();
+    // let models = await db();
     let query_param = req.query as any;
-// console.log('models', models);
+    // console.log('models', models);
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
     let orderByCol = query_param.orderByCol || 'id';
@@ -72,7 +72,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id','title','status',];
+        select_fields = ['id', 'title', 'serial', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -80,14 +80,9 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        include: [{ model: models.UserRolesModel, as: "role" }]
-
     };
 
     query.attributes = select_fields;
-
-
-    
 
     if (search_key) {
         query.where = {
@@ -103,7 +98,7 @@ async function all(
     try {
         let data = await (fastify_instance as anyObject).paginate(
             req,
-            DataModel,
+            UserRolesModel,
             paginate,
             query,
         );

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import setup from './config/setup';
 import { RootState, useAppDispatch } from '../../../store';
 import { all } from './config/store/async_actions/all';
 import setup from './config/setup';
@@ -18,7 +17,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -40,9 +39,7 @@ const All: React.FC<Props> = (props: Props) => {
         }
 
         dispatch(
-            storeSlice.actions.set_select_fields(
-                'id,title,serial,status'
-            ),
+            storeSlice.actions.set_select_fields('id,title,serial,status'),
         );
         dispatch(all({}));
     }, [searchParams]);
@@ -55,7 +52,7 @@ const All: React.FC<Props> = (props: Props) => {
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
-                <Header title={pageTitle+' user'}></Header>
+                <Header title={pageTitle + ' user'}></Header>
 
                 <div className="content_body">
                     <div className="data_list">
@@ -77,18 +74,16 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`title`}
                                             sort={true}
                                         />
-                                        
+
                                         <TableHeading
                                             label={`Serial`}
                                             col_name={`serial`}
                                             sort={true}
                                         />
-
-                                        
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                    {(state.all as any)?.data?.map(
+                                    {(state?.all as any)?.data?.map(
                                         (i: { [key: string]: any }) => {
                                             return (
                                                 <tr
@@ -126,7 +121,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                             {i.last_name}
                                                         </span>
                                                     </td> */}
-                                                    
                                                 </tr>
                                             );
                                         },
@@ -140,8 +134,8 @@ const All: React.FC<Props> = (props: Props) => {
                             set_paginate={storeSlice.actions.set_paginate}
                             set_page={storeSlice.actions.set_page}
                             all={all}
-                            data={state.all as any}
-                            selected_paginate={state.paginate}
+                            data={state?.all as any}
+                            selected_paginate={state?.paginate}
                         ></Paginate>
                     </div>
                 </div>
