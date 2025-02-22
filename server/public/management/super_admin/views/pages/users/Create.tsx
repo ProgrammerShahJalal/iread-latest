@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import setup from './config/setup';
@@ -9,13 +9,10 @@ import Select from './components/management_data_page/Select';
 import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
 import UserRolesDropDown from '../user_roles/components/dropdown/DropDown';
-import { useParams } from 'react-router-dom';
-import storeSlice from './config/store';
-import { details } from './config/store/async_actions/details';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -23,17 +20,10 @@ const Create: React.FC<Props> = (props: Props) => {
     );
     const [data, setData] = useState<anyObject>({});
     const dispatch = useAppDispatch();
-    const params = useParams();
-
-    useEffect(() => {
-        dispatch(storeSlice.actions.set_item({}));
-        dispatch(details({ id: params.id }) as any);
-    }, []);
 
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
-        form_data.append('role', data.role || '');
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
@@ -51,6 +41,23 @@ const Create: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+    useEffect(() => {
+        if (get_value('role')) {
+            setData((prevData) => ({
+                ...prevData,
+                role: get_value('role'),
+            }));
+        }
+    }, [state.item]);
+
+    const handleRoleSelection = useCallback((selectedRole) => {
+        setData((prevData) => ({
+            ...prevData,
+            role: selectedRole.id,
+        }));
+    }, []);
+
+
     return (
         <>
             <div className="page_content">
@@ -62,19 +69,21 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
+
+
                                 <h5 className="mb-4">
-                                    User Roles Informations
+                                    User Informations
                                 </h5>
                                 <div className="form_auto_fit">
                                     {[
-                                        'first_name',
-                                        'last_name',
-                                        'email',
-                                        'phone_number',
-                                        'password',
-                                        'photo',
-                                        'role',
-                                    ].map((i) => (
+                                    'first_name', 
+                                    'last_name', 
+                                    'email', 
+                                    'phone_number', 
+                                    'password', 
+                                    'role',
+                                    'photo', 
+                                ].map((i) => (
                                         <div
                                             key={i}
                                             className="form-group form-vertical"
@@ -87,22 +96,10 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         multiple={false}
                                                         default_value={
                                                             get_value('role')
-                                                                ? [
-                                                                      {
-                                                                          id: get_value(
-                                                                              'role',
-                                                                          ),
-                                                                      },
-                                                                  ]
+                                                                ? [{ id: get_value('role') }]
                                                                 : []
                                                         }
-                                                        get_selected_data={(
-                                                            selectedRole,
-                                                        ) =>
-                                                            setData({
-                                                                role: selectedRole.id,
-                                                            })
-                                                        }
+                                                        get_selected_data={handleRoleSelection}
                                                     />
                                                 </>
                                             ) : i === 'photo' ? (

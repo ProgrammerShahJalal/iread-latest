@@ -2,8 +2,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import controller from './controller';
 import check_auth from './services/check_auth';
-import check_parent_auth from './services/check_parent_auth';
-import check_student_auth from './services/check_student_auth';
 import auth_middleware from './services/auth_middleware';
 
 module.exports = async function (fastify: FastifyInstance) {
@@ -15,8 +13,6 @@ module.exports = async function (fastify: FastifyInstance) {
         async (route, opts) => {
             route
                 .get(`/`, controllerInstance.all)
-                .post(`/student/login`, controllerInstance.student_login)
-                .post(`/parent/login`, controllerInstance.parent_login)
                 .post(`/login`, controllerInstance.login)
                 .post(`/register`, controllerInstance.register)
                 .post(`/update`, controllerInstance.update)
@@ -36,16 +32,7 @@ module.exports = async function (fastify: FastifyInstance) {
                     { preHandler: auth_middleware },
                     controllerInstance.logout,
                 )
-                .post(
-                    `/parent/logout`,
-                    { preHandler: check_parent_auth },
-                    controllerInstance.logout,
-                )
-                .post(
-                    `/student/logout`,
-                    { preHandler: check_student_auth },
-                    controllerInstance.logout,
-                )
+            
                 .post(`/destroy`, 
                     // { preHandler: auth_middleware },
                     controllerInstance.destroy)

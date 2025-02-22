@@ -6,8 +6,6 @@ import register from './services/register';
 import forget from './services/forget';
 import auth_user from './services/auth_user';
 import logout from './services/logout';
-import parent_login from './services/parent_login';
-import student_login from './services/student_login';
 import user_profile_update from './services/user_profile_update';
 import all from './services/all';
 import user_detils from './services/details';
@@ -39,34 +37,6 @@ export default function (fastify: FastifyInstance) {
             });
 
             res.header('Set-Cookie', cookie);
-            res.code(data.status).send(data);
-        },
-
-        parent_login: async function (req: FastifyRequest, res: FastifyReply) {
-            let data: responseObject = await parent_login(fastify, req);
-            const cookie = serialize('token', 'Bearer ' + data.data.token, {
-                maxAge: 172800,
-                path: '/',
-                httpOnly: false,
-                sameSite: 'lax',
-            });
-
-            res.header('Set-Cookie', cookie);
-            // res.header('Set-Cookie', cookie2);
-            res.code(data.status).send(data);
-        },
-
-        student_login: async function (req: FastifyRequest, res: FastifyReply) {
-            let data: responseObject = await student_login(fastify, req);
-            const cookie = serialize('token', 'Bearer ' + data.data.token, {
-                maxAge: 172800,
-                path: '/',
-                httpOnly: false,
-                sameSite: 'lax',
-            });
-
-            res.header('Set-Cookie', cookie);
-            // res.header('Set-Cookie', cookie2);
             res.code(data.status).send(data);
         },
 

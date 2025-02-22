@@ -16,7 +16,7 @@ async function logout(
     console.log('auth account user', authUser);
 
     try {
-        const userModel = models.UserModel || models.UserParentsModel || models.UserStudentsModel;
+        const userModel = models.UserModel;
         
         if (!userModel) {
             throw new custom_error('User model not found', 500, 'Invalid user model');

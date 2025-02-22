@@ -3,8 +3,6 @@ import {
     Sequelize,
 } from 'sequelize';
 import * as user_model from './user_model';
-import * as user_students_model from './user_students_model';
-import * as user_parents_model from './user_parents_model';
 import * as user_roles_model from '../../user_roles/models/model';
 
 require('dotenv').config();
@@ -21,21 +19,15 @@ const sequelize = new Sequelize(
 
 interface models {
     User: typeof user_model.DataModel;
-    UserStudentsModel: typeof user_students_model.DataModel;
-    UserParentsModel: typeof user_parents_model.DataModel;
     UserRolesModel: typeof user_roles_model.DataModel;
     sequelize: Sequelize;
 }
 const db = async function (): Promise<models> {
     const User = user_model.init(sequelize);
-    const UserStudentsModel = user_students_model.init(sequelize);
-    const UserParentsModel = user_parents_model.init(sequelize);
     const UserRolesModel = user_roles_model.init(sequelize);
     await sequelize.sync();
     let models: models = {
         User,
-        UserStudentsModel,
-        UserParentsModel,
         UserRolesModel,
         sequelize,
     };

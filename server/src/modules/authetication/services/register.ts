@@ -4,6 +4,35 @@ import response from '../helpers/response';
 import bcrypt from 'bcrypt';
 import moment from 'moment/moment';
 import Models from '../../../database/models';
+import { body, validationResult } from 'express-validator';
+import {Request} from '../../../common_types/object';
+
+/** validation rules */
+async function validate(req: Request) {
+    let field = '';
+    let fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+        'password',
+    ];
+
+    for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        await body(field)
+            .not()
+            .isEmpty()
+            .withMessage(
+                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+            )
+            .run(req);
+    }
+
+    let result = await validationResult(req);
+
+    return result;
+}
 
 async function generateUniqueSlug(
     models: any,
@@ -31,6 +60,14 @@ async function register(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
+
+    /** validation */
+    let validate_result = await validate(req as Request);
+    if (!validate_result.isEmpty()) {
+        return response(422, 'validation error', validate_result.array());
+    }
+
+
     let models = Models.get();
     let body = req.body as { [key: string]: any };
 
@@ -55,33 +92,35 @@ async function register(
         );
 
         // Assign role serial dynamically
-        let roleTitle = body.role || 'student';
+        let roleSerial = body.role;
+
+        // Check if a role with this serial exists
         let roleRecord = await models.UserRolesModel.findOne({
-            where: { title: roleTitle },
+            where: { serial: roleSerial },
         });
 
         if (!roleRecord) {
-            // Assign the next available role serial
-            let nextSerial =
-                ((await models.UserRolesModel.max('serial')) as number) || 0;
-            nextSerial++;
-
+            // If not found, create a new role with the given serial
             roleRecord = await models.UserRolesModel.create({
-                title: roleTitle,
-                serial: nextSerial,
+                title: 'student', // Default title
+                serial: roleSerial || 1,
             });
         }
 
-        let roleSerial = roleRecord.serial;
+
 
         // Handle profile image upload
         let image_path = 'avatar.png';
-        if (body['photo']?.ext) {
-            image_path =
-                'uploads/users/' +
-                moment().format('YYYYMMDDHHmmss') +
-                body['photo'].name;
+        if (body['photo'] && typeof body['photo'] === 'object' && body['photo'].name) {
+            image_path = `uploads/users/${moment().format('YYYYMMDDHHmmss')}_${body['photo'].name}`;
             await (fastify_instance as any).upload(body['photo'], image_path);
+        }
+
+        // Store only the string path in the database
+        body.photo = image_path;
+
+        if (typeof body.photo !== 'string') {
+            return response(400, 'Invalid photo format', {});
         }
 
         // Generate unique UID
