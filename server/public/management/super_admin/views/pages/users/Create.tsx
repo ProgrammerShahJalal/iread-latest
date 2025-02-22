@@ -94,11 +94,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     <UserRolesDropDown
                                                         name="role"
                                                         multiple={false}
-                                                        default_value={
-                                                            get_value('role')
-                                                                ? [{ id: get_value('role') }]
-                                                                : []
-                                                        }
                                                         get_selected_data={handleRoleSelection}
                                                     />
                                                 </>

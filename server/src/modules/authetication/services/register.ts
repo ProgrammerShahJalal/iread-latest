@@ -91,8 +91,13 @@ async function register(
             body.last_name,
         );
 
+        // Check if a student record exists
+        let studentRecord = await models.UserRolesModel.findOne({
+            where: { title: 'student' },
+        });
+
         // Assign role serial dynamically
-        let roleSerial = body.role;
+        let roleSerial = body.role || studentRecord?.serial || 0;
 
         // Check if a role with this serial exists
         let roleRecord = await models.UserRolesModel.findOne({
@@ -100,13 +105,17 @@ async function register(
         });
 
         if (!roleRecord) {
-            // If not found, create a new role with the given serial
+            // If no student record exists, create a new student role with the next available serial
+            let nextSerial = ((await models.UserRolesModel.max('serial')) as number) || 0;
+            nextSerial++;
+        
             roleRecord = await models.UserRolesModel.create({
                 title: 'student', // Default title
-                serial: roleSerial || 1,
+                serial: nextSerial, // Assign a new serial properly
             });
         }
-
+        roleSerial = roleRecord.serial;
+        
 
 
         // Handle profile image upload
@@ -136,7 +145,7 @@ async function register(
         // Create user
         let newUser = await models.UserModel.create({
             uid: uid,
-            role_serial: roleSerial,
+            role_serial: roleSerial || studentRecord?.serial,
             first_name: body.first_name,
             last_name: body.last_name,
             email: body.email,
@@ -148,8 +157,19 @@ async function register(
         });
 
         return response(200, 'User registered successfully', newUser);
-    } catch (error) {
-        return response(500, 'Error registering user', { error });
+    }  catch (error: unknown) {
+        let errorMessage = 'Unknown error occurred';
+    
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        } else if (typeof error === 'string') {
+            errorMessage = error;
+        } else if (typeof error === 'object' && error !== null) {
+            errorMessage = JSON.stringify(error);
+        }
+    
+        console.error('Registration Error:', errorMessage);
+        return response(500, 'Error registering user', { error: errorMessage });
     }
 }
 

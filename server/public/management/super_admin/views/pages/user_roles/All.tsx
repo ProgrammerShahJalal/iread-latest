@@ -52,7 +52,7 @@ const All: React.FC<Props> = (props: Props) => {
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
-                <Header title={pageTitle + ' user'}></Header>
+                <Header title={pageTitle + 'User Roles'}></Header>
 
                 <div className="content_body">
                     <div className="data_list">

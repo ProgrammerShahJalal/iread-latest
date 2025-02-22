@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -8,6 +8,9 @@ const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userRolesMap, setUserRolesMap] = useState<{ [key: number]: string }>(
+    {},
+);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,6 +19,25 @@ const LoginPage: React.FC = () => {
   const BASE_URL = process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
     : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+
+    useEffect(()=> {
+      // Fetch user roles and store them in a map
+      fetch(
+        `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`,
+    )
+        .then((res) => res.json())
+        .then((data) => {
+            const roleMap: { [key: number]: string } = {};
+            data?.data?.data?.forEach(
+                (role: { serial: number; title: string }) => {
+                    roleMap[role.serial] = role.title;
+                },
+            );
+            setUserRolesMap(roleMap);
+        })
+        .catch((err) => console.error('Error fetching user roles:', err));
+    }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,13 +62,20 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
-      // console.log("Login successful:", data);
+      console.log("Login successful:", data);
 
       // Store user info in localStorage
-      const { id, first_name, last_name, email, phone_number, slug, photo } = data?.data?.data;
-      localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo }));
+      const { id, first_name, last_name, email, phone_number, slug, photo, role_serial } = data?.data?.data;
+      localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo, role_serial }));
 
-      router.push(`/profile?slug=${slug}`);
+
+      if(!(userRolesMap[role_serial] === 'admin')) {
+        router.push(`/profile?slug=${slug}`);
+      }
+      else{
+        router.push(`${BASE_URL}/admin#`);
+      }
+    
     } catch (err: any) {
       setError(err.message);
     } finally {
