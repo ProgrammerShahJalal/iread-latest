@@ -5,15 +5,45 @@ import moment from 'moment/moment';
 export interface Props { }
 
 const T1: React.FC<Props> = (props: Props) => {
-    const [collections, setCollections] = useState<anyObject>({});
+    const [collections, setCollections] = useState<anyObject[]>([]);
+    const [students, setStudents] = useState<anyObject[]>([]);
+    const [parents, setParents] = useState<anyObject[]>([]);
+    const [admins, setAdmins] = useState<anyObject[]>([]);
+    const [blogs, setBlogs] = useState<anyObject[]>([]);
+    const [events, setEvents] = useState<anyObject[]>([]);
+
+
 
     useEffect(() => {
-        axios.get('/api/v1/account/logs/todays-collection')
+        axios.get(`http://127.0.0.1:5011/api/v1/auth?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
             .then(res => {
-                setCollections(res.data.data);
+                const users = res.data.data.data;
+                setCollections(users);
+                setAdmins(users.filter((item: any) => item.role?.title === "admin"));
+                setParents(users.filter((item: any) => item.role?.title === "parent"));
+                setStudents(users.filter((item: any) => item.role?.title === "student"));
             });
         init_chart();
     }, [])
+
+    useEffect(() => {
+        axios.get(`http://127.0.0.1:5011/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
+            .then(res => {
+                const blogs = res.data.data.data;
+                setBlogs(blogs);
+            });
+        init_chart();
+    }, [])
+
+    useEffect(() => {
+        axios.get(`http://127.0.0.1:5011/api/v1/events?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
+            .then(res => {
+                const events = res.data.data.data;
+                setEvents(events);
+            });
+        init_chart();
+    }, [])
+
 
     return <div className="container">
         <div className="row my-4">
@@ -24,7 +54,7 @@ const T1: React.FC<Props> = (props: Props) => {
                             <div className="media-body">
                                 <span className="mb-2">Total Students</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.total_students}
+                                    {students?.length}
                                 </h2>
                             </div>
                             <i className="icofont icofont-growth font-info align-self-center"></i>
@@ -39,7 +69,7 @@ const T1: React.FC<Props> = (props: Props) => {
                             <div className="media-body">
                                 <span className="mb-2">Total Parents</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.total_parents}
+                                    {parents?.length}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-bar-graph font-primary align-self-center"></i>
@@ -52,9 +82,9 @@ const T1: React.FC<Props> = (props: Props) => {
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
                             <div className="media-body">
-                                <span className="mb-2">Total Verified Users</span>
+                                <span className="mb-2">Total admins</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.total_verified_users}
+                                    {admins?.length}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-histogram font-secondary align-self-center"></i>
@@ -65,7 +95,7 @@ const T1: React.FC<Props> = (props: Props) => {
         </div>
 
         <div className="row my-4">
-            
+
             <div className="col-xl-3 col-lg-4">
                 <div className="card" data-intro="This is card">
                     <div className="business-top-widget card-body">
@@ -73,7 +103,7 @@ const T1: React.FC<Props> = (props: Props) => {
                             <div className="media-body">
                                 <span className="mb-2">Total Blogs</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.total_blogs}
+                                    {blogs?.length}
                                 </h2>
                             </div>
                             <i className="icofont icofont-growth font-info align-self-center"></i>
@@ -88,7 +118,7 @@ const T1: React.FC<Props> = (props: Props) => {
                             <div className="media-body">
                                 <span className="mb-2">Total Events</span>
                                 <h2 className="total-value m-0 counter">
-                                    {collections.total_events}
+                                    {events.length}
                                 </h2>
                             </div>
                             <i className="icofont icofont-chart-bar-graph font-primary align-self-center"></i>
@@ -96,7 +126,7 @@ const T1: React.FC<Props> = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="col-xl-3 col-lg-4">
+            {/* <div className="col-xl-3 col-lg-4">
                 <div className="card">
                     <div className="business-top-widget card-body">
                         <div className="media d-inline-flex">
@@ -110,35 +140,23 @@ const T1: React.FC<Props> = (props: Props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
 
-        
+
     </div>;
 };
 
 async function init_chart() {
-    // function randomInRange(min, max) {
-    //     return Math.floor(Math.random() * max) + min;
-    // }
 
-    // function randomArray(meta = "booking money", min = 10000, max = 99999, count = 7) {
-    //     let array = [];
-    //     for (let i = 0; i < count; i++) {
-    //         array.push({ meta, value: randomInRange(min, max) });
-    //         // array.push(randomInRange(min, max));
-    //     }
-    //     return array;
-    // }
-
-    let res = await axios.get('/api/v1/account/logs/seven-days-collection');
+    let res = await axios.get('http://127.0.0.1:5011/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=');
 
     new Chartist.LineChart('#my_chart', {
         labels: res.data.data?.labels,
         series: [
-            res.data.data?.booking_money,
-            res.data.data?.down_payment,
-            res.data.data?.installment,
+            res.data?.data?.data?.booking_money,
+            res.data?.data?.data?.down_payment,
+            res.data?.data?.data?.installment,
         ]
     }, {
         fullWidth: true,

@@ -3,7 +3,8 @@ import { NonIndexRouteObject } from 'react-router-dom';
 import DashboardLayout from '../views/layouts/DashboardLayout';
 import T1 from '../views/pages/T1';
 
-import user_branch_staff_routes from '../views/pages/users/config/routes';
+import users from '../views/pages/users/config/routes';
+import user_roles from '../views/pages/user_roles/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
@@ -26,7 +27,7 @@ import event_payment_refunds from '../views/pages/event_payment_refunds/config/r
 import event_feedback_form_fields from '../views/pages/event_feedback_form_fields/config/routes';
 
 
-interface RouteTypes extends NonIndexRouteObject {}
+interface RouteTypes extends NonIndexRouteObject { }
 const router: RouteTypes[] = [
     {
         path: '/',
@@ -36,7 +37,8 @@ const router: RouteTypes[] = [
                 path: '',
                 element: <T1 />,
             },
-            user_branch_staff_routes,
+            users,
+            user_roles,
             contact_messages,
             blog_category,
             blog_tags,

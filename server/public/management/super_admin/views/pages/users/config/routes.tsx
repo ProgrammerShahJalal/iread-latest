@@ -22,7 +22,7 @@ export default {
             element: <History />,
         },
         {
-            path: 'create',
+            path: 'register',
             element: <Create />,
         },
         {

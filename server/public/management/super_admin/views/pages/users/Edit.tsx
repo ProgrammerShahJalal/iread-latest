@@ -11,10 +11,8 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
-import DropDown from './components/dropdown/DropDown';
-import Select from './components/management_data_page/Select';
-import { anyObject } from '../../../common_types/object';
-export interface Props { }
+import UserRolesDropDown from '../user_roles/components/dropdown/DropDown';
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -28,7 +26,6 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -71,19 +68,62 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'first_name',
                                             'last_name',
                                             'phone_number',
+                                            'role',
                                             'is_verified',
                                             'is_blocked',
                                             'photo',
                                         ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                {i === 'first_name' || i === 'last_name' || i === 'phone_number' || i === 'slug' ? (
-                                                    <Input name={i} value={get_value(i)} />
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                {i === 'first_name' ||
+                                                i === 'last_name' ||
+                                                i === 'phone_number' ? (
+                                                    <Input
+                                                        name={i}
+                                                        value={get_value(i)}
+                                                    />
                                                 ) : i === 'photo' ? (
-
                                                     <div className="form-group grid_full_width form-vertical">
-                                                        <InputImage label="Photo" name="photo" defalut_preview={get_value('photo')} />
+                                                        <InputImage
+                                                            label="Photo"
+                                                            name="photo"
+                                                            defalut_preview={get_value(
+                                                                'photo',
+                                                            )}
+                                                        />
                                                     </div>
-
+                                                ) : i === 'role' ? (
+                                                    <>
+                                                        <label>
+                                                            User Roles
+                                                        </label>
+                                                        <UserRolesDropDown
+                                                            name="role"
+                                                            multiple={false}
+                                                            default_value={
+                                                                get_value(
+                                                                    'role',
+                                                                )
+                                                                    ? [
+                                                                          {
+                                                                              id: get_value(
+                                                                                  'role',
+                                                                              ),
+                                                                          },
+                                                                      ]
+                                                                    : []
+                                                            }
+                                                            get_selected_data={(
+                                                                data,
+                                                            ) =>
+                                                                console.log(
+                                                                    data,
+                                                                )
+                                                            }
+                                                        />
+                                                    </>
                                                 ) : (
                                                     <div>
                                                         <label>{i}</label>
@@ -93,28 +133,62 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                                     type="radio"
                                                                     name={i}
                                                                     value="1"
-                                                                    checked={get_value(i) == "1"}
-                                                                    onChange={(e) => dispatch(storeSlice.actions.set_item({...state.item, [i]: e.target.value }))}
-                                                                /> Yes
+                                                                    checked={
+                                                                        get_value(
+                                                                            i,
+                                                                        ) == '1'
+                                                                    }
+                                                                    onChange={(
+                                                                        e,
+                                                                    ) =>
+                                                                        dispatch(
+                                                                            storeSlice.actions.set_item(
+                                                                                {
+                                                                                    ...state.item,
+                                                                                    [i]: e
+                                                                                        .target
+                                                                                        .value,
+                                                                                },
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                />{' '}
+                                                                Yes
                                                             </label>
                                                             <label className="">
                                                                 <input
                                                                     type="radio"
                                                                     name={i}
                                                                     value="0"
-                                                                    checked={get_value(i) == "0"}
-                                                                    onChange={(e) => dispatch(storeSlice.actions.set_item({    ...state.item, [i]: e.target.value }))}
-                                                                /> No
+                                                                    checked={
+                                                                        get_value(
+                                                                            i,
+                                                                        ) == '0'
+                                                                    }
+                                                                    onChange={(
+                                                                        e,
+                                                                    ) =>
+                                                                        dispatch(
+                                                                            storeSlice.actions.set_item(
+                                                                                {
+                                                                                    ...state.item,
+                                                                                    [i]: e
+                                                                                        .target
+                                                                                        .value,
+                                                                                },
+                                                                            ),
+                                                                        )
+                                                                    }
+                                                                />{' '}
+                                                                No
                                                             </label>
                                                         </div>
-
                                                     </div>
                                                 )}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-
 
                                 <div className="form-group form-vertical">
                                     <label></label>

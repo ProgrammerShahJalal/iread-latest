@@ -55,12 +55,13 @@ async function all(
     }
     /** initializations */
     let models = Models.get();
+    // let models = await db();
     let query_param = req.query as any;
 // console.log('models', models);
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
     let orderByCol = query_param.orderByCol || 'id';
-    let role = query_param.role || null;
+    // let role = query_param.role || null;
     let orderByAsc = query_param.orderByAsc || 'true';
     let show_active_data = query_param.show_active_data || 'true';
     let paginate = parseInt((req.query as any).paginate) || 10;
@@ -71,7 +72,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id','uid','email','status',];
+        select_fields = ['id','uid','email','token','status',];
     }
 
     let query: FindAndCountOptions = {
@@ -79,23 +80,25 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [{ model: models.UserRolesModel, as: "role" }]
+
     };
 
     query.attributes = select_fields;
 
- 
+
+    
 
     if (search_key) {
         query.where = {
             ...query.where,
             [Op.or]: [
+                { id: { [Op.like]: `%${search_key}%` } },
+                { uid: { [Op.like]: `%${search_key}%` } },
                 { first_name: { [Op.like]: `%${search_key}%` } },
                 { last_name: { [Op.like]: `%${search_key}%` } },
                 { email: { [Op.like]: `%${search_key}%` } },
                 { phone_number: { [Op.like]: `%${search_key}%` } },
-                // { status: { [Op.like]: `%${search_key}%` } },
-                { id: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }

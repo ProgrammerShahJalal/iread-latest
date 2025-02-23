@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import commonStore from './slices/common_slice';
 import users from '../views/pages/users/config/store';
+import user_roles from '../views/pages/user_roles/config/store';
 import contact_management from '../views/pages/contact_management/config/store';
 
 import blog_category from '../views/pages/blog_category/config/store';
@@ -24,12 +25,11 @@ import event_payments from '../views/pages/event_payments/config/store';
 import event_payment_refunds from '../views/pages/event_payment_refunds/config/store';
 import event_feedback_form_fields from '../views/pages/event_feedback_form_fields/config/store';
 
-
-
 const store = configureStore({
     reducer: {
         common_store: commonStore.reducer,
         users: users.reducer,
+        user_roles: user_roles.reducer,
         contact_messages: contact_management.reducer,
         blog_category: blog_category.reducer,
         blog_tags: blog_tags.reducer,
@@ -42,7 +42,8 @@ const store = configureStore({
         event_faqs: event_faqs.reducer,
         event_sessions: event_sessions.reducer,
         event_sessions_assesments: event_sessions_assesments.reducer,
-        event_session_assesment_submissions: event_session_assesment_submissions.reducer,
+        event_session_assesment_submissions:
+            event_session_assesment_submissions.reducer,
         event_attendance: event_attendance.reducer,
         event_enrollments: event_enrollments.reducer,
         event_payments: event_payments.reducer,

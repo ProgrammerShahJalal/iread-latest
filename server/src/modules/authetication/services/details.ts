@@ -4,7 +4,6 @@ import { responseObject } from '../../../common_types/object';
 import response from '../../../helpers/response';
 import error_trace from '../../../helpers/error_trace';
 import custom_error from '../../../helpers/custom_error';
-import { DataModel as UserModel } from '../models/user_model';
 import Models from '../../../database/models';
 
 
@@ -13,15 +12,16 @@ async function details(
     req: FastifyRequest,
 ): Promise<responseObject> {
     let models = Models.get();
+    // let models = await db();
 
     let params = req.params as any;
 
     try {
-        let data = await UserModel.findOne({
+        let data = await models.UserModel.findOne({
             where: {
                 id: params.id,
             },
-            
+            include: [{ model: models.UserRolesModel, as: "role" }]
         });
 
         if (data) {
