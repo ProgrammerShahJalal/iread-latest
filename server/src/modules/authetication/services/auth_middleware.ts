@@ -28,12 +28,8 @@ const auth_middleware = async (
     const token = parseCookieString(request.headers.cookie || '')?.token;
     // const user_agent = request.headers['user-agent'];
 
-    console.log('=====TOKEN AUTH MIDDLEWARE===', token);
-
     if (!token || !token.startsWith('Bearer ')) {
-        // return reply.redirect('/account/login');
-        reply.code(401).send({ error: 'Unauthorized' });
-        // return;
+        return reply.redirect('/login');
     }
 
     try {
@@ -41,7 +37,11 @@ const auth_middleware = async (
         // let models = await db();
         let models = Models.get();
         let user: any = {};
-        if (decoded.role == 'student' || decoded.role == 'parent' || decoded.role == 'admin') {
+        if (
+            decoded.role == 'student' ||
+            decoded.role == 'parent' ||
+            decoded.role == 'admin'
+        ) {
             user = await models.UserModel.findByPk(decoded.id);
         }
         console.log('decoded', decoded);

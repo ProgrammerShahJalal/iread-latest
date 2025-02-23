@@ -26,9 +26,9 @@ POST {{hostname}}/register HTTP/1.1
 content-type: application/json
 
 {
-    "first_name": "Mamun",
-    "last_name": "Sikdar",
-    "email": "mamun.sikdar@gmail.com",
+    "first_name": "Shah",
+    "last_name": "Jalal",
+    "email": "shah.jalal.ju.bd@gmail.com",
     "phone_number": "01394322124",
     "photo": "avatar.png",
     "password": "12345678"
@@ -39,11 +39,8 @@ POST {{hostname}}/update HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1,
-    "first_name": "Farabi",
-    "last_name": "Abdullah",
-    "phone_number": "01544444444",
-    "photo": "avatar.png"
+    "id": 3,
+    "role_serial": 1
 }
 
 # auth user
