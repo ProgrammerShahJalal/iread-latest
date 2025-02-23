@@ -1,5 +1,5 @@
 import db from '../models/db';
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import response from '../helpers/response';
 import { anyObject, responseObject } from '../../../common_types/object';
 import custom_error from '../helpers/custom_error';
@@ -8,7 +8,7 @@ import Models from '../../../database/models';
 
 async function logout(
     fastify_instance: FastifyInstance,
-    req: FastifyRequest,
+    req: FastifyRequest, reply: FastifyReply,
 ): Promise<responseObject> {
     // const models = await db();
     let models = Models.get();
@@ -33,7 +33,7 @@ async function logout(
         user.user_agent = "";
         await user.save();
 
-        return response(217, 'logout', {});
+        return reply.redirect(`/login`);
     } catch (error: any) {
         const uid = await error_trace(models, error, req.url, req.params);
         throw error instanceof custom_error

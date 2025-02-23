@@ -141,7 +141,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 </MenuDropDown>
 
                 <li>
-                    <a className="sidebar-header" href="/logout" onClick={(e) => {
+                    <a className="sidebar-header" href="/api/v1/auth/logout" onClick={(e) => {
                         e.preventDefault();
                         return (window as any).confirm('logout!!') &&
                             (document.getElementById('logout_form') as HTMLFormElement)?.submit();

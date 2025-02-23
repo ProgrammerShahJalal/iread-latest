@@ -16,9 +16,7 @@ function parseCookieString(cookieString: string) {
         return {};
     }
 }
-const FRONTEND_URL = process.env.NODE_ENV === "production"
-    ? process.env.FRONTEND_LIVE_URL
-    : process.env.FRONTEND_URL;
+
 
 const check_is_admin_and_redirect = async (
     request: FastifyRequest,
@@ -29,10 +27,10 @@ const check_is_admin_and_redirect = async (
 
     // Get token from cookies
     const token = parseCookieString(request.headers.cookie || '')?.token;
-
+    // const token = parseCookieString(request.headers.cookie)?.token;
+    console.log('====token====&&&&POPOPO', token);
     if (!token || !token.startsWith('Bearer ')) {
-        // return reply.redirect(`${process.env.FRONTEND_URL}/login`);
-        console.log('token', token);
+        return reply.redirect(`/login`);
     }
 
     try {
@@ -41,20 +39,19 @@ const check_is_admin_and_redirect = async (
         let models = Models.get();
 
         let user = await models.UserModel.findByPk(decoded.id);
-        console.log('user', user);
 
-        // if (!user || user.token !== decoded.token) {
-        //     return reply.redirect(`${process.env.FRONTEND_URL}/login`);
-        // }
+        if (!user || user.token !== decoded.token) {
+            return reply.redirect(`/login`);
+        }
 
-        // // Check if the user is an admin
-        // if (decoded.title !== 'admin') {
-        //     return reply.redirect(`${process.env.FRONTEND_URL}/login`);
-        // }
+        // Check if the user is an admin
+        if (decoded.role !== 'admin') {
+            return reply.redirect(`/login`);
+        }
 
         (request as anyObject).user = decoded;
     } catch (error) {
-        // return reply.redirect(`${process.env.FRONTEND_URL}/login`);
+        return reply.redirect(`/login`);
     }
 };
 

@@ -7,7 +7,7 @@ import auth_middleware from './services/auth_middleware';
 module.exports = async function (fastify: FastifyInstance) {
     let prefix: string = '/auth';
     const controllerInstance = controller(fastify);
-    console.log('Authentication routes loaded');
+
     /** public routes */
     fastify.register(
         async (route, opts) => {
@@ -42,3 +42,5 @@ module.exports = async function (fastify: FastifyInstance) {
         { prefix },
     );
 };
+
+

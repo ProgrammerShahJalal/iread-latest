@@ -27,7 +27,7 @@ import event_payment_refunds from '../views/pages/event_payment_refunds/config/r
 import event_feedback_form_fields from '../views/pages/event_feedback_form_fields/config/routes';
 
 
-interface RouteTypes extends NonIndexRouteObject {}
+interface RouteTypes extends NonIndexRouteObject { }
 const router: RouteTypes[] = [
     {
         path: '/',

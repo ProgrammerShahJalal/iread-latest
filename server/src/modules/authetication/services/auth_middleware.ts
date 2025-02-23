@@ -24,11 +24,11 @@ const auth_middleware = async (
 ) => {
     const secretKey = env.JTI;
     const jwt = require('jsonwebtoken');
-    // const token = request.headers.authorization;
-    const token = parseCookieString(request.headers.cookie)?.token;
+    // Get token from cookies
+    const token = parseCookieString(request.headers.cookie || '')?.token;
     // const user_agent = request.headers['user-agent'];
 
-    console.log('request cookies', token);
+    console.log('=====TOKEN AUTH MIDDLEWARE===', token);
 
     if (!token || !token.startsWith('Bearer ')) {
         // return reply.redirect('/account/login');
@@ -41,11 +41,7 @@ const auth_middleware = async (
         // let models = await db();
         let models = Models.get();
         let user: any = {};
-       if (decoded.title== 'student') {
-            user = await models.UserStudentsModel.findByPk(decoded.id);
-        } else if (decoded.title == 'parent') {
-            user = await models.UserParentsModel.findByPk(decoded.id);
-        } else {
+        if (decoded.role == 'student' || decoded.role == 'parent' || decoded.role == 'admin') {
             user = await models.UserModel.findByPk(decoded.id);
         }
         console.log('decoded', decoded);

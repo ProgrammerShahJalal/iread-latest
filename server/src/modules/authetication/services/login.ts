@@ -47,9 +47,9 @@ async function login(
     // let models = await db();
     let models = Models.get();
     let body: anyObject = req.body as anyObject;
-
     try {
         let data: anyObject | null = {};
+        let userRole: anyObject | null = {};
         let token: anyObject = {};
         if (body) {
             data = await models.UserModel.findOne({
@@ -57,7 +57,14 @@ async function login(
                     email: body.email,
                 },
             });
-            
+
+            userRole = await models.UserRolesModel.findOne({
+                where: {
+                    serial: data?.role_serial,
+                },
+            });
+
+            console.log('userRole', userRole);
 
             if (data) {
                 let check_pass = await bcrypt.compare(
@@ -65,12 +72,12 @@ async function login(
                     data.password,
                 );
 
-                 // Check if the user is blocked
-            if (data.is_blocked === "1") {
-                return response(403, 'Account blocked', [
-                    { type: 'field', msg: 'Your account is blocked due to multiple failed login attempts.', path: 'email', location: 'body' },
-                ]);
-            }
+                // Check if the user is blocked
+                if (data.is_blocked === "1") {
+                    return response(403, 'Account blocked', [
+                        { type: 'field', msg: 'Your account is blocked due to multiple failed login attempts.', path: 'email', location: 'body' },
+                    ]);
+                }
 
 
                 const generateSecureCode = () => crypto.randomBytes(32).toString('hex');
@@ -89,7 +96,12 @@ async function login(
                     let auth_code = generateSecureCode();
                     let forget_code = generateSecureCode();
                     token = await jwt.sign(
-                        { id: data.id, token: secret, user_agent },
+                        {
+                            id: data.id,
+                            token: secret,
+                            user_agent,
+                            role: userRole?.title,
+                        },
                         secretKey,
                     );
                     data.token = secret;
@@ -97,21 +109,21 @@ async function login(
                     data.auth_code = await hashCode(auth_code);
                     data.forget_code = await hashCode(forget_code);
                     data.forget_code_expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 min expiry
-                    
+
                     //reset the count_wrong_attempts
                     data.count_wrong_attempts = 0;
                     await data.save();
                 } else {
 
-                 // Increment failed attempts
-                 data.count_wrong_attempts = (data.count_wrong_attempts || 0) + 1;
+                    // Increment failed attempts
+                    data.count_wrong_attempts = (data.count_wrong_attempts || 0) + 1;
 
-                 // Block the user if attempts exceed 5
-                 if (data.count_wrong_attempts > 5) {
-                     data.is_blocked = "1";
-                 }
- 
-                 await data.save();
+                    // Block the user if attempts exceed 5
+                    if (data.count_wrong_attempts > 5) {
+                        data.is_blocked = "1";
+                    }
+
+                    await data.save();
 
                     return response(422, 'wrong password', [
                         {
@@ -135,7 +147,7 @@ async function login(
                 ]);
             }
         }
-        return response(201, 'authentication success', { data });
+        return response(200, 'authentication success', { token });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.params);
         if (error instanceof custom_error) {

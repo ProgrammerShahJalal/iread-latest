@@ -23,6 +23,7 @@ class FastifyApp {
         await this.registerMiddlewares();
         this.setHandlers(sequelizeInstance);
     }
+    
 
     private async registerMiddlewares() {
         const commonMiddleware = async (request: FastifyRequest) => {
