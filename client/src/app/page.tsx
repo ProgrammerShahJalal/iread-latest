@@ -1,5 +1,5 @@
 import Blog from "./home/Blog";
-import ImageCarousel from "./home/Carousel";
+import ImageCarousel from "./home/ImageCarousel";
 import Courses from "./home/Courses";
 import Gallery from "./home/Gallery";
 import HappyStudentAtAGlance from "./home/HappyStudentAtAGlance";

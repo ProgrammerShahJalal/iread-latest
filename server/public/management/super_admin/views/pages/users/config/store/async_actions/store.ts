@@ -26,7 +26,7 @@ const fetch_api = async (param, thunkAPI) => {
     dispatch(storeSlice.actions.set_loading_text('storing..'));
 
     const response = await axios.post(
-        `${end_point}/${api_prefix}/store`,
+        `${end_point}/${api_prefix}/register`,
         param,
     );
 
@@ -41,6 +41,6 @@ const fetch_api = async (param, thunkAPI) => {
 };
 
 export const store = createAsyncThunk<ReturnType, PayloadType, ThunkArgument>(
-    `${store_prefix}/store`,
+    `${store_prefix}/register`,
     fetch_api,
 );

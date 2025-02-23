@@ -3,12 +3,14 @@ import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { anyObject, responseObject } from '../../../common_types/object';
 import response from '../helpers/response';
+import Models from '../../../database/models';
 
 async function forget(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = await db();
+    // let models = await db();
+    let models = Models.get();
     let body = req.body as { [key: string]: any };
     const nodemailer = require('nodemailer');
 
@@ -26,7 +28,7 @@ async function forget(
         return Math.floor(100000 + Math.random() * 900000) + '';
     }
 
-    let data = await models.User.findOne({
+    let data = await models.UserModel.findOne({
         where: {
             id: 1,
         },

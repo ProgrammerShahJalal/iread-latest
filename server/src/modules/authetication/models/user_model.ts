@@ -17,7 +17,6 @@ type verified = '0' | '1';
 type blocked = '0' | '1';
 type status = 'active' | 'deactive';
 
-
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
     declare uid?: string;
@@ -127,7 +126,7 @@ function init(sequelize: Sequelize) {
             },
             status: {
                 type: DataTypes.ENUM('active', 'inactive'),
-                defaultValue: 'active'
+                defaultValue: 'active',
             },
             created_at: {
                 type: DataTypes.DATE,
@@ -151,4 +150,4 @@ function init(sequelize: Sequelize) {
     return DataModel;
 }
 
-export { init, DataModel };
+export { init, DataModel, modelName };

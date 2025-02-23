@@ -20,7 +20,7 @@ const Footer: React.FC<Props> = (props: Props) => {
             <div className="action_btns">
                 <ul>
                     <li>
-                        <Link to={`/${route_prefix}/create`}>
+                        <Link to={`/${route_prefix}/register`}>
                             <span className="material-symbols-outlined fill">
                                 add
                             </span>
