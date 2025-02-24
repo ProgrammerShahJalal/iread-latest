@@ -32,28 +32,37 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-    
-      await fetch("http://127.0.0.1:5011/api/v1/auth/logout", {
+      const response = await fetch("http://127.0.0.1:5011/api/v1/auth/logout", {
         method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "frontend",
+          user: user,
+        })
       });
   
-      // Remove user from localStorage
-      localStorage.removeItem("user");
-  
-      // Dispatch event to update user state globally
-      window.dispatchEvent(new Event("userUpdated"));
-  
-      // Update state
-      setUser(null);
-      setIsOpen(false);
-  
-      // Redirect to login page
-      router.push("/login");
+      // Check if the response is a success
+      if (response.ok) {
+        localStorage.removeItem("user");
+        window.dispatchEvent(new Event("userUpdated"));
+        setUser(null);
+        // router.push("/login"); 
+      } else {
+        const errorText = await response.text(); 
+        console.error("Logout failed:", errorText);
+      }
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Logout error:", error);
     }
   };
   
+  
+
+
+
   return (
     <div>
       <div className="header-nav">
@@ -115,9 +124,13 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                        Logout
-                      </button>
+                    
+                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Logout
+                        </button>
+                    
+
+
                     </li>
                   </ul>
                 )}

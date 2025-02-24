@@ -30,13 +30,17 @@ export default function (fastify: FastifyInstance) {
             let data: responseObject = await login(fastify, req);
 
             if (data?.data?.token) {
+                console.log("==============DATA INFO =====", data.data);
+                console.log("==============login token =====", data.data.token);
                 res.setCookie('token', 'Bearer ' + data.data.token, {
                     path: '/',
-                    httpOnly: false, // Makes the cookie accessible only via HTTP requests
-                    // secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax',
-                    maxAge: 60 * 60 * 24, // Cookie expiry in seconds (e.g., 1 day)
+                    httpOnly: false, // Prevents JavaScript access for security
+                    // secure: process.env.NODE_ENV === 'production' ? true : false, // Must be true in production
+                    sameSite: 'none', // Allows cross-origin cookie sharing
+                    maxAge: 60 * 60 * 24, // 1 day expiry in seconds
+                    // domain: 'localhost', // Or use your actual domain in production
                 });
+                
             }
 
             res.code(data.status).send(data);
@@ -44,6 +48,7 @@ export default function (fastify: FastifyInstance) {
 
         logout: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await logout(fastify, req, res);
+            console.log('logout data', data);
             res.clearCookie('token');
             res.code(data.status).send(data);
         },
