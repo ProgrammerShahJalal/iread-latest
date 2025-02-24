@@ -17,7 +17,7 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(`/register`, controllerInstance.register)
                 .post(`/update`, controllerInstance.update)
                 .post(`/forget`, controllerInstance.forget)
-                .get(`/:id`, controllerInstance.find)
+                .get(`/:id`, controllerInstance.find);
         },
         { prefix },
     );
@@ -29,18 +29,16 @@ module.exports = async function (fastify: FastifyInstance) {
                 // .addHook('preHandler', check_auth)
                 .post(
                     `/logout`,
-                    { preHandler: auth_middleware },
+                    // { preHandler: auth_middleware },
                     controllerInstance.logout,
                 )
-            
-                .post(`/destroy`, 
-                    // { preHandler: auth_middleware },
-                    controllerInstance.destroy)
-                
-                .get(`/info`, controllerInstance.auth_user);
+
+                .post(
+                    `/destroy`,
+                    { preHandler: auth_middleware },
+                    controllerInstance.destroy,
+                );
         },
         { prefix },
     );
 };
-
-

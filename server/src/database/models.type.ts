@@ -37,8 +37,7 @@ import * as AppSubscribersModel from "../modules/app_subscribers_management/mode
 
 import * as UserModel from "../modules/authetication/models/user_model";
 import * as UserRolesModel from "../modules/user_roles/models/model";
-import * as UserParentsModel from "../modules/authetication/models/user_parents_model";
-import * as UserStudentsModel from "../modules/authetication/models/user_students_model";
+import * as UserLoginHistoriesModel from "../modules/user_login_histories/models/model";
 
 
 export type model_types = {
@@ -82,7 +81,6 @@ export type model_types = {
     
     UserModel: typeof UserModel.DataModel;
     UserRolesModel: typeof UserRolesModel.DataModel;
-    UserParentsModel: typeof UserParentsModel.DataModel;
-    UserStudentsModel: typeof UserStudentsModel.DataModel;
+    UserLoginHistoriesModel: typeof UserLoginHistoriesModel.DataModel;
 
 }

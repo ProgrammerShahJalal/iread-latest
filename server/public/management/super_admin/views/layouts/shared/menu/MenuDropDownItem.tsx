@@ -19,5 +19,3 @@ const MenuDropDownItem: React.FC<Props> = (props: Props) => {
 };
 
 export default MenuDropDownItem;
-
-// # 

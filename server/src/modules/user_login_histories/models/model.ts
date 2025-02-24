@@ -7,20 +7,22 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-const tableName = 'user_roles';
-const modelName = 'UserRolesModel';
+const tableName = 'user_login_histories';
+const modelName = 'UserLoginHistoriesModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 
 type status = 'active' | 'deactive';
-type role = 'admin' | 'student' | 'parent';
 
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
-    declare title: role;
-    declare serial: number;
+    declare user_id: number; 
+    declare login_date: Date | null;
+    declare logout_date: Date | null;
+    declare device: string;
+    declare total_session_time: number;
 
     declare status?: status;
     declare created_at?: CreationOptional<Date>;
@@ -31,16 +33,29 @@ function init(sequelize: Sequelize) {
     DataModel.init(
         {
             id: {
-                type: DataTypes.INTEGER.UNSIGNED,
+                type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
-            },
-            title: {
-                type: DataTypes.ENUM('admin', 'student', 'parent'),
-                defaultValue: 'student',
-            },
-            serial: {
+                allowNull: false,
+                },
+            user_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
+                allowNull: false,
+            },
+            login_date: {
+                type: DataTypes.DATE,
+                allowNull: false,
+            },
+            logout_date: {
+                type: DataTypes.DATE,
+                allowNull: true,
+            },
+            device: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            total_session_time: {
+                type: DataTypes.INTEGER, // Store session duration in seconds
                 allowNull: false,
             },
             status: {
