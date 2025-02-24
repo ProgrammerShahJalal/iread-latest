@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,35 +9,33 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [userRolesMap, setUserRolesMap] = useState<{ [key: number]: string }>(
-    {},
-);
+    {}
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
- 
-  const BASE_URL = process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
+  const BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+      : process.env.NEXT_PUBLIC_BACKEND_URL;
 
-    useEffect(()=> {
-      // Fetch user roles and store them in a map
-      fetch(
-        `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`,
+  useEffect(() => {
+    // Fetch user roles and store them in a map
+    fetch(
+      `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`
     )
-        .then((res) => res.json())
-        .then((data) => {
-            const roleMap: { [key: number]: string } = {};
-            data?.data?.data?.forEach(
-                (role: { serial: number; title: string }) => {
-                    roleMap[role.serial] = role.title;
-                },
-            );
-            setUserRolesMap(roleMap);
-        })
-        .catch((err) => console.error('Error fetching user roles:', err));
-    }, [])
+      .then((res) => res.json())
+      .then((data) => {
+        const roleMap: { [key: number]: string } = {};
+        data?.data?.data?.forEach((role: { serial: number; title: string }) => {
+          roleMap[role.serial] = role.title;
+        });
+        setUserRolesMap(roleMap);
+      })
+      .catch((err) => console.error("Error fetching user roles:", err));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,29 +51,47 @@ const LoginPage: React.FC = () => {
 
       if (!response.ok) {
         if (response.statusText === "Forbidden") {
-          throw new Error("Your account is blocked due to multiple failed login attempts");
-        }
-        else {
+          throw new Error(
+            "Your account is blocked due to multiple failed login attempts"
+          );
+        } else {
           throw new Error("Invalid credentials. Please try again.");
         }
-
       }
 
       const data = await response.json();
       console.log("Login successful:", data);
 
       // Store user info in localStorage
-      const { id, first_name, last_name, email, phone_number, slug, photo, role_serial } = data?.data?.data;
-      localStorage.setItem("user", JSON.stringify({ id, first_name, last_name, email, phone_number, slug, photo, role_serial }));
+      const {
+        id,
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        slug,
+        photo,
+        role_serial,
+      } = data?.data?.data;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id,
+          first_name,
+          last_name,
+          email,
+          phone_number,
+          slug,
+          photo,
+          role_serial,
+        })
+      );
 
-
-      if(!(userRolesMap[role_serial] === 'admin')) {
+      if (!(userRolesMap[role_serial] === "admin")) {
         router.push(`/profile?slug=${slug}`);
+      } else {
+        router.push(`${BASE_URL}/admin`);
       }
-      else{
-        router.push(`${BASE_URL}/admin#`);
-      }
-    
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -94,11 +110,30 @@ const LoginPage: React.FC = () => {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
         {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <InputField id="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} required autoComplete="email" />
-          <InputField id="password" label="Password" type="password" value={formData.password} onChange={handleChange} required autoComplete="current-password" />
+          <InputField
+            id="email"
+            label="Email Address"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            autoComplete="email"
+          />
+          <InputField
+            id="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            autoComplete="current-password"
+          />
 
           <div className="flex justify-end text-sm">
-            <Link href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link
+              href="#"
+              className="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
               Forgot password?
             </Link>
           </div>
@@ -114,7 +149,10 @@ const LoginPage: React.FC = () => {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Not a member?{" "}
-          <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+          <Link
+            href="/register"
+            className="font-semibold text-indigo-600 hover:text-indigo-500"
+          >
             Register Now
           </Link>
         </p>
@@ -133,7 +171,15 @@ interface InputFieldProps {
   autoComplete?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ id, label, type, value, onChange, required, autoComplete }) => (
+const InputField: React.FC<InputFieldProps> = ({
+  id,
+  label,
+  type,
+  value,
+  onChange,
+  required,
+  autoComplete,
+}) => (
   <div>
     <label htmlFor={id} className="block text-sm font-medium text-gray-900">
       {label}

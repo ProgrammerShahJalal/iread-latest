@@ -164,7 +164,7 @@ class FastifyApp {
             : process.env.FRONTEND_URL;
 
         this.fastify.register(fastifyCors, {
-            origin: `${FRONTEND_URL}`, // Replace with your frontend's URL
+            origin: `${FRONTEND_URL}`, 
             methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
             credentials: true, // Allow cookies/auth headers
         });

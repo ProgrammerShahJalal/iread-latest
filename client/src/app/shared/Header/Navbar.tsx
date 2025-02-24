@@ -30,13 +30,38 @@ function Navbar() {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user"); // Remove user from localStorage
-    window.dispatchEvent(new Event("userUpdated")); // Dispatch event
-    setUser(null);
-    setIsOpen(false);
-    router.push("/login"); // Redirect to login page
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5011/api/v1/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "frontend",
+          user: user,
+        })
+      });
+  
+      // Check if the response is a success
+      if (response.ok) {
+        localStorage.removeItem("user");
+        window.dispatchEvent(new Event("userUpdated"));
+        setUser(null);
+        // router.push("/login"); 
+      } else {
+        const errorText = await response.text(); 
+        console.error("Logout failed:", errorText);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
+  
+  
+
+
 
   return (
     <div>
@@ -99,9 +124,13 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                        Logout
-                      </button>
+                    
+                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                          Logout
+                        </button>
+                    
+
+
                     </li>
                   </ul>
                 )}
