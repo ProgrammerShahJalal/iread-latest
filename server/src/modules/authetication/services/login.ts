@@ -63,9 +63,6 @@ async function login(
                     serial: data?.role_serial,
                 },
             });
-
-            console.log('userRole', userRole);
-
             if (data) {
                 let check_pass = await bcrypt.compare(
                     body.password,
