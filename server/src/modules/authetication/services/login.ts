@@ -5,6 +5,8 @@ import response from '../helpers/response';
 var bcrypt = require('bcrypt');
 import { body, validationResult } from 'express-validator';
 import crypto from 'crypto';
+import loginHistoryStore from '../../user_login_histories/services/store';
+
 
 import {
     anyObject,
@@ -110,6 +112,18 @@ async function login(
                     //reset the count_wrong_attempts
                     data.count_wrong_attempts = 0;
                     await data.save();
+
+            
+                    (req as anyObject).body = {
+                        ...(typeof req.body === 'object' && req.body !== null ? req.body : {}), 
+                        user_id: data.id,
+                    };
+                
+                    try {
+                        await loginHistoryStore(fastify_instance, req);
+                    } catch (err) {
+                        console.error("Error in logoutHistoryUpdate:", err);
+                    }
                 } else {
 
                     // Increment failed attempts
@@ -144,7 +158,7 @@ async function login(
                 ]);
             }
         }
-        return response(200, 'authentication success', { token });
+        return response(200, 'authentication success', { token, data });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.params);
         if (error instanceof custom_error) {

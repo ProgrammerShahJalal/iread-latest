@@ -5,6 +5,7 @@ import { anyObject, responseObject } from '../../../common_types/object';
 import custom_error from '../helpers/custom_error';
 import error_trace from '../helpers/error_trace';
 import Models from '../../../database/models';
+import logoutHistoryUpdate from '../../user_login_histories/services/update';
 
 async function logout(
     fastify_instance: FastifyInstance,
@@ -13,11 +14,10 @@ async function logout(
     // const models = await db();
     let models = Models.get();
     const authUser = (req as anyObject).user;
-    console.log('auth account user', authUser);
 
     try {
         const userModel = models.UserModel;
-        
+
         if (!userModel) {
             throw new custom_error('User model not found', 500, 'Invalid user model');
         }
@@ -32,6 +32,19 @@ async function logout(
         user.token = "";
         user.user_agent = "";
         await user.save();
+        
+
+        (req as anyObject).body = {
+            ...(typeof req.body === 'object' && req.body !== null ? req.body : {}), 
+            user_id: authUser.id,
+        };
+        console.log('req body ====> ', req.body);
+
+        try {
+            await logoutHistoryUpdate(fastify_instance, req);
+        } catch (err) {
+            console.error("Error in logoutHistoryUpdate:", err);
+        }
 
         return reply.redirect(`/login`);
     } catch (error: any) {

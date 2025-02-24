@@ -75,19 +75,34 @@ async function store(
 
 
     try {
-
-        /** Store a user login history */
-        const inputs = await models[modelName].create({
-            user_id: body.user_id,
-            login_date: loginDate,
-            logout_date: null,
-            device: device,
-            total_session_time: 0,
+        /** Check if an active session exists (logout_date is null) */
+        let existingSession = await models[modelName].findOne({
+            where: {
+                user_id: body.user_id,
+                logout_date: null,
+            },
         });
 
+        if (existingSession) {
+            // Update the existing session instead of creating a new one
+            await existingSession.update({
+                login_date: loginDate,
+                device: device,
+            });
 
-        return response(201, 'User login history stored successfully', { inputs });
+            return response(200, 'User login history updated successfully', { existingSession });
+        } else {
+            // Store a new user login history
+            const inputs = await models[modelName].create({
+                user_id: body.user_id,
+                login_date: loginDate,
+                logout_date: null,
+                device: device,
+                total_session_time: 0,
+            });
 
+            return response(201, 'User login history stored successfully', { inputs });
+        }
     } catch (error: any) {
         const uid = await error_trace(models, error, req.url, req.body);
         throw new custom_error('Server error', 500, error.message, uid);
@@ -95,3 +110,6 @@ async function store(
 }
 
 export default store;
+export const e = {
+    loginHistoryStore: store,
+}

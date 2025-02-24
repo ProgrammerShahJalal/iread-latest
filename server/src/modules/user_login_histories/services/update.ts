@@ -50,6 +50,7 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+    
 
     try {
 
@@ -59,6 +60,7 @@ async function update(
             where: {
                 user_id: body.user_id
                 },
+                order: [['created_at', 'DESC']]
         });
         if (!data) {
             throw new custom_error(
@@ -100,3 +102,6 @@ async function update(
 }
 
 export default update;
+export const e = {
+    logoutHistoryUpdate: update,
+}

@@ -30,14 +30,30 @@ function Navbar() {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user"); // Remove user from localStorage
-    window.dispatchEvent(new Event("userUpdated")); // Dispatch event
-    setUser(null);
-    setIsOpen(false);
-    router.push("/login"); // Redirect to login page
+  const handleLogout = async () => {
+    try {
+    
+      await fetch("http://127.0.0.1:5011/api/v1/auth/logout", {
+        method: "POST",
+      });
+  
+      // Remove user from localStorage
+      localStorage.removeItem("user");
+  
+      // Dispatch event to update user state globally
+      window.dispatchEvent(new Event("userUpdated"));
+  
+      // Update state
+      setUser(null);
+      setIsOpen(false);
+  
+      // Redirect to login page
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-
+  
   return (
     <div>
       <div className="header-nav">
