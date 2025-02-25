@@ -30,8 +30,6 @@ export default function (fastify: FastifyInstance) {
             let data: responseObject = await login(fastify, req);
 
             if (data?.data?.token) {
-                console.log("==============DATA INFO =====", data.data);
-                console.log("==============login token =====", data.data.token);
                 res.setCookie('token', 'Bearer ' + data.data.token, {
                     path: '/',
                     httpOnly: false, // Prevents JavaScript access for security
@@ -48,7 +46,6 @@ export default function (fastify: FastifyInstance) {
 
         logout: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await logout(fastify, req, res);
-            console.log('logout data', data);
             res.clearCookie('token');
             res.code(data.status).send(data);
         },

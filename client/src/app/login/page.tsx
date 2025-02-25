@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     // Fetch user roles and store them in a map
     fetch(
-      `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`
+      `${BASE_URL}/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -72,6 +72,7 @@ const LoginPage: React.FC = () => {
         slug,
         photo,
         role_serial,
+        token,
       } = data?.data?.data;
       localStorage.setItem(
         "user",
@@ -84,8 +85,12 @@ const LoginPage: React.FC = () => {
           slug,
           photo,
           role_serial,
+          token,
         })
       );
+
+      // Dispatch event to update Navbar immediately
+      window.dispatchEvent(new Event("userUpdated"));
 
       if (!(userRolesMap[role_serial] === "admin")) {
         router.push(`/profile?slug=${slug}`);
@@ -129,14 +134,14 @@ const LoginPage: React.FC = () => {
             autoComplete="current-password"
           />
 
-          <div className="flex justify-end text-sm">
+          {/* <div className="flex justify-end text-sm">
             <Link
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
               Forgot password?
             </Link>
-          </div>
+          </div> */}
 
           <button
             type="submit"

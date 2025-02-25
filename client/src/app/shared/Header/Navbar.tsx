@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,6 +9,25 @@ function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);;
+
+
+  // Handle clicks outside the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: { target: any; }) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     // Function to update user state from localStorage
@@ -30,9 +49,14 @@ function Navbar() {
     };
   }, []);
 
+  const BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+      : process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5011/api/v1/auth/logout", {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -49,7 +73,7 @@ function Navbar() {
         localStorage.removeItem("user");
         window.dispatchEvent(new Event("userUpdated"));
         setUser(null);
-        // router.push("/login"); 
+        router.push("/login"); 
       } else {
         const errorText = await response.text(); 
         console.error("Logout failed:", errorText);
@@ -98,7 +122,7 @@ function Navbar() {
                   </Link>
                 </li>
               </ul>
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 {user?.email ? (
                   <button onClick={() => setIsOpen(!isOpen)} className="flex items-center focus:outline-none">
                     <Image

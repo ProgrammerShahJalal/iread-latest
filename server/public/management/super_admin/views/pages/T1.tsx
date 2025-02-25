@@ -5,7 +5,6 @@ import moment from 'moment/moment';
 export interface Props { }
 
 const T1: React.FC<Props> = (props: Props) => {
-    const [collections, setCollections] = useState<anyObject[]>([]);
     const [students, setStudents] = useState<anyObject[]>([]);
     const [parents, setParents] = useState<anyObject[]>([]);
     const [admins, setAdmins] = useState<anyObject[]>([]);
@@ -13,12 +12,10 @@ const T1: React.FC<Props> = (props: Props) => {
     const [events, setEvents] = useState<anyObject[]>([]);
 
 
-
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5011/api/v1/auth?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
+        axios.get(`/api/v1/auth?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
             .then(res => {
                 const users = res.data.data.data;
-                setCollections(users);
                 setAdmins(users.filter((item: any) => item.role?.title === "admin"));
                 setParents(users.filter((item: any) => item.role?.title === "parent"));
                 setStudents(users.filter((item: any) => item.role?.title === "student"));
@@ -27,7 +24,7 @@ const T1: React.FC<Props> = (props: Props) => {
     }, [])
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5011/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
+        axios.get(`/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
             .then(res => {
                 const blogs = res.data.data.data;
                 setBlogs(blogs);
@@ -36,7 +33,7 @@ const T1: React.FC<Props> = (props: Props) => {
     }, [])
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5011/api/v1/events?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
+        axios.get(`/api/v1/events?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`)
             .then(res => {
                 const events = res.data.data.data;
                 setEvents(events);
@@ -126,21 +123,7 @@ const T1: React.FC<Props> = (props: Props) => {
                     </div>
                 </div>
             </div>
-            {/* <div className="col-xl-3 col-lg-4">
-                <div className="card">
-                    <div className="business-top-widget card-body">
-                        <div className="media d-inline-flex">
-                            <div className="media-body">
-                                <span className="mb-2">Total Comments</span>
-                                <h2 className="total-value m-0 counter">
-                                    {collections.total_comments}
-                                </h2>
-                            </div>
-                            <i className="icofont icofont-chart-histogram font-secondary align-self-center"></i>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
+            
         </div>
 
 
@@ -149,7 +132,8 @@ const T1: React.FC<Props> = (props: Props) => {
 
 async function init_chart() {
 
-    let res = await axios.get('http://127.0.0.1:5011/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=');
+
+    let res = await axios.get(`/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`);
 
     new Chartist.LineChart('#my_chart', {
         labels: res.data.data?.labels,
