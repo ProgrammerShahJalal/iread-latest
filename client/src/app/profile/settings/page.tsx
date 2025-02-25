@@ -4,9 +4,6 @@ import Image from "next/image";
 import ProfileLayout from "../../../components/ProfileLayout";
 import toast from "react-hot-toast";
 
-const BASE_URL = process.env.NODE_ENV === "production"
-? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface User {
   id: number;
@@ -24,6 +21,11 @@ const ProfileSettingPage = () => {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+
+  const BASE_URL = process.env.NODE_ENV === "production"
+? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
   useEffect(() => {
