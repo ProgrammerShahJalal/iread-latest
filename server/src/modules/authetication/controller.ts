@@ -48,7 +48,6 @@ export default function (fastify: FastifyInstance) {
 
         logout: async function (req: FastifyRequest, res: FastifyReply) {
             let data: responseObject = await logout(fastify, req, res);
-            console.log('logout data', data);
             res.clearCookie('token');
             res.code(data.status).send(data);
         },

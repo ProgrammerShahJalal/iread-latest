@@ -49,7 +49,7 @@ function Navbar() {
         localStorage.removeItem("user");
         window.dispatchEvent(new Event("userUpdated"));
         setUser(null);
-        // router.push("/login"); 
+        router.push("/login"); 
       } else {
         const errorText = await response.text(); 
         console.error("Logout failed:", errorText);

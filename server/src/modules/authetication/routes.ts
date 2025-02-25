@@ -26,10 +26,9 @@ module.exports = async function (fastify: FastifyInstance) {
     fastify.register(
         async (route, opts) => {
             route
-                // .addHook('preHandler', check_auth)
                 .post(
                     `/logout`,
-                    // { preHandler: auth_middleware },
+                    { preHandler: auth_middleware },
                     controllerInstance.logout,
                 )
 

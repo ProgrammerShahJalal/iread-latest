@@ -72,6 +72,7 @@ const LoginPage: React.FC = () => {
         slug,
         photo,
         role_serial,
+        token,
       } = data?.data?.data;
       localStorage.setItem(
         "user",
@@ -84,6 +85,7 @@ const LoginPage: React.FC = () => {
           slug,
           photo,
           role_serial,
+          token,
         })
       );
 
