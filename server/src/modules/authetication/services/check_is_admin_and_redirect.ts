@@ -28,14 +28,13 @@ const check_is_admin_and_redirect = async (
     // Get token from cookies
     const token = parseCookieString(request.headers.cookie || '')?.token;
     // const token = parseCookieString(request.headers.cookie)?.token;
-    console.log('====token====&&&&POPOPO', token);
+
     if (!token || !token.startsWith('Bearer ')) {
         return reply.redirect(`/login`);
     }
 
     try {
         const decoded = jwt.verify(token.slice(7), secretKey);
-        console.log('decoded', decoded);
         let models = Models.get();
 
         let user = await models.UserModel.findByPk(decoded.id);
