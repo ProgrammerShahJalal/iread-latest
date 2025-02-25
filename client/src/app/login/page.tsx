@@ -89,6 +89,9 @@ const LoginPage: React.FC = () => {
         })
       );
 
+      // Dispatch event to update Navbar immediately
+      window.dispatchEvent(new Event("userUpdated"));
+
       if (!(userRolesMap[role_serial] === "admin")) {
         router.push(`/profile?slug=${slug}`);
       } else {
@@ -131,14 +134,14 @@ const LoginPage: React.FC = () => {
             autoComplete="current-password"
           />
 
-          <div className="flex justify-end text-sm">
+          {/* <div className="flex justify-end text-sm">
             <Link
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
               Forgot password?
             </Link>
-          </div>
+          </div> */}
 
           <button
             type="submit"

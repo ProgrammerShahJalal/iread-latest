@@ -3,6 +3,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import controller from './controller';
 import check_auth from './services/check_auth';
 import auth_middleware from './services/auth_middleware';
+import check_auth_and_redirect from './services/check_auth_and_redirect';
 
 module.exports = async function (fastify: FastifyInstance) {
     let prefix: string = '/auth';
