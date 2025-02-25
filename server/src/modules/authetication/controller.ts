@@ -30,8 +30,6 @@ export default function (fastify: FastifyInstance) {
             let data: responseObject = await login(fastify, req);
 
             if (data?.data?.token) {
-                console.log("==============DATA INFO =====", data.data);
-                console.log("==============login token =====", data.data.token);
                 res.setCookie('token', 'Bearer ' + data.data.token, {
                     path: '/',
                     httpOnly: false, // Prevents JavaScript access for security
