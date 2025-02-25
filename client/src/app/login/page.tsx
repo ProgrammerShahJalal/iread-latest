@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     // Fetch user roles and store them in a map
     fetch(
-      `http://127.0.0.1:5011/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`
+      `${BASE_URL}/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`
     )
       .then((res) => res.json())
       .then((data) => {
