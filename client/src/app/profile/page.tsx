@@ -4,9 +4,6 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import ProfileLayout from "../../components/ProfileLayout";
 
-const BASE_URL = process.env.NODE_ENV === "production"
-? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface User {
   id: number;
@@ -17,13 +14,18 @@ interface User {
   photo: string;
 }
 
-const ProfileSettingPage = () => {
+const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+
+  const BASE_URL = process.env.NODE_ENV === "production"
+? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
   useEffect(() => {
@@ -57,51 +59,6 @@ const ProfileSettingPage = () => {
       reader.readAsDataURL(file);
     }
   };
-
-  // const handleSave = async () => {
-  //   if (!formData) return;
-  
-  //   setLoading(true);
-  //   try {
-  //     const formDataPayload = new FormData();
-  //     formDataPayload.append("id", formData.id.toString());
-  //     formDataPayload.append("first_name", formData.first_name);
-  //     formDataPayload.append("last_name", formData.last_name);
-  //     formDataPayload.append("phone_number", formData.phone_number);
-  
-  //     if (fileInputRef.current?.files?.[0]) {
-  //       formDataPayload.append("photo", fileInputRef.current.files[0]);
-  //     }
-  
-  //     const response = await fetch(`${API_URL}/api/v1/auth/update`, {
-  //       method: "POST",
-  //       body: formDataPayload,
-  //     });
-  
-  //     const res = await response.json();
-  //     const result = res.data;
-  
-  //     if (!response.ok) {
-  //       throw new Error(result.message || "Failed to update profile.");
-  //     }
-  
-  //     const updatedUser = { ...formData, photo: result.photo };
-  
-  //     setUser(updatedUser);
-  //     localStorage.setItem("user", JSON.stringify(updatedUser));
-  
-  //     // Dispatch event to update Navbar
-  //     window.dispatchEvent(new Event("userUpdated"));
-  
-  //     setEditMode(false);
-  //     toast.success("Profile updated successfully!");
-  //   } catch (error) {
-  //     toast.error(error instanceof Error ? error.message : "An error occurred");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  
 
 
 
@@ -217,4 +174,4 @@ const ProfileSettingPage = () => {
   );
 };
 
-export default ProfileSettingPage;
+export default ProfilePage;
