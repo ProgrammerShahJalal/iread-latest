@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
-
+import Link from "next/link";
 
 
 const BlogsPage: React.FC = async() => {
@@ -65,7 +65,7 @@ const BlogsPage: React.FC = async() => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <a href={`/blogs/${blog.slug}`}>{blog.title}</a>
+                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
@@ -73,9 +73,9 @@ const BlogsPage: React.FC = async() => {
                                         <p className="text-justify mt-3">
                                             {blog.short_description}
                                         </p>
-                                        <a href={`/blogs/${blog.slug}`} className="btn-read-more">
+                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more">
                                             Read more
-                                        </a>
+                                        </Link>
                                     </div>
                                 </article>
                             </div>
@@ -88,7 +88,4 @@ const BlogsPage: React.FC = async() => {
 };
 
 export default BlogsPage;
-function query(arg0: string): any {
-    throw new Error("Function not implemented.");
-}
 

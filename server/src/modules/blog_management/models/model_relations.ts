@@ -13,9 +13,11 @@ export function init() {
         sourceKey: "id",
         as: "blog_tags",
     });
+    models.BlogModel.hasMany(models.BlogCommentModel, {
+        foreignKey: "blog_id",
+        sourceKey: "id",
+        as: "blog_comments",
+    });
 
-    // models.BlogCommentModel.belongsTo(models.BlogModel, {
-    //     foreignKey: "blog_id",
-    //     as: "blogs",
-    // });
+    
 }

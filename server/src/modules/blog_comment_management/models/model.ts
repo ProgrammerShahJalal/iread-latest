@@ -33,7 +33,6 @@ class DataModel extends Model<Infer, InferCreation> {
     declare user_id?: number;
     declare blog_id: number;
     declare comment: string;
-    declare parent_id: number;
 
     declare status?: status;
     declare creator?: number;
@@ -61,10 +60,6 @@ function init(sequelize: Sequelize) {
             },
             comment: {
                 type: DataTypes.TEXT(),
-                allowNull: true,
-            },
-            parent_id: {
-                type: DataTypes.STRING(),
                 allowNull: true,
             },
 

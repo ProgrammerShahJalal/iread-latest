@@ -6,9 +6,10 @@ import users from '../views/pages/users/config/store';
 import user_roles from '../views/pages/user_roles/config/store';
 import contact_management from '../views/pages/contact_management/config/store';
 
+import blogs from '../views/pages/blogs/config/store';
 import blog_category from '../views/pages/blog_category/config/store';
 import blog_tags from '../views/pages/blog_tags/config/store';
-import blogs from '../views/pages/blogs/config/store';
+import blog_comments from '../views/pages/blog_comments/config/store';
 
 import event_category from '../views/pages/event_category/config/store';
 import event_tags from '../views/pages/event_tags/config/store';
@@ -34,6 +35,7 @@ const store = configureStore({
         blog_category: blog_category.reducer,
         blog_tags: blog_tags.reducer,
         blogs: blogs.reducer,
+        blog_comments: blog_comments.reducer,
         event_category: event_category.reducer,
         event_tags: event_tags.reducer,
         events: events.reducer,

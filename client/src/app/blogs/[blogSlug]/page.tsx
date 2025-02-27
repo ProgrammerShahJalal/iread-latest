@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getBlogs } from "../../../api/blogApi";
-
+import { getBlogComments } from "../../../api/blogCommentApi";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -18,6 +18,8 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
   if (!blogSlug) {
     return <div className="py-24 text-center">Invalid blog request.</div>;
   }
+  
+
 
   try {
     const blogs = await getBlogs();
@@ -30,10 +32,15 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
         </div>
       );
     }
+    
+
+    // ✅ Fetch blog comments
+    const comments = await getBlogComments(blog.blog_id);
+
 
     return (
       <section>
-        <div className="container my-10">
+        <div className="container my-10 min-h-[100vh]">
           <div className="row">
             <div className="col-md-8 col-md-offset-2">
               <article className="post clearfix mb-0">
@@ -58,13 +65,13 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                       Posted: <span className="text-theme-color-2">{formatDate(blog.publish_date)}</span>
                     </li>
                     <li>
-                      By: <span className="text-theme-color-2">{blog.author? blog.author.name : 'Admin'}</span>
+                      By: <span className="text-theme-color-2">{blog.author ? blog.author.name : 'Admin'}</span>
                     </li>
                     <li>
-                      Categories: <span className="text-theme-color-2">{blog.categories?.map((category: BlogCategory)=> category.title).join(', ')}</span>
+                      Categories: <span className="text-theme-color-2">{blog.categories?.map((category: any) => category.title).join(', ')}</span>
                     </li>
                     <li>
-                      Tags: <span className="text-theme-color-2">{blog.tags?.map((tag: BlogTag)=> tag.title).join(', ')}</span>
+                      Tags: <span className="text-theme-color-2">{blog.tags?.map((tag: any) => tag.title).join(', ')}</span>
                     </li>
                   </ul>
                 </div>
@@ -74,11 +81,37 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                     dangerouslySetInnerHTML={{ __html: blog.full_description }}
                   />
                 </div>
-                <div className="container mt-5">
-                  <h3 className="font-semibold text-2xl md:text-lg text-[#555555]">About the Author</h3>
-                  <p className="text-theme-color-2">{blog.author? blog.author.name : 'Admin'}</p>
-                </div>
               </article>
+
+              {/* ✅ Blog Comments Section */}
+              <div className="mt-12 border-t pt-8">
+                <h3 className="text-xl font-semibold">Comments</h3>
+                {comments.length > 0 ? (
+                  <ul className="mt-4 space-y-6">
+                    {comments.map((comment) => (
+                      <li key={comment.comment_id} className="border-b pb-4">
+                        <div className="flex items-start space-x-4">
+                          <Image
+                            src={comment.user_photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user_photo}` : "/avatar.png"}
+                            alt={`${comment.first_name} ${comment.last_name}`}
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                          />
+                          <div>
+                            <p className="font-semibold">
+                              {comment.first_name} {comment.last_name}
+                            </p>
+                            <p className="text-gray-600">{comment.comment}</p>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500 mt-4">No comments yet.</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
