@@ -17,7 +17,7 @@ const BlogsPage: React.FC = async() => {
 
   let blogsData: Blog[] = await getBlogs();
 
-//   console.log('blogs', blogsData);
+
 
     return (
         <section>

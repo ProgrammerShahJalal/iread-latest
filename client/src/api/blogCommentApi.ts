@@ -1,7 +1,7 @@
-import 'server-only';
+// import 'server-only';
 import { query } from '../lib/db';
 
-interface BlogComment {
+export interface BlogComment {
     comment_id: number;
     user_id: number;
     blog_id: number;
@@ -10,6 +10,14 @@ interface BlogComment {
     last_name: string;
     user_photo: string;
 }
+
+export interface PostCommentResponse {
+    status: number;
+    message: string;
+    data: {
+      data: BlogComment;
+    };
+  }
 
 export async function getBlogComments(blog_id: number): Promise<BlogComment[]> {
     const comment_query = `
@@ -28,4 +36,14 @@ export async function getBlogComments(blog_id: number): Promise<BlogComment[]> {
     `;
 
     return await query<BlogComment>(comment_query, [blog_id]); 
+}
+
+export async function postBlogComment(blog_id: number, user_id: number, comment: string) {
+    const insert_query = `
+        INSERT INTO blog_comments (blog_id, user_id, comment, status, createdAt, updatedAt)
+        VALUES (?, ?, ?, 'active', NOW(), NOW());
+    `;
+    
+    const result = await query(insert_query, [blog_id, user_id, comment]);
+    return { status: 201, message: "Comment added successfully", data: result };
 }

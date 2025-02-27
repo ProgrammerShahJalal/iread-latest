@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getBlogs } from "../../../api/blogApi";
 import { getBlogComments } from "../../../api/blogCommentApi";
+import CommentsSection from "../../../components/CommentsSection";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -82,6 +83,10 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                   />
                 </div>
               </article>
+
+              {/* Blog Comments Form */}
+              <CommentsSection blogs={blog.blog_id}/>
+
 
               {/* ✅ Blog Comments Section */}
               <div className="mt-12 border-t pt-8">

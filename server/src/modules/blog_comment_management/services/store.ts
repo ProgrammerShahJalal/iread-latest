@@ -65,8 +65,8 @@ async function store(
     console.log('blogsArray', usersArray);
 
     let inputs: InferCreationAttributes<typeof data> = {
-        user_id: usersArray[0], 
-        blog_id: blogsArray[0], 
+        user_id: body.users || usersArray[0], 
+        blog_id: body.blogs || blogsArray[0], 
         comment: body.comment,
     };
 
