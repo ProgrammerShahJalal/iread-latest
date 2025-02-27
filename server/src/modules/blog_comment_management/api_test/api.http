@@ -1,4 +1,4 @@
-@hostname = http://127.0.0.1:5001/api/v1/blog-comments
+@hostname = http://127.0.0.1:5011/api/v1/blog-comments
 
 # all
 ###
@@ -6,7 +6,7 @@ GET {{hostname}}?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10
 
 # get
 ###
-GET {{hostname}}/1 HTTP/1.1
+GET {{hostname}}/10 HTTP/1.1
 
 # store
 ###

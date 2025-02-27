@@ -65,7 +65,6 @@ async function update(
         user_id: body.user_id,
         blog_id: body.blog_id,
         comment: body.comment,
-        parent_id: body.parent_id,
     };
 
     /** print request data into console */
