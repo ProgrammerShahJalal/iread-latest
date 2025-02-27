@@ -11,6 +11,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -43,7 +44,7 @@ async function validate(req: Request) {
     return result;
 }
 
-async function all(
+async function all( 
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
@@ -53,7 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    let models = await db();
+    let models = Models.get();
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
@@ -70,7 +71,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'comment', 'status'];
+        select_fields = ['id', 'user_id', 'blog_id', 'comment', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -94,12 +95,12 @@ async function all(
         query.where = {
             ...query.where,
             [Op.or]: [
-                { full_name: { [Op.like]: `%${search_key}%` } },
-                { email: { [Op.like]: `%${search_key}%` } },
+                { comment: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
-                { id: { [Op.like]: `%${search_key}%` } },
+                { id: { [Op.like]: `%${search_key}%` } }, 
             ],
         };
+
     }
 
     try {

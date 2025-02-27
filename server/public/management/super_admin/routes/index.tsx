@@ -8,6 +8,7 @@ import user_roles from '../views/pages/user_roles/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
+import blog_comments from '../views/pages/blog_comments/config/routes';
 import blog_tags from '../views/pages/blog_tags/config/routes';
 import blogs from '../views/pages/blogs/config/routes';
 
@@ -42,6 +43,7 @@ const router: RouteTypes[] = [
             contact_messages,
             blog_category,
             blog_tags,
+            blog_comments,
             blogs,
             event_category,
             event_tags,

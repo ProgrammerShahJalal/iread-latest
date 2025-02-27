@@ -64,6 +64,7 @@ async function store(
 
     let blogCategoryBlogModel = models.BlogCategoryBlogModel;
     let blogTagBlogModel = models.BlogTagBlogModel;
+    let BlogCommentModel = models.BlogCommentModel;
 
     let image_path = 'avatar.png';
     if (body['cover_image']?.ext) {

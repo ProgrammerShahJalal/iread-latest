@@ -1,6 +1,6 @@
-import mysql from 'mysql2/promise';
+import mysql, { RowDataPacket } from 'mysql2/promise';
 
-export async function query(sql: string, values = []) {
+export async function query<T extends object>(sql: string, values: any[] = []): Promise<T[]> {
     const connection = await mysql.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -8,7 +8,7 @@ export async function query(sql: string, values = []) {
         database: process.env.DB_DATABASE,
     });
 
-    const [results] = await connection.execute(sql, values);
-    connection.end();
+    const [results] = await connection.execute<(T & RowDataPacket)[]>(sql, values);
+    await connection.end();
     return results;
 }

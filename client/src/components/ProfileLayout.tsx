@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const ProfileLayout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex">
+    <div className="flex min-h-[100vh]">
       <Sidebar />
       <div className="bg-slate-200 flex-1 p-6">{children}</div>
     </div>

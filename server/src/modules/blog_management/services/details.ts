@@ -34,7 +34,11 @@ async function details(
                 {
                     model: models.BlogTagBlogModel,
                     as: 'blog_tags',
-                }
+                },
+                {
+                    model: models.BlogCommentModel,
+                    as: 'blog_comments',
+                },
             ]
         });
 
