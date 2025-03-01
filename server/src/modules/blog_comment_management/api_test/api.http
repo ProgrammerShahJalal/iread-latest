@@ -8,6 +8,11 @@ GET {{hostname}}?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10
 ###
 GET {{hostname}}/10 HTTP/1.1
 
+
+# get all comments of a blog
+###
+GET {{hostname}}/comment/19 HTTP/1.1
+
 # store
 ###
 POST  {{hostname}}/store HTTP/1.1
