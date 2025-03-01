@@ -29,7 +29,7 @@ module.exports = async function (fastify: FastifyInstance) {
             route
                 .post(
                     `/logout`,
-                    { preHandler: auth_middleware },
+                    // { preHandler: auth_middleware },
                     controllerInstance.logout,
                 )
 

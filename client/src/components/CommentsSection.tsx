@@ -10,11 +10,12 @@ interface BlogComment {
   first_name: string;
   last_name: string;
   user_photo?: string;
+  user?: User;
   comment: string;
 }
 
 interface User {
-  id: number;
+  id?: number;
   first_name: string;
   last_name: string;
   photo: string;
@@ -35,6 +36,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const fetchComments = async () => {
     try {
       const response = await axios.get(`http://localhost:5011/api/v1/blog-comments/comment/${blogs}`);
+      console.log('api response', response.data.data);
       setCommentts(response.data.data);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -48,7 +50,9 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
     if (userData) {
       setUser(JSON.parse(userData));
     }
-  }, [blogs]); 
+  }, [blogs]);
+
+
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,27 +78,26 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
     }
   };
 
-
   return (
     <div className="mt-12 border-t pt-8">
 
       <h3 className="text-xl font-semibold">Comments</h3>
 
-      {commentts.length > 0 ? (
+      {comments.length > 0 ? (
         <ul className="mt-4 space-y-6">
           {commentts.map((comment, index) => (
             <li key={comment.comment_id || comment.id || index} className="border-b pb-4">
               <div className="flex items-start space-x-4">
                 <Image
-                  src={user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
-                  alt={`${user?.first_name} ${user?.last_name}`}
+                  src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
+                  alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
                   width={40}
                   height={40}
                   className="rounded-full"
                 />
                 <div>
                   <p className="font-semibold">
-                    {user?.first_name} {user?.last_name}
+                    {comment?.user?.first_name} {comment?.user?.last_name}
                   </p>
                   <p className="text-gray-600">{comment.comment}</p>
                 </div>
@@ -106,23 +109,45 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
         <p className="text-gray-500 mt-4">No comments yet.</p>
       )}
 
-      <form className="mt-6" onSubmit={handleCommentSubmit}>
-        <textarea
-          className="w-full border rounded p-2"
-          rows={3}
-          placeholder="Add a comment..."
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-          disabled={loading}
-        >
-          {loading ? "Posting..." : "Submit"}
-        </button>
-      </form>
+      {
+        user === null ? (
+          <><>
+            <textarea
+            disabled
+              className="w-full border rounded p-2"
+              rows={3}
+              placeholder="Add a comment..."
+              value={commentText}
+              // onChange={(e) => setCommentText(e.target.value)}
+              required />
+            <button
+              type="submit"
+              className="mt-2 px-4 py-2 bg-slate-500 text-slate-700 border border-black rounded"
+              disabled
+            >
+              Submit
+            </button>
+          </><p className="text-red-500 font-semibold mt-4">Please login to comment.</p></>
+        ) : (
+          <form className="mt-6" onSubmit={handleCommentSubmit}>
+            <textarea
+              className="w-full border rounded p-2"
+              rows={3}
+              placeholder="Add a comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              disabled={loading}
+            >
+              {loading ? "Posting..." : "Submit"}
+            </button>
+          </form>
+        )
+      }
     </div>
   );
 };
