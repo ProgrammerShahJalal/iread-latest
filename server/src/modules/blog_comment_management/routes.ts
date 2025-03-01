@@ -15,6 +15,7 @@ module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void)
         .post(`${prefix}/destroy`, controllerInstance.destroy)
         .post(`${prefix}/import`, controllerInstance.import)
         .get(`${prefix}/:id`, controllerInstance.find)
+        .get(`${prefix}/comment/:blog_id`, controllerInstance.findAllBlogComments)
         ;
 
     done();

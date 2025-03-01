@@ -85,38 +85,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
               </article>
 
               {/* Blog Comments Form */}
-              <CommentsSection blogs={blog.blog_id}/>
-
-
-              {/* ✅ Blog Comments Section */}
-              <div className="mt-12 border-t pt-8">
-                <h3 className="text-xl font-semibold">Comments</h3>
-                {comments.length > 0 ? (
-                  <ul className="mt-4 space-y-6">
-                    {comments.map((comment) => (
-                      <li key={comment.comment_id} className="border-b pb-4">
-                        <div className="flex items-start space-x-4">
-                          <Image
-                            src={comment.user_photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user_photo}` : "/avatar.png"}
-                            alt={`${comment.first_name} ${comment.last_name}`}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                          />
-                          <div>
-                            <p className="font-semibold">
-                              {comment.first_name} {comment.last_name}
-                            </p>
-                            <p className="text-gray-600">{comment.comment}</p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500 mt-4">No comments yet.</p>
-                )}
-              </div>
+              <CommentsSection blogs={blog.blog_id} comments={comments} />
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
 } from 'fastify';
 import all from './services/all';
 import details from './services/details';
+import blogComments from './services/blogComments';
 import soft_delete from './services/soft_delete';
 import store from './services/store';
 import { responseObject } from '../../common_types/object';
@@ -26,6 +27,10 @@ export default function (fastify: FastifyInstance) {
 
         find: async function (req: FastifyRequest, res: FastifyReply) {
             let data = await details(fastify, req);
+            res.code(data.status).send(data);
+        },
+        findAllBlogComments: async function (req: FastifyRequest, res: FastifyReply) {
+            let data = await blogComments(fastify, req);
             res.code(data.status).send(data);
         },
 
