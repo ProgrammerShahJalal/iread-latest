@@ -6,7 +6,12 @@ import error_trace from '../../../helpers/error_trace';
 import custom_error from '../../../helpers/custom_error';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
-
+// async function details(
+//     fastify_instance: FastifyInstance,
+//     req: FastifyRequest,
+// ): Promise<responseObject> {
+//     throw new Error('500 test');
+// }
 
 async function details(
     fastify_instance: FastifyInstance,
@@ -17,22 +22,16 @@ async function details(
     let params = req.params as any;
 
     try {
-        let data = await models[modelName].findAll({
+        let data = await models[modelName].findOne({
             where: {
-                blog_id: params.blog_id,
+                id: params.id,
             },
-            include: [
+            include:[
                 {
-                    model: models.UserModel,
-                    as: 'user', 
-                    attributes: ['first_name', 'last_name', 'photo'],
-                },
-
-                {
-                    model: models.BlogCommentRepliesModel,
+                    model: models.BlogCommentModel,
                     as: 'replies',
                 }
-            ],
+            ]
         });
 
         if (data) {

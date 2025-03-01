@@ -8,6 +8,7 @@ import * as BlogTagsModel from "../modules/blog_tags_management/models/model";
 import * as BlogTagBlogModel from "../modules/blog_tags_management/models/blog_tag_blog.model";
 
 import * as BlogCommentModel from "../modules/blog_comment_management/models/model";
+import * as BlogCommentRepliesModel from "../modules/blog_comment_reply_management/models/model";
 import * as BlogLikeModel from "../modules/blog_likes_management/models/model";
 import * as BlogViewModel from "../modules/blog_view_management/models/model";
 
@@ -52,6 +53,7 @@ export type model_types = {
 
 
     BlogCommentModel: typeof BlogCommentModel.DataModel;
+    BlogCommentRepliesModel: typeof BlogCommentRepliesModel.DataModel;
     BlogLikeModel: typeof BlogLikeModel.DataModel;
     BlogViewModel: typeof BlogViewModel.DataModel;
    

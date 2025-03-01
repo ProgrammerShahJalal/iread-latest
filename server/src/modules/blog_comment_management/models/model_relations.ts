@@ -14,4 +14,12 @@ export function init() {
         sourceKey: "id",
         as: "comments",
     });
+
+
+    models.BlogCommentModel.hasMany(models.BlogCommentRepliesModel, {
+        foreignKey: "parent_comment_id",
+        as: "replies",
+    });
+    
+
 }
