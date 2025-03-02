@@ -21,12 +21,18 @@ async function details(
             where: {
                 blog_id: params.blog_id,
             },
-            // include:[
-            //     {
-            //         model: models.BlogModel,
-            //         as: 'blogs',
-            //     }
-            // ]
+            include: [
+                {
+                    model: models.UserModel,
+                    as: 'user', 
+                    attributes: ['first_name', 'last_name', 'photo'],
+                },
+
+                {
+                    model: models.BlogCommentRepliesModel,
+                    as: 'replies',
+                }
+            ],
         });
 
         if (data) {

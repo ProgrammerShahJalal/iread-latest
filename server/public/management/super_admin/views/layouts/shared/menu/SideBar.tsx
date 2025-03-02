@@ -46,6 +46,10 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         label="Blog Comments"
                         to="/blog-comments"
                     />
+                    <MenuDropDownItem
+                        label="Blog Comment Replies"
+                        to="/blog-comment-replies"
+                    />
                 </MenuDropDown>
                 {/* EVENT  */}
                 <MenuDropDown
