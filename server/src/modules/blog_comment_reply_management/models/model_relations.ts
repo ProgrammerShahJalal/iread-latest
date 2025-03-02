@@ -6,7 +6,7 @@ export function init() {
     models.BlogCommentRepliesModel.belongsTo(models.BlogCommentModel, {
         foreignKey: "parent_comment_id",
         targetKey: "id",
-        as: "comment",
+        as: "comments",
     });
     
 

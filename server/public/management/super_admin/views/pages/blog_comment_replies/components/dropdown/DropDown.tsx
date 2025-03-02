@@ -27,13 +27,12 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(storeSlice.actions.set_only_latest_data(true));
         dispatch(all({}));
     }, []);
-
-
+    
     useEffect(() => {
         if (default_value?.length && state.all?.data?.length) {
             setSelectedList((prevSelectedList) => {
-                const enrichedList = default_value.map((defaultItem) => {
-                    const fullItem = state.all.data.find((item) => item.id === Number(defaultItem.id));
+                const enrichedList = default_value[0].id.map((defaultItem) => {
+                    const fullItem = state.all.data.find((item) => item.id === defaultItem.parent_comment_id);
                     return fullItem || defaultItem;
                 });
     
@@ -114,7 +113,7 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                                                 </div>
                                                 <div className="label">
                                                     {/* {i.uid} - */}
-                                                    {i.title }
+                                                    {i.comment}
                                                 </div>
                                             </label>
                                         </li>

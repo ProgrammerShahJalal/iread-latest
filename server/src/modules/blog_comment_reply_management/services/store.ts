@@ -50,12 +50,13 @@ async function store(
     // Convert stringified arrays to actual arrays
     const usersArray = JSON.parse(body.users || "[]");
     const blogsArray = JSON.parse(body.blogs || "[]");
+    const parentCommentIdArray = JSON.parse(body.parent_comment_id || "[]");
 
     let inputs: InferCreationAttributes<typeof data> = {
         user_id: body.users || usersArray[0], 
         blog_id: body.blogs || blogsArray[0], 
         comment: body.comment,
-        parent_comment_id: body.parent_comment_id, // Link reply to parent comment
+        parent_comment_id: body.parent_comment_id || parentCommentIdArray[0],
     };
 
     /** store reply into database */

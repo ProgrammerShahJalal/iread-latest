@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import { useSelector } from 'react-redux';
@@ -10,9 +10,9 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import Select from 'react-select';
 import BlogDropDown from "../blogs/components/dropdown/DropDown";
 import UserDropDown from "../users/components/dropdown/DropDown";
+import CommentDropDown from "../blog_comments/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -90,14 +90,24 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 <div className="form-group form-vertical">
                                     <label>Users</label>
                                     <UserDropDown name="users"
-                                    default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
+                                        multiple={false}
+                                        default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
+                                        get_selected_data={(data) => {
+                                            console.log(data)
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="form-group form-vertical">
+                                    <label>Parent Comment</label>
+                                    <CommentDropDown name="parent_comment_id"
+                                    default_value={get_value('parent_comment_id') ? [{ id: Number(get_value('parent_comment_id')) }] : []}
                                         multiple={false}
                                         get_selected_data={(data) => {
                                             console.log(data)
                                         }}
                                     />
                                 </div>
-                                
                                     <div className="form_auto_fit">
                                         {[
                                             'comment',
@@ -113,43 +123,8 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                     </div>
 
-                                    {/* DROPDOWN SELECT OPTIONS */}
-                                    {/* <Select
-                                        name="status"
-                                        options={statusOptions}
-                                        value={statusOptions.find((option) => option.value === get_value('status'))}
-                                        onChange={(selectedOption: { value: string; label: string } | null) => {
-                                            const formData = new FormData();
-                                            if (selectedOption) {
-                                                formData.set('status', selectedOption.value);
-                                                dispatch(
-                                                    storeSlice.actions.set_item({
-                                                        ...state.item,
-                                                        status: selectedOption.value,
-                                                    })
-                                                );
-                                            }
-                                        }}
-                                        styles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Default text color for the input
-                                            }),
-                                            singleValue: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for selected value
-                                            }),
-                                            menu: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for dropdown options
-                                            }),
-                                            option: (provided, state) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for each dropdown option
-                                                backgroundColor: state.isFocused ? '#f1f1f1' : 'white', // Highlight color for focused options
-                                            }),
-                                        }}
-                                    /> */}
+                                    
+                                    
 
 
 

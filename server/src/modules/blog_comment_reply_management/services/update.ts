@@ -1,4 +1,3 @@
-import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { body, validationResult } from 'express-validator';
 import {
@@ -12,7 +11,6 @@ import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
 
-import moment from 'moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
@@ -39,12 +37,7 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -63,15 +56,22 @@ async function update(
 
 
     /** store data into database */
+    // Convert stringified arrays to actual arrays
+    const usersArray = JSON.parse(body.users || "[]");
+    const blogsArray = JSON.parse(body.blogs || "[]");
+    const parentCommentIdArray = Array.isArray(body.parent_comment_id)
+    ? body.parent_comment_id
+    : JSON.parse(body.parent_comment_id || "[]");
+
     try {
         let data = await models[modelName].findByPk(body.id);
 
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                user_id: body.user_id || data.user_id,
-                blog_id: body.blog_id || data.blog_id,
+                user_id: body.user_id || usersArray[0] || data.user_id,
+                blog_id: body.blog_id || blogsArray[0] || data.blog_id,
                 comment: body.comment || data.comment,
-                parent_comment_id: body.parent_comment_id || data.parent_comment_id,
+                parent_comment_id: Number(parentCommentIdArray[0]) || data.parent_comment_id,
             };
             data.update(inputs);
             await data.save();

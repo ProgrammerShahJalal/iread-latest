@@ -28,9 +28,9 @@ interface CommentsSectionProps {
 }
 
 const BASE_URL =
-process.env.NODE_ENV === "production"
-  ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-  : process.env.NEXT_PUBLIC_BACKEND_URL;
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
@@ -141,24 +141,25 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
 
       {commentts.length > 0 ? (
         <ul className="mt-4 space-y-6">
-        {commentts.map((comment, index) => (
-          <li key={comment.id || index} className="border-b pb-4">
-            <div className="flex items-start space-x-4">
-              <Image
-                src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
-                alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div>
-                <p className="font-semibold">
-                  {comment?.user?.first_name} {comment?.user?.last_name}
-                </p>
-                <p className="text-gray-600">{comment.comment}</p>
-      
-                {/* Admin Reply Button */}
-                {user?.role_serial && userRolesMap[Number(user.role_serial)] === "admin" && (
+          {commentts.map((comment, index) => (
+            <li key={comment.id || index} className="border-b pb-4">
+              <div className="flex items-start space-x-4">
+                <Image
+                  src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
+                  alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover w-10 h-10"
+                />
+
+                <div>
+                  <p className="font-semibold">
+                    {comment?.user?.first_name} {comment?.user?.last_name}
+                  </p>
+                  <p className="text-gray-600">{comment.comment}</p>
+
+                  {/* Admin Reply Button */}
+                  {user?.role_serial && userRolesMap[Number(user.role_serial)] === "admin" && (
                     <button
                       className="mt-2 text-blue-500 hover:underline"
                       onClick={() => setReplyingTo(comment.id)}
@@ -196,10 +197,18 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                   {comment.replies && comment.replies.length > 0 && (
                     <ul className="mt-2 ml-8 border-l pl-4">
                       {comment.replies.map((reply) => (
-                        <li key={reply.id} className="mt-2">
-                          <p className="font-semibold">{reply.first_name} {reply.last_name}</p>
-                          <p className="text-gray-600">{reply.comment}</p>
-                        </li>
+                        <><div>
+                          <Image
+                           src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin.png`}
+                            alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                            width={40}
+                            height={40}
+                            className="rounded-full object-cover w-10 h-10"
+                          />
+                        </div><li key={reply.id} className="mt-2">
+                            <p className="font-semibold">Admin</p>
+                            <p className="text-gray-600">{reply.comment}</p>
+                          </li></>
                       ))}
                     </ul>
                   )}
@@ -208,7 +217,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
             </li>
           ))}
         </ul>
-      
+
       ) : (
         <p className="text-gray-500 mt-4">No comments yet.</p>
       )}
@@ -217,7 +226,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
         user === null ? (
           <><>
             <textarea
-            disabled
+              disabled
               className="w-full border rounded p-2"
               rows={3}
               placeholder="Add a comment..."
