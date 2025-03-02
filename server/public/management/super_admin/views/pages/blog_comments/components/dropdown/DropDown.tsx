@@ -28,22 +28,34 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(all({}));
     }, []);
     
-    useEffect(() => {
-        if (default_value?.length && state.all?.data?.length) {
-            setSelectedList((prevSelectedList) => {
-                const enrichedList = default_value[0].id.map((defaultItem) => {
-                    const fullItem = state.all.data.find((item) => item.id === defaultItem.blog_tag_id);
-                    return fullItem || defaultItem;
-                });
+    // useEffect(() => {
+    //     if (default_value?.length && state.all?.data?.length) {
+    //         const enrichedList = default_value.map((defaultItem) => {
+    //             const fullItem = state.all.data.find((item) => item.id === defaultItem.id);
+    //             return fullItem || defaultItem;
+    //         });
     
-                // Avoid unnecessary state updates to prevent re-renders
-                if (JSON.stringify(prevSelectedList) !== JSON.stringify(enrichedList)) {
-                    return enrichedList;
-                }
-                return prevSelectedList;
-            });
-        }
-    }, [default_value, state.all.data]);
+    //         setSelectedList(enrichedList);
+    //     }
+    // }, [default_value, state.all.data]);
+
+    useEffect(() => {
+            if (default_value?.length && state.all?.data?.length) {
+                setSelectedList((prevSelectedList) => {
+                    const enrichedList = default_value.map((defaultItem) => {
+                        const fullItem = state.all.data.find((item) => item.id === Number(defaultItem.id));
+                        return fullItem || defaultItem;
+                    });
+        
+                    // Avoid unnecessary state updates to prevent re-renders
+                    if (JSON.stringify(prevSelectedList) !== JSON.stringify(enrichedList)) {
+                        return enrichedList;
+                    }
+                    return prevSelectedList;
+                });
+            }
+        }, [default_value, state.all.data]);
+    
 
     /** local states */
     const [showDropDownList, setShowDropDownList] = useState(false);

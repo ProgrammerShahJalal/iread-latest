@@ -2,7 +2,7 @@
 import { query } from '../lib/db';
 
 export interface BlogComment {
-    comment_id: number;
+    id: number;
     user_id: number;
     blog_id: number;
     comment: string;
@@ -22,7 +22,7 @@ export interface PostCommentResponse {
 export async function getBlogComments(blog_id: number): Promise<BlogComment[]> {
     const comment_query = `
         SELECT 
-            bc.id AS comment_id,
+            bc.id,
             bc.user_id,
             bc.blog_id,
             bc.comment,

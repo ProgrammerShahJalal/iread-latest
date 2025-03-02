@@ -1,6 +1,7 @@
 'use strict';
 import { FastifyInstance } from 'fastify';
 import controller from './controller';
+import auth_middleware from '../authetication/services/auth_middleware';
 
 module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void) {
     const controllerInstance = controller(fastify);

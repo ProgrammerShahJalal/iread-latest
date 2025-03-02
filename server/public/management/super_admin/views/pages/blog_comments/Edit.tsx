@@ -11,6 +11,8 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import Select from 'react-select';
+import BlogDropDown from "../blogs/components/dropdown/DropDown";
+import UserDropDown from "../users/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -73,6 +75,29 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     <h5 className="mb-4">
                                         Input Data
                                     </h5>
+
+                                    <div className="form-group form-vertical">
+                                    <label>Blogs</label>
+                                    <BlogDropDown name="blogs"
+                                        multiple={false}
+                                        default_value={get_value('blog_id') ? [{ id: get_value('blog_id') }] : []}
+                                        get_selected_data={(data) => {
+                                            console.log(data)
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="form-group form-vertical">
+                                    <label>Users</label>
+                                    <UserDropDown name="users"
+                                    default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
+                                        multiple={false}
+                                        get_selected_data={(data) => {
+                                            console.log(data)
+                                        }}
+                                    />
+                                </div>
+                                
                                     <div className="form_auto_fit">
                                         {[
                                             'comment',
