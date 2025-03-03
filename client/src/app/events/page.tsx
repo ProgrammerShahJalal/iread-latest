@@ -4,13 +4,13 @@ import Link from 'next/link';
 import React from 'react'
 import { getEvents } from '../../api/eventApi';
 
-const EventsPage = async() => {
-    
+const EventsPage = async () => {
 
-  let eventsData: Event[] = await getEvents();
 
-// console.log('events', eventsData);
-//  console.log('events', events);
+    let eventsData: Event[] = await getEvents();
+
+    console.log('events', eventsData[0].title);
+    //  console.log('events', events);
     return (
         <section>
 
@@ -57,7 +57,7 @@ const EventsPage = async() => {
                                     <div className="section-content">
                                         <div className="row">
                                             {
-                                                events?.map((event) => {
+                                                eventsData?.map((event) => {
                                                     return (
                                                         <>
                                                             <div className="col-sm-6 col-md-4 col-lg-4">
@@ -66,22 +66,24 @@ const EventsPage = async() => {
                                                                         <Image
                                                                             className="w-full rounded mb-4"
                                                                             alt=""
-                                                                            src={event?.poster}
+                                                                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
                                                                             width={400}
                                                                             height={300}
-                                                                            
+
                                                                         />
 
                                                                     </div>
                                                                     <div className="schedule-details clearfix p-15 pt-10">
                                                                         <h5 className="font-16 title">
-                                                                            <Link href={`/events/${event?.id}`}>{event?.title}</Link>
+                                                                            <Link href={`/events/${event?.event_id}`}>{event?.title}</Link>
 
                                                                         </h5>
                                                                         <ul className="list-inline font-11 mb-20">
                                                                             <li>
-                                                                                <i className="fa fa-calendar mr-5" /> {event?.session_start_date}
+                                                                                <i className="fa fa-calendar mr-5" />
+                                                                                {new Date(event?.session_start_date_time).toLocaleString()}
                                                                             </li>
+
                                                                             <li>
                                                                                 <i className="fa fa-map-marker mr-5" /> {event?.place}
                                                                             </li>
@@ -92,11 +94,11 @@ const EventsPage = async() => {
                                                                         <div className="mt-10">
                                                                             <Link
                                                                                 className="btn btn-dark btn-theme-colored btn-sm mt-10 mr-5"
-                                                                                href={`/events/${event?.id}#form`}
+                                                                                href={`/events/${event?.event_id}#form`}
                                                                             >
                                                                                 Register
                                                                             </Link>
-                                                                            <Link href={`/events/${event?.id}`} className="btn btn-dark btn-sm mt-10">
+                                                                            <Link href={`/events/${event?.event_id}`} className="btn btn-dark btn-sm mt-10">
                                                                                 Details
                                                                             </Link>
                                                                         </div>
