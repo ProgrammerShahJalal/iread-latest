@@ -26,12 +26,16 @@ async function details(
             where: {
                 id: params.id,
             },
-            // include:[
-            //     {
-            //         model: models.BlogCategoriesModel,
-            //         as: 'blog_categories',
-            //     }
-            // ]
+            include:[
+                {
+                    model: models.EventCategoryEventModel,
+                    as: 'event_categories',
+                },
+                {
+                    model: models.EventTagEventModel,
+                    as: 'event_tags',
+                },
+            ]
         });
 
         if (data) {

@@ -16,7 +16,9 @@ import * as AuthorModel from "../modules/author_management/models/model";
 
 import * as EventModel from "../modules/event_management/models/model";
 import * as EventCategoriesModel from "../modules/event_categories_management/models/model";
+import * as EventCategoryEventModel from "../modules/event_categories_management/models/event_category_event.model";
 import * as EventTagsModel from "../modules/event_tags_management/models/model";
+import * as EventTagEventModel from "../modules/event_tags_management/models/event_tag_event.model";
 import * as EventCertifiedUsersModel from "../modules/event_certified_users_management/models/model";
 import * as EventResourcesModel from "../modules/event_resources_management/models/model";
 import * as EventFaqsModel from "../modules/event_faqs_management/models/model";
@@ -61,7 +63,9 @@ export type model_types = {
 
     EventModel: typeof EventModel.DataModel;
     EventCategoriesModel: typeof EventCategoriesModel.DataModel;
+    EventCategoryEventModel: typeof EventCategoryEventModel.DataModel;
     EventTagsModel: typeof EventTagsModel.DataModel;
+    EventTagEventModel: typeof EventTagEventModel.DataModel;
     EventCertifiedUsersModel: typeof EventCertifiedUsersModel.DataModel;
     EventResourcesModel: typeof EventResourcesModel.DataModel;
     EventFaqsModel: typeof EventFaqsModel.DataModel;

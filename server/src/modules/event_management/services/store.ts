@@ -68,6 +68,9 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
+    let eventCategoryEventModel = models.EventCategoryEventModel;
+    let EventTagEventModel = models.EventTagEventModel;
+
 
     let image_path = 'avatar.png';
     if (body['poster']?.ext) {
@@ -78,7 +81,9 @@ async function store(
         await (fastify_instance as any).upload(body['poster'], image_path);
     }
 
-    // console.log('body', body);
+    let categories: number[] = JSON.parse(body['event_categories']) || [];
+    let tags: number[] = JSON.parse(body['event_tags']) || [];
+
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
@@ -106,6 +111,23 @@ async function store(
             throw new Error('Failed to save data.');
         }
 
+        await Promise.all(
+            categories.map(async (categoryId) => {
+                await eventCategoryEventModel.create({
+                    event_id: data.id || 1,
+                    event_category_id: categoryId,
+                });
+            })
+        );
+
+        await Promise.all(
+            tags.map(async (tagId) => {
+                await EventTagEventModel.create({
+                    event_id: data.id || 1,
+                    event_tag_id: tagId,
+                });
+            })
+        );
 
         return response(201, 'data created', { data });
     } catch (error: any) {

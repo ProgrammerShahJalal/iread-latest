@@ -66,6 +66,14 @@ async function update(
     // (fastify_instance as any).print(inputs);
 
     /** store data into database */
+
+    let eventCategoryEventModel = models.EventCategoryEventModel;
+    let EventTagEventModel = models.EventTagEventModel;
+
+    let categories: number[] = JSON.parse(body['event_categories']) || [];
+    let tags: number[] = JSON.parse(body['event_tags']) || [];
+
+
     try {
         let data = await models[modelName].findByPk(body.id);
 
@@ -102,6 +110,32 @@ async function update(
         if (data) {
             data.update(inputs);
             await data.save();
+
+            await eventCategoryEventModel.destroy({
+                where: { event_id: data.id }
+            });
+
+            await Promise.all(
+                categories.map(async (categoryId) => {
+                    await eventCategoryEventModel.create({
+                        event_id: data.id || 1,
+                        event_category_id: categoryId,
+                    });
+                })
+            );
+
+            await EventTagEventModel.destroy({
+                where: { event_id: data.id }
+            });
+
+            await Promise.all(
+                tags.map(async (tagId) => {
+                    await EventTagEventModel.create({
+                        event_id: data.id || 1,
+                        event_tag_id: tagId,
+                    });
+                })
+            );
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

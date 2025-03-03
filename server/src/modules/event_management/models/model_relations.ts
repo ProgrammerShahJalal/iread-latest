@@ -3,13 +3,14 @@ import Models from "../../../database/models";
 export function init() {
     const models = Models.get();
 
-    // models.BlogModel.hasMany(models.BlogCommentModel, {
-    //     foreignKey: "blog_id",
-    //     as: "blog_comments",
-    // });
-
-    // models.BlogCommentModel.belongsTo(models.BlogModel, {
-    //     foreignKey: "blog_id",
-    //     as: "blogs",
-    // });
+    models.EventModel.hasMany(models.EventCategoryEventModel, {
+        foreignKey: "event_id",
+        sourceKey: "id",
+        as: "event_categories",
+    });
+    models.EventModel.hasMany(models.EventTagEventModel, {
+        foreignKey: "event_id",
+        sourceKey: "id",
+        as: "event_tags",
+    });
 }
