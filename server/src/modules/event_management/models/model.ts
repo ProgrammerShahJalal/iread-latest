@@ -7,8 +7,8 @@ import {
     CreationOptional,
 } from 'sequelize';
 
-export const tableName = 'events';
-export const modelName = 'EventModel';
+const tableName = 'events';
+const modelName = 'EventModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
@@ -136,4 +136,4 @@ function init(sequelize: Sequelize) {
     return DataModel;
 }
 
-export { init, DataModel };
+export { init, DataModel, modelName, tableName }; // export the function and the model

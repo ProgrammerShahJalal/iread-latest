@@ -24,10 +24,10 @@ async function details(
                     model: models.EventCategoryEventModel,
                     as: 'event_categories',
                 },
-                {
-                    model: models.EventTagEventModel,
-                    as: 'event_tags',
-                },
+                // {
+                //     model: models.EventTagEventModel,
+                //     as: 'event_tags',
+                // },
             ]
         });
 
