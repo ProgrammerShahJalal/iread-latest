@@ -26,15 +26,6 @@ async function details(
             where: {
                 id: params.id,
             },
-            // include: [
-            //     {
-            //         model: models.BlogModel,
-            //         as: "category_blogs",
-            //         attributes: ["id", "title"],
-                    
-
-            //     }
-            // ]
         });
 
         if (data) {

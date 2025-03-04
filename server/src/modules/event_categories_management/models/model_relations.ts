@@ -11,9 +11,4 @@ export function init() {
         foreignKey: "event_id",
     });
 
-    // // Define the association with BlogViewModel
-    // models.BlogCategoriesModel.hasMany(models.BlogViewModel, {
-    //     foreignKey: "blog_category_id",
-    //     as: "views",
-    // });
 }

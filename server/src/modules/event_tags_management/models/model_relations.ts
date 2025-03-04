@@ -10,4 +10,9 @@ export function init() {
         otherKey: "event_tag_id",
         foreignKey: "event_id",
     });
+
+    models.EventTagsModel.belongsTo(models.EventModel, {
+        as: "tag_event",
+        foreignKey: "event_id",
+    });
 }

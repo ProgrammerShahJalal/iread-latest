@@ -64,9 +64,11 @@ export type model_types = {
     EventModel: typeof EventModel.DataModel;
     EventCategoriesModel: typeof EventCategoriesModel.DataModel;
     EventCategoryEventModel: typeof EventCategoryEventModel.DataModel;
+
     EventTagsModel: typeof EventTagsModel.DataModel;
     EventTagEventModel: typeof EventTagEventModel.DataModel;
     EventCertifiedUsersModel: typeof EventCertifiedUsersModel.DataModel;
+    
     EventResourcesModel: typeof EventResourcesModel.DataModel;
     EventFaqsModel: typeof EventFaqsModel.DataModel;
     EventSessionsModel: typeof EventSessionsModel.DataModel;
