@@ -1,41 +1,39 @@
-import { Sequelize } from "sequelize";
-import Models from "../../../database/models";
+import { Sequelize } from 'sequelize';
+import Models from '../../../database/models';
 
-export function init() {
-    const models = Models.get();
+export async function init() {
+    const models = await Models.get(); // Ensure models are fully initialized
 
-    if (!models.EventModel ) {
-        console.error("EventModel is undefined (IN Event Management). Check model initialization.");
-        return;
-    }
-    if (!models.EventCategoriesModel) {
-        console.error("EventCategoriesModel is undefined (IN Event Management). Check model initialization.");
+    if (!models.EventModel || !models.EventCategoriesModel) {
+        console.error(
+            'EventModel or EventCategoriesModel is undefined. Ensure model initialization before calling init().',
+        );
         return;
     }
 
     models.EventModel.hasMany(models.EventCategoryEventModel, {
-        foreignKey: "event_id",
-        sourceKey: "id",
-        as: "event_categories",
+        foreignKey: 'event_id',
+        sourceKey: 'id',
+        as: 'event_categories',
     });
     models.EventModel.hasMany(models.EventTagEventModel, {
-        foreignKey: "event_id",
-        sourceKey: "id",
-        as: "event_tags",
+        foreignKey: 'event_id',
+        sourceKey: 'id',
+        as: 'event_tags',
     });
 
     models.EventModel.belongsToMany(models.EventCategoriesModel, {
-        as: "event_categories_cat",
-        through: "event_category_event",
-        foreignKey: "event_id",
-        otherKey: "event_category_id",
+        as: 'event_categories_cat',
+        through: 'event_category_event',
+        foreignKey: 'event_id',
+        otherKey: 'event_category_id',
     });
     models.EventModel.belongsToMany(models.EventTagsModel, {
-        as: "event_tags_tag",
-        through: "event_tag_event",
-        foreignKey: "event_id",
-        otherKey: "event_tag_id",
+        as: 'event_tags_tag',
+        through: 'event_tag_event',
+        foreignKey: 'event_id',
+        otherKey: 'event_tag_id',
     });
 
-    console.log('event management relation models');
+    console.log('Event management relation models initialized successfully');
 }

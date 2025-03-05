@@ -19,9 +19,7 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'id',
-    ];
+    let fields = ['id'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -57,16 +55,14 @@ async function update(
     }
 
     /** initializations */
-    let models = Models.get();
+    let models = await Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
     let inputs: InferCreationAttributes<typeof user_model> = {
         title: body.title,
         status: body.status,
-       
     };
-
 
     /** print request data into console */
     // console.clear();

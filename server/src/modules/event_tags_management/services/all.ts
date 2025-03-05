@@ -11,6 +11,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -53,7 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    let models = await db();
+    let models = await Models.get();
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
@@ -83,11 +84,11 @@ async function all(
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
+    if (role && role != 'all') {
         query.where = {
             ...query.where,
             role: role,
-        }
+        };
     }
 
     if (search_key) {

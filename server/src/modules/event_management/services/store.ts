@@ -34,7 +34,6 @@ async function validate(req: Request) {
         'poster',
         'price',
         'discount_price',
-
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -64,13 +63,12 @@ async function store(
     }
 
     /** initializations */
-    let models = Models.get();
+    let models = await Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
     let eventCategoryEventModel = models.EventCategoryEventModel;
     let EventTagEventModel = models.EventTagEventModel;
-
 
     let image_path = 'avatar.png';
     if (body['poster']?.ext) {
@@ -83,7 +81,6 @@ async function store(
 
     let categories: number[] = JSON.parse(body['event_categories']) || [];
     let tags: number[] = JSON.parse(body['event_tags']) || [];
-
 
     let inputs: InferCreationAttributes<typeof data> = {
         title: body.title,
@@ -103,9 +100,7 @@ async function store(
     };
 
     try {
-
         (await data.update(inputs)).save();
-
 
         if (!data.id) {
             throw new Error('Failed to save data.');
@@ -117,7 +112,7 @@ async function store(
                     event_id: data.id || 1,
                     event_category_id: categoryId,
                 });
-            })
+            }),
         );
 
         await Promise.all(
@@ -126,7 +121,7 @@ async function store(
                     event_id: data.id || 1,
                     event_tag_id: tagId,
                 });
-            })
+            }),
         );
 
         return response(201, 'data created', { data });

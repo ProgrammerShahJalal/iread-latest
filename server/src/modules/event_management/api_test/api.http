@@ -6,7 +6,7 @@ GET {{hostname}}?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10
 
 # get
 ###
-GET {{hostname}}/4 HTTP/1.1
+GET {{hostname}}/1 HTTP/1.1
 
 # # get
 # ###

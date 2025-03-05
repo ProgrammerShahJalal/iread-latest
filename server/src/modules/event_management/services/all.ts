@@ -11,6 +11,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -53,7 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    let models = await db();
+    let models = await Models.get();
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
@@ -67,10 +68,29 @@ async function all(
     let exclude_fields: string[] = ['password'];
 
     if (query_param.select_fields) {
-        select_fields = query_param?.select_fields?.replace(/\s/g, '').split(',');
-        select_fields = [...select_fields, 'id','status',];
+        select_fields = query_param?.select_fields
+            ?.replace(/\s/g, '')
+            .split(',');
+        select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id','title','reg_start_date','reg_end_date','session_start_date_time','session_end_date_time','place','short_description','full_description','pre_requisities','terms_and_conditions','event_type','poster','price','discount_price','status',];
+        select_fields = [
+            'id',
+            'title',
+            'reg_start_date',
+            'reg_end_date',
+            'session_start_date_time',
+            'session_end_date_time',
+            'place',
+            'short_description',
+            'full_description',
+            'pre_requisities',
+            'terms_and_conditions',
+            'event_type',
+            'poster',
+            'price',
+            'discount_price',
+            'status',
+        ];
     }
 
     let query: FindAndCountOptions = {
@@ -83,18 +103,16 @@ async function all(
 
     query.attributes = select_fields;
 
-
     if (search_key) {
         query.where = {
             ...query.where,
             [Op.or]: [
                 { id: { [Op.like]: `%${search_key}%` } },
-               
+
                 // { place: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }
-    
 
     try {
         let data = await (fastify_instance as anyObject).paginate(

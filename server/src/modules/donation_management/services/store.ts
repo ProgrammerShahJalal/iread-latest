@@ -17,17 +17,10 @@ import Models from '../../../database/models';
 import Stripe from 'stripe';
 import axios from 'axios';
 
-
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'name',
-        'email',
-        'phone',
-        'occupation',
-        'amount',
-    ];
+    let fields = ['name', 'email', 'phone', 'occupation', 'amount'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -40,13 +33,14 @@ async function validate(req: Request) {
             .run(req);
     }
 
-
     let result = await validationResult(req);
 
     return result;
 }
 
-const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, { apiVersion: "2024-12-18.acacia" });
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
+    apiVersion: '2025-02-24.acacia',
+});
 
 interface DonationRequest {
     name: string;
@@ -80,13 +74,10 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-
-    const { name, email, phone, occupation, amount } = req.body as DonationRequest;
-
-
+    const { name, email, phone, occupation, amount } =
+        req.body as DonationRequest;
 
     try {
-
         const amountInCents = Math.round(parseFloat(amount) * 100);
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -127,13 +118,14 @@ async function store(
         await data.update(inputs);
         await data.save();
 
-
         if (!data.id) {
             throw new Error('Failed to save donation data.');
         }
 
         // Webhook logic
-        const webhookURL = process.env.WEBHOOK_URL || 'http://127.0.0.1:5001/api/v1/donations/webhook';
+        const webhookURL =
+            process.env.WEBHOOK_URL ||
+            'http://127.0.0.1:5001/api/v1/donations/webhook';
         const webhookPayload = {
             event: 'data.created',
             data: {
@@ -149,8 +141,14 @@ async function store(
         // Call the webhook
         await axios.post(webhookURL, webhookPayload);
 
-
-        return response(201, 'data created', { name, email, phone, occupation, amount, sessionId: session.id });
+        return response(201, 'data created', {
+            name,
+            email,
+            phone,
+            occupation,
+            amount,
+            sessionId: session.id,
+        });
     } catch (error: any) {
         console.error('Error creating donation:', error);
         let uid = await error_trace(models, error, req.url, req.body);

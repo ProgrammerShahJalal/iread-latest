@@ -10,8 +10,7 @@ async function details(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-
-    let models = Models.get();
+    let models = await Models.get();
     let params = req.params as any;
 
     try {
@@ -19,16 +18,16 @@ async function details(
             where: {
                 id: params.id,
             },
-            include:[
+            include: [
                 {
                     model: models.EventCategoryEventModel,
                     as: 'event_categories',
                 },
-                // {
-                //     model: models.EventTagEventModel,
-                //     as: 'event_tags',
-                // },
-            ]
+                {
+                    model: models.EventTagEventModel,
+                    as: 'event_tags',
+                },
+            ],
         });
 
         if (data) {
