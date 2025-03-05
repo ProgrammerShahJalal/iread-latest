@@ -16,6 +16,9 @@ import Footer from './components/management_data_page/Footer';
 import DateTime from '../../components/DateTime';
 import moment from 'moment/moment';
 import { anyObject } from '../../../common_types/object';
+import EventCategoryDropDown from "../event_category/components/dropdown/DropDown";
+import EventTagDropDown from "../event_tags/components/dropdown/DropDown";
+
 const Edit: React.FC = () => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
@@ -59,10 +62,17 @@ const Edit: React.FC = () => {
         e.preventDefault();
 
         const form_data = new FormData(e.currentTarget);
-        form_data.append('full_description', data);
+        // form_data.append('full_description', data);
 
-        const response = await dispatch(update(form_data) as any);
-        // console.log('Response:', response);
+        // Get the editor data
+        if (editorRef.current) {
+            form_data.append('full_description', editorRef.current.getData()); // Access CKEditor instance correctly
+        } else {
+            console.error('CKEditor instance is not available');
+        }
+
+        // Dispatch the update action
+                await dispatch(update(form_data) as any);
     };
 
     // Helper to get values from state
@@ -109,10 +119,24 @@ const Edit: React.FC = () => {
                                             ></textarea>
                                         </div>
 
-                                        {['pre_requisities', 'terms_and_conditions', 'price', 'discount_price'].map(
+                                        {['pre_requisities',
+                                            'terms_and_conditions',
+                                            'price',
+                                            'discount_price',
+                                            'poster',
+                                        ].map(
                                             (i) => (
                                                 <div key={i} className="form-group form-vertical">
-                                                    <Input value={get_value(i)} name={i} />
+
+                                                    {
+                                                        i === 'poster' ? <div className="form-group grid_full_width form-vertical">
+                                                            <InputImage
+                                                                defalut_preview={get_value('poster')}
+                                                                label="Poster"
+                                                                name="poster"
+                                                            />
+                                                        </div> : <Input value={get_value(i)} name={i} />
+                                                    }
                                                 </div>
                                             ),
                                         )}
@@ -125,6 +149,26 @@ const Edit: React.FC = () => {
                                             <Input value={get_value('place')} name="place" />
                                         </div>
 
+                                        <div className="form-group form-vertical">
+                                            <label>Event Categories</label>
+                                            <EventCategoryDropDown name="event_categories"
+                                                multiple={true}
+                                                default_value={get_value('event_categories') ? [{ id: get_value('event_categories') }] : []}
+                                                get_selected_data={(data) => {
+                                                    console.log(data)
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="form-group form-vertical">
+                                            <label>Event Tags</label>
+                                            <EventTagDropDown name="event_tags"
+                                                multiple={true}
+                                                default_value={get_value('event_tags') ? [{ id: get_value('event_tags') }] : []}
+                                                get_selected_data={(data) => {
+                                                    console.log(data)
+                                                }}
+                                            />
+                                        </div>
                                         {/* Event Type Radio Buttons */}
                                         <label>Event Type</label>
                                         <div style={{ paddingBottom: 10 }}>
@@ -202,13 +246,7 @@ const Edit: React.FC = () => {
                                                 handler={() => console.log('DateTime changed')}
                                             />
                                         </div>
-                                        <div className="form-group grid_full_width form-vertical">
-                                            <InputImage
-                                                defalut_preview={get_value('poster')}
-                                                label="Poster"
-                                                name="poster"
-                                            />
-                                        </div>
+
 
                                     </div>
                                 </div>

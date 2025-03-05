@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { Chart, BarController, BarElement, PointElement, ArcElement, PieController, LinearScale, Tooltip, Legend, Title, CategoryScale } from "chart.js";
 
-export interface Props {}
+export interface Props { }
 
 const T1: React.FC<Props> = () => {
     const [students, setStudents] = useState<any[]>([]);
@@ -10,7 +10,7 @@ const T1: React.FC<Props> = () => {
     const [admins, setAdmins] = useState<any[]>([]);
     const [blogs, setBlogs] = useState<any[]>([]);
     const [events, setEvents] = useState<any[]>([]);
-    
+
     const barChartRef = useRef<HTMLCanvasElement>(null);
     const pieChartRef = useRef<HTMLCanvasElement>(null);
     const barChartInstance = useRef<Chart | null>(null);
@@ -114,89 +114,89 @@ const T1: React.FC<Props> = () => {
     return (
         <div className="container">
 
-<div className="row my-4">
-            <div className="col-xl-3 col-lg-4">
-                <div className="card" data-intro="This is card">
-                    <div className="business-top-widget card-body">
-                        <div className="media d-inline-flex">
-                            <div className="media-body">
-                                <span className="mb-2">Total Students</span>
-                                <h2 className="total-value m-0 counter">
-                                    {students?.length}
-                                </h2>
+            <div className="row my-4">
+                <div className="col-xl-3 col-lg-4">
+                    <div className="card" data-intro="This is card">
+                        <div className="business-top-widget card-body">
+                            <div className="media d-inline-flex">
+                                <div className="media-body">
+                                    <span className="mb-2">Total Students</span>
+                                    <h2 className="total-value m-0 counter">
+                                        {students?.length}
+                                    </h2>
+                                </div>
+                                <img
+                                    width={100}
+                                    height={"auto"}
+                                    src="/assets/dashboard/images/student.png"
+                                    alt="Students"
+                                />
                             </div>
-                            <img 
-                            width={100}
-                            height={"auto"}
-                            src="/assets/dashboard/images/student.png"
-                            alt="Students"
-                            />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-xl-3 col-lg-4">
-                <div className="card">
-                    <div className="business-top-widget card-body">
-                        <div className="media d-inline-flex">
-                            <div className="media-body">
-                                <span className="mb-2">Total Parents</span>
-                                <h2 className="total-value m-0 counter">
-                                    {parents?.length}
-                                </h2>
+                <div className="col-xl-3 col-lg-4">
+                    <div className="card">
+                        <div className="business-top-widget card-body">
+                            <div className="media d-inline-flex">
+                                <div className="media-body">
+                                    <span className="mb-2">Total Parents</span>
+                                    <h2 className="total-value m-0 counter">
+                                        {parents?.length}
+                                    </h2>
+                                </div>
+                                <img
+                                    width={100}
+                                    height={"auto"}
+                                    src="/assets/dashboard/images/parent.png"
+                                    alt="Parents"
+                                />
                             </div>
-                            <img 
-                            width={100}
-                            height={"auto"}
-                            src="/assets/dashboard/images/parent.png"
-                            alt="Parents"
-                            />
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="col-xl-3 col-lg-4">
-                <div className="card">
-                    <div className="business-top-widget card-body">
-                        <div className="media d-inline-flex">
-                            <div className="media-body">
-                                <span className="mb-2">Total events</span>
-                                <h2 className="total-value m-0 counter">
-                                    {events?.length}
-                                </h2>
+                <div className="col-xl-3 col-lg-4">
+                    <div className="card">
+                        <div className="business-top-widget card-body">
+                            <div className="media d-inline-flex">
+                                <div className="media-body">
+                                    <span className="mb-2">Total events</span>
+                                    <h2 className="total-value m-0 counter">
+                                        {events?.length}
+                                    </h2>
+                                </div>
+                                <img
+                                    width={100}
+                                    height={"auto"}
+                                    src="/assets/dashboard/images/event-list.png"
+                                    alt="Events"
+                                />
                             </div>
-                            <img 
-                            width={100}
-                            height={"auto"}
-                            src="/assets/dashboard/images/event-list.png"
-                            alt="Events"
-                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xl-3 col-lg-4">
+                    <div className="card">
+                        <div className="business-top-widget card-body">
+                            <div className="media d-inline-flex">
+                                <div className="media-body">
+                                    <span className="mb-2">Total blogs</span>
+                                    <h2 className="total-value m-0 counter">
+                                        {blogs?.length}
+                                    </h2>
+                                </div>
+                                <img
+                                    width={100}
+                                    height={"auto"}
+                                    src="/assets/dashboard/images/blog.png"
+                                    alt="Blogs"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="col-xl-3 col-lg-4">
-                <div className="card">
-                    <div className="business-top-widget card-body">
-                        <div className="media d-inline-flex">
-                            <div className="media-body">
-                                <span className="mb-2">Total blogs</span>
-                                <h2 className="total-value m-0 counter">
-                                    {blogs?.length}
-                                </h2>
-                            </div>
-                            <img 
-                            width={100}
-                            height={"auto"}
-                            src="/assets/dashboard/images/blog.png"
-                            alt="Blogs"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
             <div className="row my-4">
                 <div className="col-md-6">
@@ -204,8 +204,15 @@ const T1: React.FC<Props> = () => {
                     <canvas ref={barChartRef}></canvas>
                 </div>
                 <div className="col-md-6">
-                    <h3>Pie Chart</h3>
-                    <canvas ref={pieChartRef}></canvas>
+                    <div className="card">
+                        <div className="card-header py-1">
+                            <h3 className="m-0">Pie Chart</h3>
+                        </div>
+                        <div className="card-body">
+                        <canvas ref={pieChartRef}></canvas>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

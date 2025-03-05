@@ -1,6 +1,4 @@
-import {
-    Sequelize,
-} from 'sequelize';
+import { Sequelize } from 'sequelize';
 import DB from '../../../bootstrap/db.sql';
 import * as module_model from './model';
 // import * as user_model from '../../user_module/models/user_model';

@@ -1,8 +1,10 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import Stripe from "stripe";
-import { responseObject } from "../../../common_types/object";
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import Stripe from 'stripe';
+import { responseObject } from '../../../common_types/object';
 
-const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, { apiVersion: "2024-12-18.acacia" });
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
+    apiVersion: '2025-02-24.acacia',
+});
 
 async function webhook(
     fastify_instance: FastifyInstance,
@@ -24,10 +26,13 @@ async function webhook(
             event = stripe.webhooks.constructEvent(
                 req.body as Buffer, // Raw request body as a buffer
                 sig,
-                process.env.STRIPE_WEBHOOK_SECRET as string
+                process.env.STRIPE_WEBHOOK_SECRET as string,
             );
         } catch (err: any) {
-            console.error('Webhook signature verification failed:', err.message);
+            console.error(
+                'Webhook signature verification failed:',
+                err.message,
+            );
             return res.status(400).send({
                 success: false,
                 message: 'Webhook signature verification failed.',
@@ -49,7 +54,9 @@ async function webhook(
                 console.warn(`Unhandled event type: ${event.type}`);
         }
 
-        return res.status(200).send({ success: true, message: 'Webhook received.' });
+        return res
+            .status(200)
+            .send({ success: true, message: 'Webhook received.' });
     }
 
     // Return a valid responseObject for the webhook function
@@ -58,7 +65,7 @@ async function webhook(
         message: 'Webhook handler initialized.',
         data: {
             // Add any additional data you want to return
-            },
+        },
     };
 }
 

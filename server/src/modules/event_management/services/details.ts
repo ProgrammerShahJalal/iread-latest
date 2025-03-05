@@ -1,24 +1,16 @@
-import db from '../models/db';
+import Models from '../../../database/models';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { responseObject } from '../../../common_types/object';
 import response from '../../../helpers/response';
 import error_trace from '../../../helpers/error_trace';
 import custom_error from '../../../helpers/custom_error';
 import { modelName } from '../models/model';
-import Models from '../../../database/models';
-// async function details(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
 
 async function details(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = Models.get();
-
+    let models = await Models.get();
     let params = req.params as any;
 
     try {
@@ -26,12 +18,16 @@ async function details(
             where: {
                 id: params.id,
             },
-            // include:[
-            //     {
-            //         model: models.BlogCategoriesModel,
-            //         as: 'blog_categories',
-            //     }
-            // ]
+            include: [
+                {
+                    model: models.EventCategoryEventModel,
+                    as: 'event_categories',
+                },
+                {
+                    model: models.EventTagEventModel,
+                    as: 'event_tags',
+                },
+            ],
         });
 
         if (data) {

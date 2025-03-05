@@ -55,17 +55,22 @@ async function update(
     }
 
     /** initializations */
-    let models = Models.get();
+    let models = await Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
-
-
 
     /** print request data into console */
     // console.clear();
     // (fastify_instance as any).print(inputs);
 
     /** store data into database */
+
+    let eventCategoryEventModel = models.EventCategoryEventModel;
+    let EventTagEventModel = models.EventTagEventModel;
+
+    let categories: number[] = JSON.parse(body['event_categories']) || [];
+    let tags: number[] = JSON.parse(body['event_tags']) || [];
+
     try {
         let data = await models[modelName].findByPk(body.id);
 
@@ -77,7 +82,7 @@ async function update(
                 body['poster'].name;
             await (fastify_instance as any).upload(body['poster'], image_path);
         }
-        
+
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
             reg_start_date: body.reg_start_date || data?.reg_start_date,
@@ -94,7 +99,7 @@ async function update(
             terms_and_conditions:
                 body.terms_and_conditions || data?.terms_and_conditions,
             event_type: body.event_type || data?.event_type,
-            poster: image_path || data?.poster as string,
+            poster: image_path || (data?.poster as string),
             price: body.price || data?.price,
             discount_price: body.discount_price || data?.discount_price,
         };
@@ -102,6 +107,32 @@ async function update(
         if (data) {
             data.update(inputs);
             await data.save();
+
+            await eventCategoryEventModel.destroy({
+                where: { event_id: data.id },
+            });
+
+            await Promise.all(
+                categories.map(async (categoryId) => {
+                    await eventCategoryEventModel.create({
+                        event_id: data.id || 1,
+                        event_category_id: categoryId,
+                    });
+                }),
+            );
+
+            await EventTagEventModel.destroy({
+                where: { event_id: data.id },
+            });
+
+            await Promise.all(
+                tags.map(async (tagId) => {
+                    await EventTagEventModel.create({
+                        event_id: data.id || 1,
+                        event_tag_id: tagId,
+                    });
+                }),
+            );
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

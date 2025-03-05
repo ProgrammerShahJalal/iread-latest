@@ -32,8 +32,8 @@ async function soft_delete(
     }
 
     /** initializations */
-    let models = Models.get();
-    
+    let models = await Models.get();
+
     let body = req.body as { [key: string]: any };
 
     try {

@@ -17,7 +17,7 @@ async function details(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = Models.get();
+    let models = await Models.get();
 
     let params = req.params as any;
 
