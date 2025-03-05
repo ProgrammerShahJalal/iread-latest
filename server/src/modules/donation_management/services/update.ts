@@ -19,9 +19,7 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'id',
-    ];
+    let fields = ['id'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -61,15 +59,6 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        occupation: body.occupation,
-        ammount: body.ammount,
-    };
-
-
     /** print request data into console */
     // console.clear();
     // (fastify_instance as any).print(inputs);
@@ -78,6 +67,15 @@ async function update(
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                name: body.name || data.name,
+                email: body.email || data.email,
+                phone: body.phone || data.phone,
+                occupation: body.occupation || data.occupation,
+                amount: body.ammount || data.amount,
+                session_id: body.session_id || data.session_id,
+            };
+
             data.update(inputs);
             await data.save();
             return response(201, 'data updated', { data });

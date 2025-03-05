@@ -15,6 +15,8 @@ import Select from 'react-select';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import DateTime from '../../components/DateTime';
+import EventCategoryDropDown from "../event_category/components/dropdown/DropDown";
+import EventTagDropDown from "../event_tags/components/dropdown/DropDown";
 
 export interface Props { }
 
@@ -105,9 +107,18 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'terms_and_conditions',
                                             'price',
                                             'discount_price',
+                                            'poster',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input name={i} />
+                                                
+                                                {
+                                                    i === 'poster' ? <div className="form-group grid_full_width form-vertical">
+                                                    <InputImage
+                                                        label={'Poster'}
+                                                        name={'poster'}
+                                                    />
+                                                </div> : <Input name={i} />
+                                                }
                                             </div>
                                         ))}
 
@@ -131,7 +142,24 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
                                            
 
-
+                                            <div className="form-group form-vertical">
+                                                <label>Event Categories</label>
+                                                <EventCategoryDropDown name="event_categories"
+                                                    multiple={true}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="form-group form-vertical">
+                                                <label>Event Tags</label>
+                                                <EventTagDropDown name="event_tags"
+                                                    multiple={true}
+                                                    get_selected_data={(data) => {
+                                                        console.log(data)
+                                                    }}
+                                                />
+                                            </div>
                                             {/* RADIO OPTIONS */}
                                             <label>Event Type</label>
                                             <div style={{
@@ -211,13 +239,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     name={'session_end_date_time'}
                                                     handler={(data) => { console.log('arguments', data) }}
                                                 ></DateTime>
-                                            </div>
-
-                                            <div className="form-group grid_full_width form-vertical">
-                                                <InputImage
-                                                    label={'Poster'}
-                                                    name={'poster'}
-                                                />
                                             </div>
                                         </div>
                                     </div>

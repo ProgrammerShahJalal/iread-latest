@@ -1,3 +1,21 @@
+import * as EventModel from "../modules/event_management/models/model";
+import * as EventCategoriesModel from "../modules/event_categories_management/models/model";
+import * as EventCategoryEventModel from "../modules/event_categories_management/models/event_category_event.model";
+import * as EventTagsModel from "../modules/event_tags_management/models/model";
+import * as EventTagEventModel from "../modules/event_tags_management/models/event_tag_event.model";
+import * as EventCertifiedUsersModel from "../modules/event_certified_users_management/models/model";
+import * as EventResourcesModel from "../modules/event_resources_management/models/model";
+import * as EventFaqsModel from "../modules/event_faqs_management/models/model";
+import * as EventSessionsModel from "../modules/event_sessions_management/models/model";
+import * as EventSessionsAssesmentsModel from "../modules/event_session_assesments_management/models/model";
+import * as EventSessionAssesmentSubmissionsModel from "../modules/event_session_assesment_submissions_management/models/model";
+import * as EventAttendanceModel from "../modules/event_attendance_management/models/model";
+import * as EventEnrollmentsModel from "../modules/event_enrollments_management/models/model";
+import * as EventPaymentsModel from "../modules/event_payments_management/models/model";
+import * as EventPaymentRefundsModel from "../modules/event_payment_refunds_management/models/model";
+import * as EventFeedbackFormFieldsModel from "../modules/event_feedback_form_fields_management/models/model";
+import * as EventFeedbackFormFieldValuesModel from "../modules/event_feedback_form_field_values_management/models/model";
+
 import * as ErrorTraceModel from "../modules/system_management/models/error_trace.model";
 import * as ContactModel from "../modules/contact_management/models/model";
 
@@ -14,22 +32,6 @@ import * as BlogViewModel from "../modules/blog_view_management/models/model";
 
 import * as AuthorModel from "../modules/author_management/models/model";
 
-import * as EventModel from "../modules/event_management/models/model";
-import * as EventCategoriesModel from "../modules/event_categories_management/models/model";
-import * as EventTagsModel from "../modules/event_tags_management/models/model";
-import * as EventCertifiedUsersModel from "../modules/event_certified_users_management/models/model";
-import * as EventResourcesModel from "../modules/event_resources_management/models/model";
-import * as EventFaqsModel from "../modules/event_faqs_management/models/model";
-import * as EventSessionsModel from "../modules/event_sessions_management/models/model";
-import * as EventSessionsAssesmentsModel from "../modules/event_session_assesments_management/models/model";
-import * as EventSessionAssesmentSubmissionsModel from "../modules/event_session_assesment_submissions_management/models/model";
-import * as EventAttendanceModel from "../modules/event_attendance_management/models/model";
-import * as EventEnrollmentsModel from "../modules/event_enrollments_management/models/model";
-import * as EventPaymentsModel from "../modules/event_payments_management/models/model";
-import * as EventPaymentRefundsModel from "../modules/event_payment_refunds_management/models/model";
-import * as EventFeedbackFormFieldsModel from "../modules/event_feedback_form_fields_management/models/model";
-import * as EventFeedbackFormFieldValuesModel from "../modules/event_feedback_form_field_values_management/models/model";
-
 import * as DonationModel from "../modules/donation_management/models/model";
 
 import * as AppSettinsgModel from "../modules/app_setting_management/models/model";
@@ -44,6 +46,24 @@ import * as UserLoginHistoriesModel from "../modules/user_login_histories/models
 export type model_types = {
     ContactModel: typeof ContactModel.DataModel;
     ErrorTraceModel: typeof ErrorTraceModel.DataModel;
+
+    EventModel: typeof EventModel.DataModel;
+    EventCategoriesModel: typeof EventCategoriesModel.DataModel;
+    EventCategoryEventModel: typeof EventCategoryEventModel.DataModel;
+    EventTagsModel: typeof EventTagsModel.DataModel;
+    EventTagEventModel: typeof EventTagEventModel.DataModel;
+    EventCertifiedUsersModel: typeof EventCertifiedUsersModel.DataModel;
+    EventResourcesModel: typeof EventResourcesModel.DataModel;
+    EventFaqsModel: typeof EventFaqsModel.DataModel;
+    EventSessionsModel: typeof EventSessionsModel.DataModel;
+    EventSessionsAssesmentsModel: typeof EventSessionsAssesmentsModel.DataModel;
+    EventSessionAssesmentSubmissionsModel: typeof EventSessionAssesmentSubmissionsModel.DataModel;
+    EventAttendanceModel: typeof EventAttendanceModel.DataModel;
+    EventEnrollmentsModel: typeof EventEnrollmentsModel.DataModel;
+    EventPaymentsModel: typeof EventPaymentsModel.DataModel;
+    EventPaymentRefundsModel: typeof EventPaymentRefundsModel.DataModel;
+    EventFeedbackFormFieldsModel: typeof EventFeedbackFormFieldsModel.DataModel;
+    EventFeedbackFormFieldValuesModel: typeof EventFeedbackFormFieldValuesModel.DataModel;
     
     BlogModel: typeof BlogModel.DataModel;
     BlogCategoriesModel: typeof BlogCategoriesModel.DataModel;
@@ -58,22 +78,6 @@ export type model_types = {
     BlogViewModel: typeof BlogViewModel.DataModel;
    
     AuthorModel: typeof AuthorModel.DataModel;
-
-    EventModel: typeof EventModel.DataModel;
-    EventCategoriesModel: typeof EventCategoriesModel.DataModel;
-    EventTagsModel: typeof EventTagsModel.DataModel;
-    EventCertifiedUsersModel: typeof EventCertifiedUsersModel.DataModel;
-    EventResourcesModel: typeof EventResourcesModel.DataModel;
-    EventFaqsModel: typeof EventFaqsModel.DataModel;
-    EventSessionsModel: typeof EventSessionsModel.DataModel;
-    EventSessionsAssesmentsModel: typeof EventSessionsAssesmentsModel.DataModel;
-    EventSessionAssesmentSubmissionsModel: typeof EventSessionAssesmentSubmissionsModel.DataModel;
-    EventAttendanceModel: typeof EventAttendanceModel.DataModel;
-    EventEnrollmentsModel: typeof EventEnrollmentsModel.DataModel;
-    EventPaymentsModel: typeof EventPaymentsModel.DataModel;
-    EventPaymentRefundsModel: typeof EventPaymentRefundsModel.DataModel;
-    EventFeedbackFormFieldsModel: typeof EventFeedbackFormFieldsModel.DataModel;
-    EventFeedbackFormFieldValuesModel: typeof EventFeedbackFormFieldValuesModel.DataModel;
 
     DonationModel: typeof DonationModel.DataModel;
 

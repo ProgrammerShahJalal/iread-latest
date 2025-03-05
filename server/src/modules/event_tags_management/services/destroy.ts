@@ -36,7 +36,7 @@ async function destroy(
     }
 
     /** initializations */
-    let models = Models.get();
+    let models = await Models.get();
     let body = req.body as { [key: string]: any };
 
     try {
@@ -61,7 +61,12 @@ async function destroy(
         if (error instanceof custom_error) {
             error.uid = uid;
         } else {
-            throw new custom_error('server error', 500, (error as Error).message, uid);
+            throw new custom_error(
+                'server error',
+                500,
+                (error as Error).message,
+                uid,
+            );
         }
         throw error;
     }

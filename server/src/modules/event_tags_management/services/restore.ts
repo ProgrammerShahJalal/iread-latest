@@ -33,7 +33,7 @@ async function restore(
 
     /** initializations */
     // let models = await db();
-    let models = Models.get();
+    let models = await Models.get();
     let body = req.body as { [key: string]: any };
 
     try {
