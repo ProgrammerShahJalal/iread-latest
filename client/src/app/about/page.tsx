@@ -9,11 +9,11 @@ type Props = {};
 function AboutPage({ }: Props) {
 
     return (
-        <>
+        <div className="min-h-[100vh]">
             <Hero />
             <HappyStudentAtAGlance />
             <FaqPage />
-        </>
+        </div>
     );
 }
 

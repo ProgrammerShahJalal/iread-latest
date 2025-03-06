@@ -4,12 +4,27 @@ import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../api/eventApi";
 
+
+const formatDateTime = (isoDate: string): string => {
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    // second: "2-digit",
+    hour12: true, // Use 12-hour format (set to false for 24-hour format)
+  };
+  return date.toLocaleString("en-GB", options);
+};
+
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
 
   return (
     <section>
-      <div className="">
+      <div className="min-h-[100vh]">
         <div className="section-content">
           <div className="row">
             <section
@@ -70,9 +85,9 @@ const EventsPage = async () => {
                                   <ul className="list-inline font-11 mb-20">
                                     <li>
                                       <i className="fa fa-calendar mr-5" />
-                                      {new Date(
-                                        event?.session_start_date_time
-                                      ).toLocaleString()}
+                                      {
+                                      formatDateTime(event?.session_start_date_time)
+                                      }
                                     </li>
 
                                     <li>

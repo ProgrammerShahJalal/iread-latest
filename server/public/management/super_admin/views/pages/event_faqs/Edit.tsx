@@ -10,133 +10,142 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import Select from 'react-select';
-import DateEl from '../../components/DateEl';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
 
-export interface Props { }
-
-const Edit: React.FC<Props> = (props: Props) => {
-    const state: typeof initialState = useSelector(
-        (state: RootState) => state[setup.module_name],
-    );
-
+const Edit: React.FC = () => {
+    const state = useSelector((state: RootState) => state[setup.module_name]);
     const dispatch = useAppDispatch();
     const params = useParams();
+
+    const [faqs, setFaqs] = useState<{ title: string; description: string }[]>([]);
 
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
-    }, []);
+    }, [dispatch, params.id]);
 
-
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
-
-
-
-    async function handle_submit(e) {
-        e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(update(form_data) as any);
-    }
-
-    function get_value(key) {
-        try {
-            if (state.item[key]) return state.item[key];
-            if (state.item?.info[key]) return state.item?.info[key];
-        } catch (error) {
-            return '';
+    useEffect(() => {
+        if (state.item?.faqs) {
+            setFaqs(state.item.faqs);
         }
-        return '';
+    }, [state.item]);
+
+    function get_value(key: string) {
+        return state.item?.[key] || state.item?.info?.[key] || '';
     }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        formData.append('faqs', JSON.stringify(faqs)); // Append FAQs as JSON string
+        await dispatch(update(formData) as any);
+    };
+
+    const handleFaqChange = (index: number, field: string, value: string) => {
+        const updatedFaqs = [...faqs];
+        updatedFaqs[index] = { ...updatedFaqs[index], [field]: value };
+        setFaqs(updatedFaqs);
+    };
+
+    const addFaq = () => setFaqs([...faqs, { title: '', description: '' }]);
+
+    const removeFaq = (index: number) => {
+        const updatedFaqs = faqs.filter((_, i) => i !== index);
+        setFaqs(updatedFaqs);
+    };
 
     return (
-        <>
-            <div className="page_content">
-                <div className="explore_window fixed_size">
-                    <Header page_title={setup.edit_page_title}></Header>
-
-                    {Object.keys(state.item).length && (
-                        <div className="content_body custom_scroll">
-                            <form
-                                onSubmit={(e) => handle_submit(e)}
-                                className="mx-auto pt-3"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    defaultValue={get_value(`id`)}
-                                />
-
-                                <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
-                                    <div className="form_auto_fit">
-                    
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                      
-                                        {[
-                                            'title',
-                                            'description',
-
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                        <Input
-                                                            name={i}
-                                                            value={get_value(i)}
-                                                        />
-                                            </div>
-                                        ))}
-
-                                    </div>
-
-
-
+        <div className="page_content">
+            <div className="explore_window fixed_size">
+                <Header page_title={setup.edit_page_title} />
+                {Object.keys(state.item).length > 0 && (
+                    <div className="content_body custom_scroll">
+                        <form onSubmit={handleSubmit} className="mx-auto pt-3">
+                            <input type="hidden" name="id" defaultValue={get_value('id')} />
+                            
+                            <h5 className="mb-4">Input Data</h5>
+                            <div className="form_auto_fit">
+                                <div className="form-group form-vertical">
+                                    <label>Events</label>
+                                    <EventDropDown 
+                                        name="events"
+                                        multiple={false}
+                                        default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
+                                    />
                                 </div>
 
                                 <div className="form-group form-vertical">
-                                    <label></label>
-                                    <div className="form_elements">
-                                        <button className="btn btn-outline-info">
-                                            submit
-                                        </button>
-                                    </div>
+                                    {/* <label>Title</label> */}
+                                    <Input name="title" value={get_value('title')} />
                                 </div>
-                            </form>
-                        </div>
-                    )}
 
-                    <Footer>
-                        {state?.item?.id && (
-                            <li>
-                                <Link
-                                    to={`/${setup.route_prefix}/details/${state.item?.id}`}
-                                    className="outline"
-                                >
-                                    <span className="material-symbols-outlined fill">
-                                        visibility
-                                    </span>
-                                    <div className="text">Details</div>
-                                </Link>
-                            </li>
-                        )}
-                    </Footer>
-                </div>
+                                <div className="form-group form-vertical">
+                                    <label>Description</label>
+                                    <textarea 
+                                        name="description" 
+                                        defaultValue={get_value('description')} 
+                                        className="form-control" 
+                                        rows={5} 
+                                    />
+                                </div>
+                            </div>
+
+                            {/* FAQ Section */}
+                            <h5 className="mt-4">FAQs</h5>
+                            {faqs.map((faq, index) => (
+                                <div key={index} className="faq-item border p-3 mb-3 rounded">
+                                    <div className="form-group">
+                                        <label>FAQ Title</label>
+                                        <br/>
+                                        <input
+                                            className="form-control" 
+                                            value={faq.title} 
+                                            onChange={(e) => handleFaqChange(index, 'title', e.target.value)} 
+                                        />
+                                        
+                                    </div>
+                                    <div className="form-group">
+                                        <label>FAQ Description</label>
+                                        <textarea 
+                                            className="form-control" 
+                                            rows={3} 
+                                            value={faq.description} 
+                                            onChange={(e) => handleFaqChange(index, 'description', e.target.value)} 
+                                        />
+                                    </div>
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-danger btn-sm mt-2" 
+                                        onClick={() => removeFaq(index)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                            <button type="button" className="btn btn-primary" onClick={addFaq}>
+                                + Add FAQ
+                            </button>
+
+                            <div className="form-group mt-4">
+                                <button type="submit" className="btn btn-outline-info">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+                <Footer>
+                    {state?.item?.id && (
+                        <li>
+                            <Link to={`/${setup.route_prefix}/details/${state.item.id}`} className="outline">
+                                <span className="material-symbols-outlined fill">visibility</span>
+                                <div className="text">Details</div>
+                            </Link>
+                        </li>
+                    )}
+                </Footer>
             </div>
-        </>
+        </div>
     );
 };
 

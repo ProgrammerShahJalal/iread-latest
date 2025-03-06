@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../../api/eventApi";
+import FaqCard from "@/faq/FaqCard";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -86,6 +87,16 @@ const EventDetailsPage = async ({
         <div className="container my-10">
           <div className="row">
             <div className="col-lg-8">
+            <div className="entry-meta pl-15">
+                  <ul className="list-inline my-6">
+                    <li>
+                      Categories: <span className="text-theme-color-2">{event.categories?.map((category: any) => category.title).join(', ')}</span>
+                    </li>
+                    <li>
+                      Tags: <span className="text-theme-color-2">{event.tags?.map((tag: any) => tag.title).join(', ')}</span>
+                    </li>
+                  </ul>
+                </div>
               <div className="post-content mt-10">
                 <div
                   className="post-content"
@@ -273,6 +284,16 @@ const EventDetailsPage = async ({
               </div>
             </div>
           </div>
+
+          <div className="max-w-4xl mx-auto py-8 px-4 my-10">
+      <h1 className="text-3xl font-bold text-center mb-6">Frequently Asked Questions</h1>
+
+      <div className="grid grid-cols-1 gap-y-5">
+        {/* {faqs.map((faq) => (
+          <FaqCard key={faq?.question} faq={faq} />
+        ))} */}
+      </div>
+    </div>
 
           <div className="my-10">
             <div>
