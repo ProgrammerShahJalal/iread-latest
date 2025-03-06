@@ -4,7 +4,7 @@ import store from './services/store';
 import { responseObject } from '../../common_types/object';
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
-    apiVersion: '2025-02-24.acacia',
+    apiVersion: '2024-12-18.acacia',
 });
 
 export default function (fastify: FastifyInstance) {
