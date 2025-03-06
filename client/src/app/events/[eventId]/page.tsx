@@ -86,8 +86,6 @@ const EventDetailsPage = async ({
         <div className="container my-10">
           <div className="row">
             <div className="col-lg-8">
-              <h3 className="text-2xl font-bold">Event Details</h3>
-              <p className="mb-4">{event.short_description}</p>
               <div className="post-content mt-10">
                 <div
                   className="post-content"

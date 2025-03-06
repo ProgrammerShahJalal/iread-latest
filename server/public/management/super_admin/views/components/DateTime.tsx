@@ -36,6 +36,7 @@ const DateTime: React.FC<Props> = ({ value, name, handler }: Props) => {
         if (dateTimeInput.current) {
             const inputValue = dateTimeInput.current.value;
             const formattedTime = moment(inputValue).format('YYYY-MM-DD HH:mm:ss'); // Removes "T" and "Z"
+            setInputValue(formattedTime);
             
             handler({
                 [name]: formattedTime,
