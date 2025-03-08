@@ -6,6 +6,8 @@ import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../../api/eventApi";
 import FaqCard from "@/faq/FaqCard";
+import { getFaqs } from "../../../api/faqApi";
+import EventFaqCard from "./EventFaqCard";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -45,9 +47,13 @@ const EventDetailsPage = async ({
 
   try {
     const events = await getEvents();
-    console.log("eventId", eventId);
+    const faqs = await getFaqs();
     const event = events.find(
       (event: any) => event.event_id === Number(eventId)
+    );
+
+    const eventFaqs = faqs.filter(
+      (faq: any) => faq.event_id === Number(eventId)
     );
 
     if (!event) {
@@ -289,9 +295,9 @@ const EventDetailsPage = async ({
       <h1 className="text-3xl font-bold text-center mb-6">Frequently Asked Questions</h1>
 
       <div className="grid grid-cols-1 gap-y-5">
-        {/* {faqs.map((faq) => (
-          <FaqCard key={faq?.question} faq={faq} />
-        ))} */}
+        {eventFaqs.map((faq: any) => (
+          <EventFaqCard key={faq.faq_id} faq={faq} />
+        ))}
       </div>
     </div>
 

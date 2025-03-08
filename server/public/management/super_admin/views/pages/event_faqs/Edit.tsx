@@ -75,7 +75,6 @@ const Edit: React.FC = () => {
                                 </div>
 
                                 <div className="form-group form-vertical">
-                                    {/* <label>Title</label> */}
                                     <Input name="title" value={get_value('title')} />
                                 </div>
 
@@ -98,6 +97,7 @@ const Edit: React.FC = () => {
                                         <label>FAQ Title</label>
                                         <br/>
                                         <input
+                                        name="title"
                                             className="form-control" 
                                             value={faq.title} 
                                             onChange={(e) => handleFaqChange(index, 'title', e.target.value)} 
@@ -107,6 +107,7 @@ const Edit: React.FC = () => {
                                     <div className="form-group">
                                         <label>FAQ Description</label>
                                         <textarea 
+                                            name="description" 
                                             className="form-control" 
                                             rows={3} 
                                             value={faq.description} 

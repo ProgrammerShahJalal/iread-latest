@@ -83,7 +83,6 @@ async function store(
                 });
         
                 return response(201, 'Data created', {
-                    data: savedData,
                     faqs: allFaqs, // Include all stored FAQs
                 });
         
