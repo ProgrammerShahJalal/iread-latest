@@ -76,12 +76,10 @@ const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
                                     <EventDropDown 
                                         name="events"
                                         multiple={false}
-                                        default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
                                     />
                                 </div>
 
                                 <div className="form-group form-vertical">
-                                    {/* <label>Title</label> */}
                                     <Input name="title" value={get_value('title')} />
                                 </div>
 
@@ -101,7 +99,7 @@ const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
                             {faqs.map((faq, index) => (
                                 <div key={index} className="faq-item border p-3 mb-3 rounded">
                                     <div className="form-group">
-                                        <label>FAQ Title</label>
+                                        <label>Title</label>
                                         <br/>
                                         <input
                                             className="form-control" 
@@ -111,7 +109,7 @@ const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
                                         
                                     </div>
                                     <div className="form-group">
-                                        <label>FAQ Description</label>
+                                        <label>Description</label>
                                         <textarea 
                                             className="form-control" 
                                             rows={3} 
