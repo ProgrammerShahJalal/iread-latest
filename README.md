@@ -1,16 +1,15 @@
-# IREAD Online Learning Platform
+# IREAD Online Learning Platform Documentation
 
 ## Introduction
-
-This project is a multi-phase website development effort. Currently, we are working on the primary phase, which focuses on authentication management, event management, and blog management. The next phase will introduce course management. The application is designed with a focus on user experience and scalability, enabling efficient creation, viewing, and management of content.
+IREAD is a multi-phase online learning platform. The current phase focuses on authentication, event management, and blog management. The next phase will introduce course management. Designed for scalability and user experience, the platform allows seamless creation, viewing, and management of content.
 
 ## Technologies Used
 
-- **Frontend**: Next.js, Tailwind CSS
-- **Backend**: Node.js, Fastify
-- **Architecture**: MVC (Model-View-Controller)
-- **Database**: MySQL
-- **Containerization**: Docker
+**Frontend:** Next.js, Tailwind CSS  
+**Backend:** Node.js, Fastify  
+**Architecture:** MVC (Model-View-Controller)  
+**Database:** MySQL  
+**Containerization:** Docker  
 
 ## Features
 
@@ -25,186 +24,155 @@ This project is a multi-phase website development effort. Currently, we are work
 - Course creation and management
 
 ## Backend Project Structure
-
-The project follows the MVC pattern for better separation of concerns and maintainability:
+The project follows the MVC pattern for better maintainability:
 
 ```
 project-root
-
-|├── client
-    ├── public // all frontend assets
-    ├── src
-      ├── app                 // next js root app
-        ├── home              // home page sections
-        ├── pages             // frontend inner pages
-        ├── shared            // shared components
-        ├── app.css           // frontend root css file
-        ├── layout.tsx        // frontend commont layout
-        ├── page.tsx          // frontend home page
-    ├── .eslintrc.json
-    ├── .gitignore
-    ├── next-env.d.ts
-    ├── package-lock.json
-    ├── package.json
-    ├── README.md
-    ├── tsconfig.json
-
-|├── server
-    ├── logs
-    |   ├── 404.log
-    |   ├── debug.log
-    |   ├── fatal.log
-    |   ├── info.log     
-    ├── public  
-    |   ├── assets            // all nessaray assets for design dashboard 
-    |   ├── management        // dashboard react source code    
-    |   ├── management_build  // dashboard react build source code    
-    |   ├── uploads           // all dynamic uploaded files 
-    |   ├── views             // base .ejs files
-    |   ├── avatar.png        // default user photo
-    ├── src        
-        ├── bootstrap         // server boot dependencies       
-        |    ├── db.sql.ts     // boot mysql connection instance       
-        ├── common_types      // all common types needed by type script
-        |    ├── object.ts            
-        ├── configs        
-        |    ├── app.config.ts // app configuration variables              
-        ├── helpers           // helper methods       
-        |   ├── custom_error.ts   // customer error message 
-        |   ├── error_trace.ts    // save error logs into db
-        |   ├── response.ts       // common response object
-        ├── modules           // api modules  
-        |   ├── module-1
-        |       ├── api_test  // check api throug vs code rest client
-        |       ├── models
-        |       |   ├── seeders   // feed database test data
-        |       |   ├── db.ts     // initialize models and create relations
-        |       |   ├── models.ts // model defination - database columns
-        |       ├── services      // each module CRUD services
-        |       |   ├── all.ts
-        |       |   ├── destroy.ts
-        |       |   ├── details.ts
-        |       |   ├── import.ts
-        |       |   ├── restore.ts
-        |       |   ├── soft_delete.ts
-        |       |   ├── store.ts
-        |       |   ├── update.ts
-        |       ├── test          // test each api for differenct status codes
-        |       ├── controller.ts // module controller
-        |       ├── routes.ts     // module route list
-        ├── plugins        
-        |   ├── paginate.ts     // response record pagination
-        |   ├── set_log.ts      // save error logs
-        |   ├── upload.ts       // file uploader
-        ├── routes              // default routes except api  
-        ├── index.ts            // server index
-    ├── .env        
-    ├── .env.example        
-    ├── .eslintignore       
-    ├── .eslintrc.json        
-    ├── .gitignore    
-    ├── .prettierignore        
-    ├── .prettierrc        
-    ├── jest.config.js
-    ├── nodemon.json
-    ├── note.js
-    ├── package.json
-    ├── tsconfig.json
-    ├── vite-config-admin.js
+|-- client/
+|   |-- public/  # Frontend assets
+|   |-- src/
+|       |-- app/  # Next.js root app
+|       |-- home/  # Home page sections
+|       |-- pages/  # Frontend inner pages
+|       |-- shared/  # Shared components
+|       |-- app.css  # Root CSS file
+|       |-- layout.tsx  # Common layout
+|       |-- page.tsx  # Home page
+|   |-- package.json
+|   |-- tsconfig.json
+|
+|-- server/
+|   |-- logs/  # Log files
+|   |-- public/
+|       |-- assets/  # Dashboard assets
+|       |-- management/  # React dashboard source code
+|       |-- management_build/  # Dashboard build source code
+|       |-- uploads/  # Uploaded files
+|       |-- views/  # EJS templates
+|   |-- src/
+|       |-- bootstrap/  # Server boot dependencies
+|           |-- db.sql.ts  # MySQL connection instance
+|       |-- common_types/  # TypeScript common types
+|       |-- configs/
+|           |-- app.config.ts  # Application configuration
+|       |-- helpers/
+|           |-- custom_error.ts  # Custom error handling
+|           |-- error_trace.ts  # Error logs management
+|           |-- response.ts  # Common response handling
+|       |-- modules/  # API modules
+|           |-- authentication/
+|               |-- controller.ts  # Auth controller
+|               |-- routes.ts  # Auth routes
+|               |-- services.ts  # Auth services
+|               |-- models.ts  # Auth models
+|           |-- events/
+|           |-- blogs/
+|       |-- plugins/
+|       |-- routes/
+|       |-- index.ts  # Server entry point
+|   |-- .env
+|   |-- package.json
+|   |-- tsconfig.json
 ```
+
+## Backend API Endpoints
+
+### Authentication
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/auth/register     | Register a new user           |
+| POST   | /api/auth/login        | User login                     |
+| GET    | /api/auth/profile      | Get user profile               |
+| PUT    | /api/auth/update       | Update user details            |
+| POST   | /api/auth/logout       | Logout user                    |
+
+### Events
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/events/create     | Create an event               |
+| GET    | /api/events            | Get all events                |
+| GET    | /api/events/:id        | Get event by ID               |
+| PUT    | /api/events/update/:id | Update event details          |
+| DELETE | /api/events/delete/:id | Delete an event               |
+
+### Blogs
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/blogs/create      | Create a blog post            |
+| GET    | /api/blogs             | Get all blog posts            |
+| GET    | /api/blogs/:id         | Get a blog post by ID         |
+| PUT    | /api/blogs/update/:id  | Update a blog post            |
+| DELETE | /api/blogs/delete/:id  | Delete a blog post            |
 
 ## Setup Instructions
 
 ### Prerequisites
-
 - Node.js (>= 16.x)
 - npm or yarn
 - Git
-- Docker and Docker Compose
+- Docker & Docker Compose
 
 ### Steps
+1. Clone the Repository:
+```bash
+git clone <repository-url>
+cd <repository-folder>
+```
+2. Install Dependencies:
+```bash
+npm install
+```
+3. Set Up Environment Variables:
+- Create a `.env` file in the project root
+- Add database credentials, API keys, etc.
 
-1. **Clone the Repository**:
+4. Run the Application Locally (Without Docker):
+```bash
+# Start the backend server
+npm run server
 
-   ```bash
-   git clone <repository-url>
-   cd <repository-folder>
-   ```
+# Start the frontend
+npm run dev
+```
+- Server: [http://localhost:5003](http://localhost:5003)
+- Client: [http://localhost:3000](http://localhost:3000)
 
-2. **Install Dependencies**:
+5. Run the Application Using Docker:
+```bash
+docker-compose up --build -d
+```
+- Server: [http://localhost:8005](http://localhost:8005)
 
-   ```bash
-   npm install
-   ```
-
-3. **Environment Configuration**:
-
-   - Create a `.env` file in the project root.
-   - Add the required environment variables (e.g., database credentials, API keys).
-
-4. **Run the Application Locally (Without Docker)**:
-
-  - server run
-   ```bash
-   npm run server
-   ```
-
-  - client run
-   ```bash
-   npm run dev
-   ```
-
-   server will be available at `http://localhost:5003`.
-   client will be available at `http://localhost:3000`.
-
-5. **Run the Application Using Docker**:
-
-   - Build and run the Docker container:
-
-     ```bash
-     docker-compose up --build -d
-     ```
-
-   - server will be available at `http://localhost:8005` & `http://localhost:8006`.
-
-6. **Build for Production**:
-
-   ```bash
-   npm run build
-   ```
-
-   Deploy the production build to your preferred hosting platform.
+6. Build for Production:
+```bash
+npm run build
+```
+- Deploy the build to a hosting platform.
 
 ## Deployment Instructions
-
-- Ensure your hosting platform supports Docker.
-- Push the Docker image to a container registry (e.g., Docker Hub, AWS ECR).
-- Deploy the containerized application using a platform like AWS, Google Cloud, or Azure.
-- Configure environment variables in the production environment.
+1. Ensure hosting platform supports Docker.
+2. Push the Docker image to a container registry (e.g., Docker Hub, AWS ECR).
+3. Deploy the containerized application using AWS, Google Cloud, or Azure.
+4. Configure environment variables in production.
 
 ## Usage Guide
-
-- **Authentication**:
-  - Manage user accounts, roles, and permissions through the Authentication section.
-- **Events**:
-  - Navigate to the Events section to add, edit, or view event details.
-- **Blogs**:
-  - Use the Blogs section to create and manage blog posts.
+- **Authentication:** Manage user accounts, roles, and permissions.
+- **Events:** Add, edit, or view event details.
+- **Blogs:** Create and manage blog posts.
 
 ## Development Process
+**Frontend:**
+- Built with Next.js for SSR and fast performance.
+- Tailwind CSS for a modern, responsive UI.
 
-- **Frontend**:
-  - Designed using Next.js for server-side rendering and fast performance.
-  - Styled with Tailwind CSS for a modern and responsive UI.
-- **Backend**:
-  - Built with Express, following the MVC architecture.
-  - Secure API endpoints for data interaction.
-- **Containerization**:
-  - Docker is used to containerize the application for consistent development and deployment environments.
+**Backend:**
+- Node.js with Fastify for optimized performance.
+- Secure API endpoints.
+
+**Containerization:**
+- Docker ensures consistency across development and production environments.
 
 ## Future Improvements
+- Implement course management features.
+- Integrate AI-based solutions for personalized learning.
 
-- Develop course management features.
-- AI based solutions.
-
----
