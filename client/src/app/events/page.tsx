@@ -4,7 +4,6 @@ import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../api/eventApi";
 
-
 const formatDateTime = (isoDate: string): string => {
   const date = new Date(isoDate);
   const options: Intl.DateTimeFormatOptions = {
@@ -85,9 +84,9 @@ const EventsPage = async () => {
                                   <ul className="list-inline font-11 mb-20">
                                     <li>
                                       <i className="fa fa-calendar mr-5" />
-                                      {
-                                      formatDateTime(event?.session_start_date_time)
-                                      }
+                                      {formatDateTime(
+                                        event?.session_start_date_time
+                                      )}
                                     </li>
 
                                     <li>
@@ -97,12 +96,6 @@ const EventsPage = async () => {
                                   </ul>
                                   <p>{event?.short_description}</p>
                                   <div className="mt-10">
-                                    <Link
-                                      className="btn btn-dark btn-theme-colored btn-sm mt-10 mr-5"
-                                      href={`/events/${event?.event_id}#form`}
-                                    >
-                                      Register
-                                    </Link>
                                     <Link
                                       href={`/events/${event?.event_id}`}
                                       className="btn btn-dark btn-sm mt-10"
