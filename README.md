@@ -77,7 +77,7 @@ project-root
 
 ## Backend API Endpoints
 
-### Authentication
+### Authentication (users)
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
 | POST   | /api/v1/auth/register     | Register a new user           |
@@ -86,16 +86,57 @@ project-root
 | GET    | /api/v1/auth/:id          | Get user by ID                 |
 | POST    | /api/v1/auth/update       | Update user details            |
 | POST   | /api/v1/auth/logout       | Logout user                    |
+| POST | /api/v1/auth/soft-delete  |  Soft Delete an user            |
+| POST | /api/v1/auth/restore  |  Restore an user          |
+| POST | /api/v1/auth/destroy  | Delete an user         |
+
+### User Roles
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/v1/user-roles/store        | Create a new user role        |
+| POST   | /api/v1/user-roles/update       | Update user role details      |
+| GET    | /api/v1/user-roles              | Get all user roles            |
+| GET    | /api/v1/user-roles/:id          | Get user role by ID           |
+| POST   | /api/v1/user-roles/soft-delete  |  Soft Delete an user role     |
+| POST   | /api/v1/user-roles/restore  |  Restore an user role             |
+| POST   | /api/v1/user-roles/destroy  | Delete an user role               |
+
+
+### User Login Histories
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/v1/user-login-histories/store        | Create a new user login history        |
+| POST   | /api/v1/user-login-histories/update       | Update user login history details      |
+| GET    | /api/v1/user-login-histories              | Get all user login histories  |
+| GET    | /api/v1/user-login-histories/:id          | Get user role history by ID           |
+| POST   | /api/v1/user-login-histories/soft-delete  |  Soft Delete an user role login history     |
+| POST   | /api/v1/user-login-histories/restore  |  Restore an user login history             |
+| POST   | /api/v1/user-login-histories/destroy  | Delete an user login history              |
+
 
 ### Events
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
-| POST   | /api/v1/events/create     | Create an event               |
+| POST   | /api/v1/events/store     | Create an event               |
 | GET    | /api/v1/events            | Get all events                |
 | GET    | /api/v1/events/:id        | Get event by ID               |
-| POST    | /api/v1/events/update/:id | Update event details          |
-| DELETE | /api/v1/events/delete/:id | Delete an event               |
- | POST   | /api/v1/events/attend/:id | Attend an event               |
+| POST    | /api/v1/events/update    | Update event details          |
+| POST | /api/v1/events/soft-delete | Soft Delete an event               |
+| POST | /api/v1/events/restore | Restore an event               |
+| POST | /api/v1/events/destroy | Delete an event               |
+
+
+### Event Categories
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/v1/event-categories/store     | Create an event  category              |
+| GET    | /api/v1/event-categories            | Get all event categories              |
+| GET    | /api/v1/event-categories/:id        | Get event category by ID               |
+| POST    | /api/v1/event-categories/update    | Update event category details          |
+| POST | /api/v1/event-categories/soft-delete | Soft Delete an event category           |
+| POST | /api/v1/event-categories/restore | Restore an event  category               |
+| POST | /api/v1/event-categories/destroy | Delete an event category               |
+
 
 ### Blogs
 | Method | Endpoint               | Description                    |

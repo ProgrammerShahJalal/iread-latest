@@ -5,6 +5,7 @@ import T1 from '../views/pages/T1';
 
 import users from '../views/pages/users/config/routes';
 import user_roles from '../views/pages/user_roles/config/routes';
+import user_login_histories from '../views/pages/user-login-histories/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
 import blog_category from '../views/pages/blog_category/config/routes';
@@ -41,6 +42,7 @@ const router: RouteTypes[] = [
             },
             users,
             user_roles,
+            user_login_histories,
             contact_messages,
             blog_category,
             blog_tags,
