@@ -5,7 +5,7 @@ import React from 'react'
 const CoursePage = () => {
   return (
     <section>
-        <div className="">
+        <div className="min-h-[100vh]">
             <div className="row">
             <div className="main-content bg-lighter">
   {/* Section: inner-header */}

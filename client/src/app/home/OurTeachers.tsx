@@ -7,7 +7,7 @@ function OurTeachers({ }: Props) {
     return (
         <>
             <section>
-                <div className="container">
+                <div className="container min-h-[100vh]">
                     <div className="section-title mb-10">
                         <div className="row">
                             <div className="col-md-8">
