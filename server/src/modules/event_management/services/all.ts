@@ -76,19 +76,6 @@ async function all(
         select_fields = [
             'id',
             'title',
-            'reg_start_date',
-            'reg_end_date',
-            'session_start_date_time',
-            'session_end_date_time',
-            'place',
-            'short_description',
-            'full_description',
-            'pre_requisities',
-            'terms_and_conditions',
-            'event_type',
-            'poster',
-            'price',
-            'discount_price',
             'status',
         ];
     }
@@ -108,8 +95,9 @@ async function all(
             ...query.where,
             [Op.or]: [
                 { id: { [Op.like]: `%${search_key}%` } },
+                { title: { [Op.like]: `%${search_key}%` } },
+                { status: { [Op.like]: `%${search_key}%` } },
 
-                // { place: { [Op.like]: `%${search_key}%` } },
             ],
         };
     }

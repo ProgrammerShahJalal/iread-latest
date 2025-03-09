@@ -10,133 +10,86 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import Select from 'react-select';
-import DateEl from '../../components/DateEl';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
 
-export interface Props { }
-
-const Edit: React.FC<Props> = (props: Props) => {
-    const state: typeof initialState = useSelector(
-        (state: RootState) => state[setup.module_name],
-    );
-
+const Edit: React.FC = () => {
+    const state = useSelector((state: RootState) => state[setup.module_name]);
     const dispatch = useAppDispatch();
     const params = useParams();
+
 
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
-    }, []);
+    }, [dispatch, params.id]);
 
 
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
+    function get_value(key: string) {
+        return state.item?.[key] || state.item?.info?.[key] || '';
+    }
 
-
-
-    async function handle_submit(e) {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(update(form_data) as any);
-    }
+        const formData = new FormData(e.currentTarget);
+        await dispatch(update(formData) as any);
+    };
 
-    function get_value(key) {
-        try {
-            if (state.item[key]) return state.item[key];
-            if (state.item?.info[key]) return state.item?.info[key];
-        } catch (error) {
-            return '';
-        }
-        return '';
-    }
 
     return (
-        <>
-            <div className="page_content">
-                <div className="explore_window fixed_size">
-                    <Header page_title={setup.edit_page_title}></Header>
-
-                    {Object.keys(state.item).length && (
-                        <div className="content_body custom_scroll">
-                            <form
-                                onSubmit={(e) => handle_submit(e)}
-                                className="mx-auto pt-3"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    defaultValue={get_value(`id`)}
-                                />
-
-                                <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
-                                    <div className="form_auto_fit">
-                    
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                      
-                                        {[
-                                            'title',
-                                            'description',
-
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                        <Input
-                                                            name={i}
-                                                            value={get_value(i)}
-                                                        />
-                                            </div>
-                                        ))}
-
-                                    </div>
-
-
-
+        <div className="page_content">
+            <div className="explore_window fixed_size">
+                <Header page_title={setup.edit_page_title} />
+                {Object.keys(state.item).length > 0 && (
+                    <div className="content_body custom_scroll">
+                        <form onSubmit={handleSubmit} className="mx-auto pt-3">
+                            <input type="hidden" name="id" defaultValue={get_value('id')} />
+                            
+                            <h5 className="mb-4">Input Data</h5>
+                            <div className="form_auto_fit">
+                                <div className="form-group form-vertical">
+                                    <label>Events</label>
+                                    <EventDropDown 
+                                        name="events"
+                                        multiple={false}
+                                        default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
+                                    />
                                 </div>
 
                                 <div className="form-group form-vertical">
-                                    <label></label>
-                                    <div className="form_elements">
-                                        <button className="btn btn-outline-info">
-                                            submit
-                                        </button>
-                                    </div>
+                                    <Input name="title" value={get_value('title')} />
                                 </div>
-                            </form>
-                        </div>
-                    )}
 
-                    <Footer>
-                        {state?.item?.id && (
-                            <li>
-                                <Link
-                                    to={`/${setup.route_prefix}/details/${state.item?.id}`}
-                                    className="outline"
-                                >
-                                    <span className="material-symbols-outlined fill">
-                                        visibility
-                                    </span>
-                                    <div className="text">Details</div>
-                                </Link>
-                            </li>
-                        )}
-                    </Footer>
-                </div>
+                                <div className="form-group form-vertical">
+                                    <label>Description</label>
+                                    <textarea 
+                                        name="description" 
+                                        defaultValue={get_value('description')} 
+                                        className="form-control" 
+                                        rows={5} 
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group mt-4">
+                                <button type="submit" className="btn btn-outline-info">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+                <Footer>
+                    {state?.item?.id && (
+                        <li>
+                            <Link to={`/${setup.route_prefix}/details/${state.item.id}`} className="outline">
+                                <span className="material-symbols-outlined fill">visibility</span>
+                                <div className="text">Details</div>
+                            </Link>
+                        </li>
+                    )}
+                </Footer>
             </div>
-        </>
+        </div>
     );
 };
 

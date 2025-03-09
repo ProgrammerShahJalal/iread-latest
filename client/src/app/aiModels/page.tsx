@@ -48,7 +48,7 @@ const AIModelsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-6 flex flex-col items-center">
+    <div className="min-h-[100vh] bg-gray-100 py-10 px-6 flex flex-col items-center">
       {/* Header Section */}
       <div className="w-full max-w-7xl bg-white rounded-xl p-8 mb-10">
         <h1 className="text-4xl font-bold text-[#202C45]">AI Models</h1>
