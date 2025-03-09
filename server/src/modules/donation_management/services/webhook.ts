@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { responseObject } from '../../../common_types/object';
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
-    apiVersion: '2024-12-18.acacia',
+    apiVersion: process.env.STRIPE_API_VERSION as any,
 });
 
 async function webhook(
