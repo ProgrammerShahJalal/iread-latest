@@ -32,10 +32,6 @@ const All: React.FC<Props> = () => {
     const dispatch = useAppDispatch();
     let [searchParams] = useSearchParams();
 
-    const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
 
     useEffect(() => {
         let role = searchParams.get('role');
@@ -55,7 +51,7 @@ const All: React.FC<Props> = () => {
 
         // Fetch user roles and store them in a map
         fetch(
-            `${BASE_URL}/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`,
+            `/api/v1/user-roles?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10&select_fields=`,
         )
             .then((res) => res.json())
             .then((data) => {
