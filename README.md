@@ -138,6 +138,142 @@ project-root
 | POST | /api/v1/event-categories/destroy | Delete an event category               |
 
 
+### Event Tags
+| Method | Endpoint               | Description                    |
+|--------|------------------------|--------------------------------|
+| POST   | /api/v1/event-tags/store     | Create an event tag             |
+| GET    | /api/v1/event-tags            | Get all event tags              |
+| GET    | /api/v1/event-tags/:id        | Get event tag by ID               |
+| POST   | /api/v1/event-tags/update    | Update event tag details          |
+| POST   | /api/v1/event-tags/soft-delete | Soft Delete an event tag           |
+| POST   | /api/v1/event-tags/restore | Restore an event  tag               |
+| POST   | /api/v1/event-tags/destroy | Delete an event tag               |
+
+
+### Event Certified Users
+| Method | Endpoint                              | Description                      |
+|--------|---------------------------------------|----------------------------------|
+| POST   | /api/v1/event-certified-users/store  | Create an event-certified user  |
+| GET    | /api/v1/event-certified-users        | Get all event-certified users   |
+| GET    | /api/v1/event-certified-users/:id    | Get event-certified user by ID  |
+| POST   | /api/v1/event-certified-users/update | Update event-certified user     |
+| POST   | /api/v1/event-certified-users/soft-delete | Soft delete an event-certified user |
+| POST   | /api/v1/event-certified-users/restore | Restore an event-certified user |
+| POST   | /api/v1/event-certified-users/destroy | Delete an event-certified user  |
+
+### Event Resources
+| Method | Endpoint                      | Description                |
+|--------|-------------------------------|----------------------------|
+| POST   | /api/v1/event-resources/store | Create an event resource  |
+| GET    | /api/v1/event-resources       | Get all event resources   |
+| GET    | /api/v1/event-resources/:id   | Get event resource by ID  |
+| POST   | /api/v1/event-resources/update | Update event resource     |
+| POST   | /api/v1/event-resources/soft-delete | Soft delete an event resource |
+| POST   | /api/v1/event-resources/restore | Restore an event resource |
+| POST   | /api/v1/event-resources/destroy | Delete an event resource  |
+
+### Event FAQs
+| Method | Endpoint              | Description        |
+|--------|-----------------------|--------------------|
+| POST   | /api/v1/event-faqs/store | Create an event FAQ  |
+| GET    | /api/v1/event-faqs       | Get all event FAQs   |
+| GET    | /api/v1/event-faqs/:id   | Get event FAQ by ID  |
+| POST   | /api/v1/event-faqs/update | Update event FAQ     |
+| POST   | /api/v1/event-faqs/soft-delete | Soft delete an event FAQ |
+| POST   | /api/v1/event-faqs/restore | Restore an event FAQ |
+| POST   | /api/v1/event-faqs/destroy | Delete an event FAQ  |
+
+### Event Sessions
+| Method | Endpoint                | Description          |
+|--------|-------------------------|----------------------|
+| POST   | /api/v1/event-sessions/store | Create an event session  |
+| GET    | /api/v1/event-sessions       | Get all event sessions   |
+| GET    | /api/v1/event-sessions/:id   | Get event session by ID  |
+| POST   | /api/v1/event-sessions/update | Update event session     |
+| POST   | /api/v1/event-sessions/soft-delete | Soft delete an event session |
+| POST   | /api/v1/event-sessions/restore | Restore an event session |
+| POST   | /api/v1/event-sessions/destroy | Delete an event session  |
+
+### Event Session Assessments
+| Method | Endpoint                        | Description                  |
+|--------|---------------------------------|------------------------------|
+| POST   | /api/v1/event-session-assessments/store | Create an event session assessment |
+| GET    | /api/v1/event-session-assessments       | Get all event session assessments |
+| GET    | /api/v1/event-session-assessments/:id   | Get event session assessment by ID |
+| POST   | /api/v1/event-session-assessments/update | Update event session assessment |
+| POST   | /api/v1/event-session-assessments/soft-delete | Soft delete an event session assessment |
+| POST   | /api/v1/event-session-assessments/restore | Restore an event session assessment |
+| POST   | /api/v1/event-session-assessments/destroy | Delete an event session assessment |
+
+### Event Session Assessment Submissions
+| Method | Endpoint                                      | Description                      |
+|--------|----------------------------------------------|----------------------------------|
+| POST   | /api/v1/event-session-assessment-submissions/store | Submit an event session assessment |
+| GET    | /api/v1/event-session-assessment-submissions       | Get all event session assessment submissions |
+| GET    | /api/v1/event-session-assessment-submissions/:id   | Get event session assessment submission by ID |
+| POST   | /api/v1/event-session-assessment-submissions/update | Update event session assessment submission |
+| POST   | /api/v1/event-session-assessment-submissions/soft-delete | Soft delete an event session assessment submission |
+| POST   | /api/v1/event-session-assessment-submissions/restore | Restore an event session assessment submission |
+| POST   | /api/v1/event-session-assessment-submissions/destroy | Delete an event session assessment submission |
+
+### Event Attendance
+| Method | Endpoint               | Description                 |
+|--------|------------------------|-----------------------------|
+| POST   | /api/v1/event-attendance/store | Record event attendance |
+| GET    | /api/v1/event-attendance       | Get all event attendance records |
+| GET    | /api/v1/event-attendance/:id   | Get event attendance record by ID |
+| POST   | /api/v1/event-attendance/update | Update event attendance |
+| POST   | /api/v1/event-attendance/soft-delete | Soft delete an event attendance record |
+| POST   | /api/v1/event-attendance/restore | Restore an event attendance record |
+| POST   | /api/v1/event-attendance/destroy | Delete an event attendance record |
+
+### Event Enrollments
+| Method | Endpoint             | Description        |
+|--------|----------------------|--------------------|
+| POST   | /api/v1/event-enrollments/store | Enroll in an event |
+| GET    | /api/v1/event-enrollments       | Get all event enrollments |
+| GET    | /api/v1/event-enrollments/:id   | Get event enrollment by ID |
+| POST   | /api/v1/event-enrollments/update | Update event enrollment |
+| POST   | /api/v1/event-enrollments/soft-delete | Soft delete an event enrollment |
+| POST   | /api/v1/event-enrollments/restore | Restore an event enrollment |
+| POST   | /api/v1/event-enrollments/destroy | Delete an event enrollment |
+
+### Event Payments
+| Method | Endpoint           | Description        |
+|--------|--------------------|--------------------|
+| POST   | /api/v1/event-payments/store | Process an event payment |
+| GET    | /api/v1/event-payments       | Get all event payments |
+| GET    | /api/v1/event-payments/:id   | Get event payment by ID |
+| POST   | /api/v1/event-payments/update | Update event payment |
+| POST   | /api/v1/event-payments/soft-delete | Soft delete an event payment |
+| POST   | /api/v1/event-payments/restore | Restore an event payment |
+| POST   | /api/v1/event-payments/destroy | Delete an event payment |
+
+### Event Payment Refunds
+| Method | Endpoint                    | Description            |
+|--------|-----------------------------|------------------------|
+| POST   | /api/v1/event-payment-refunds/store | Request an event payment refund |
+| GET    | /api/v1/event-payment-refunds       | Get all event payment refunds |
+| GET    | /api/v1/event-payment-refunds/:id   | Get event payment refund by ID |
+| POST   | /api/v1/event-payment-refunds/update | Update event payment refund |
+| POST   | /api/v1/event-payment-refunds/soft-delete | Soft delete an event payment refund |
+| POST   | /api/v1/event-payment-refunds/restore | Restore an event payment refund |
+| POST   | /api/v1/event-payment-refunds/destroy | Delete an event payment refund |
+
+### Event Feedback Form Fields
+| Method | Endpoint                       | Description               |
+|--------|--------------------------------|---------------------------|
+| POST   | /api/v1/event-feedback-form-fields/store | Create a feedback form field |
+| GET    | /api/v1/event-feedback-form-fields       | Get all feedback form fields |
+| GET    | /api/v1/event-feedback-form-fields/:id   | Get feedback form field by ID |
+| POST   | /api/v1/event-feedback-form-fields/update | Update feedback form field |
+| POST   | /api/v1/event-feedback-form-fields/soft-delete | Soft delete a feedback form field |
+| POST   | /api/v1/event-feedback-form-fields/restore | Restore a feedback form field |
+| POST   | /api/v1/event-feedback-form-fields/destroy | Delete a feedback form field |
+
+
+
+
 ### Blogs
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
