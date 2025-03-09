@@ -93,17 +93,21 @@ project-root
 | POST   | /api/v1/events/create     | Create an event               |
 | GET    | /api/v1/events            | Get all events                |
 | GET    | /api/v1/events/:id        | Get event by ID               |
-| PUT    | /api/v1/events/update/:id | Update event details          |
+| POST    | /api/v1/events/update/:id | Update event details          |
 | DELETE | /api/v1/events/delete/:id | Delete an event               |
+ | POST   | /api/v1/events/attend/:id | Attend an event               |
 
 ### Blogs
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
-| POST   | /api/v1/blogs/create      | Create a blog post            |
+| POST   | /api/v1/blogs/store      | Create a blog post            |
 | GET    | /api/v1/blogs             | Get all blog posts            |
 | GET    | /api/v1/blogs/:id         | Get a blog post by ID         |
-| PUT    | /api/v1/blogs/update/:id  | Update a blog post            |
-| DELETE | /api/v1/blogs/delete/:id  | Delete a blog post            |
+| GET    | /api/v1/blogs/:slug         | Get a blog post by slug     |
+| POST   | /api/v1/blogs/update      | Update a blog post               |
+| POST | /api/v1/blogs/soft-delete  |  Soft Delete a blog post            |
+| POST | /api/v1/blogs/restore  |  Restore a blog post          |
+| POST | /api/v1/blogs/destroy  | Delete a blog post            |
 
 ## Setup Instructions
 
