@@ -23,7 +23,7 @@ IREAD is a multi-phase online learning platform. The current phase focuses on au
 ### Upcoming Features
 - Course creation and management
 
-## Backend Project Structure
+## Project File Structure
 The project follows the MVC pattern for better maintainability:
 
 ```
@@ -80,29 +80,34 @@ project-root
 ### Authentication
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
-| POST   | /api/auth/register     | Register a new user           |
-| POST   | /api/auth/login        | User login                     |
-| GET    | /api/auth/profile      | Get user profile               |
-| PUT    | /api/auth/update       | Update user details            |
-| POST   | /api/auth/logout       | Logout user                    |
+| POST   | /api/v1/auth/register     | Register a new user           |
+| POST   | /api/v1/auth/login        | User login                     |
+| GET    | /api/v1/auth              | Get all users                   |
+| GET    | /api/v1/auth/:id          | Get user by ID                 |
+| POST    | /api/v1/auth/update       | Update user details            |
+| POST   | /api/v1/auth/logout       | Logout user                    |
 
 ### Events
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
-| POST   | /api/events/create     | Create an event               |
-| GET    | /api/events            | Get all events                |
-| GET    | /api/events/:id        | Get event by ID               |
-| PUT    | /api/events/update/:id | Update event details          |
-| DELETE | /api/events/delete/:id | Delete an event               |
+| POST   | /api/v1/events/create     | Create an event               |
+| GET    | /api/v1/events            | Get all events                |
+| GET    | /api/v1/events/:id        | Get event by ID               |
+| POST    | /api/v1/events/update/:id | Update event details          |
+| DELETE | /api/v1/events/delete/:id | Delete an event               |
+ | POST   | /api/v1/events/attend/:id | Attend an event               |
 
 ### Blogs
 | Method | Endpoint               | Description                    |
 |--------|------------------------|--------------------------------|
-| POST   | /api/blogs/create      | Create a blog post            |
-| GET    | /api/blogs             | Get all blog posts            |
-| GET    | /api/blogs/:id         | Get a blog post by ID         |
-| PUT    | /api/blogs/update/:id  | Update a blog post            |
-| DELETE | /api/blogs/delete/:id  | Delete a blog post            |
+| POST   | /api/v1/blogs/store      | Create a blog post            |
+| GET    | /api/v1/blogs             | Get all blog posts            |
+| GET    | /api/v1/blogs/:id         | Get a blog post by ID         |
+| GET    | /api/v1/blogs/:slug         | Get a blog post by slug     |
+| POST   | /api/v1/blogs/update      | Update a blog post               |
+| POST | /api/v1/blogs/soft-delete  |  Soft Delete a blog post            |
+| POST | /api/v1/blogs/restore  |  Restore a blog post          |
+| POST | /api/v1/blogs/destroy  | Delete a blog post            |
 
 ## Setup Instructions
 
@@ -134,8 +139,8 @@ npm run server
 # Start the frontend
 npm run dev
 ```
-- Server: [http://localhost:5003](http://localhost:5003)
-- Client: [http://localhost:3000](http://localhost:3000)
+- Server: [http://localhost:5011](http://localhost:5011)
+- Client: [http://localhost:5012](http://localhost:5012)
 
 5. Run the Application Using Docker:
 ```bash
