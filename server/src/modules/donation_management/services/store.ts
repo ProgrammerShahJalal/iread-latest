@@ -39,7 +39,7 @@ async function validate(req: Request) {
 }
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
-    apiVersion: '2024-12-18.acacia',
+    apiVersion: process.env.STRIPE_API_VERSION as any,
 });
 
 interface DonationRequest {
