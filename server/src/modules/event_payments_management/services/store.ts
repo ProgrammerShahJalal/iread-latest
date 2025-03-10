@@ -15,6 +15,7 @@ import error_trace from '../../../helpers/error_trace';
 
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
+import Stripe from 'stripe';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -39,12 +40,14 @@ async function validate(req: Request) {
             .run(req);
     }
 
-   
-
     let result = await validationResult(req);
 
     return result;
 }
+
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
+    apiVersion: process.env.STRIPE_API_VERSION as any,
+});
 
 async function store(
     fastify_instance: FastifyInstance,
@@ -60,13 +63,13 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
-    
+
     let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id: body.event_id?.[1],
-        user_id: body.user_id?.[1],
-        event_enrollment_id: body.event_enrollment_id?.[1],
-        event_payment_id: body.event_payment_id?.[1],
+        event_id: body.event_id || body.event_id?.[1],
+        user_id: body.user_id || body.user_id?.[1],
+        event_enrollment_id:
+            body.event_enrollment_id || body.event_enrollment_id?.[1],
+        event_payment_id: body.event_payment_id,
         date: body.date,
         amount: body.amount,
         trx_id: body.trx_id,
@@ -74,10 +77,17 @@ async function store(
         is_refunded: body.is_refunded || false,
     };
 
-
     /** store data into database */
     try {
-        (await data.update(inputs)).save();
+        // Properly set and save the new data
+        data.set(inputs);
+        await data.save();
+
+        // Update `is_paid` to true in the EventEnrollmentsModel
+        await models.EventEnrollmentsModel.update(
+            { is_paid: '1' },
+            { where: { id: body.event_enrollment_id } },
+        );
 
         return response(201, 'data created', {
             data,

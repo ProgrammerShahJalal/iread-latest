@@ -93,7 +93,6 @@ function init(sequelize: Sequelize) {
                 defaultValue: false,
             },
 
-
             status: {
                 type: new DataTypes.ENUM('success', 'failed'),
                 defaultValue: 'success',
