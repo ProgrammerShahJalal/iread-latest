@@ -20,9 +20,9 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'events',
-        'users',
-        'enrollments',
+        'event_id',
+        'user_id',
+        'event_enrollment_id',
         'date',
         'amount',
         'trx_id',
@@ -63,10 +63,10 @@ async function store(
     
     let inputs: InferCreationAttributes<typeof data> = {
      
-        event_id: body.events?.[1],
-        user_id: body.users?.[1],
-        event_enrollment_id: body.enrollments?.[1],
-        event_payment_id: body.payments?.[1],
+        event_id: body.event_id?.[1],
+        user_id: body.user_id?.[1],
+        event_enrollment_id: body.event_enrollment_id?.[1],
+        event_payment_id: body.event_payment_id?.[1],
         date: body.date,
         amount: body.amount,
         trx_id: body.trx_id,
