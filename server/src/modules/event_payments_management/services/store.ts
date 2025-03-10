@@ -49,6 +49,25 @@ const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
     apiVersion: process.env.STRIPE_API_VERSION as any,
 });
 
+interface PaymentRequest {
+    event_id: number;
+    user_id: number;
+    event_enrollment_id: number;
+    date: string;
+    amount: string;
+    trx_id: string;
+}
+
+interface Payment {
+    event_id: number;
+    user_id: number;
+    event_enrollment_id: number;
+    date: string;
+    amount: number;
+    trx_id: string;
+    session_id: string;
+}
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -63,6 +82,9 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
+
+    const { user_id, event_id, event_enrollment_id, trx_id, amount } =
+        req.body as PaymentRequest;
 
     let inputs: InferCreationAttributes<typeof data> = {
         event_id: body.event_id || body.event_id?.[1],
@@ -79,6 +101,33 @@ async function store(
 
     /** store data into database */
     try {
+        const amountInCents = Math.round(parseFloat(amount) * 100);
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: `User ID ${user_id}`,
+                            description: `Event ID: ${event_id}, Event Enrollment ID: ${event_enrollment_id}, Trx ID: ${trx_id}`,
+                        },
+                        unit_amount: amountInCents,
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${encodeURIComponent(event_enrollment_id)}&trx_id=${encodeURIComponent(trx_id)}&amount=${amountInCents / 100}`,
+            cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
+            metadata: {
+                user_id,
+                event_id,
+                event_enrollment_id,
+                trx_id,
+            },
+        } as Stripe.Checkout.SessionCreateParams);
+        // console.log('Stripe Session:', session);
         // Properly set and save the new data
         data.set(inputs);
         await data.save();
