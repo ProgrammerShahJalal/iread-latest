@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getEvents } from "../../../api/eventApi";
 import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
-import CheckAuth from "../../../components/CheckAuth";
+import EventEnrollProcess from "../../../components/EventEnrollProcess";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -62,6 +62,9 @@ const EventDetailsPage = async ({
         </div>
       );
     }
+
+
+
 
     return (
       <section>
@@ -177,13 +180,7 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                <CheckAuth />
-                <Link
-                  href="#form"
-                  className="btn bg-[#202C45] text-white w-full mt-3"
-                >
-                  Enrollment Now
-                </Link>
+                <EventEnrollProcess eventId={event.event_id} eventPrice={event.discount_price}/>
               </div>
             </div>
           </div>
