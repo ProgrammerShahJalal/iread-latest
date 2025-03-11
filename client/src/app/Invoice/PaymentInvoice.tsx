@@ -1,6 +1,7 @@
-import Image from "next/image";
 import React, { useRef } from "react";
-import generatePDF from "react-to-pdf";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Image from "next/image";
 
 interface InvoiceProps {
     name: string | null;
@@ -17,7 +18,21 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
     name, email, phone, occupation, amount, trx_id, getTodayDate, generateInvoiceNumber 
 }) => {
     const targetRef = useRef<HTMLDivElement>(null);
-    const getTargetElement = () => document.getElementById('payment-content-id');
+
+    const handleDownloadInvoice = () => {
+        if (targetRef.current) {
+            html2canvas(targetRef.current).then((canvas) => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+                pdf.save("invoice.pdf");
+            });
+        } else {
+            console.error("Target element not found");
+        }
+    };
 
     return (
         <div className="mb-10">
@@ -26,26 +41,15 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
                     <div className="text-center">
                         <button
                             className="bg-green-600 px-3 py-2 rounded-md text-white"
-                            onClick={() => {
-                                if (targetRef.current) {
-                                    generatePDF({
-                                        targetRef,
-                                        filename: "invoice.pdf",
-                                        children: function (props: { toPdf: () => void; }): React.ReactNode {
-                                            throw new Error("Function not implemented.");
-                                        }
-                                    });
-                                } else {
-                                    console.error("Target element not found");
-                                }
-                            }}
+                            onClick={handleDownloadInvoice}
                         >
                             Download Invoice
                         </button>
                     </div>
                     
-                    <div ref={targetRef || getTargetElement} id="payment-content-id" className="p-10 mb-24 rounded-md">
-                        {/* Invoice Header */}
+                    {/* Attach the ref to this div */}
+                    <div ref={targetRef} id="payment-content-id" className="p-10 mb-24 rounded-md">
+                        {/* Invoice content */}
                         <div className="flex items-center justify-between mb-8 px-3 pt-20">
                             <div>
                                 <span className="text-2xl">Payment Invoice #</span>: {generateInvoiceNumber()}
