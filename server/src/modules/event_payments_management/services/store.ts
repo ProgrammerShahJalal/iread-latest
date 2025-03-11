@@ -86,19 +86,6 @@ async function store(
     const { user_id, event_id, event_enrollment_id, trx_id, amount } =
         req.body as PaymentRequest;
 
-    let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.event_id || body.event_id?.[1],
-        user_id: body.user_id || body.user_id?.[1],
-        event_enrollment_id:
-            body.event_enrollment_id || body.event_enrollment_id?.[1],
-        event_payment_id: body.event_payment_id,
-        date: body.date,
-        amount: body.amount,
-        trx_id: body.trx_id,
-        media: body.media,
-        is_refunded: body.is_refunded || false,
-    };
-
     /** store data into database */
     try {
         const amountInCents = Math.round(parseFloat(amount) * 100);
@@ -118,7 +105,7 @@ async function store(
                 },
             ],
             mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${encodeURIComponent(event_enrollment_id)}&trx_id=${encodeURIComponent(trx_id)}&amount=${amountInCents / 100}`,
+            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${encodeURIComponent(event_enrollment_id)}&trx_id=${encodeURIComponent(trx_id)}&amount=${amount}`,
             cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
             metadata: {
                 user_id,
@@ -128,6 +115,20 @@ async function store(
             },
         } as Stripe.Checkout.SessionCreateParams);
         // console.log('Stripe Session:', session);
+
+        let inputs: InferCreationAttributes<typeof data> = {
+            event_id: body.event_id || body.event_id?.[1],
+            user_id: body.user_id || body.user_id?.[1],
+            event_enrollment_id:
+                body.event_enrollment_id || body.event_enrollment_id?.[1],
+            event_payment_id: body.event_payment_id,
+            date: body.date,
+            amount: body.amount,
+            trx_id: body.trx_id,
+            media: body.media,
+            session_id: session?.id,
+            is_refunded: body.is_refunded || false,
+        };
         // Properly set and save the new data
         data.set(inputs);
         await data.save();

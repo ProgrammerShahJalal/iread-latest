@@ -39,6 +39,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare amount: number;
     declare trx_id: string;
     declare media: media;
+    declare session_id: string;
     declare is_refunded?: boolean;
 
     declare status?: status;
@@ -87,6 +88,10 @@ function init(sequelize: Sequelize) {
             media: {
                 type: DataTypes.ENUM('Stripe', 'Bank'),
                 defaultValue: 'Stripe',
+            },
+            session_id: {
+                type: DataTypes.STRING(100),
+                allowNull: true,
             },
             is_refunded: {
                 type: DataTypes.BOOLEAN,

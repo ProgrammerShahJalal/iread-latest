@@ -63,7 +63,7 @@ const EventsPage = async () => {
                     <div className="row">
                       {eventsData?.map((event) => {
                         return (
-                          <>
+                          <div key={event.event_id}>
                             <div className="col-sm-6 col-md-4 col-lg-4">
                               <div className="schedule-box maxwidth500 bg-light mb-30">
                                 <div className="thumb">
@@ -106,7 +106,7 @@ const EventsPage = async () => {
                                 </div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         );
                       })}
                     </div>

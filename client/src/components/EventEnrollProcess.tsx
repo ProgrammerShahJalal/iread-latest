@@ -73,7 +73,7 @@ const EventEnrollProcess = ({
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe failed to load");
 
-      const trxId = uuidv4(); // Generate a unique transaction ID
+      const trxId = uuidv4().split('-')[0];// Generate a unique transaction ID
 
       const response = await fetch(
         `${BASE_URL}/api/v1/event-payments/create-checkout-session`,
@@ -85,7 +85,7 @@ const EventEnrollProcess = ({
             user_id: userId,
             event_enrollment_id: eventEnrollmentId,
             date: new Date().toISOString(),
-            amount: eventPrice * 100, // Convert to cents
+            amount: eventPrice, 
             media: "Stripe",
             trx_id: trxId, // Use dynamically generated transaction ID
           }),
@@ -93,13 +93,12 @@ const EventEnrollProcess = ({
       );
 
       const session = await response.json();
-      // const sessionId = response?.data?.data?.sessionId;
-      console.log("Stripe session:", session);
+    
       if (!response.ok)
         throw new Error(session.message || "Failed to initiate payment");
 
       const { error } = await stripe.redirectToCheckout({
-        sessionId: session?.data?.data?.id,
+        sessionId: session?.data?.data?.session_id,
       });
 
       if (error) throw new Error(error.message);
@@ -112,14 +111,15 @@ const EventEnrollProcess = ({
 
   return userId ? (
     <>
-      <p className="text-green-500">Authenticated (User ID: {userId})</p>
+      {/* <p className="text-green-500">Authenticated (User ID: {userId})</p> */}
       {error && <p className="text-red-500">{error}</p>}
 
       {eventEnrollmentId ? (
         <button
           onClick={handlePayment}
           disabled={isLoading}
-          className="bg-pink-500 text-white w-full mt-3"
+          style={{ backgroundColor: "#ec4899" }} // Tailwind's pink-500 color in HEX
+          className="w-full mt-3 text-white py-2 px-4 rounded-lg hover:opacity-90 disabled:bg-gray-400"
         >
           {isLoading ? "Redirecting..." : "Checkout"}
         </button>
