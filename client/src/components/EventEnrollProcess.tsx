@@ -73,7 +73,7 @@ const EventEnrollProcess = ({
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe failed to load");
 
-      const trxId = uuidv4().split('-')[0];// Generate a unique transaction ID
+      const trxId = uuidv4().split("-")[0]; // Generate a unique transaction ID
 
       const response = await fetch(
         `${BASE_URL}/api/v1/event-payments/create-checkout-session`,
@@ -85,7 +85,7 @@ const EventEnrollProcess = ({
             user_id: userId,
             event_enrollment_id: eventEnrollmentId,
             date: new Date().toISOString(),
-            amount: eventPrice, 
+            amount: eventPrice,
             media: "Stripe",
             trx_id: trxId, // Use dynamically generated transaction ID
           }),
@@ -93,7 +93,7 @@ const EventEnrollProcess = ({
       );
 
       const session = await response.json();
-    
+
       if (!response.ok)
         throw new Error(session.message || "Failed to initiate payment");
 

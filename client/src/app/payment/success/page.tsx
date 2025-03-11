@@ -20,7 +20,6 @@ const PaymentSuccessContent = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -101,12 +100,13 @@ const PaymentSuccessContent = () => {
         <h1 className="text-3xl font-bold text-green-600 mb-4 mt-16">
           Thank You for Your payment!
         </h1>
-        <p className="text-gray-700 mb-6">
-          Your payment was successful.
-        </p>
+        <p className="text-gray-700 mb-6">Your payment was successful.</p>
       </div>
       {isEmailSent && (
         <PaymentInvoice
+          event_id={event_id}
+          event_enrollment_id={event_enrollment_id}
+          user_id={user_id}
           name={userName}
           email={userEmail}
           phone={userPhone}
