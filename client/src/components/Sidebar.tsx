@@ -11,7 +11,7 @@ const Sidebar = () => {
 
   const navLinks = [
     { name: "My Profile", path: "/profile" },
-    { name: "My Courses", path: "/profile/myCourses" },
+    { name: "My Events", path: "/profile/myEvents" },
     { name: "Settings", path: "/profile/settings" },
   ];
 
