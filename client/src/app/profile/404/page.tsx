@@ -1,25 +1,26 @@
-import React from 'react'
-import ProfileLayout from '../../../components/ProfileLayout';
-import Image from 'next/image';
+import React from "react";
+import ProfileLayout from "../../../components/ProfileLayout";
+import Image from "next/image";
+import Link from "next/link";
 
 function InProfileNotFoundPage() {
   return (
     <ProfileLayout>
-<div className='w-96 min-h-[100vh] text-center mx-auto'>
-      <h2 className='font-bold text-4xl'>404</h2>
-      <h2 className='font-bold text-4xl'>AI MAMA NA PLS!!!</h2>
-      <Image
-      className='w-64 h-64'
-      width={600}
-      height={600}
-      src="/404.png"
-      alt='not found image'
-      />
-      
-    </div>
+      <h1 className="font-extrabold text-center text-5xl text-red-500">404</h1>
+      <h2 className="font-semibold text-center text-xl mt-2 text-gray-700">
+        Oops! Looks like this page took a vacation! 🌴
+      </h2>
+      <div className="w-96 flex flex-col items-center justify-center text-center mx-auto">
+        <Image
+          className="w-60 h-auto mx-auto mt-4"
+          width={240}
+          height={240}
+          src="/no-data.svg"
+          alt="Page not found"
+        />
+      </div>
     </ProfileLayout>
-    
-  )
+  );
 }
 
 export default InProfileNotFoundPage;

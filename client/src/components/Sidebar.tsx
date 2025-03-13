@@ -40,7 +40,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 h-screen">
+    <div className="w-36 md:w-64 h-screen">
       <nav className="mt-4">
         {navLinks.map((link) => (
           <Link
