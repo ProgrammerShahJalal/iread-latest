@@ -3,7 +3,7 @@ import { getMyEvents } from "../../../api/eventApi";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
 
-// Format the date to a readable format
+// Function to format date & time
 const formatDateTime = (isoDate: string): string => {
   const date = new Date(isoDate);
   const options: Intl.DateTimeFormatOptions = {
@@ -17,23 +17,24 @@ const formatDateTime = (isoDate: string): string => {
   return date.toLocaleString("en-GB", options);
 };
 
-// Define the interface for `MyEventsPage` props
-interface MyEventsPageProps {
-  user?: User | null;  // User can be null as well
-}
+// ✅ Server Component: Fetch data before rendering
+const MyEventsPage = async ({
+  searchParams,
+}: {
+  searchParams: { uid?: string };
+}) => {
+  const userId = searchParams.uid ? parseInt(searchParams.uid, 10) : null;
 
-const MyEventsPage: React.FC<MyEventsPageProps> = async ({ user }) => {
-  console.log('user', user);
-  
-  // Handle if user is not found
-  if (!user) {
-    return <p>User not found</p>;
+  if (!userId) {
+    return (
+      <ProfileLayout>
+        <p className="text-red-500">Invalid User ID.</p>
+      </ProfileLayout>
+    );
   }
 
-  // Fetch events based on user ID
-  const myEvents = await getMyEvents(user.id);
-
-  console.log('myEvents', myEvents);
+  // Fetch events on the server
+  const myEvents = await getMyEvents(userId);
 
   return (
     <ProfileLayout>
@@ -44,44 +45,45 @@ const MyEventsPage: React.FC<MyEventsPageProps> = async ({ user }) => {
             <div className="container pb-50 pt-80">
               <div className="section-content">
                 <div className="row">
-                  {myEvents?.map((event: Event) => (
-                    <div key={event.event_id}>
-                      <div className="col-sm-6 col-md-4 col-lg-4">
-                        <div className="schedule-box maxwidth500 bg-light mb-30">
-                          <div className="thumb">
-                            <Image
-                              className="w-full rounded mb-4"
-                              alt=""
-                              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
-                              width={400}
-                              height={300}
-                            />
-                          </div>
-                          <div className="schedule-details clearfix p-15 pt-10">
-                            <h5 className="font-16 title">
-                              <Link href={`/events/${event?.event_id}`}>
-                                {event?.title}
-                              </Link>
-                            </h5>
-                            <ul className="list-inline font-11 mb-20">
-                              <li>
-                                <i className="fa fa-calendar mr-5" />
-                                {formatDateTime(event?.session_start_date_time)}
-                              </li>
-
-                              <li>
-                                <i className="fa fa-map-marker mr-5" /> {event?.place}
-                              </li>
-                            </ul>
-                            <p>{event?.short_description}</p>
-                            <div className="mt-10">
-                              <Link
-                                href={`/events/${event?.event_id}`}
-                                className="btn btn-dark btn-sm mt-10"
-                              >
-                                Details
-                              </Link>
-                            </div>
+                  {myEvents.map((event: Event) => (
+                    <div
+                      key={event.event_id}
+                      className="col-sm-6 col-md-4 col-lg-4"
+                    >
+                      <div className="schedule-box maxwidth500 bg-light mb-30">
+                        <div className="thumb">
+                          <Image
+                            className="w-full rounded mb-4"
+                            alt={event.title}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                            width={400}
+                            height={300}
+                          />
+                        </div>
+                        <div className="schedule-details clearfix p-15 pt-10">
+                          <h5 className="font-16 title">
+                            <Link href={`/events/${event.event_id}`}>
+                              {event.title}
+                            </Link>
+                          </h5>
+                          <ul className="list-inline font-11 mb-20">
+                            <li>
+                              <i className="fa fa-calendar mr-5" />
+                              {formatDateTime(event.session_start_date_time)}
+                            </li>
+                            <li>
+                              <i className="fa fa-map-marker mr-5" />
+                              {event.place}
+                            </li>
+                          </ul>
+                          <p>{event.short_description}</p>
+                          <div className="mt-10">
+                            <Link
+                              href={`/events/${event.event_id}`}
+                              className="btn btn-dark btn-sm mt-10"
+                            >
+                              Details
+                            </Link>
                           </div>
                         </div>
                       </div>

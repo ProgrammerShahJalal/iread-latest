@@ -5,22 +5,22 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Sidebar = () => {
-   const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
-   const router = useRouter();
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const navLinks = [
     { name: "My Profile", path: "/profile" },
-    { name: "My Events", path: "/profile/myEvents" },
+    { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
     { name: "Settings", path: "/profile/settings" },
   ];
-
-  useEffect(() => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    }, []);
 
   // const handleLogout = () => {
   //   localStorage.removeItem("user"); // Remove user from localStorage
