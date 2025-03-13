@@ -43,7 +43,8 @@ const EventEnrollProcess = ({
     setError(null);
 
     try {
-      const response = await axios.post(
+      // Step 1: Enroll the user
+      const enrollmentResponse = await axios.post(
         `${BASE_URL}/api/v1/event-enrollments/store`,
         {
           event_id: eventId,
@@ -55,15 +56,19 @@ const EventEnrollProcess = ({
           headers: { "Content-Type": "application/json" },
         }
       );
-      setEventEnrollmentId(response?.data?.data?.data?.id);
+
+      const eventEnrollmentId = enrollmentResponse?.data?.data?.data?.id;
+      if (!eventEnrollmentId) throw new Error("Failed to enroll in the event");
+
+      // Step 2: Initiate payment immediately after successful enrollment
+      await handlePayment(eventEnrollmentId);
     } catch (error: any) {
       setError(error.response?.data?.message || "Something went wrong");
-    } finally {
       setIsLoading(false);
     }
   };
 
-  const handlePayment = async () => {
+  const handlePayment = async (eventEnrollmentId: string) => {
     if (!userId) return;
 
     setIsLoading(true);
@@ -113,25 +118,13 @@ const EventEnrollProcess = ({
     <>
       {/* <p className="text-green-500">Authenticated (User ID: {userId})</p> */}
       {error && <p className="text-red-500">{error}</p>}
-
-      {eventEnrollmentId ? (
-        <button
-          onClick={handlePayment}
-          disabled={isLoading}
-          style={{ backgroundColor: "#ec4899" }} // Tailwind's pink-500 color in HEX
-          className="w-full mt-3 text-white py-2 px-4 rounded-lg hover:opacity-90 disabled:bg-gray-400"
-        >
-          {isLoading ? "Redirecting..." : "Checkout"}
-        </button>
-      ) : (
-        <button
-          onClick={handleEnrollment}
-          disabled={isLoading}
-          className="btn bg-[#202C45] text-white w-full mt-3"
-        >
-          {isLoading ? "Processing..." : "Enroll Now"}
-        </button>
-      )}
+      <button
+        onClick={handleEnrollment}
+        disabled={isLoading}
+        className="btn bg-[#202C45] text-white w-full mt-3"
+      >
+        {isLoading ? "Processing..." : "Enroll Now"}
+      </button>
     </>
   ) : (
     <>
