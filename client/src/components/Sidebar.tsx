@@ -1,32 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Sidebar = () => {
   const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+
+      const uidFromQuery = searchParams.get("uid");
+      if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+        router.replace("/profile/404");
+      }
+    } else {
+      router.replace("/profile/404");
     }
-  }, []);
+  }, [searchParams, router]);
 
   const navLinks = [
-    { name: "My Profile", path: "/profile" },
+    { name: "My Profile", path: `/profile?uid=${user?.id}`  },
     { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
-    { name: "Settings", path: "/profile/settings" },
+    { name: "Settings", path: `/profile/settings?uid=${user?.id}` },
   ];
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("user"); // Remove user from localStorage
-  //   setUser(null); // Reset user state
-  //   router.push("/login"); // Redirect to login page
-  // };
 
   return (
     <div className="w-64 h-screen">
@@ -43,9 +47,6 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
-      {/* <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                        Logout
-                      </button> */}
     </div>
   );
 };
