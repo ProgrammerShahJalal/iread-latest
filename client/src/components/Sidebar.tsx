@@ -31,11 +31,13 @@ const Sidebar = () => {
   }, [searchParams, router]);
 
   const navLinks = [
-    { name: "My Profile", path: `/profile?uid=${user?.id}`  },
+    {
+      name: "My Profile",
+      path: user ? `/profile?slug=${user.slug}&uid=${user.id}` : "/profile",
+    },
     { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
     { name: "Settings", path: `/profile/settings?uid=${user?.id}` },
   ];
-
 
   return (
     <div className="w-64 h-screen">
