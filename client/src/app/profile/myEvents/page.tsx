@@ -79,7 +79,7 @@ const MyEventsPage = async ({
                           <p>{event.short_description}</p>
                           <div className="mt-10">
                             <Link
-                              href={`/events/${event.event_id}`}
+                              href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
                               className="btn btn-dark btn-sm mt-10"
                             >
                               Details
