@@ -77,13 +77,23 @@ const MyEventsPage = async ({
                             </li>
                           </ul>
                           <p>{event.short_description}</p>
-                          <div className="mt-10">
-                            <Link
-                              href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
-                              className="btn btn-dark btn-sm mt-10"
-                            >
-                              Details
-                            </Link>
+                          <div className="flex justify-between items-center">
+                            <div className="mt-10">
+                              <Link
+                                href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
+                                className="btn btn-dark btn-sm mt-10"
+                              >
+                                Details
+                              </Link>
+                            </div>
+                            <div className="mt-10">
+                              <Link
+                                href={`/profile/myEvents/reports?eventId=${event.event_id}?uid=${userId}`}
+                                className="btn bg-[#F2184F] text-white btn-sm mt-10"
+                              >
+                                Reports
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
