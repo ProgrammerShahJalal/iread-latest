@@ -51,9 +51,11 @@ const EventDetailsPage = async ({
 
     if (!event) {
       return (
-        <div className="py-24 text-center">
-          <h2 className="font-semibold my-12">No Event Found</h2>
-        </div>
+        <ProfileLayout>
+          <div className="py-24 text-center">
+            <h2 className="font-semibold my-12">No Event Found</h2>
+          </div>
+        </ProfileLayout>
       );
     }
 

@@ -88,7 +88,7 @@ const MyEventsPage = async ({
                             </div>
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/reports?eventId=${event.event_id}?uid=${userId}`}
+                                href={`/profile/myEvents/reports?uid=${userId}&eventId=${event.event_id}`}
                                 className="btn bg-[#F2184F] text-white btn-sm mt-10"
                               >
                                 Reports
