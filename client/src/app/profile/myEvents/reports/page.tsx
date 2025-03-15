@@ -1,6 +1,7 @@
 import React from "react";
 import { getEventPayments } from "../../../../api/eventPaymentsApi";
 import ProfileLayout from "../../../../components/ProfileLayout";
+import RefundButton from "../../../../components/RefundButton";
 
 const ReportsPage = async ({
   searchParams,
@@ -44,17 +45,30 @@ const ReportsPage = async ({
             <table className="min-w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Event ID</th>
-                  <th className="border border-gray-300 px-4 py-2">User ID</th>
-                  <th className="border border-gray-300 px-4 py-2">Status</th>
-                  <th className="border border-gray-300 px-4 py-2">Amount</th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    Event ID
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    User ID
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    Status
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    Amount
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
                     Transaction ID
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">
+                  <th className="border border-gray-300 px-4 py-2 text-center">
                     Payment Method
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">Refunded</th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    Refunded
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -87,6 +101,21 @@ const ReportsPage = async ({
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         {payment.is_refunded ? "Yes" : "No"}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {!payment.is_refunded ? (
+                          <RefundButton
+                            paymentId={payment.payment_id}
+                            userId={payment.user_id}
+                            eventId={payment.event_id}
+                            eventEnrollmentId={payment.event_enrollment_id}
+                            trxId={payment.trx_id}
+                          />
+                        ) : (
+                          <span className="text-gray-400">
+                            Already Refunded
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))
