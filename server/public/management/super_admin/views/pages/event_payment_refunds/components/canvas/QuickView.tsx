@@ -87,11 +87,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.media}</th>
                                 </tr>
                                 <tr>
-                                    <th>Is Refunded?</th>
-                                    <th>:</th>
-                                    <th>{state.item.is_refunded === true ? 'Yes' : 'No'}</th>
-                                </tr>
-                                <tr>
                                     <th>Status</th>
                                     <th>:</th>
                                     <th>{state.item.status}</th>

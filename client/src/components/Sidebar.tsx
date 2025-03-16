@@ -11,24 +11,28 @@ const Sidebar = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser: User = JSON.parse(storedUser);
-        setUser(parsedUser);
+    // Ensure this code only runs in the browser
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const parsedUser: User = JSON.parse(storedUser);
+          setUser(parsedUser);
 
-        const uidFromQuery = searchParams.get("uid");
-        if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+          const uidFromQuery = searchParams.get("uid");
+          if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+            router.replace("/profile/404");
+          }
+        } catch (error) {
+          console.error("Failed to parse user data:", error);
           router.replace("/profile/404");
         }
-      } catch (error) {
-        console.error("Failed to parse user data:", error);
+      } else {
         router.replace("/profile/404");
       }
-    } else {
-      router.replace("/profile/404");
     }
   }, [searchParams, router]);
+
 
   const navLinks = [
     {

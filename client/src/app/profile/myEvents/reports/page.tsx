@@ -3,18 +3,19 @@ import { getEventPayments } from "../../../../api/eventPaymentsApi";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import RefundButton from "../../../../components/RefundButton";
 
-const ReportsPage = async ({
-  searchParams,
-}: {
-  searchParams: { uid?: string; eventId?: string };
-}) => {
+
+interface PageProps {
+  searchParams: Promise<{ uid: string; eventId: string }>;
+}
+
+const ReportsPage = async ({ searchParams }: PageProps) => {
   // Extract uid and eventId from searchParams
-  const uid = searchParams?.uid ? Number(searchParams.uid) : undefined;
-  const eventId = searchParams?.eventId
-    ? Number(searchParams.eventId)
+  const params = await searchParams;
+  const uid = params?.uid ? Number(params?.uid) : undefined;
+  const eventId = params?.eventId
+    ? Number(params?.eventId)
     : undefined;
 
-  console.log("uid, eventId:", uid, eventId);
 
   if (!uid) {
     return (

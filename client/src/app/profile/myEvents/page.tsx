@@ -17,13 +17,14 @@ const formatDateTime = (isoDate: string): string => {
   return date.toLocaleString("en-GB", options);
 };
 
+interface PageProps {
+  searchParams: Promise<{ uid: string; eventId: string }>;
+}
+
 // ✅ Server Component: Fetch data before rendering
-const MyEventsPage = async ({
-  searchParams,
-}: {
-  searchParams: { uid?: string };
-}) => {
-  const userId = searchParams.uid ? parseInt(searchParams.uid, 10) : null;
+const MyEventsPage = async ({ searchParams }: PageProps) => {
+  const params = await searchParams;
+  const userId = params?.uid ? parseInt(params.uid, 10) : null;
 
   if (!userId) {
     return (
