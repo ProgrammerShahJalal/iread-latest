@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const RefundButton = ({
   paymentId,
@@ -19,7 +20,6 @@ const RefundButton = ({
   amount: number;
 }) => {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
   const BASE_URL =
     process.env.NODE_ENV === "production"
@@ -28,7 +28,6 @@ const RefundButton = ({
 
   const handleRefundRequest = async () => {
     setLoading(true);
-    setMessage("");
 
     try {
       const response = await axios.post(
@@ -43,12 +42,10 @@ const RefundButton = ({
         }
       );
 
-      setMessage(
-        response.data.message || "Refund request submitted successfully."
-      );
+      toast.success(response.data.message || "Refund request submitted successfully.");
     } catch (error: any) {
       console.error("Error requesting refund:", error);
-      setMessage(error.response?.data?.message || "Failed to request refund.");
+      toast.error(error.response?.data?.message || "Failed to request refund.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +60,6 @@ const RefundButton = ({
       >
         {loading ? "Processing..." : "Request Refund"}
       </button>
-      {message && <p className="text-sm text-red-500 mt-2">{message}</p>}
     </div>
   );
 };

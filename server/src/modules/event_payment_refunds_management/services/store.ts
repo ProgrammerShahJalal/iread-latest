@@ -58,6 +58,21 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
+
+     // Check if refund request already exists
+     let existingRefund = await models[modelName].findOne({
+        where: {
+            user_id: body.user_id,
+            event_id: body.event_id,
+            event_enrollment_id: body.event_enrollment_id,
+            event_payment_id: body.payment_id,
+            trx_id: body.trx_id,
+        },
+    });
+
+    if (existingRefund) {
+        return response(409, 'Refund request already exists.', { existingRefund });
+    }
     
     let inputs: InferCreationAttributes<typeof data> = {
      
@@ -76,7 +91,7 @@ async function store(
     try {
         (await data.update(inputs)).save();
 
-        return response(201, 'data created', {
+        return response(201, 'Refund request send successfully.', {
             data,
         });
     } catch (error: any) {
