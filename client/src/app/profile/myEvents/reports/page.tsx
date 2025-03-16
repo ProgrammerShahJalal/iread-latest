@@ -110,6 +110,7 @@ const ReportsPage = async ({
                             eventId={payment.event_id}
                             eventEnrollmentId={payment.event_enrollment_id}
                             trxId={payment.trx_id}
+                            amount={payment.amount}
                           />
                         ) : (
                           <span className="text-gray-400">

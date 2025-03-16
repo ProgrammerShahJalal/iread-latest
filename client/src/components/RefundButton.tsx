@@ -9,12 +9,14 @@ const RefundButton = ({
   eventId,
   eventEnrollmentId,
   trxId,
+  amount,
 }: {
   paymentId: number;
   userId: number;
   eventId: number;
   eventEnrollmentId: number;
   trxId: string;
+  amount: number;
 }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -37,6 +39,7 @@ const RefundButton = ({
           event_enrollment_id: eventEnrollmentId,
           payment_id: paymentId,
           trx_id: trxId,
+          amount: amount,
         }
       );
 
