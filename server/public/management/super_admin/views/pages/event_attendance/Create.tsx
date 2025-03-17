@@ -14,43 +14,33 @@ import axios from 'axios';
 
 export interface Props {}
 interface User {
+    id: number;
+    uid: number;
     first_name: string;
     last_name: string;
     email: string;
     phone_number: string;
     slug: string;
+    photo: string;
 }
 
-const Create: React.FC<Props> = (props: Props) => {
+interface Attendance {
+    event_id: number;
+    event_session_id: number | null;
+    user_id: number;
+    date_time: string;
+}
+
+const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
     const [users, setUsers] = useState<User[]>([]);
+    const [userAttendances, setUserAttendances] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const state: typeof initialState = useSelector(
-        (state: RootState) => state[setup.module_name],
-    );
+    const state: typeof initialState = useSelector((state: RootState) => state[setup.module_name]);
     const dispatch = useAppDispatch();
-
-    async function handle_submit(e) {
-        e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(store(form_data) as any);
-        if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
-            e.target.reset();
-            // init_nominee();
-        }
-    }
-
-    function get_value(key) {
-        try {
-            if (state.item[key]) return state.item[key];
-            if (state.item?.info[key]) return state.item?.info[key];
-        } catch (error) {
-            return '';
-        }
-        return '';
-    }
 
     useEffect(() => {
         if (!selectedEventId) return;
@@ -63,6 +53,15 @@ const Create: React.FC<Props> = (props: Props) => {
                     `http://127.0.0.1:5011/api/v1/event-enrollments/by-event/${selectedEventId}`,
                 );
                 setUsers(response.data.data);
+                
+                // Initialize attendance state
+                const initialAttendances = response.data.data.map((user: User) => ({
+                    event_id: selectedEventId,
+                    event_session_id: selectedSessionId,
+                    user_id: user.id,
+                    date_time: "",
+                }));
+                setUserAttendances(initialAttendances);
             } catch (err) {
                 setError('Failed to fetch users.');
             } finally {
@@ -73,133 +72,117 @@ const Create: React.FC<Props> = (props: Props) => {
         fetchUsers();
     }, [selectedEventId]);
 
+    const handleDateTimeChange = (userId: number, dateTime: string) => {
+        setUserAttendances((prev) =>
+            prev.map((record) =>
+                record.user_id === userId ? { ...record, date_time: dateTime } : record
+            )
+        );
+    };
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        try {
+            const response = await dispatch(store(userAttendances) as any);
+            if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+                alert('Attendance saved successfully!');
+            }
+        } catch (err) {
+            console.error('Error saving attendance:', err);
+        }
+    }
+
     return (
         <>
             <div className="page_content">
                 <div className="explore_window fixed_size">
-                    <Header page_title={setup.create_page_title}></Header>
+                    <Header page_title={setup.create_page_title} />
                     <div className="content_body custom_scroll">
-                        <form
-                            onSubmit={(e) => handle_submit(e)}
-                            className="mx-auto pt-3"
-                        >
-                            <div>
-                                <h5 className="mb-4">
-                                    Event Attendance Informations
-                                </h5>
-                                <div className="form_auto_fit">
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown
-                                            name="events"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(Number(data.ids));
-                                                setSelectedEventId(
-                                                    Number(data.ids),
-                                                );
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Sessions</label>
-                                        <SessionDropDown
-                                            name="sessions"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data);
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Loading State */}
-                                    {loading && <p>Loading...</p>}
-                                    {error && (
-                                        <p className="text-red-500">{error}</p>
-                                    )}
-
-                                    {/* User Table */}
-                                    {users.length > 0 ? (
-                                        <table className="w-full border-collapse border border-gray-300 mt-4">
-                                            <thead>
-                                                <tr className="bg-gray-100">
-                                                    <th className="border p-2">
-                                                        #
-                                                    </th>
-                                                    <th className="border p-2">
-                                                        Full Name
-                                                    </th>
-                                                    <th className="border p-2">
-                                                        Email
-                                                    </th>
-                                                    <th className="border p-2">
-                                                        Phone Number
-                                                    </th>
-                                                    <th className="border p-2">
-                                                        Slug
-                                                    </th>
-                                                    <th className="border p-2">
-                                                        Attendence
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {users.map((user, index) => (
-                                                    <tr
-                                                        key={index}
-                                                        className="text-center"
-                                                    >
-                                                        <td className="border p-2">
-                                                            {index + 1}
-                                                        </td>
-                                                        <td className="border p-2">{`${user.first_name} ${user.last_name}`}</td>
-                                                        <td className="border p-2">
-                                                            {user.email}
-                                                        </td>
-                                                        <td className="border p-2">
-                                                            {user.phone_number}
-                                                        </td>
-                                                        <td className="border p-2">
-                                                            {user.slug}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    ) : (
-                                        !loading && (
-                                            <p>
-                                                No users found for this event.
-                                            </p>
-                                        )
-                                    )}
-
-                                    {/* <div className="form-group form-vertical">
-                                        <DateTime
-                                            name={'date_time'}
-                                            value={get_value('date_time')}
-                                            handler={(data) =>
-                                                console.log(
-                                                    'Date Time Changed',
-                                                    data,
-                                                )
-                                            }
-                                        />
-                                    </div> */}
+                        <form onSubmit={handleSubmit} className="mx-auto pt-3">
+                            <h5 className="mb-4">Event Attendance Information</h5>
+                            <div className="form_auto_fit">
+                                <div className="form-group form-vertical">
+                                    <label>Events</label>
+                                    <EventDropDown
+                                        name="events"
+                                        multiple={false}
+                                        get_selected_data={(data) => {
+                                            setSelectedEventId(Number(data.ids));
+                                        }}
+                                    />
+                                </div>
+                                <div className="form-group form-vertical">
+                                    <label>Sessions</label>
+                                    <SessionDropDown
+                                        name="sessions"
+                                        multiple={false}
+                                        get_selected_data={(data) => {
+                                            setSelectedSessionId(Number(data.ids));
+                                            setUserAttendances((prev) =>
+                                                prev.map((record) => ({
+                                                    ...record,
+                                                    event_session_id: Number(data.ids),
+                                                }))
+                                            );
+                                        }}
+                                    />
                                 </div>
                             </div>
 
-                            <div className="form-group form-vertical">
-                                <label></label>
-                                <div className="form_elements">
-                                    <button className="btn btn_1 btn-outline-info">
-                                        submit
-                                    </button>
-                                </div>
+                            {loading && <p>Loading...</p>}
+                            {error && <p className="text-red-500">{error}</p>}
+
+                            {users.length > 0 ? (
+                                <table className="w-full border-collapse border border-gray-300 mt-4">
+                                    <thead>
+                                        <tr className="bg-gray-100">
+                                            <th className="border p-2">#</th>
+                                            <th className="border p-2">User ID</th>
+                                            <th className="border p-2">First Name</th>
+                                            <th className="border p-2">Last Name</th>
+                                            <th className="border p-2">Email</th>
+                                            <th className="border p-2">Phone</th>
+                                            <th className="border p-2">Photo</th>
+                                            <th className="border p-2">Date Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {users.map((user, index) => (
+                                            <tr key={user.id} className="text-center">
+                                                <td className="border p-2">{index + 1}</td>
+                                                <td className="border p-2">{user.id}</td>
+                                                <td className="border p-2">{user.first_name}</td>
+                                                <td className="border p-2">{user.last_name}</td>
+                                                <td className="border p-2">{user.email}</td>
+                                                <td className="border p-2">{user.phone_number}</td>
+                                                <td className="border p-2">
+                                                    <img width={30} height={30} className="w-32 h-32" src={user.photo} alt="User Photo" />
+                                                </td>
+                                                <td className="border p-2">
+                                                    <DateTime
+                                                        name={`date_time_${user.id}`}
+                                                        value={
+                                                            userAttendances.find((record) => record.user_id === user.id)?.date_time || ""
+                                                        }
+                                                        handler={(data) => handleDateTimeChange(user.id, data as any)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                !loading && <p>No users found for this event.</p>
+                            )}
+
+                            <div className="form-group form-vertical mt-4">
+                                <button type="submit" className="btn btn_1 btn-outline-info">
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>
-                    <Footer></Footer>
+                    <Footer />
                 </div>
             </div>
         </>
