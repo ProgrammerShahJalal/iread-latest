@@ -63,6 +63,7 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
 
         for (let item of body) {
             let formattedDate = moment(item.date.value, moment.ISO_8601).format('YYYY-MM-DD');
+            let formattedTime = moment(item.time.value, moment.ISO_8601).format('HH:mm');
 
             let newData = await models[modelName].create(
                 {
@@ -70,7 +71,7 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
                     event_session_id: item.event_session_id,
                     user_id: item.user_id,
                     date: formattedDate,
-                    time: item.time,
+                    time: formattedTime,
                 },
                 { transaction }
             );

@@ -113,6 +113,8 @@ const Create: React.FC<Props> = () => {
         return '';
     }
 
+    console.log('selectedDate', selectedDate);
+
     return (
         <>
             <div className="page_content">
@@ -155,7 +157,9 @@ const Create: React.FC<Props> = () => {
                                             <DateElA
                                                 name={"date"}
                                                 value={get_value('date')}
-                                                handler={(data) => setSelectedDate(data.value)}
+                                                handler={(data) => {
+                                                    setSelectedDate(data?.date)
+                                                    console.log(data?.date)}}
                                             />
                                     </div>
                             </div>
