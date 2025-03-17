@@ -9,11 +9,12 @@ import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from '../events/components/dropdown/DropDown';
 import SessionDropDown from '../event_sessions/components/dropdown/DropDown';
-import DateTime from '../../components/DateTime';
+import DateElA from '../../components/DateElA';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Time from '../../components/Time';
 
-export interface Props {}
+export interface Props { }
 interface User {
     id: number;
     uid: number;
@@ -29,12 +30,13 @@ interface Attendance {
     event_id: number;
     event_session_id: number | null;
     user_id: number;
-    date_time: string;
+    time: string;
 }
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
     const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [users, setUsers] = useState<User[]>([]);
     const [userAttendances, setUserAttendances] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
@@ -54,13 +56,14 @@ const Create: React.FC<Props> = () => {
                     `http://127.0.0.1:5011/api/v1/event-enrollments/by-event/${selectedEventId}`,
                 );
                 setUsers(response.data.data);
-                
+
                 // Initialize attendance state
                 const initialAttendances = response.data.data.map((user: User) => ({
                     event_id: selectedEventId,
                     event_session_id: selectedSessionId,
+                    date: selectedDate,
                     user_id: user.id,
-                    date_time: "",
+                    time: "",
                 }));
                 setUserAttendances(initialAttendances);
             } catch (err) {
@@ -73,10 +76,17 @@ const Create: React.FC<Props> = () => {
         fetchUsers();
     }, [selectedEventId]);
 
-    const handleDateTimeChange = (userId: number, dateTime: string) => {
+    const handleTimeChange = (userId: number, time: string) => {
         setUserAttendances((prev) =>
             prev.map((record) =>
-                record.user_id === userId ? { ...record, date_time: dateTime } : record
+                record.user_id === userId ? { ...record, time: time } : record
+            )
+        );
+    };
+    const handleDateChange = (userId: number, date: string) => {
+        setUserAttendances((prev) =>
+            prev.map((record) =>
+                record.user_id === userId ? { ...record, date: date } : record
             )
         );
     };
@@ -91,6 +101,16 @@ const Create: React.FC<Props> = () => {
         } catch (err) {
             toast.error('Error saving attendance:', err);
         }
+    }
+
+    function get_value(key) {
+        try {
+            if (state.item[key]) return state.item[key];
+            if (state.item?.info[key]) return state.item?.info[key];
+        } catch (error) {
+            return '';
+        }
+        return '';
     }
 
     return (
@@ -128,6 +148,16 @@ const Create: React.FC<Props> = () => {
                                         }}
                                     />
                                 </div>
+                                
+                                
+                                    <div className="form-group form-vertical">
+                                    <label>Date</label>
+                                            <DateElA
+                                                name={"date"}
+                                                value={get_value('date')}
+                                                handler={(data) => setSelectedDate(data.value)}
+                                            />
+                                    </div>
                             </div>
 
                             {loading && <p>Loading...</p>}
@@ -144,7 +174,7 @@ const Create: React.FC<Props> = () => {
                                             <th className="border p-2">Email</th>
                                             <th className="border p-2">Phone</th>
                                             <th className="border p-2">Photo</th>
-                                            <th className="border p-2">Date Time</th>
+                                            <th className="border p-2">Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -160,12 +190,12 @@ const Create: React.FC<Props> = () => {
                                                     <img width={30} height={30} className="w-32 h-32" src={user.photo} alt="User Photo" />
                                                 </td>
                                                 <td className="border p-2">
-                                                    <DateTime
-                                                        name={`date_time_${user.id}`}
+                                                    <Time
+                                                        name={`time_${user.id}`}
                                                         value={
-                                                            userAttendances.find((record) => record.user_id === user.id)?.date_time || ""
+                                                            userAttendances.find((record) => record.user_id === user.id)?.time || ""
                                                         }
-                                                        handler={(data) => handleDateTimeChange(user.id, data as any)}
+                                                        handler={(data) => handleTimeChange(user.id, data as any)}
                                                     />
                                                 </td>
                                             </tr>

@@ -33,7 +33,8 @@ class DataModel extends Model<Infer, InferCreation> {
     declare event_id: number;
     declare event_session_id: number;
     declare user_id: number;
-    declare date_time: string;
+    declare date: string;
+    declare time: string;
 
     declare status?: status;
     declare creator?: number;
@@ -62,10 +63,14 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            date_time: {
+            date: {
                 type: DataTypes.DATE,
                 allowNull: true,
             },
+            time: {
+                type: DataTypes.TIME,
+                allowNull: true,
+                },
 
             status: {
                 type: new DataTypes.ENUM('active', 'deactive'),

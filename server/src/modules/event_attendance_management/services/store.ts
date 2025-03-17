@@ -24,7 +24,7 @@ async function validate(req: Request) {
     }
 
     for (let i = 0; i < req.body.length; i++) {
-        let fields = ['event_id', 'event_session_id', 'user_id', 'date_time'];
+        let fields = ['event_id', 'event_session_id', 'date', 'user_id', 'time'];
 
         for (let field of fields) {
             await body(`${i}.${field}`)
@@ -62,14 +62,15 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
         let createdData = [];
 
         for (let item of body) {
-            let formattedDateTime = moment(item.date_time.value, moment.ISO_8601).format('YYYY-MM-DD HH:mm:ss');
+            let formattedDate = moment(item.date.value, moment.ISO_8601).format('YYYY-MM-DD');
 
             let newData = await models[modelName].create(
                 {
                     event_id: item.event_id,
                     event_session_id: item.event_session_id,
                     user_id: item.user_id,
-                    date_time: formattedDateTime,
+                    date: formattedDate,
+                    time: item.time,
                 },
                 { transaction }
             );
