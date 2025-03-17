@@ -11,6 +11,7 @@ import EventDropDown from '../events/components/dropdown/DropDown';
 import SessionDropDown from '../event_sessions/components/dropdown/DropDown';
 import DateTime from '../../components/DateTime';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export interface Props {}
 interface User {
@@ -85,10 +86,10 @@ const Create: React.FC<Props> = () => {
         try {
             const response = await dispatch(store(userAttendances) as any);
             if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
-                alert('Attendance saved successfully!');
+                toast.success('Attendance saved successfully!');
             }
         } catch (err) {
-            console.error('Error saving attendance:', err);
+            toast.error('Error saving attendance:', err);
         }
     }
 
