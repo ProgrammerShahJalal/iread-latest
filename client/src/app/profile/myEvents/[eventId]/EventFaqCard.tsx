@@ -11,7 +11,7 @@ const EventFaqCard = ({ faq }: { faq: any }) => {
     return (
         <div
             onClick={() => setIsOpen((prv) => !prv)}
-            className={`border duration-300 ${isOpen ? "shadow-medium" : "border-[#e8e8e8]"
+            className={`border bg-white duration-300 ${isOpen ? "shadow-medium" : "border-[#e8e8e8]"
                 } p-3 md:p-4  rounded-lg cursor-pointer`}
         >
             <div className="flex items-center gap-2 justify-between">

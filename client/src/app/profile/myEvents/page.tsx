@@ -63,7 +63,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                         </div>
                         <div className="schedule-details clearfix p-15 pt-10">
                           <h5 className="font-16 title">
-                            <Link href={`/events/${event.event_id}`}>
+                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userId}`}>
                               {event.title}
                             </Link>
                           </h5>

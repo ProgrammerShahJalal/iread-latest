@@ -4,6 +4,7 @@ import { getFaqs } from "../../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventResources } from "../../../../api/eventResourcesApi";
+import Link from "next/link";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -29,9 +30,16 @@ const formatDateTime = (isoDate: string): string => {
 const EventDetailsPage = async ({
   params,
 }: {
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ eventId: string, uid: string }>;
 }) => {
-  const { eventId } = await params;
+  const { eventId, uid } = await params;
+
+  console.log('uid', uid);
+
+
+  // Preserve existing query params when navigating
+  const createLink = (path: string) =>
+    `/profile/myEvents/${path}/${eventId}${uid ? `?uid=${uid}` : ""}`;
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
@@ -62,6 +70,21 @@ const EventDetailsPage = async ({
     return (
       <ProfileLayout>
         <div className="container my-10">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
+      <Link href={createLink("giveFeedback")} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Give Feedback
+      </Link>
+      <Link href={createLink("takeSession")} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Take Session
+      </Link>
+      <Link href={createLink("participants")} className="bg-black rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Participants
+      </Link>
+      <Link href={createLink("certificate")} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Certificate
+      </Link>
+    </div>
+
           <div className="text-center">
             <Image
               src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
