@@ -38,8 +38,9 @@ const EventDetailsPage = async ({
 
 
   // Preserve existing query params when navigating
-  const createLink = (path: string) =>
-    `/profile/myEvents/${path}/${eventId}${uid ? `?uid=${uid}` : ""}`;
+  const createLink = (action: string) =>
+    `/profile/myEvents/${action}/${eventId}${uid ? `?uid=${uid}` : ""}`;
+  
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
