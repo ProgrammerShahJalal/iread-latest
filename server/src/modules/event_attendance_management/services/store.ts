@@ -20,17 +20,27 @@ import initializeDB from '../models/db';
 /** Validation rules */
 async function validate(req: Request) {
     if (!Array.isArray(req.body)) {
-        throw new Error('Invalid request format. Expected an array of objects.');
+        throw new Error(
+            'Invalid request format. Expected an array of objects.',
+        );
     }
 
     for (let i = 0; i < req.body.length; i++) {
-        let fields = ['event_id', 'event_session_id', 'date', 'user_id', 'time'];
+        let fields = [
+            'event_id',
+            'event_session_id',
+            'date',
+            'user_id',
+            'time',
+        ];
 
         for (let field of fields) {
             await body(`${i}.${field}`)
                 .not()
                 .isEmpty()
-                .withMessage(`The <b>${field.replace('_', ' ')}</b> field is required in object at index ${i}.`)
+                .withMessage(
+                    `The <b>${field.replace('_', ' ')}</b> field is required in object at index ${i}.`,
+                )
                 .run(req);
         }
     }
@@ -38,7 +48,10 @@ async function validate(req: Request) {
     return validationResult(req);
 }
 
-async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Promise<responseObject> {
+async function store(
+    fastify_instance: FastifyInstance,
+    req: FastifyRequest,
+): Promise<responseObject> {
     /** validation */
     let validate_result = await validate(req as Request);
     if (!validate_result.isEmpty()) {
@@ -50,20 +63,39 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
     let body = req.body as anyObject[];
 
     if (!Array.isArray(body)) {
-        return response(400, 'Invalid request: Expected an array of objects.', [{}]);
+        return response(400, 'Invalid request: Expected an array of objects.', [
+            {},
+        ]);
     }
 
     const db = await initializeDB();
     const transaction = await db.sequelize.transaction();
 
-
-
     try {
         let createdData = [];
 
         for (let item of body) {
-            let formattedDate = moment(item.date.value, moment.ISO_8601).format('YYYY-MM-DD');
-            let formattedTime = moment(item.time.value, moment.ISO_8601).format('HH:mm');
+            // Validate the date format
+            if (!moment(item.date, moment.ISO_8601, true).isValid()) {
+                throw new Error(`Invalid date format for value: ${item.date}`);
+            }
+            // Ensure `time.value` exists before formatting
+            if (
+                !item.time ||
+                !item.time.value ||
+                !moment(item.time.value, 'HH:mm:ss', true).isValid()
+            ) {
+                throw new Error(
+                    `Invalid time format for value: ${JSON.stringify(item.time)}`,
+                );
+            }
+
+            let formattedDate = moment(item.date, moment.ISO_8601).format(
+                'YYYY-MM-DD',
+            );
+            let formattedTime = moment(item.time.value, 'HH:mm:ss').format(
+                'HH:mm:ss',
+            );
 
             let newData = await models[modelName].create(
                 {
@@ -73,7 +105,7 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
                     date: formattedDate,
                     time: formattedTime,
                 },
-                { transaction }
+                { transaction },
             );
 
             createdData.push(newData);
@@ -81,8 +113,9 @@ async function store(fastify_instance: FastifyInstance, req: FastifyRequest): Pr
 
         await transaction.commit(); // Commit transaction
 
-        return response(201, 'Data created successfully', { data: createdData });
-
+        return response(201, 'Data created successfully', {
+            data: createdData,
+        });
     } catch (error: any) {
         await transaction.rollback(); // Rollback in case of error
 

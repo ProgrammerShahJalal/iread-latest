@@ -14,7 +14,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import Time from '../../components/Time';
 
-export interface Props { }
+export interface Props {}
 interface User {
     id: number;
     uid: number;
@@ -35,14 +35,18 @@ interface Attendance {
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+        null,
+    );
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [users, setUsers] = useState<User[]>([]);
     const [userAttendances, setUserAttendances] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const state: typeof initialState = useSelector((state: RootState) => state[setup.module_name]);
+    const state: typeof initialState = useSelector(
+        (state: RootState) => state[setup.module_name],
+    );
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -58,13 +62,15 @@ const Create: React.FC<Props> = () => {
                 setUsers(response.data.data);
 
                 // Initialize attendance state
-                const initialAttendances = response.data.data.map((user: User) => ({
-                    event_id: selectedEventId,
-                    event_session_id: selectedSessionId,
-                    date: selectedDate,
-                    user_id: user.id,
-                    time: "",
-                }));
+                const initialAttendances = response.data.data.map(
+                    (user: User) => ({
+                        event_id: selectedEventId,
+                        event_session_id: selectedSessionId,
+                        date: selectedDate,
+                        user_id: user.id,
+                        time: '',
+                    }),
+                );
                 setUserAttendances(initialAttendances);
             } catch (err) {
                 setError('Failed to fetch users.');
@@ -74,20 +80,13 @@ const Create: React.FC<Props> = () => {
         };
 
         fetchUsers();
-    }, [selectedEventId]);
+    }, [selectedEventId, selectedSessionId, selectedDate]);
 
     const handleTimeChange = (userId: number, time: string) => {
         setUserAttendances((prev) =>
             prev.map((record) =>
-                record.user_id === userId ? { ...record, time: time } : record
-            )
-        );
-    };
-    const handleDateChange = (userId: number, date: string) => {
-        setUserAttendances((prev) =>
-            prev.map((record) =>
-                record.user_id === userId ? { ...record, date: date } : record
-            )
+                record.user_id === userId ? { ...record, time: time } : record,
+            ),
         );
     };
 
@@ -122,7 +121,9 @@ const Create: React.FC<Props> = () => {
                     <Header page_title={setup.create_page_title} />
                     <div className="content_body custom_scroll">
                         <form onSubmit={handleSubmit} className="mx-auto pt-3">
-                            <h5 className="mb-4">Event Attendance Information</h5>
+                            <h5 className="mb-4">
+                                Event Attendance Information
+                            </h5>
                             <div className="form_auto_fit">
                                 <div className="form-group form-vertical">
                                     <label>Events</label>
@@ -130,7 +131,9 @@ const Create: React.FC<Props> = () => {
                                         name="events"
                                         multiple={false}
                                         get_selected_data={(data) => {
-                                            setSelectedEventId(Number(data.ids));
+                                            setSelectedEventId(
+                                                Number(data.ids),
+                                            );
                                         }}
                                     />
                                 </div>
@@ -140,28 +143,37 @@ const Create: React.FC<Props> = () => {
                                         name="sessions"
                                         multiple={false}
                                         get_selected_data={(data) => {
-                                            setSelectedSessionId(Number(data.ids));
+                                            setSelectedSessionId(
+                                                Number(data.ids),
+                                            );
                                             setUserAttendances((prev) =>
                                                 prev.map((record) => ({
                                                     ...record,
-                                                    event_session_id: Number(data.ids),
-                                                }))
+                                                    event_session_id: Number(
+                                                        data.ids,
+                                                    ),
+                                                })),
                                             );
                                         }}
                                     />
                                 </div>
-                                
-                                
-                                    <div className="form-group form-vertical">
+
+                                <div className="form-group form-vertical">
                                     <label>Date</label>
-                                            <DateElA
-                                                name={"date"}
-                                                value={get_value('date')}
-                                                handler={(data) => {
-                                                    setSelectedDate(data?.date)
-                                                    console.log(data?.date)}}
-                                            />
-                                    </div>
+                                    <DateElA
+                                        name="date"
+                                        value={get_value('date')}
+                                        handler={(data) => {
+                                            setSelectedDate(data?.date);
+                                            setUserAttendances((prev) =>
+                                                prev.map((record) => ({
+                                                    ...record,
+                                                    date: data?.date,
+                                                })),
+                                            );
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                             {loading && <p>Loading...</p>}
@@ -172,34 +184,76 @@ const Create: React.FC<Props> = () => {
                                     <thead>
                                         <tr className="bg-gray-100">
                                             <th className="border p-2">#</th>
-                                            <th className="border p-2">User ID</th>
-                                            <th className="border p-2">First Name</th>
-                                            <th className="border p-2">Last Name</th>
-                                            <th className="border p-2">Email</th>
-                                            <th className="border p-2">Phone</th>
-                                            <th className="border p-2">Photo</th>
+                                            <th className="border p-2">
+                                                User ID
+                                            </th>
+                                            <th className="border p-2">
+                                                First Name
+                                            </th>
+                                            <th className="border p-2">
+                                                Last Name
+                                            </th>
+                                            <th className="border p-2">
+                                                Email
+                                            </th>
+                                            <th className="border p-2">
+                                                Phone
+                                            </th>
+                                            <th className="border p-2">
+                                                Photo
+                                            </th>
                                             <th className="border p-2">Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {users.map((user, index) => (
-                                            <tr key={user.id} className="text-center">
-                                                <td className="border p-2">{index + 1}</td>
-                                                <td className="border p-2">{user.id}</td>
-                                                <td className="border p-2">{user.first_name}</td>
-                                                <td className="border p-2">{user.last_name}</td>
-                                                <td className="border p-2">{user.email}</td>
-                                                <td className="border p-2">{user.phone_number}</td>
+                                            <tr
+                                                key={user.id}
+                                                className="text-center"
+                                            >
                                                 <td className="border p-2">
-                                                    <img width={30} height={30} className="w-32 h-32" src={user.photo} alt="User Photo" />
+                                                    {index + 1}
+                                                </td>
+                                                <td className="border p-2">
+                                                    {user.id}
+                                                </td>
+                                                <td className="border p-2">
+                                                    {user.first_name}
+                                                </td>
+                                                <td className="border p-2">
+                                                    {user.last_name}
+                                                </td>
+                                                <td className="border p-2">
+                                                    {user.email}
+                                                </td>
+                                                <td className="border p-2">
+                                                    {user.phone_number}
+                                                </td>
+                                                <td className="border p-2">
+                                                    <img
+                                                        width={30}
+                                                        height={30}
+                                                        className="w-32 h-32"
+                                                        src={user.photo}
+                                                        alt="User Photo"
+                                                    />
                                                 </td>
                                                 <td className="border p-2">
                                                     <Time
                                                         name={`time_${user.id}`}
                                                         value={
-                                                            userAttendances.find((record) => record.user_id === user.id)?.time || ""
+                                                            userAttendances.find(
+                                                                (record) =>
+                                                                    record.user_id ===
+                                                                    user.id,
+                                                            )?.time || ''
                                                         }
-                                                        handler={(data) => handleTimeChange(user.id, data as any)}
+                                                        handler={(data) =>
+                                                            handleTimeChange(
+                                                                user.id,
+                                                                data as any,
+                                                            )
+                                                        }
                                                     />
                                                 </td>
                                             </tr>
@@ -207,11 +261,16 @@ const Create: React.FC<Props> = () => {
                                     </tbody>
                                 </table>
                             ) : (
-                                !loading && <p>No users found for this event.</p>
+                                !loading && (
+                                    <p>No users found for this event.</p>
+                                )
                             )}
 
                             <div className="form-group form-vertical mt-4">
-                                <button type="submit" className="btn btn_1 btn-outline-info">
+                                <button
+                                    type="submit"
+                                    className="btn btn_1 btn-outline-info"
+                                >
                                     Submit
                                 </button>
                             </div>
