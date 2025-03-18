@@ -63,8 +63,8 @@ async function update(
                 event_id: body.events?.[1] || data.event_id,
                 event_session_id: body.sessions?.[1] || data.event_session_id,
                 user_id: body.users?.[1] || data.user_id,
-                date: body.date_time || data.date,
-                time: body.date_time || data.time,
+                date: body.date || data.date,
+                time: body.time || data.time,
                 is_present: body.is_present || data.is_present,
             };
             data.update(inputs);

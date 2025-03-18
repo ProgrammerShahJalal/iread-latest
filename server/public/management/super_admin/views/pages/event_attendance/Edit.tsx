@@ -31,16 +31,12 @@ const Edit: React.FC<Props> = (props: Props) => {
     }, []);
 
 
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
-
-
-
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
+        // Convert is_present checkbox value to "1" or "0" as a string
+        const isPresentValue = isPresent ? "1" : "0";
+        form_data.set('is_present', isPresentValue);
         const response = await dispatch(update(form_data) as any);
     }
 
