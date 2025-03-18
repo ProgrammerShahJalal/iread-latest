@@ -1,4 +1,3 @@
-import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { body, validationResult } from 'express-validator';
 import {
@@ -15,30 +14,38 @@ import error_trace from '../../../helpers/error_trace';
 
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
+import db from '../models/db';
+import initializeDB from '../models/db';
 
-/** validation rules */
+/** Validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'date_time',
-    ];
-
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
-            .run(req);
+    if (!Array.isArray(req.body)) {
+        throw new Error(
+            'Invalid request format. Expected an array of objects.',
+        );
     }
 
+    for (let i = 0; i < req.body.length; i++) {
+        let fields = [
+            'event_id',
+            'event_session_id',
+            'date',
+            'user_id',
+            'time',
+        ];
 
+        for (let field of fields) {
+            await body(`${i}.${field}`)
+                .not()
+                .isEmpty()
+                .withMessage(
+                    `The <b>${field.replace('_', ' ')}</b> field is required in object at index ${i}.`,
+                )
+                .run(req);
+        }
+    }
 
-    let result = await validationResult(req);
-
-    return result;
+    return validationResult(req);
 }
 
 async function store(
@@ -48,37 +55,72 @@ async function store(
     /** validation */
     let validate_result = await validate(req as Request);
     if (!validate_result.isEmpty()) {
-        return response(422, 'validation error', validate_result.array());
+        return response(422, 'Validation error', validate_result.array());
     }
 
     /** initializations */
     let models = Models.get();
-    let body = req.body as anyObject;
-    let data = new models[modelName]();
-    
-     // Format the date_time to remove "T" and "Z"
-     let formattedDateTime = moment(body.date_time, moment.ISO_8601).format('YYYY-MM-DD HH:mm:ss');
+    let body = req.body as anyObject[];
 
-    let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id:  body.events?.[1],
-        event_session_id: body.sessions?.[1] ,
-        user_id: body.users?.[1],
-        date_time: formattedDateTime,
-    };
+    if (!Array.isArray(body)) {
+        return response(400, 'Invalid request: Expected an array of objects.', [
+            {},
+        ]);
+    }
 
+    const db = await initializeDB();
+    const transaction = await db.sequelize.transaction();
 
-    /** store data into database */
     try {
-        (await data.update(inputs)).save();
+        let createdData = [];
 
-        return response(201, 'data created', {
-            data,
+        for (let item of body) {
+            // Validate the date format
+            if (!moment(item.date, moment.ISO_8601, true).isValid()) {
+                throw new Error(`Invalid date format for value: ${item.date}`);
+            }
+            // Ensure `time.value` exists before formatting
+            if (
+                !item.time ||
+                !item.time.value ||
+                !moment(item.time.value, 'HH:mm:ss', true).isValid()
+            ) {
+                throw new Error(
+                    `Invalid time format for value: ${JSON.stringify(item.time)}`,
+                );
+            }
+
+            let formattedDate = moment(item.date, moment.ISO_8601).format(
+                'YYYY-MM-DD',
+            );
+            let formattedTime = moment(item.time.value, 'HH:mm:ss').format(
+                'HH:mm:ss',
+            );
+
+            let newData = await models[modelName].create(
+                {
+                    event_id: item.event_id,
+                    event_session_id: item.event_session_id,
+                    user_id: item.user_id,
+                    date: formattedDate,
+                    time: formattedTime,
+                },
+                { transaction },
+            );
+
+            createdData.push(newData);
+        }
+
+        await transaction.commit(); // Commit transaction
+
+        return response(201, 'Data created successfully', {
+            data: createdData,
         });
     } catch (error: any) {
+        await transaction.rollback(); // Rollback in case of error
+
         let uid = await error_trace(models, error, req.url, req.body);
-        throw new custom_error('server error', 500, error.message, uid);
-        // throw error;
+        throw new custom_error('Server error', 500, error.message, uid);
     }
 }
 

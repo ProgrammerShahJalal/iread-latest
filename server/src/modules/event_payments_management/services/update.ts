@@ -70,6 +70,7 @@ async function update(
                 amount: body.amount || data.amount,
                 trx_id: body.trx_id || data.trx_id,
                 media: body.media || data.media,
+                session_id: body.session_id || data.session_id,
                 is_refunded: body.is_refunded || data.is_refunded || false,
             };
             data.update(inputs);

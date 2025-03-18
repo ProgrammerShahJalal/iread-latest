@@ -3,11 +3,10 @@ import { photoGallary } from "@/data/events";
 import ImageGallery from "@/home/ImageGallary";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { getEvents } from "../../../api/eventApi";
-import FaqCard from "@/faq/FaqCard";
 import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
+import EventEnrollProcess from "../../../components/EventEnrollProcess";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -64,6 +63,9 @@ const EventDetailsPage = async ({
       );
     }
 
+
+
+
     return (
       <section>
         <div
@@ -96,10 +98,18 @@ const EventDetailsPage = async ({
               <div className="entry-meta pl-15">
                 <ul className="list-inline my-6">
                   <li>
-                    Categories: <span className="text-theme-color-2">{event.categories?.map((category: any) => category.title).join(', ')}</span>
+                    Categories:{" "}
+                    <span className="text-theme-color-2">
+                      {event.categories
+                        ?.map((category: any) => category.title)
+                        .join(", ")}
+                    </span>
                   </li>
                   <li>
-                    Tags: <span className="text-theme-color-2">{event.tags?.map((tag: any) => tag.title).join(', ')}</span>
+                    Tags:{" "}
+                    <span className="text-theme-color-2">
+                      {event.tags?.map((tag: any) => tag.title).join(", ")}
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -170,131 +180,17 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                <Link
-                  href="#form"
-                  className="btn bg-[#202C45] text-white w-full mt-3"
-                >
-                  Register Now
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div id="form" className="container-fluid">
-            <div className="section-title">
-              <div className="row">
-                <div className="mt-24 col-md-6 col-md-offset-3 text-center">
-                  <h3 className="title text-2xl font-semibold text-[#202C45]">
-                    Registration Form
-                  </h3>
-                </div>
-              </div>
-            </div>
-            <div className="row mt">
-              <div className="col-md-6 col-md-offset-3">
-                <form
-                  id="booking-form"
-                  name="booking-form"
-                  action="includes/event-register.php"
-                  method="post"
-                  encType="multipart/form-data"
-                >
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          placeholder="Enter Name"
-                          name="register_name"
-                          required={true}
-                          className="form-control"
-                          aria-required="true"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          placeholder="Enter Email"
-                          name="register_email"
-                          className="form-control"
-                          required={true}
-                          aria-required="true"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          placeholder="Enter Phone"
-                          name="register_phone"
-                          className="form-control"
-                          required={true}
-                          aria-required="true"
-                          autoComplete="off"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="form-group">
-                        <label>Ticket types</label>
-                        <select
-                          name="ticket_type"
-                          className="form-control valid"
-                          aria-invalid="false"
-                        >
-                          <option>One Person</option>
-                          <option>Two Person</option>
-                          <option>Family Pack</option>
-                          <option>Premium</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="form-group">
-                        <label>Event types</label>
-                        <select
-                          name="event_type"
-                          className="form-control valid"
-                          aria-invalid="false"
-                        >
-                          <option>Event 1</option>
-                          <option>Event 2</option>
-                          <option>Event 3</option>
-                          <option>All package</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-sm-12">
-                      <div className="form-group text-center">
-                        <input
-                          name="form_botcheck"
-                          className="form-control"
-                          type="hidden"
-                          defaultValue=""
-                        />
-                        <button
-                          data-loading-text="Please wait..."
-                          className="btn btn-dark btn-theme-colored btn-sm btn-block mt-20 pt-10 pb-10"
-                          type="submit"
-                        >
-                          Register now
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                {/* Job Form Validation*/}
+                <EventEnrollProcess eventId={event.event_id} eventPrice={event.discount_price}/>
               </div>
             </div>
           </div>
 
           <div className="max-w-4xl mx-auto py-8 px-4 my-10">
-            {
-              eventFaqs?.length > 0 && <h1 className="text-3xl font-bold text-center mb-6">Frequently Asked Questions</h1>
-            }
+            {eventFaqs?.length > 0 && (
+              <h1 className="text-3xl font-bold text-center mb-6">
+                Frequently Asked Questions
+              </h1>
+            )}
 
             <div className="grid grid-cols-1 gap-y-5">
               {eventFaqs.map((faq: any) => (

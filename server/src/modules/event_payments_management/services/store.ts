@@ -15,14 +15,15 @@ import error_trace from '../../../helpers/error_trace';
 
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
+import Stripe from 'stripe';
 
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'events',
-        'users',
-        'enrollments',
+        'event_id',
+        'user_id',
+        'event_enrollment_id',
         'date',
         'amount',
         'trx_id',
@@ -39,11 +40,32 @@ async function validate(req: Request) {
             .run(req);
     }
 
-   
-
     let result = await validationResult(req);
 
     return result;
+}
+
+const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
+    apiVersion: process.env.STRIPE_API_VERSION as any,
+});
+
+interface PaymentRequest {
+    event_id: number;
+    user_id: number;
+    event_enrollment_id: number;
+    date: string;
+    amount: string;
+    trx_id: string;
+}
+
+interface Payment {
+    event_id: number;
+    user_id: number;
+    event_enrollment_id: number;
+    date: string;
+    amount: number;
+    trx_id: string;
+    session_id: string;
 }
 
 async function store(
@@ -60,24 +82,62 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
-    
-    let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id: body.events?.[1],
-        user_id: body.users?.[1],
-        event_enrollment_id: body.enrollments?.[1],
-        event_payment_id: body.payments?.[1],
-        date: body.date,
-        amount: body.amount,
-        trx_id: body.trx_id,
-        media: body.media,
-        is_refunded: body.is_refunded || false,
-    };
 
+    const { user_id, event_id, event_enrollment_id, trx_id, amount } =
+        req.body as PaymentRequest;
 
     /** store data into database */
     try {
-        (await data.update(inputs)).save();
+        const amountInCents = Math.round(parseFloat(amount) * 100);
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: `User ID ${user_id}`,
+                            description: `Event ID: ${event_id}, Event Enrollment ID: ${event_enrollment_id}, Trx ID: ${trx_id}`,
+                        },
+                        unit_amount: amountInCents,
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${encodeURIComponent(event_enrollment_id)}&trx_id=${encodeURIComponent(trx_id)}&amount=${amount}`,
+            cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
+            metadata: {
+                user_id,
+                event_id,
+                event_enrollment_id,
+                trx_id,
+            },
+        } as Stripe.Checkout.SessionCreateParams);
+        // console.log('Stripe Session:', session);
+
+        let inputs: InferCreationAttributes<typeof data> = {
+            event_id: body.event_id || body.event_id?.[1],
+            user_id: body.user_id || body.user_id?.[1],
+            event_enrollment_id:
+                body.event_enrollment_id || body.event_enrollment_id?.[1],
+            event_payment_id: body.event_payment_id,
+            date: body.date,
+            amount: body.amount,
+            trx_id: body.trx_id,
+            media: body.media,
+            session_id: session?.id,
+            is_refunded: body.is_refunded || false,
+        };
+        // Properly set and save the new data
+        data.set(inputs);
+        await data.save();
+
+        // Update `is_paid` to true in the EventEnrollmentsModel
+        await models.EventEnrollmentsModel.update(
+            { is_paid: '1' },
+            { where: { id: body.event_enrollment_id } },
+        );
 
         return response(201, 'data created', {
             data,

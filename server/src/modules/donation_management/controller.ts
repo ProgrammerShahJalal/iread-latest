@@ -3,7 +3,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import store from './services/store';
 import { responseObject } from '../../common_types/object';
 
-console.log('STRIPE_API_VERSION', `${process.env.STRIPE_API_VERSION}`);
+
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
     apiVersion: process.env.STRIPE_API_VERSION as any,
 });

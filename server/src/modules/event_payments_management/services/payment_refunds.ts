@@ -74,11 +74,12 @@ async function payment_refunds(
             event_id: data.event_id,
             user_id: data.user_id,
             event_enrollment_id: data.event_enrollment_id,
-            event_payment_id: data.event_enrollment_id,
+            event_payment_id: data.event_payment_id,
             date: moment().toISOString(),
             amount: data.amount,
             trx_id: data.trx_id,
             media: data.media,
+            session_id: data.session_id,
         };
 
         await models.EventPaymentRefundsModel.create(refundInputs);

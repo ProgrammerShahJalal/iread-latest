@@ -60,7 +60,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         'amount',
                                         'trx_id',
                                         'media',
-                                        'is_refunded',
+                                        // 'is_refunded',
                                         'status',
                                     ].map((i) => (
                                         <tr>

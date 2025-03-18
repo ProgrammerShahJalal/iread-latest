@@ -143,7 +143,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
         <ul className="mt-4 space-y-6">
           {commentts.map((comment, index) => (
             <li key={comment.id || index} className="border-b pb-4">
-              <div className="flex items-start space-x-4">
+              <div key={comment.id} className="flex items-start space-x-4">
                 <Image
                   src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
                   alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}

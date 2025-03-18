@@ -61,8 +61,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                 <div className="form_auto_fit">
 
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
+                                        <label>Event</label>
+                                        <EventDropDown name="event_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
@@ -70,8 +70,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="users"
+                                        <label>User</label>
+                                        <UserDropDown name="user_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
@@ -79,8 +79,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <label>Enrollments</label>
-                                        <EnrollmentDropDown name="enrollments"
+                                        <label>Enrollment</label>
+                                        <EnrollmentDropDown name="event_enrollment_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
@@ -88,8 +88,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <label>Payments</label>
-                                        <PaymentDropDown name="payments"
+                                        <label>Payment</label>
+                                        <PaymentDropDown name="payment_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)

@@ -1,9 +1,5 @@
 'use strict';
-import {
-    FastifyReply,
-    FastifyRequest,
-    FastifyInstance,
-} from 'fastify';
+import { FastifyReply, FastifyRequest, FastifyInstance } from 'fastify';
 import all from './services/all';
 import details from './services/details';
 import soft_delete from './services/soft_delete';
@@ -13,6 +9,7 @@ import update from './services/update';
 import restore from './services/restore';
 import destroy from './services/destroy';
 import data_import from './services/import';
+import findByEvent from './services/findByEvent';
 
 export default function (fastify: FastifyInstance) {
     return {
@@ -26,6 +23,11 @@ export default function (fastify: FastifyInstance) {
 
         find: async function (req: FastifyRequest, res: FastifyReply) {
             let data = await details(fastify, req);
+            res.code(data.status).send(data);
+        },
+
+        findByEvent: async function (req: FastifyRequest, res: FastifyReply) {
+            let data = await findByEvent(fastify, req);
             res.code(data.status).send(data);
         },
 
