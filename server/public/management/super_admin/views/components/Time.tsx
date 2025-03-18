@@ -5,6 +5,7 @@ export interface Props {
     value: string | null;
     name: string;
     handler: (data: { [key: string]: any }) => void;
+    default_value: string | null;
 }
 interface TargetWithPicker {
     showPicker?: () => void;
@@ -12,10 +13,17 @@ interface TargetWithPicker {
 
 // Format time
 export function formattedTime(value: string | null): string {
-    return value ? moment(value, 'HH:mm:ss').format('h:mm A') : moment().format('h:mm A');
+    return value
+        ? moment(value, 'HH:mm:ss').format('h:mm A')
+        : moment().format('h:mm A');
 }
 
-const Time: React.FC<Props> = ({ value, name, handler }: Props) => {
+const Time: React.FC<Props> = ({
+    value,
+    name,
+    handler,
+    default_value,
+}: Props) => {
     const timeInput = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState<string | null>(null);
 
@@ -27,7 +35,9 @@ const Time: React.FC<Props> = ({ value, name, handler }: Props) => {
     function timeHandler() {
         if (timeInput.current) {
             const inputValue = timeInput.current.value;
-            const formattedTime = moment(inputValue, 'HH:mm').format('HH:mm:ss'); // Ensures a proper time format
+            const formattedTime = moment(inputValue, 'HH:mm').format(
+                'HH:mm:ss',
+            ); // Ensures a proper time format
             setInputValue(formattedTime);
 
             handler({
@@ -46,7 +56,10 @@ const Time: React.FC<Props> = ({ value, name, handler }: Props) => {
     };
 
     return (
-        <label htmlFor={name} className="text-capitalize d-block time-custom-control">
+        <label
+            htmlFor={name}
+            className="text-capitalize d-block time-custom-control"
+        >
             <input
                 type="time"
                 ref={timeInput}
@@ -56,9 +69,9 @@ const Time: React.FC<Props> = ({ value, name, handler }: Props) => {
                 onChange={timeHandler}
                 className="form-control"
             />
-            {/* <div className="form-control preview">
-                {inputValue && formattedTime(inputValue)}
-            </div> */}
+            <div className="form-control preview">
+                {default_value && formattedTime(default_value)}
+            </div>
         </label>
     );
 };

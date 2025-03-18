@@ -13,25 +13,9 @@ import DateElA from '../../components/DateElA';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Time from '../../components/Time';
+import { Attendance, Event, User } from '../../../../../types';
 
 export interface Props {}
-interface User {
-    id: number;
-    uid: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number: string;
-    slug: string;
-    photo: string;
-}
-
-interface Attendance {
-    event_id: number;
-    event_session_id: number | null;
-    user_id: number;
-    time: string;
-}
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
@@ -39,7 +23,27 @@ const Create: React.FC<Props> = () => {
         null,
     );
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [users, setUsers] = useState<User[]>([]);
+    const [event, setEvent] = useState<Event>({
+        event_id: 0,
+        title: '',
+        reg_start_date: '',
+        reg_end_date: '',
+        session_start_date_time: '',
+        session_end_date_time: '',
+        place: '',
+        short_description: '',
+        full_description: '',
+        pre_requisities: '',
+        terms_and_conditions: '',
+        event_type: '',
+        poster: '',
+        price: '',
+        discount_price: '',
+        categories: [],
+        tags: [],
+    });
     const [userAttendances, setUserAttendances] = useState<Attendance[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -61,6 +65,11 @@ const Create: React.FC<Props> = () => {
                 );
                 setUsers(response.data.data);
 
+                const eventRes = await axios.get(
+                    `http://127.0.0.1:5011/api/v1/events/${selectedEventId}`,
+                );
+                setEvent(eventRes.data.data);
+
                 // Initialize attendance state
                 const initialAttendances = response.data.data.map(
                     (user: User) => ({
@@ -81,6 +90,32 @@ const Create: React.FC<Props> = () => {
 
         fetchUsers();
     }, [selectedEventId, selectedSessionId, selectedDate]);
+
+    // Function to split the date and time
+    const splitDateTime = (dateTimeString: string) => {
+        const dateTime = new Date(dateTimeString);
+        const date = dateTime.toISOString().split('T')[0]; // Extracts date (YYYY-MM-DD)
+        const time = dateTime.toTimeString().split(' ')[0]; // Extracts time (HH:MM:SS)
+        return { date, time };
+    };
+
+    // Only call splitDateTime if event.session_start_date_time is valid
+    useEffect(() => {
+        if (event.session_start_date_time) {
+            const { date, time } = splitDateTime(event.session_start_date_time);
+            setSelectedDate(date); // Set the extracted date as the default value for DateElA
+            setSelectedTime(time); // Set the extracted time as the default value for Time
+
+            // Update userAttendances with the extracted time
+            setUserAttendances((prev) =>
+                prev.map((record) => ({
+                    ...record,
+                    date: date,
+                    time: time,
+                })),
+            );
+        }
+    }, [event.session_start_date_time]);
 
     const handleTimeChange = (userId: number, time: string) => {
         setUserAttendances((prev) =>
@@ -162,7 +197,10 @@ const Create: React.FC<Props> = () => {
                                     <label>Date</label>
                                     <DateElA
                                         name="date"
-                                        value={get_value('date')}
+                                        value={
+                                            selectedDate || get_value('date')
+                                        }
+                                        default_value={selectedDate}
                                         handler={(data) => {
                                             setSelectedDate(data?.date);
                                             setUserAttendances((prev) =>
@@ -241,6 +279,9 @@ const Create: React.FC<Props> = () => {
                                                 <td className="border p-2">
                                                     <Time
                                                         name={`time_${user.id}`}
+                                                        default_value={
+                                                            selectedTime
+                                                        }
                                                         value={
                                                             userAttendances.find(
                                                                 (record) =>

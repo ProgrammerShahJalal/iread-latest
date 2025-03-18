@@ -5,6 +5,7 @@ export interface Props {
     value: string | null;
     name: string;
     handler: (data: { [key: string]: any }) => void;
+    default_value: string | null;
 }
 
 interface TargetWithPicker {
@@ -19,7 +20,12 @@ export function formated_date(value) {
     }
 }
 
-const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
+const DateEl: React.FC<Props> = ({
+    value,
+    name,
+    handler,
+    default_value,
+}: Props) => {
     const date_input = useRef<HTMLInputElement>(null);
     const [input_value, setInput_value] = useState<string | null>(null);
 
@@ -52,23 +58,24 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     };
 
     return (
-        <><label
-            htmlFor={name}
-            className="text-capitalize d-block date_custom_control"
-        >
-            <input
-                type="date"
-                ref={date_input}
-                onClick={(e) => handleClick(e)}
-                id={name}
-                name={name}
-                onChange={date_handler}
-                className="form-control" />
-
-        </label>
-            {/* <div className="form-control preview">
-                {input_value && formated_date(input_value)}
-            </div> */}
+        <>
+            <label
+                htmlFor={name}
+                className="text-capitalize d-block date_custom_control"
+            >
+                <input
+                    type="date"
+                    ref={date_input}
+                    onClick={(e) => handleClick(e)}
+                    id={name}
+                    name={name}
+                    onChange={date_handler}
+                    className="form-control"
+                />
+            </label>
+            <div className="form-control preview">
+                {default_value && formated_date(default_value)}
+            </div>
         </>
     );
 };
