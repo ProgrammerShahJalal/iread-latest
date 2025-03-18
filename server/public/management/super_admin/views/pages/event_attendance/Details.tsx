@@ -37,8 +37,19 @@ const Details: React.FC<Props> = (props: Props) => {
 
 
     
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
+    };
+    const formateTime = (time: string) => {
+        
+        const formattedTime = moment(time, ['HH:mm:ss', 'h:mm A', 'YYYY-MM-DD HH:mm:ss']).format('h:mm A');
+    
+        if (formattedTime === 'Invalid date') {
+            console.error('Invalid time format:', time);
+            return 'Invalid time';
+        }
+    
+        return formattedTime;
     };
 
 
@@ -57,17 +68,28 @@ const Details: React.FC<Props> = (props: Props) => {
                                         'event_id',
                                         'event_session_id',
                                         'user_id',
-                                        'date_time',
+                                        'date',
+                                        'time',
+                                        'is_present',
                                         'status',
                                     ].map((i) => (
-                                        <tr>
+                                        <tr key={i}>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
                                                    {
-                                                    i === 'date_time' ? (
-                                                        <td>{formateDateTime(get_value(i))}</td>
+                                                    i === 'date' ? (
+                                                        <td>{formateDate(get_value(i))}</td>
                                                     ) : (
-                                                        <td>{get_value(i)}</td>
+                                                        i === 'time' ? (
+                                                            <td>{formateTime(get_value(i))}</td>
+                                                        ): (
+                                                            i === 'is_present' ? (
+                                                                <td>{get_value(i) !== undefined ? (get_value(i) ? 'Yes' : 'No') : 'N/A'}</td>
+                                                            ) : (
+                                                                <td>{get_value(i)}</td>
+                                                            )
+                                                            
+                                                        )
                                                     )
                                                    }
                                         </tr>

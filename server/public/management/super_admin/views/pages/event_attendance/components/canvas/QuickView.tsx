@@ -22,8 +22,19 @@ const QuickView: React.FC<Props> = (props: Props) => {
     }
 
 
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+    let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
+    };
+    const formateTime = (time: string) => {
+        
+        const formattedTime = moment(time, ['HH:mm:ss', 'h:mm A', 'YYYY-MM-DD HH:mm:ss']).format('h:mm A');
+    
+        if (formattedTime === 'Invalid date') {
+            console.error('Invalid time format:', time);
+            return 'Invalid time';
+        }
+    
+        return formattedTime;
     };
 
     if (modalRoot && state.show_quick_view_canvas) {
@@ -61,9 +72,19 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.user_id}</th>
                                 </tr>
                                 <tr>
-                                    <th>Date Time</th>
+                                    <th>Date</th>
                                     <th>:</th>
-                                    <th>{formateDateTime(state.item.date_time)}</th>
+                                    <th>{formateDate(state.item.date)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>:</th>
+                                    <th>{formateTime(state.item.time)}</th>
+                                </tr>
+                                <tr>
+                                    <th>Is Present</th>
+                                    <th>:</th>
+                                    <th>{state.item.is_present !== undefined ? (state.item.is_present ? 'Yes' : 'No') : 'N/A'}</th>
                                 </tr>
                                 
                                 <tr>

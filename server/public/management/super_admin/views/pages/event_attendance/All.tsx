@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,event_session_id,user_id,date_time,status',
+                'event_id,event_session_id,user_id,date,time,is_present,status',
             ),
         );
         dispatch(all({}));
@@ -45,8 +45,19 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
 
-    let formateDateTime = (date: string) => {
-        return moment(date).format('Do MMM YY, h:mm:ss A');
+    let formateDate = (date: string) => {
+        return moment(date).format('Do MMM YY');
+    };
+    const formateTime = (time: string) => {
+
+        const formattedTime = moment(time, ['HH:mm:ss', 'h:mm A', 'YYYY-MM-DD HH:mm:ss']).format('h:mm A');
+
+        if (formattedTime === 'Invalid date') {
+            console.error('Invalid time format:', time);
+            return 'Invalid time';
+        }
+
+        return formattedTime;
     };
 
     return (
@@ -85,8 +96,18 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Date Time`}
-                                            col_name={`date_time`}
+                                            label={`Date`}
+                                            col_name={`date`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Time`}
+                                            col_name={`time`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
+                                            label={`Is Present`}
+                                            col_name={`is_present`}
                                             sort={true}
                                         />
                                         <TableHeading
@@ -124,11 +145,22 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {formateDateTime(i.date_time)}
+                                                            {formateDate(i.date)}
                                                         </span>
                                                     </td>
-
-
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                        >
+                                                            {formateTime(i.time)}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                    {i.is_present !== undefined ? (i.is_present ? 'Yes' : 'No') : 'N/A'}
+                                                    </td>
                                                     <td>
                                                         {i.status}
                                                     </td>

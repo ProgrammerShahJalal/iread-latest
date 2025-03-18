@@ -9,13 +9,11 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
-import Input from './components/management_data_page/Input';
-import Select from 'react-select';
-import DateEl from '../../components/DateEl';
 import EventDropDown from "../events/components/dropdown/DropDown";
 import SessionDropDown from "../event_sessions/components/dropdown/DropDown";
 import UserDropDown from "../users/components/dropdown/DropDown";
-import DateTime from '../../components/DateTime';
+import DateElA from '../../components/DateElA';
+import Time from '../../components/Time';
 
 export interface Props { }
 
@@ -23,7 +21,7 @@ const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
-
+    const [isPresent, setIsPresent] = useState(false);
     const dispatch = useAppDispatch();
     const params = useParams();
 
@@ -55,6 +53,20 @@ const Edit: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
+
+    const handleCheckboxChange = (e) => {
+        const isChecked = e.target.checked;
+        setIsPresent(isChecked); // Update the state
+
+        // Perform actions based on whether the checkbox is checked or unchecked
+        if (isChecked) {
+            console.log('Checkbox is checked');
+            // Add any logic for when the checkbox is checked
+        } else {
+            console.log('Checkbox is unchecked');
+            // Add any logic for when the checkbox is unchecked
+        }
+    };
 
     return (
         <>
@@ -112,10 +124,30 @@ const Edit: React.FC<Props> = (props: Props) => {
                                         </div>
 
                                         <div className="form-group form-vertical">
-                                            <DateTime
-                                                name={"date_time"}
-                                                value={get_value('date_time')}
-                                                handler={(data) => console.log('Date Time Changed', data)}
+                                            <label>Date</label>
+                                            <DateElA
+                                                name={"date"}
+                                                value={get_value('date')}
+                                                handler={(data) => console.log('Date Changed', data)}
+                                                default_value={get_value('date')} />
+                                        </div>
+
+                                        <div className="form-group form-vertical">
+                                            <label>Time</label>
+                                            <Time
+                                                name={"time"}
+                                                value={get_value('time')}
+                                                handler={(data) => console.log('Time Changed', data)}
+                                                default_value={get_value('time')} />
+                                        </div>
+                                        <div className="form-group form-vertical">
+                                            <label>Is Present</label>
+                                            <input
+                                                type="checkbox"
+                                                checked={get_value('is_present') || isPresent}
+                                                onChange={handleCheckboxChange}
+                                                name={"is_present"}
+                                                value={get_value('is_present')}
                                             />
                                         </div>
 

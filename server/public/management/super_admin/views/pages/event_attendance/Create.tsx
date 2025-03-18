@@ -55,40 +55,36 @@ const Create: React.FC<Props> = () => {
 
     useEffect(() => {
         if (!selectedEventId) return;
-
-        const fetchUsers = async () => {
+    
+        const fetchEventData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(
-                    `http://127.0.0.1:5011/api/v1/event-enrollments/by-event/${selectedEventId}`,
-                );
-                setUsers(response.data.data);
-
-                const eventRes = await axios.get(
-                    `http://127.0.0.1:5011/api/v1/events/${selectedEventId}`,
-                );
+                const [usersRes, eventRes] = await Promise.all([
+                    axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`),
+                    axios.get(`/api/v1/events/${selectedEventId}`),
+                ]);
+    
+                setUsers(usersRes.data.data);
                 setEvent(eventRes.data.data);
-
-                // Initialize attendance state
-                const initialAttendances = response.data.data.map(
-                    (user: User) => ({
+    
+                setUserAttendances(
+                    usersRes.data.data.map((user: User) => ({
                         event_id: selectedEventId,
                         event_session_id: selectedSessionId,
-                        date: selectedDate,
+                        date: null,
                         user_id: user.id,
                         time: '',
-                    }),
+                    }))
                 );
-                setUserAttendances(initialAttendances);
-            } catch (err) {
-                setError('Failed to fetch users.');
+            } catch {
+                setError('Failed to fetch data.');
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchUsers();
+    
+        fetchEventData();
     }, [selectedEventId]);
 
     // Function to split the date and time
