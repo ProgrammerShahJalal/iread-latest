@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import Time from '../../components/Time';
 import { Attendance, Event, User } from '../../../../../types';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
@@ -89,7 +89,7 @@ const Create: React.FC<Props> = () => {
         };
 
         fetchUsers();
-    }, [selectedEventId, selectedSessionId, selectedDate]);
+    }, [selectedEventId]);
 
     // Function to split the date and time
     const splitDateTime = (dateTimeString: string) => {
@@ -146,8 +146,6 @@ const Create: React.FC<Props> = () => {
         }
         return '';
     }
-
-    console.log('selectedDate', selectedDate);
 
     return (
         <>
@@ -241,6 +239,7 @@ const Create: React.FC<Props> = () => {
                                                 Photo
                                             </th>
                                             <th className="border p-2">Time</th>
+                                            <th className="border p-2">Is Present</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -297,6 +296,25 @@ const Create: React.FC<Props> = () => {
                                                         }
                                                     />
                                                 </td>
+                                                <td className="border p-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            userAttendances.find((record) => record.user_id === user.id)
+                                                                ?.is_present || false
+                                                        }
+                                                        onChange={() => {
+                                                            setUserAttendances((prev) =>
+                                                                prev.map((record) =>
+                                                                    record.user_id === user.id
+                                                                        ? { ...record, is_present: !record.is_present }
+                                                                        : record,
+                                                                ),
+                                                            );
+                                                        }}
+                                                    />
+                                                </td>
+
                                             </tr>
                                         ))}
                                     </tbody>

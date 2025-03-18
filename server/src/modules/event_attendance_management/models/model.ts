@@ -35,6 +35,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare user_id: number;
     declare date: string;
     declare time: string;
+    declare is_present: boolean;
 
     declare status?: status;
     declare creator?: number;
@@ -70,7 +71,11 @@ function init(sequelize: Sequelize) {
             time: {
                 type: DataTypes.TIME,
                 allowNull: true,
-                },
+            },
+            is_present: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false,
+            },
 
             status: {
                 type: new DataTypes.ENUM('active', 'deactive'),

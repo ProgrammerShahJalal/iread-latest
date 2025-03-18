@@ -65,6 +65,7 @@ async function update(
                 user_id: body.users?.[1] || data.user_id,
                 date: body.date_time || data.date,
                 time: body.date_time || data.time,
+                is_present: body.is_present || data.is_present,
             };
             data.update(inputs);
             await data.save();
