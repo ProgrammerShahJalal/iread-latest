@@ -83,7 +83,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 value={get_value('date')}
                                                 handler={(data) => console.log('Date Changed', data)}
                                             />
-                                        </div>
+                                    </div>
                                    
                                 </div>
 

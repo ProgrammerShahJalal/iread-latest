@@ -19,7 +19,6 @@ content-type: application/json
     "event_enrollment_id": "1",
     "date": "2022-01-01",
     "amount": "170.00",
-    "payment_method": "Stripe",
     "trx_id": "trx56Trxgl7",
     "media": "Stripe"
 

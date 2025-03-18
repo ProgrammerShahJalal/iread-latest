@@ -1,35 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Sidebar = () => {
-   const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
-   const router = useRouter();
-
-  const navLinks = [
-    { name: "My Profile", path: "/profile" },
-    { name: "My Courses", path: "/profile/myCourses" },
-    { name: "Settings", path: "/profile/settings" },
-  ];
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Ensure this code only runs in the browser
+    if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    }, []);
+        try {
+          const parsedUser: User = JSON.parse(storedUser);
+          setUser(parsedUser);
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("user"); // Remove user from localStorage
-  //   setUser(null); // Reset user state
-  //   router.push("/login"); // Redirect to login page
-  // };
+          const uidFromQuery = searchParams.get("uid");
+          if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+            router.replace("/profile/404");
+          }
+        } catch (error) {
+          console.error("Failed to parse user data:", error);
+          router.replace("/profile/404");
+        }
+      } else {
+        router.replace("/profile/404");
+      }
+    }
+  }, [searchParams, router]);
+
+
+  const navLinks = [
+    {
+      name: "My Profile",
+      path: user ? `/profile?slug=${user.slug}&uid=${user.id}` : "/profile",
+    },
+    { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
+    { name: "Settings", path: `/profile/settings?uid=${user?.id}` },
+  ];
 
   return (
-    <div className="w-64 h-screen">
+    <div className="w-36 md:w-64 h-screen">
       <nav className="mt-4">
         {navLinks.map((link) => (
           <Link
@@ -43,9 +58,6 @@ const Sidebar = () => {
           </Link>
         ))}
       </nav>
-      {/* <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                        Logout
-                      </button> */}
     </div>
   );
 };

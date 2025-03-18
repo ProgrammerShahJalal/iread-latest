@@ -20,12 +20,10 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'events',
-        'users',
-        'enrollments',
-        'payments',
-        'date',
-        'amount',
+        'event_id',
+        'user_id',
+        'event_enrollment_id',
+        'payment_id',
         'trx_id',
     ];
 
@@ -60,14 +58,29 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
+
+     // Check if refund request already exists
+     let existingRefund = await models[modelName].findOne({
+        where: {
+            user_id: body.user_id,
+            event_id: body.event_id,
+            event_enrollment_id: body.event_enrollment_id,
+            event_payment_id: body.payment_id,
+            trx_id: body.trx_id,
+        },
+    });
+
+    if (existingRefund) {
+        return response(409, 'Refund request already exists.', { existingRefund });
+    }
     
     let inputs: InferCreationAttributes<typeof data> = {
      
-        event_id: body.events?.[1],
-        user_id: body.users?.[1],
-        event_enrollment_id: body.enrollments?.[1],
-        event_payment_id: body.payments?.[1],
-        date: body.date,
+        event_id: body.event_id?.[1] || body.event_id,
+        user_id: body.user_id?.[1] || body.user_id,
+        event_enrollment_id: body.event_enrollment_id?.[1] || body.event_enrollment_id,
+        event_payment_id: body.payment_id?.[1] || body.payment_id,
+        date: body.date || moment().toISOString(),
         amount: body.amount,
         trx_id: body.trx_id,
         media: body.media,
@@ -78,7 +91,7 @@ async function store(
     try {
         (await data.update(inputs)).save();
 
-        return response(201, 'data created', {
+        return response(201, 'Refund request send successfully.', {
             data,
         });
     } catch (error: any) {

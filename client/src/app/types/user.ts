@@ -8,4 +8,5 @@ interface User{
     phone_number: string;
     photo: string;
     slug: string;
+    token: string;
 }

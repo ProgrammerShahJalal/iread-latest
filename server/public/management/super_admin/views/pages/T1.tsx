@@ -200,8 +200,14 @@ const T1: React.FC<Props> = () => {
 
             <div className="row my-4">
                 <div className="col-md-6">
-                    <h3>Bar Chart</h3>
-                    <canvas ref={barChartRef}></canvas>
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Bar Chart</h3>
+                            <canvas ref={barChartRef}></canvas>
+                        </div>
+
+                    </div>
+
                 </div>
                 <div className="col-md-6">
                     <div className="card">
@@ -209,7 +215,7 @@ const T1: React.FC<Props> = () => {
                             <h3 className="m-0">Pie Chart</h3>
                         </div>
                         <div className="card-body">
-                        <canvas ref={pieChartRef}></canvas>
+                            <canvas ref={pieChartRef}></canvas>
                         </div>
 
                     </div>

@@ -2,7 +2,11 @@
 import { FastifyInstance } from 'fastify';
 import controller from './controller';
 
-module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void) {
+module.exports = function (
+    fastify: FastifyInstance,
+    opts: {},
+    done: () => void,
+) {
     const controllerInstance = controller(fastify);
     let prefix: string = '/event-enrollments';
 
@@ -15,7 +19,7 @@ module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void)
         .post(`${prefix}/destroy`, controllerInstance.destroy)
         .post(`${prefix}/import`, controllerInstance.import)
         .get(`${prefix}/:id`, controllerInstance.find)
-        ;
+        .get(`${prefix}/by-event/:id`, controllerInstance.findByEvent);
 
     done();
 };

@@ -3,12 +3,13 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { responseObject } from '../../../common_types/object';
 import response from '../../../helpers/response';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 async function data_import(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    let models = await db();
+    let models = await Models.get();
     let params = req.params as any;
 
     try {

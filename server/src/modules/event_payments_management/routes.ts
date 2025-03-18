@@ -7,6 +7,8 @@ module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void)
     let prefix: string = '/event-payments';
 
     fastify
+        .post(`${prefix}/create-checkout-session`, controllerInstance.session)
+        .post(`${prefix}/webhook`, controllerInstance.webhook)
         .get(`${prefix}`, controllerInstance.all)
         .post(`${prefix}/store`, controllerInstance.store)
         .post(`${prefix}/update`, controllerInstance.update)

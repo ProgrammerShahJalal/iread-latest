@@ -9,12 +9,11 @@ function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const dropdownRef = useRef<HTMLDivElement | null>(null);;
-
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Handle clicks outside the dropdown
   useEffect(() => {
-    const handleClickOutside = (event: { target: any; }) => {
+    const handleClickOutside = (event: { target: any }) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
@@ -65,27 +64,23 @@ function Navbar() {
         body: JSON.stringify({
           from: "frontend",
           user: user,
-        })
+        }),
       });
-  
+
       // Check if the response is a success
       if (response.ok) {
         localStorage.removeItem("user");
         window.dispatchEvent(new Event("userUpdated"));
         setUser(null);
-        router.push("/login"); 
+        router.push("/login");
       } else {
-        const errorText = await response.text(); 
+        const errorText = await response.text();
         console.error("Logout failed:", errorText);
       }
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
-  
-  
-
-
 
   return (
     <div>
@@ -100,15 +95,33 @@ function Navbar() {
                 ☰
               </button>
               <ul id="menuzord-menu" className="menuzord-menu">
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/about">About Us</Link></li>
-                <li><Link href="/events">Events</Link></li>
-                <li><Link href="/courses">Courses</Link></li>
-                <li><Link href="/forum">Forum</Link></li>
-                <li><Link href="/blogs">Blogs</Link></li>
-                <li><Link href="/trainers">Trainers</Link></li>
-                <li><Link href="/aiModels">AI Models</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li>
+                  <Link href="/about">About Us</Link>
+                </li>
+                <li>
+                  <Link href="/events">Events</Link>
+                </li>
+                <li>
+                  <Link href="/courses">Courses</Link>
+                </li>
+                <li>
+                  <Link href="/forum">Forum</Link>
+                </li>
+                <li>
+                  <Link href="/blogs">Blogs</Link>
+                </li>
+                <li>
+                  <Link href="/trainers">Trainers</Link>
+                </li>
+                <li>
+                  <Link href="/aiModels">AI Models</Link>
+                </li>
+                <li>
+                  <Link href="/contact">Contact</Link>
+                </li>
               </ul>
               <ul>
                 <li>
@@ -124,7 +137,10 @@ function Navbar() {
               </ul>
               <div className="relative" ref={dropdownRef}>
                 {user?.email ? (
-                  <button onClick={() => setIsOpen(!isOpen)} className="flex items-center focus:outline-none">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center focus:outline-none"
+                  >
                     <Image
                       src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
                       alt="Profile Picture"
@@ -141,20 +157,24 @@ function Navbar() {
 
                 {isOpen && user?.email && (
                   <ul className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-lg overflow-hidden z-50">
-                    <li className="px-4 py-2 text-gray-700 font-semibold border-b">{user?.first_name + " " + user?.last_name}</li>
+                    <li className="px-4 py-2 text-gray-700 font-semibold border-b">
+                      {user?.first_name + " " + user?.last_name}
+                    </li>
                     <li>
-                      <Link href={`/profile?slug=${user?.slug}`} className="block px-4 py-2 hover:bg-gray-100">
+                      <Link
+                        href={`/profile?slug=${user.slug}&uid=${user.id}`}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
                         Your Profile
                       </Link>
                     </li>
                     <li>
-                    
-                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                          Logout
-                        </button>
-                    
-
-
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
                     </li>
                   </ul>
                 )}

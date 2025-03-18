@@ -12,10 +12,10 @@ import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import Select from 'react-select';
 import DateEl from '../../components/DateEl';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
+import UserDropDown from '../users/components/dropdown/DropDown';
 
-export interface Props { }
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -30,13 +30,10 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-
     let statusOptions = [
         { value: 'active', label: 'Active' },
         { value: 'deactive', label: 'Deactive' },
     ];
-
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -73,38 +70,39 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 />
 
                                 <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
+                                    <h5 className="mb-4">Input Data</h5>
                                     <div className="form_auto_fit">
-                    
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                      
-                                        {[
-                                            'title',
-                                            'url',
+                                        <div className="form-group form-vertical">
+                                            <label>Events</label>
+                                            <EventDropDown
+                                                name="events"
+                                                multiple={false}
+                                                default_value={
+                                                    get_value('event_id')
+                                                        ? [
+                                                              {
+                                                                  id: get_value(
+                                                                      'event_id',
+                                                                  ),
+                                                              },
+                                                          ]
+                                                        : []
+                                                }
+                                                get_selected_data={(data) => {
+                                                    console.log(data);
+                                                }}
+                                            />
+                                        </div>
 
-                                        ].map((i) => (
+                                        {['title', 'url'].map((i) => (
                                             <div className="form-group form-vertical">
-                                                        <Input
-                                                            name={i}
-                                                            value={get_value(i)}
-                                                        />
+                                                <Input
+                                                    name={i}
+                                                    value={get_value(i)}
+                                                />
                                             </div>
                                         ))}
-
                                     </div>
-
-
-
                                 </div>
 
                                 <div className="form-group form-vertical">
