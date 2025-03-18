@@ -7,72 +7,53 @@ export interface Props {
     handler: (data: { [key: string]: any }) => void;
     default_value: string | null;
 }
-interface TargetWithPicker {
-    showPicker?: () => void;
-}
 
-// Format time
-export function formattedTime(value: string | null): string {
-    return value
-        ? moment(value, 'HH:mm:ss').format('h:mm A')
-        : moment().format('h:mm A');
-}
+// Format time for display
+const formattedTime = (value: string): string => {
+    return moment(value, 'HH:mm').format('h:mm A');
+};
 
-const Time: React.FC<Props> = ({
-    value,
-    name,
-    handler,
-    default_value,
-}: Props) => {
+const Time: React.FC<Props> = ({ value, name, handler, default_value }) => {
     const timeInput = useRef<HTMLInputElement>(null);
-    const [inputValue, setInputValue] = useState<string | null>(null);
+    const [inputValue, setInputValue] = useState<string>('');
 
     useEffect(() => {
-        setInputValue(value);
-        return () => setInputValue(null);
-    }, [value]);
-
-    function timeHandler() {
-        if (timeInput.current) {
-            const inputValue = timeInput.current.value;
-            const formattedTime = moment(inputValue, 'HH:mm').format(
-                'HH:mm:ss',
-            ); // Ensures a proper time format
-            setInputValue(formattedTime);
-
-            handler({
-                [name]: formattedTime,
-                key: name,
-                value: formattedTime,
-            });
+        if (default_value) {
+            setInputValue(moment(default_value, 'HH:mm:ss').format('HH:mm'));
+        } else {
+            setInputValue(moment().format('HH:mm')); // Default to current time
         }
+    }, [default_value]);
+
+    function timeHandler(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = event.target.value;
+        setInputValue(newValue); // Update the input field
+        handler({ [name]: newValue }); // Send formatted time to the handler
     }
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        const target = event.target as TargetWithPicker | null;
+        const target = event.target as HTMLInputElement;
         if (target?.showPicker) {
             target.showPicker();
         }
     };
 
     return (
-        <label
-            htmlFor={name}
-            className="text-capitalize d-block time-custom-control"
-        >
-            <input
-                type="time"
-                ref={timeInput}
-                onClick={(e) => handleClick(e)}
-                id={name}
-                name={name}
-                onChange={timeHandler}
-                className="form-control"
-            />
-            <div className="form-control preview">
-                {default_value && formattedTime(default_value)}
-            </div>
-        </label>
+        <div>
+            <label htmlFor={name} className="text-capitalize d-block time-custom-control">
+                <input
+                    type="time"
+                    ref={timeInput}
+                    onClick={handleClick}
+                    id={name}
+                    name={name}
+                    onChange={timeHandler}
+                    className="form-control"
+                    value={inputValue}
+                />
+            </label>
+            {/* <div className="form-control preview">{formattedTime(inputValue)}</div> */}
+        </div>
     );
 };
 

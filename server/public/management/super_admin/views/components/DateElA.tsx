@@ -8,75 +8,51 @@ export interface Props {
     default_value: string | null;
 }
 
-interface TargetWithPicker {
-    showPicker?: () => void;
-}
+const formatDate = (value: string | null) => {
+    return value ? moment(value).format('DD MMMM YYYY') : moment().format('DD MMMM YYYY');
+};
 
-export function formated_date(value) {
-    if (value) {
-        return moment(value).format('DD MMMM YYYY');
-    } else {
-        return moment().format('DD MMMM YYYY');
-    }
-}
-
-const DateEl: React.FC<Props> = ({
-    value,
-    name,
-    handler,
-    default_value,
-}: Props) => {
+const DateEl: React.FC<Props> = ({ value, name, handler, default_value }) => {
     const date_input = useRef<HTMLInputElement>(null);
-    const [input_value, setInput_value] = useState<string | null>(null);
+    const [inputValue, setInputValue] = useState<string>(
+        default_value ? moment(default_value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+    );
 
     useEffect(() => {
-        setInput_value(value);
-
-        return () => {
-            setInput_value(null);
-        };
-    }, []);
-
-    function date_handler() {
-        if (date_input?.current) {
-            const input_value = date_input.current?.value;
-            console.log('date_input value', date_input?.current?.value);
-            setInput_value(input_value);
-            handler({
-                [name]: input_value,
-                key: name,
-                value: input_value,
-            });
+        if (value) {
+            setInputValue(moment(value).format('YYYY-MM-DD'));
         }
+    }, [value]);
+
+    function dateHandler(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = event.target.value;
+        setInputValue(newValue);
+        handler({ [name]: newValue });
     }
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        const target = event.target as TargetWithPicker | null;
+ const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        const target = event.target as HTMLInputElement;
         if (target?.showPicker) {
             target.showPicker();
         }
     };
 
     return (
-        <>
-            <label
-                htmlFor={name}
-                className="text-capitalize d-block date_custom_control"
-            >
+        <div>
+            <label htmlFor={name} className="text-capitalize d-block date_custom_control">
                 <input
                     type="date"
                     ref={date_input}
-                    onClick={(e) => handleClick(e)}
+                    onClick={handleClick}
                     id={name}
                     name={name}
-                    onChange={date_handler}
+                    onChange={dateHandler}
                     className="form-control"
+                    value={inputValue}
                 />
             </label>
-            <div className="form-control preview">
-                {default_value && formated_date(default_value)}
-            </div>
-        </>
+            {/* <div className="form-control preview">{formatDate(inputValue)}</div> */}
+        </div>
     );
 };
 
