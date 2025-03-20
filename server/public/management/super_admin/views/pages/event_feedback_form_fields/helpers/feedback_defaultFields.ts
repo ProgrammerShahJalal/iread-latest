@@ -279,7 +279,7 @@ export const feedbackDefaultFields = [
             {
                 label: '10',
                 value: '10',
-                selected: true,
+                selected: false,
             },
         ],
     },
@@ -293,12 +293,13 @@ export const feedbackDefaultFields = [
         subtype: 'text',
     },
     {
-        type: 'text',
+        type: "textarea",
         required: false,
-        label: '<span style="color: rgb(44, 51, 69); font-family: Inter, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, &quot;Lucida Sans&quot;, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 500; white-space-collapse: preserve; display: inline !important;">Any final comments?</span>',
-        className: 'form-control',
-        name: 'text-1742369226426',
+        label: "<span style=\"color: rgb(44, 51, 69); font-size: 14px; font-style: normal; font-weight: 400; display: inline !important;\">Any final comments?</span>",
+        className: "form-control",
+        name: "textarea-1742459231910-0",
         access: false,
-        subtype: 'text',
-    },
+        subtype: "textarea",
+        rows: 3
+      },
 ];
