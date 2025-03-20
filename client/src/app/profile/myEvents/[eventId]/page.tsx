@@ -29,18 +29,13 @@ const formatDateTime = (isoDate: string): string => {
 
 const EventDetailsPage = async ({
   params,
+  searchParams,
 }: {
-  params: Promise<{ eventId: string, uid: string }>;
+  params: Promise<{ eventId: string }>;
+  searchParams: {uid: string};
 }) => {
-  const { eventId, uid } = await params;
-
-  console.log('uid', uid);
-
-
-  // Preserve existing query params when navigating
-  const createLink = (action: string) =>
-    `/profile/myEvents/${action}/${eventId}${uid ? `?uid=${uid}` : ""}`;
-  
+  const { eventId} = await params;
+  const { uid } =await searchParams;
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
@@ -67,21 +62,22 @@ const EventDetailsPage = async ({
         </ProfileLayout>
       );
     }
-
+    
+let uid = 2;
     return (
       <ProfileLayout>
         <div className="container my-10">
         <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
-      <Link href={createLink("giveFeedback")} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/feedback/${eventId}?uid=${uid}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Give Feedback
       </Link>
-      <Link href={createLink("takeSession")} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/session/${eventId}?uid=${uid}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Take Session
       </Link>
-      <Link href={createLink("participants")} className="bg-black rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/participants/${eventId}?uid=${uid}`} className="bg-black rounded-md px-4 py-2 text-white w-full md:w-auto">
         Participants
       </Link>
-      <Link href={createLink("certificate")} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/certificate/${eventId}?uid=${uid}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Certificate
       </Link>
     </div>
