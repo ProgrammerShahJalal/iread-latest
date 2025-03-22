@@ -7,20 +7,19 @@ import { useParams } from 'next/navigation';
 
 
 // Define the type for a form field
-interface FormField {
-    type: string;
-    required: boolean;
-    label: string;
-    name: string;
-    values?: { label: string; value: string; selected: boolean }[];
-    subtype?: string;
-    className?: string;
-    rows?: number;
+interface Session {
+    id: number;
+    event_id: number;
+    title: string;
+    topics: string;
+    start: string;
+    end: string;
+    total_time: string;
 }
 
 function EventSessionPage() {
       const [user, setUser] = useState<User | null>(null);
-    const [sessionFields, setSessionFields] = useState<FormField[] | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
     const [eventFormFieldId, setEventFormFieldId] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -44,13 +43,12 @@ function EventSessionPage() {
             : process.env.NEXT_PUBLIC_BACKEND_URL;
 
     useEffect(() => {
-        const fetchFeedbackFields = async () => {
+        const fetchSession = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/api/v1/event-feedback-form-fields/event/${eventId}`);
+                const response = await axios.get(`${BASE_URL}/api/v1/event-sessions/event/${eventId}`);
+                console.log('res', response.data.data);
                 if (response.data.status === 200) {
-                    // Parse the fields JSON string into an array of FormField objects
-                    const fields = JSON.parse(response.data.data.fields);
-                    setSessionFields(fields);
+                    setSession(response.data.data);
                     setEventFormFieldId(response.data.data.id);
                 } else {
                     setError('No data found');
@@ -62,61 +60,35 @@ function EventSessionPage() {
             }
         };
 
-        fetchFeedbackFields();
+        fetchSession();
     }, [BASE_URL, eventId]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
 
-    const handleRadioChange = (name: string, value: string) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    //     // Prepare the payload
+    //     const payload = {
+    //         event_id: eventId,
+    //         event_form_field_id: eventFormFieldId,
+    //         user_id: user?.id,
+    //     };
 
-        // Prepare the payload
-        const payload = {
-            event_id: eventId,
-            event_form_field_id: eventFormFieldId,
-            user_id: user?.id,
-            fields: sessionFields?.map((field) => ({
-                type: field.type,
-                required: field.required,
-                label: field.label,
-                name: field.name,
-                value: formData[field.name] || "", // Get the value from formData
-                values: field.values?.map((val) => ({
-                    label: val.label,
-                    value: val.value,
-                    selected: val.value === formData[field.name], // Mark selected value
-                })),
-            })),
-        };
-
-        try {
-            const response = await axios.post(
-                `${BASE_URL}/api/v1/event-feedback-form-field-values/store`,
-                payload
-            );
-            if (response.data.status === 201) {
-                alert("Feedback submitted successfully!");
-            } else {
-                alert("Failed to submit feedback.");
-            }
-        } catch (err: any) {
-            console.error("Error submitting feedback:", err);
-            alert("An error occurred while submitting feedback.");
-        }
-    };
+    //     try {
+    //         const response = await axios.post(
+    //             `${BASE_URL}/api/v1/event-feedback-form-field-values/store`,
+    //             payload
+    //         );
+    //         if (response.data.status === 201) {
+    //             alert("Feedback submitted successfully!");
+    //         } else {
+    //             alert("Failed to submit feedback.");
+    //         }
+    //     } catch (err: any) {
+    //         console.error("Error submitting feedback:", err);
+    //         alert("An error occurred while submitting feedback.");
+    //     }
+    // };
 
     if (loading) {
         return <div className='text-center mt-24 min-h-[100vh]'>Loading...</div>;
@@ -130,65 +102,10 @@ function EventSessionPage() {
         <ProfileLayout>
             <div className="p-8">
                 <div className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-800">Event Feedback</h2>
-                    <p className="my-1 text-gray-600">Please share your feedback regarding the event</p>
+                    <h2 className="text-3xl font-bold text-gray-800">Event Session</h2>
+                    <p className="my-1 text-gray-600">Explore the session regarding to the event</p>
                 </div>
-                {sessionFields && (
-                    <form className="space-y-8" onSubmit={handleSubmit}>
-                        {sessionFields.map((field, index) => (
-                            <div key={index} className="space-y-4">
-                                <div
-                                    className="text-lg font-medium text-gray-700"
-                                    dangerouslySetInnerHTML={{ __html: field.label }}
-                                />
-                                {field.type === 'radio-group' && (
-                                    <div className="flex flex-wrap gap-4">
-                                        {field.values?.map((value, idx) => (
-                                            <label key={idx} className="flex items-center space-x-2">
-                                                <input
-                                                    type="radio"
-                                                    name={field.name}
-                                                    value={value.value}
-                                                    required={field.required}
-                                                    className="form-radio h-5 w-5 text-green-500"
-                                                    onChange={() => handleRadioChange(field.name, value.value)}
-                                                    checked={formData[field.name] === value.value}
-                                                />
-                                                <span className="text-gray-700">{value.label}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                )}
-                                {field.type === 'text' && (
-                                    <input
-                                        type={field.subtype || 'text'}
-                                        name={field.name}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                        required={field.required}
-                                        onChange={handleInputChange}
-                                        value={formData[field.name] || ""}
-                                    />
-                                )}
-                                {field.type === 'textarea' && (
-                                    <textarea
-                                        name={field.name}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                        required={field.required}
-                                        rows={field.rows}
-                                        onChange={handleInputChange}
-                                        value={formData[field.name] || ""}
-                                    />
-                                )}
-                            </div>
-                        ))}
-                        <button
-                            type="submit"
-                            className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors"
-                        >
-                            Submit Feedback
-                        </button>
-                    </form>
-                )}
+                {session && session.title}
             </div>
         </ProfileLayout>
     );
