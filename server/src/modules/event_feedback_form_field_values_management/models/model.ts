@@ -35,7 +35,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare event_id: number;
     declare event_form_field_id: number;
     declare user_id: number;
-    declare value: string;
+    declare fields: JSON;
 
     declare status?: status;
     declare creator?: number;
@@ -64,8 +64,8 @@ function init(sequelize: Sequelize) {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },
-            value: {
-                type: DataTypes.TEXT,
+            fields: {
+                type: DataTypes.JSON,
                 allowNull: true,
             },
 

@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import Time from '../../components/Time';
 import { Attendance, Event, User } from '../../../../../types';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
@@ -55,41 +55,37 @@ const Create: React.FC<Props> = () => {
 
     useEffect(() => {
         if (!selectedEventId) return;
-
-        const fetchUsers = async () => {
+    
+        const fetchEventData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(
-                    `http://127.0.0.1:5011/api/v1/event-enrollments/by-event/${selectedEventId}`,
-                );
-                setUsers(response.data.data);
-
-                const eventRes = await axios.get(
-                    `http://127.0.0.1:5011/api/v1/events/${selectedEventId}`,
-                );
+                const [usersRes, eventRes] = await Promise.all([
+                    axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`),
+                    axios.get(`/api/v1/events/${selectedEventId}`),
+                ]);
+    
+                setUsers(usersRes.data.data);
                 setEvent(eventRes.data.data);
-
-                // Initialize attendance state
-                const initialAttendances = response.data.data.map(
-                    (user: User) => ({
+    
+                setUserAttendances(
+                    usersRes.data.data.map((user: User) => ({
                         event_id: selectedEventId,
                         event_session_id: selectedSessionId,
-                        date: selectedDate,
+                        date: null,
                         user_id: user.id,
                         time: '',
-                    }),
+                    }))
                 );
-                setUserAttendances(initialAttendances);
-            } catch (err) {
-                setError('Failed to fetch users.');
+            } catch {
+                setError('Failed to fetch data.');
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchUsers();
-    }, [selectedEventId, selectedSessionId, selectedDate]);
+    
+        fetchEventData();
+    }, [selectedEventId]);
 
     // Function to split the date and time
     const splitDateTime = (dateTimeString: string) => {
@@ -146,8 +142,6 @@ const Create: React.FC<Props> = () => {
         }
         return '';
     }
-
-    console.log('selectedDate', selectedDate);
 
     return (
         <>
@@ -241,6 +235,7 @@ const Create: React.FC<Props> = () => {
                                                 Photo
                                             </th>
                                             <th className="border p-2">Time</th>
+                                            <th className="border p-2">Is Present</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -297,6 +292,25 @@ const Create: React.FC<Props> = () => {
                                                         }
                                                     />
                                                 </td>
+                                                <td className="border p-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            userAttendances.find((record) => record.user_id === user.id)
+                                                                ?.is_present || false
+                                                        }
+                                                        onChange={() => {
+                                                            setUserAttendances((prev) =>
+                                                                prev.map((record) =>
+                                                                    record.user_id === user.id
+                                                                        ? { ...record, is_present: !record.is_present }
+                                                                        : record,
+                                                                ),
+                                                            );
+                                                        }}
+                                                    />
+                                                </td>
+
                                             </tr>
                                         ))}
                                     </tbody>

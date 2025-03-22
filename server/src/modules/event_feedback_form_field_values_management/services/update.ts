@@ -64,7 +64,7 @@ async function update(
     let inputs: InferCreationAttributes<typeof user_model> = {
         event_id: body.event_id,
         event_form_field_id: body.event_form_field_id,
-        value: body.value,
+        fields: body.fields,
         user_id: body.user_id,
     };
 

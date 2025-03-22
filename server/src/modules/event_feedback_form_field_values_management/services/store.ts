@@ -20,7 +20,9 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'value',
+        'event_id',
+        'event_form_field_id',
+        'fields',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -59,7 +61,7 @@ async function store(
      
         event_id: body.event_id,
         event_form_field_id: body.event_form_field_id,
-        value: body.value,
+        fields: body.fields,
         user_id: body.user_id,
 
     };
