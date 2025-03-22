@@ -63,9 +63,7 @@ async function store(
     let body = req.body as anyObject[];
 
     if (!Array.isArray(body)) {
-        return response(400, 'Invalid request: Expected an array of objects.', [
-            {},
-        ]);
+        return response(400, 'Invalid request: Expected an array of objects.', [{}]);
     }
 
     const db = await initializeDB();
@@ -79,23 +77,21 @@ async function store(
             if (!moment(item.date, moment.ISO_8601, true).isValid()) {
                 throw new Error(`Invalid date format for value: ${item.date}`);
             }
-            // Ensure `time.value` exists before formatting
-            if (
-                !item.time ||
-                !item.time.value ||
-                !moment(item.time.value, 'HH:mm:ss', true).isValid()
-            ) {
-                throw new Error(
-                    `Invalid time format for value: ${JSON.stringify(item.time)}`,
-                );
+
+            // Ensure `time` is always treated as a string
+            let timeValue = item.time;
+            if (typeof item.time === 'object') {
+                // Extract first available key's value
+                timeValue = Object.values(item.time)[0];
             }
 
-            let formattedDate = moment(item.date, moment.ISO_8601).format(
-                'YYYY-MM-DD',
-            );
-            let formattedTime = moment(item.time.value, 'HH:mm:ss').format(
-                'HH:mm:ss',
-            );
+            // Validate time format (supports both HH:mm and HH:mm:ss)
+            if (!moment(timeValue, ['HH:mm:ss', 'HH:mm'], true).isValid()) {
+                throw new Error(`Invalid time format for value: ${JSON.stringify(item.time)}`);
+            }
+
+            let formattedDate = moment(item.date, moment.ISO_8601).format('YYYY-MM-DD');
+            let formattedTime = moment(timeValue, ['HH:mm:ss', 'HH:mm']).format('HH:mm:ss');
 
             let newData = await models[modelName].create(
                 {
@@ -104,6 +100,7 @@ async function store(
                     user_id: item.user_id,
                     date: formattedDate,
                     time: formattedTime,
+                    is_present: item.is_present,
                 },
                 { transaction },
             );
@@ -123,5 +120,6 @@ async function store(
         throw new custom_error('Server error', 500, error.message, uid);
     }
 }
+
 
 export default store;

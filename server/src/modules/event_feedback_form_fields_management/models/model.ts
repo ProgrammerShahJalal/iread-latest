@@ -31,13 +31,12 @@ interface SelectOption {
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'active' | 'deactive';
-type type = 'text' | 'date' | 'number' | 'textarea' | 'select' | 'checkbox';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
-   declare fields: JSON;
+    declare fields: JSON;
 
     declare status?: status;
     declare creator?: number;

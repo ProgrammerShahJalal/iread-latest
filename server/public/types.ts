@@ -14,6 +14,8 @@ export interface Attendance {
     event_session_id: number | null;
     user_id: number;
     time: string;
+    date: string;
+    is_present: boolean;
 }
 
 export interface EventCategory {

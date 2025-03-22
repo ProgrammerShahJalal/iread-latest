@@ -4,6 +4,7 @@ import { getFaqs } from "../../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventResources } from "../../../../api/eventResourcesApi";
+import Link from "next/link";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -30,8 +31,9 @@ const EventDetailsPage = async ({
   params,
 }: {
   params: Promise<{ eventId: string }>;
+
 }) => {
-  const { eventId } = await params;
+  const { eventId} = await params;
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
@@ -58,10 +60,26 @@ const EventDetailsPage = async ({
         </ProfileLayout>
       );
     }
-
+    
+let uid = 2;
     return (
       <ProfileLayout>
         <div className="container my-10">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
+      <Link href={`/profile/feedback/${eventId}?uid=${uid}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Give Feedback
+      </Link>
+      <Link href={`/profile/session/${eventId}?uid=${uid}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Take Session
+      </Link>
+      <Link href={`/profile/participants/${eventId}?uid=${uid}`} className="bg-black rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Participants
+      </Link>
+      <Link href={`/profile/certificate/${eventId}?uid=${uid}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+        Certificate
+      </Link>
+    </div>
+
           <div className="text-center">
             <Image
               src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}

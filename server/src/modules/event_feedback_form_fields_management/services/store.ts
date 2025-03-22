@@ -21,6 +21,7 @@ async function validate(req: Request) {
     let field = '';
     let fields = [
         'events',
+        'fields',
     ];
 
     for (let index = 0; index < fields.length; index++) {
