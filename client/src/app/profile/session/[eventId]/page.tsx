@@ -18,9 +18,9 @@ interface FormField {
     rows?: number;
 }
 
-function EventFeedbackPage() {
+function EventSessionPage() {
       const [user, setUser] = useState<User | null>(null);
-    const [feedbackFields, setFeedbackFields] = useState<FormField[] | null>(null);
+    const [sessionFields, setSessionFields] = useState<FormField[] | null>(null);
     const [eventFormFieldId, setEventFormFieldId] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -50,7 +50,7 @@ function EventFeedbackPage() {
                 if (response.data.status === 200) {
                     // Parse the fields JSON string into an array of FormField objects
                     const fields = JSON.parse(response.data.data.fields);
-                    setFeedbackFields(fields);
+                    setSessionFields(fields);
                     setEventFormFieldId(response.data.data.id);
                 } else {
                     setError('No data found');
@@ -88,7 +88,7 @@ function EventFeedbackPage() {
             event_id: eventId,
             event_form_field_id: eventFormFieldId,
             user_id: user?.id,
-            fields: feedbackFields?.map((field) => ({
+            fields: sessionFields?.map((field) => ({
                 type: field.type,
                 required: field.required,
                 label: field.label,
@@ -133,9 +133,9 @@ function EventFeedbackPage() {
                     <h2 className="text-3xl font-bold text-gray-800">Event Feedback</h2>
                     <p className="my-1 text-gray-600">Please share your feedback regarding the event</p>
                 </div>
-                {feedbackFields && (
+                {sessionFields && (
                     <form className="space-y-8" onSubmit={handleSubmit}>
-                        {feedbackFields.map((field, index) => (
+                        {sessionFields.map((field, index) => (
                             <div key={index} className="space-y-4">
                                 <div
                                     className="text-lg font-medium text-gray-700"
@@ -194,4 +194,4 @@ function EventFeedbackPage() {
     );
 }
 
-export default EventFeedbackPage;
+export default EventSessionPage;
