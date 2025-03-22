@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import axios from 'axios';
 import ProfileLayout from '../../../../components/ProfileLayout';
+import { useParams } from 'next/navigation';
 
 // Define the type for the params object
 interface EventFeedbackPageProps {
-    params: {
+    [x: string]: any;
+    params: Promise<{
         eventId: string;
-    };
+    }>;
 }
-
 // Define the type for a form field
 interface FormField {
     type: string;
@@ -23,7 +24,7 @@ interface FormField {
     rows?: number;
 }
 
-function EventFeedbackPage({ params }: EventFeedbackPageProps) {
+function EventFeedbackPage() {
       const [user, setUser] = useState<User | null>(null);
     const [feedbackFields, setFeedbackFields] = useState<FormField[] | null>(null);
     const [eventFormFieldId, setEventFormFieldId] = useState(0);
@@ -31,7 +32,8 @@ function EventFeedbackPage({ params }: EventFeedbackPageProps) {
     const [error, setError] = useState("");
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-    const eventId = params.eventId;
+    const params = useParams<{ eventId: string;}>()
+    const eventId = Number(params?.eventId);
 
 
     useEffect(() => {
@@ -67,7 +69,7 @@ function EventFeedbackPage({ params }: EventFeedbackPageProps) {
         };
 
         fetchFeedbackFields();
-    }, [eventId]);
+    }, [BASE_URL, eventId]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -127,7 +129,7 @@ function EventFeedbackPage({ params }: EventFeedbackPageProps) {
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className='min-h-[100vh] py-10 text-center'>Error: {error}</div>;
     }
 
     return (

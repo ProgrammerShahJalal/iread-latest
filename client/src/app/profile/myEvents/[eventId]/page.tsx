@@ -29,13 +29,11 @@ const formatDateTime = (isoDate: string): string => {
 
 const EventDetailsPage = async ({
   params,
-  searchParams,
 }: {
   params: Promise<{ eventId: string }>;
-  searchParams: {uid: string};
+
 }) => {
   const { eventId} = await params;
-  const { uid } =await searchParams;
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
