@@ -66,7 +66,6 @@ function EventSessionPage() {
 
     // const handleSubmit = async (e: React.FormEvent) => {
     //     e.preventDefault();
-
     //     // Prepare the payload
     //     const payload = {
     //         event_id: eventId,
