@@ -18,8 +18,6 @@
     "@stripe/stripe-js": "^5.5.0",
     "@tiptap/pm": "^2.11.5",
     "axios": "^1.7.9",
-    "bootstrap": "^5.3.3",
-    "jquery": "^3.7.1",
     "lightgallery": "^2.8.2",
     "moment": "^2.30.1",
     "mysql2": "^3.12.0",
@@ -34,7 +32,6 @@
     "react-to-pdf": "^1.0.1",
     "sequelize": "^6.37.5",
     "server-only": "^0.0.1",
-    "summernote": "^0.9.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

@@ -1,21 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import ProfileLayout from "../../../../../../components/ProfileLayout";
-
-// Dynamic import to load jQuery and Summernote only on the client-side
-const $ = typeof window !== "undefined" ? require("jquery") : null;
-const bootstrap = typeof window !== "undefined" ? require("bootstrap") : null;
-const summernote = typeof window !== "undefined" ? require("summernote/dist/summernote-bs4") : null;
-
-// Import styles (CSS should always be imported normally)
-import "jquery";
-import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "summernote/dist/summernote-bs4";
 import "summernote/dist/summernote-bs4.css";
+
+declare global {
+  interface Window {
+    $: any;
+  }
+}
 
 
 const AssessmentPage = () => {
@@ -26,49 +21,46 @@ const AssessmentPage = () => {
   const description = searchParams.get("description");
   const [editorContent, setEditorContent] = useState("");
 
-  // Ensure description is a string or provide a default value
   const safeDescription = typeof description === "string" ? description : "";
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  if (typeof window !== "undefined") {
-    (window as any).$ = require("jquery");
+    // Initialize Bootstrap and jQuery
+    window.$ = require("jquery");
     require("bootstrap");
     require("summernote/dist/summernote-bs4");
-  }
-  
-  useEffect(() => {
-    if (typeof window !== "undefined" && $) {
-      ($("#summernote") as any).summernote({
-        placeholder: "Write your assessment answer here...",
-        tabsize: 2,
-        height: 300,
-        toolbar: [
-          ["style", ["style"]],
-          ["font", ["bold", "underline", "clear"]],
-          ["color", ["color"]], 
-          ["para", ["ul", "ol", "paragraph"]],
-          ["table", ["table"]],
-          ["insert", ["link", "picture", "video"]],
-          ["view", ["fullscreen", "codeview", "help"]],
-        ],
-        callbacks: {
-          onChange: (content: string) => {
-            setEditorContent(content);
-          },
-        },
-      });
 
-      return () => {
-        ($("#summernote") as any).summernote("destroy");
-      };
-    }
+    // Initialize Summernote after dependencies are loaded
+    window.$("#summernote").summernote({
+      placeholder: "Write your assessment answer here...",
+      tabsize: 2,
+      height: 300,
+      toolbar: [
+        ["style", ["style"]],
+        ["font", ["bold", "underline", "clear"]],
+        ["color", ["color"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["table", ["table"]],
+        ["insert", ["link", "picture", "video"]],
+        ["view", ["fullscreen", "codeview", "help"]],
+      ],
+      callbacks: {
+        onChange: (content: string) => {
+          setEditorContent(content);
+        },
+      },
+    });
+
+    return () => {
+      window.$("#summernote").summernote("destroy");
+    };
   }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Submitted Data:", editorContent);
   };
-
 
   return (
     <ProfileLayout>
