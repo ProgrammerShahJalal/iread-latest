@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProfileLayout from '../../../../components/ProfileLayout';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // Import useRouter
 import { FaCalendarAlt, FaClock, FaListAlt, FaCheckCircle, FaBook } from 'react-icons/fa';
 import moment from 'moment/moment';
 
@@ -37,6 +37,7 @@ function EventSessionPage() {
     const [sessionAssesment, setSessionAssesment] = useState<SessionAssesment | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const router = useRouter(); // Initialize useRouter
 
     const params = useParams<{ eventId: string; }>()
     const eventId = Number(params?.eventId);
@@ -113,6 +114,16 @@ function EventSessionPage() {
         return moment(time, 'HH:mm').format('h:mmA');
     };
 
+    const handleStartAssessment = () => {
+        if (sessionAssesment) {
+            const queryString = new URLSearchParams({
+                title: sessionAssesment.title,
+                description: sessionAssesment.description,
+            }).toString();
+    
+            router.push(`/profile/session/${eventId}/assesment/${sessionAssesment.id}?uid=${user?.id}&${queryString}`);
+        }
+    };
     return (
         <ProfileLayout>
             <div className="p-8">
@@ -152,16 +163,7 @@ function EventSessionPage() {
                         <div className="space-y-4">
                             <div className="flex items-center space-x-2">
                                 <FaBook className="text-gray-600" />
-                                <span className="text-gray-700 text-2xl font-bold">{sessionAssesment.title}</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <FaListAlt className="text-gray-600" />
-                                <div className="post-content mt-10">
-                                    <div
-                                        className="post-content"
-                                        dangerouslySetInnerHTML={{ __html: sessionAssesment.description }}
-                                    />
-                                </div>
+                                <span className="text-gray-700">Title: {sessionAssesment.title}</span>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <FaCheckCircle className="text-gray-600" />
@@ -179,6 +181,14 @@ function EventSessionPage() {
                                 <FaCalendarAlt className="text-gray-600" />
                                 <span className="text-gray-700">End: {formatTime(sessionAssesment.end)}</span>
                             </div>
+
+                            {/* Start Button */}
+                            <button
+                                onClick={handleStartAssessment}
+                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+                            >
+                                Start Assessment
+                            </button>
                         </div>
                     </div>
                 ) : (
