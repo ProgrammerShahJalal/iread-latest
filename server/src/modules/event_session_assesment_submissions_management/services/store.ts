@@ -21,9 +21,6 @@ async function validate(req: Request) {
     let field = '';
     let fields = [
         'submitted_content',
-        'mark',
-        'obtained_mark',
-        'grade',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -64,9 +61,9 @@ async function store(
         event_session_id: body.event_session_id,
         event_session_assesment_id: body.event_session_assesment_id,
         submitted_content: body.submitted_content,
-        mark: body.mark,
-        obtained_mark: body.obtained_mark,
-        grade: body.grade,
+        mark: body.mark || 0,
+        obtained_mark: body.obtained_mark || 0,
+        grade: body.grade || 'F',
     };
 
     /** print request data into console */

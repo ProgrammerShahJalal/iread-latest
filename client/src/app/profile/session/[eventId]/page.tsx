@@ -35,6 +35,8 @@ function EventSessionPage() {
     const [user, setUser] = useState<User | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [sessionAssesment, setSessionAssesment] = useState<SessionAssesment | null>(null);
+    const [sessionId, setSessionId] = useState<number | null>(null);
+    const [assessmentId, setAssessmentId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const router = useRouter(); // Initialize useRouter
@@ -61,6 +63,7 @@ function EventSessionPage() {
                 const response = await axios.get(`${BASE_URL}/api/v1/event-sessions/event/${eventId}`);
                 if (response.data.status === 200) {
                     setSession(response.data.data);
+                    setSessionId(response.data.data.id);
                 } else {
                     setError('No session data found');
                 }
@@ -77,6 +80,7 @@ function EventSessionPage() {
                 const response = await axios.get(`${BASE_URL}/api/v1/event-session-assesments/event/${eventId}`);
                 if (response.data.status === 200) {
                     setSessionAssesment(response.data.data);
+                    setAssessmentId(response.data.data.id);
                 } else {
                     setError('No session assesment data found');
                 }
@@ -121,7 +125,7 @@ function EventSessionPage() {
                 description: sessionAssesment.description,
             }).toString();
     
-            router.push(`/profile/session/${eventId}/assesment/${sessionAssesment.id}?uid=${user?.id}&${queryString}`);
+            router.push(`/profile/session/${eventId}/assesment/${sessionAssesment.id}?uid=${user?.id}&eventId=${eventId}&sessionId=${sessionId}&assessmentId=${assessmentId}&${queryString}`);
         }
     };
     return (
