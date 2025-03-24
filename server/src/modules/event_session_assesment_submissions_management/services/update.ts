@@ -64,19 +64,16 @@ async function update(
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+        let event_session_assesment_model = models.EventSessionsAssesmentsModel;
+
+        let sesionAssesmentdata = await event_session_assesment_model.findOne({
+            where: {
+                id: body.event_session_assesment_id,
+
+            },
+        });
+
         if (data) {
-
-             // Function to calculate grade based on obtained_mark
-             function calculateGrade(mark: number): string {
-                if (mark >= 90) return 'A';
-                if (mark >= 80) return 'B';
-                if (mark >= 70) return 'C';
-                if (mark >= 60) return 'D';
-                return 'F';
-            }
-
-            let obtainedMark = body.obtained_mark || data.obtained_mark;
-            let calculatedGrade = calculateGrade(obtainedMark);
 
             let inputs: InferCreationAttributes<typeof user_model> = {
                 event_id: body.event_id || data.event_id,
@@ -85,7 +82,7 @@ async function update(
                 submitted_content: body.submitted_content || data.submitted_content,
                 mark: body.mark || data.mark,
                 obtained_mark: body.obtained_mark || data.obtained_mark,
-                grade: calculatedGrade,
+                grade: body.grade || data.grade,
             };
 
             data.update(inputs);

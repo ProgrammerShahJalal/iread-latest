@@ -76,6 +76,11 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     name="id"
                                     defaultValue={get_value(`id`)}
                                 />
+                                <input
+                                    type="hidden"
+                                    name="event_session_assesment_id"
+                                    defaultValue={get_value(`event_session_assesment_id`)}
+                                />
 
                                 <div>
                                     <div>
@@ -85,6 +90,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'submitted_content',
                                             'mark',
                                             'obtained_mark',
+                                            'grade',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
                                                 {
