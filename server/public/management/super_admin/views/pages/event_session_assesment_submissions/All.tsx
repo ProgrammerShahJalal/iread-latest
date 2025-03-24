@@ -80,11 +80,6 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Submitted Content`}
-                                            col_name={`submitted_content`}
-                                            sort={false}
-                                        />
-                                        <TableHeading
                                             label={`Mark`}
                                             col_name={`mark`}
                                             sort={true}
@@ -128,6 +123,8 @@ const All: React.FC<Props> = (props: Props) => {
                                                     <td>{i.event_session_id}</td>
                                                     <td>{i.event_session_assesment_id}</td>
 
+                                                    <td>{i.mark}</td> 
+                                                    <td>{i.obtained_mark || 'Pending'}</td> 
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -135,12 +132,9 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.submitted_content}
+                                                            <td style={{color: 'green', fontWeight: 900}}>{i.grade}</td> 
                                                         </span>
                                                     </td> 
-                                                    <td>{i.mark}</td> 
-                                                    <td>{i.obtained_mark}</td> 
-                                                    <td>{i.grade}</td> 
                                                     <td>{i.status}</td>
                                                 </tr>
                                             );

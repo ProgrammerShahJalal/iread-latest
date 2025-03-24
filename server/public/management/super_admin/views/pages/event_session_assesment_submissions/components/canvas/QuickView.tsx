@@ -48,6 +48,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                         <table className="table quick_modal_table">
                             <tbody>
                                 <tr>
+                                    <th>ID</th>
+                                    <th>:</th>
+                                    <th>{state?.item.id}</th>
+                                </tr>
+                                <tr>
                                     <th>Event ID</th>
                                     <th>:</th>
                                     <th>{state?.item.event_id}</th>
@@ -58,9 +63,9 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state?.item.event_session_id}</th>
                                 </tr>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>Event Session Assesment ID</th>
                                     <th>:</th>
-                                    <th>{state?.item.title}</th>
+                                    <th>{state?.item.event_session_assesment_id}</th>
                                 </tr>
                                 <tr>
                                     <th>Mark</th>
@@ -68,19 +73,14 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state?.item.mark}</th>
                                 </tr>
                                 <tr>
-                                    <th>Pass Mark</th>
+                                    <th>Obtained Mark</th>
                                     <th>:</th>
-                                    <th>{state?.item.pass_mark}</th>
+                                    <th>{state?.item.obtained_mark || 'Pending'}</th>
                                 </tr>
                                 <tr>
-                                    <th>Start</th>
+                                    <th>Grade</th>
                                     <th>:</th>
-                                    <th>{formatTime(state?.item.start)}</th>
-                                </tr>
-                                <tr>
-                                    <th>End</th>
-                                    <th>:</th>
-                                    <th>{formatTime(state?.item.end)}</th>
+                                    <th>{state?.item.grade}</th>
                                 </tr>
                                 
                                 <tr>

@@ -61,27 +61,36 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        event_id: body.event_id,
-        event_session_id: body.event_session_id,
-        event_session_assesment_id: body.event_session_assesment_id,
-        submitted_content: body.submitted_content,
-        mark: body.mark,
-        obtained_mark: body.obtained_mark,
-        grade: body.grade,
-    };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
+
+             // Function to calculate grade based on obtained_mark
+             function calculateGrade(mark: number): string {
+                if (mark >= 90) return 'A';
+                if (mark >= 80) return 'B';
+                if (mark >= 70) return 'C';
+                if (mark >= 60) return 'D';
+                return 'F';
+            }
+
+            let obtainedMark = body.obtained_mark || data.obtained_mark;
+            let calculatedGrade = calculateGrade(obtainedMark);
+
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                event_id: body.event_id || data.event_id,
+                event_session_id: body.event_session_id || data.event_session_id,
+                event_session_assesment_id: body.event_session_assesment_id || data.event_session_assesment_id,
+                submitted_content: body.submitted_content || data.submitted_content,
+                mark: body.mark || data.mark,
+                obtained_mark: body.obtained_mark || data.obtained_mark,
+                grade: calculatedGrade,
+            };
+
             data.update(inputs);
             await data.save();
-            return response(201, 'data updated', { data });
+            return response(201, 'Mark assign successfully.', { data });
         } else {
             throw new custom_error(
                 'data not found',

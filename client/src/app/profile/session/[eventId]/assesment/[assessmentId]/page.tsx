@@ -44,7 +44,7 @@ const AssessmentPage = () => {
       setLoading(false);
     }
   };
-console.log('eventId, sessionId, assessmentId', eventId, sessionId, assessmentId);
+
   return (
     <ProfileLayout>
       <div className="p-8">
