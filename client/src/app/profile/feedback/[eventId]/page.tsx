@@ -5,13 +5,7 @@ import axios from 'axios';
 import ProfileLayout from '../../../../components/ProfileLayout';
 import { useParams } from 'next/navigation';
 
-// Define the type for the params object
-interface EventFeedbackPageProps {
-    [x: string]: any;
-    params: Promise<{
-        eventId: string;
-    }>;
-}
+
 // Define the type for a form field
 interface FormField {
     type: string;

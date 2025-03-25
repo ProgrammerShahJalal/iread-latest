@@ -61,27 +61,33 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        event_id: body.event_id,
-        event_session_id: body.event_session_id,
-        event_session_assesment_id: body.event_session_assesment_id,
-        submitted_content: body.submitted_content,
-        mark: body.mark,
-        obtained_mark: body.obtained_mark,
-        grade: body.grade,
-    };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
+        let event_session_assesment_model = models.EventSessionsAssesmentsModel;
+
+        let sesionAssesmentdata = await event_session_assesment_model.findOne({
+            where: {
+                id: body.event_session_assesment_id,
+
+            },
+        });
+
         if (data) {
+
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                event_id: body.event_id || data.event_id,
+                event_session_id: body.event_session_id || data.event_session_id,
+                event_session_assesment_id: body.event_session_assesment_id || data.event_session_assesment_id,
+                submitted_content: body.submitted_content || data.submitted_content,
+                mark: body.mark || data.mark,
+                obtained_mark: body.obtained_mark || data.obtained_mark,
+                grade: body.grade || data.grade,
+            };
+
             data.update(inputs);
             await data.save();
-            return response(201, 'data updated', { data });
+            return response(201, 'Mark assign successfully.', { data });
         } else {
             throw new custom_error(
                 'data not found',

@@ -21,9 +21,6 @@ async function validate(req: Request) {
     let field = '';
     let fields = [
         'submitted_content',
-        'mark',
-        'obtained_mark',
-        'grade',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -37,7 +34,7 @@ async function validate(req: Request) {
             .run(req);
     }
 
-  
+
     let result = await validationResult(req);
 
     return result;
@@ -57,21 +54,26 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
-    
+
+    let event_session_assesment_model = models.EventSessionsAssesmentsModel;
+
+    let sesionAssesmentdata = await event_session_assesment_model.findOne({
+        where: {
+            id: body.event_session_assesment_id,
+
+        },
+    });
+
     let inputs: InferCreationAttributes<typeof data> = {
-     
+
         event_id: body.event_id,
         event_session_id: body.event_session_id,
         event_session_assesment_id: body.event_session_assesment_id,
         submitted_content: body.submitted_content,
-        mark: body.mark,
-        obtained_mark: body.obtained_mark,
-        grade: body.grade,
+        mark: sesionAssesmentdata?.mark || 0,
+        obtained_mark: body.obtained_mark || null,
+        grade: body.grade || 'Pending',
     };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {

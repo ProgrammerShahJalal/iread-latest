@@ -28,35 +28,12 @@ const Edit: React.FC<Props> = (props: Props) => {
     const editorRef = useRef<any>(null); // Ref for CKEditor instance
     const [data, setData] = useState<string>(''); // State for CKEditor content
 
-   // Fetch details when component mounts
-   useEffect(() => {
-    dispatch(storeSlice.actions.set_item({}));
-    dispatch(details({ id: params.id }) as any);
-}, [dispatch, params.id]);
 
-// Initialize CKEditor
-useEffect(() => {
-    const fullDescriptionElement = document.querySelector('[data-name="description"]');
-    if (fullDescriptionElement && !editorRef.current) {
-        const editor = CKEDITOR.replace('description'); // Replace with the correct element ID
-        editorRef.current = editor; // Store the CKEditor instance in ref
-
-        // Set initial data for the editor
-        const defaultValue = get_value('description');
-        if (defaultValue) {
-            editor.setData(defaultValue);
-        }
-
-        // Cleanup to avoid memory leaks
-        return () => {
-            if (editor) {
-                editor.destroy();
-                editorRef.current = null;
-            }
-        };
-    }
-}, [state.item]);
-
+    // Fetch details when component mounts
+    useEffect(() => {
+        dispatch(storeSlice.actions.set_item({}));
+        dispatch(details({ id: params.id }) as any);
+    }, [dispatch, params.id]);
 
     let statusOptions = [
         { value: 'active', label: 'Active' },
@@ -99,78 +76,42 @@ useEffect(() => {
                                     name="id"
                                     defaultValue={get_value(`id`)}
                                 />
+                                <input
+                                    type="hidden"
+                                    name="event_session_assesment_id"
+                                    defaultValue={get_value(`event_session_assesment_id`)}
+                                />
 
                                 <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
-                                    <div className="row">
-
-                                    <div className='col-8'>
-
-
-                                        <label className='mb-4'>Description</label>
-                                        {state.item && (
-                                            <div
-                                                data-name="description"
-                                                id="description"
-                                            ></div>
-                                        )}
+                                    <div>
+                                        <label className='mb-4'>Submitted Content</label>
 
                                         {[
-                                            'title',
+                                            'submitted_content',
                                             'mark',
-                                            'pass_mark',
+                                            'obtained_mark',
+                                            'grade',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                    <Input name={i} value={get_value(i)} />
+                                                {
+                                                    i === 'mark' ? (
+                                                        <>
+                                                            <label className="mb-4">Mark</label>
+                                                            <input className="form-group form-vertical" readOnly name={i} value={get_value(i)} />
+                                                        </>
+                                                    ) : (
+                                                        i === 'submitted_content' ? (
+                                                            <div
+                                                                className="post-content"
+                                                                dangerouslySetInnerHTML={{ __html: get_value(i) }}
+                                                            />
+                                                        ) : <Input name={i} value={get_value(i)} />
+                                                    )
+                                                }
                                             </div>
                                         ))}
 
                                     </div>
-
-                                    <div className='col-4'>
-
-                                        <div className="form_auto_fit">
-
-                                            <div className="form-group form-vertical">
-                                                <label>Events</label>
-                                                <EventDropDown name="events"
-                                                    multiple={false}
-                                                    default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
-                                                    get_selected_data={(data) => {
-                                                        console.log(data)
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className="form-group form-vertical">
-                                                <label>Sessions</label>
-                                                <SessionDropDown name="sessions"
-                                                    multiple={false}
-                                                    default_value={get_value('event_session_id') ? [{ id: get_value('event_session_id') }] : []}
-                                                    get_selected_data={(data) => {
-                                                        console.log(data)
-                                                    }}
-                                                />
-                                            </div>
-
-                                            {[
-                                            'start',
-                                            'end',
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                <Input
-                                                type='time'
-                                                name={i}
-                                                value={get_value(i)}
-                                                />
-                                               
-                                            </div>
-                                        ))}
-                                        </div>
-                                    </div>
-
-                                </div>
 
 
 
