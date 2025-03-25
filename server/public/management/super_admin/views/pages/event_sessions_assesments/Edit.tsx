@@ -68,7 +68,13 @@ useEffect(() => {
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
-        const response = await dispatch(update(form_data) as any);
+        // Get the editor data
+        if (editorRef.current) {
+            form_data.append('description', editorRef.current.getData()); // Access CKEditor instance correctly
+        } else {
+            console.error('CKEditor instance is not available');
+        }
+        dispatch(update(form_data) as any);
     }
 
     function get_value(key) {

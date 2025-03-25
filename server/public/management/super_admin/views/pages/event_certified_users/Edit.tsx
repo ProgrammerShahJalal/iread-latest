@@ -82,6 +82,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                         <label>Events</label>
                                         <EventDropDown name="events"
                                             multiple={false}
+                                            default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
                                             get_selected_data={(data) => {
                                                 console.log(data)
                                             }}
@@ -91,6 +92,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                         <label>Users</label>
                                         <UserDropDown name="users"
                                             multiple={false}
+                                            default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
                                             get_selected_data={(data) => {
                                                 console.log(data)
                                             }}

@@ -1,17 +1,19 @@
-import { blogs } from "@/data/blogs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { getBlogs } from "../../api/blogApi";
 
 
 
 
-const Blog = () => {
+const Blog = async() => {
     const formatDate = (isoDate: string): string => {
         const date = new Date(isoDate);
         const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
         return date.toLocaleDateString('en-GB', options);
     };
+
+     let blogsData: Blog[] = await getBlogs();
 
     return (
         <section className="container">
@@ -28,14 +30,14 @@ const Blog = () => {
             <section id="news">
                 <div>
                     <div className="row">
-                        {blogs?.slice(0, 3)?.map((blog) => (
-                            <div key={blog.id} className="col-sm-6 col-md-4">
+                        {blogsData?.slice(0, 3)?.map((blog) => (
+                            <div key={blog.blog_id} className="col-sm-6 col-md-4">
                                 <article className="post mb-30">
                                     <div className="entry-header">
                                         {
                                             blog?.cover_image && (
                                                 <Image
-                                                    src={blog.cover_image}
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
                                                     alt={blog.title}
                                                     className="w-full h-64 object-cover rounded-md"
                                                     width={400}
@@ -57,7 +59,7 @@ const Blog = () => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
+                                                    <Link href={`/blogs/${blog.slug}`}>{blog.title}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
@@ -65,7 +67,7 @@ const Blog = () => {
 
                                         </div>
                                         <p className="text-justify mt-3">{blog.short_description}</p>
-                                        <Link href={`/blogs/${blog.id}`} className="btn-read-more">
+                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more">
                                             Read more
                                         </Link>
                                     </div>
