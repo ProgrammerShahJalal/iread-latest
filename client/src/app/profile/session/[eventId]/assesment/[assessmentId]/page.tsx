@@ -19,6 +19,11 @@ const AssessmentPage = () => {
 
   const safeDescription = typeof description === "string" ? description : "";
 
+  const BASE_URL =
+        process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+            : process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -32,7 +37,7 @@ const AssessmentPage = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5011/api/v1/event-session-assesment-submissions/store",
+        `${BASE_URL}/api/v1/event-session-assesment-submissions/store`,
         payload
       );
       console.log("Submission successful:", response.data);
