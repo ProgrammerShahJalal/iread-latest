@@ -28,7 +28,6 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(all({}));
     }, []);
 
-    
     useEffect(() => {
         if (default_value?.length && state.all?.data?.length) {
             setSelectedList((prevSelectedList) => {
@@ -113,7 +112,6 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                                                     />
                                                 </div>
                                                 <div className="label">
-                                                    {/* {i.uid} - */}
                                                     {i.first_name } {i.last_name}
                                                 </div>
                                             </label>
