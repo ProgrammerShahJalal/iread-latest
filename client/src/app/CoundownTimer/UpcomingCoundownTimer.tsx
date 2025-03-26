@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import UpClock from './Clock/UpClock';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import UpClock from "./Clock/UpClock";
 
 interface UpcomingCountdownTimerProps {
-  offerTill: string;
+  events: Event[];
 }
 
-const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({ offerTill }) => {
+const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
+  events,
+}) => {
   const [timerDays, setTimerDays] = useState<number | null>(null);
   const [timerHours, setTimerHours] = useState<number | null>(null);
   const [timerMinutes, setTimerMinutes] = useState<number | null>(null);
@@ -16,7 +18,15 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({ offerTi
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTimer = useCallback(() => {
-    const countDownDate = new Date(offerTill).getTime();
+    // dateTill will be the latest date => we will get the date from events array, in which object session_start_date_time is more close
+
+    let dateTill = events.reduce((prev, curr) => {
+      return curr.session_start_date_time > prev.session_start_date_time
+        ? curr
+        : prev;
+    }, events[0]).session_start_date_time;
+
+    const countDownDate = new Date(dateTill).getTime();
 
     intervalRef.current = setInterval(() => {
       const now = new Date().getTime();
@@ -40,7 +50,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({ offerTi
         setTimerSeconds(seconds);
       }
     }, 1000);
-  }, [offerTill]);
+  }, [events]);
 
   useEffect(() => {
     startTimer();
