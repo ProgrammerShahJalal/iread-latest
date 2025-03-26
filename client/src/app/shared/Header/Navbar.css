@@ -1,44 +1,113 @@
-.menu-toggle {
-    display: none;
-    font-size: 24px;
-    background: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
+/* .menu-toggle {
+  display: none;
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    margin: 10px;
   }
-  
+
   #menuzord-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #202c45;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+  }
+
+  #menuzord-menu.active {
     display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
-  
-  
-  @media (max-width: 768px) {
-    .menu-toggle {
-      display: block;
-      margin: 10px;
-    }
-  
-    #menuzord-menu {
-      display: none;
-      flex-direction: column;
-      width: 100%;
-      background-color: #202C45;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 10;
-    }
-  
-    #menuzord-menu.active {
-      display: flex;
-    }
-  
-    #menuzord-menu li {
-      margin: 10px 0;
-      text-align: center;
-    }
+
+  #menuzord-menu li {
+    margin: 10px 0;
+    text-align: center;
   }
-  
+} */
+
+/* Navbar.css */
+
+#menu-toggle {
+  color: white;
+  font-size: 24px;
+}
+.mobile-menu-toggle {
+  display: block;
+}
+
+.desktop-menu {
+  display: none;
+  align-items: center;
+}
+
+.desktop-menu li {
+  margin-right: 20px; /* Add space between menu items */
+}
+
+.desktop-menu li:last-child {
+  margin-right: 0; /* Remove margin from the last item */
+}
+
+.desktop-menu li a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.desktop-menu li a:hover {
+  color: #ddd; /* Optional: add a hover effect */
+}
+
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  z-index: 50;
+}
+
+.mobile-menu.active {
+  display: block;
+}
+
+.mobile-menu-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-menu-list li {
+  padding: 15px;
+  border-bottom: 1px solid #444;
+}
+
+.mobile-menu-list li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .desktop-menu {
+    display: flex !important;
+  }
+}
