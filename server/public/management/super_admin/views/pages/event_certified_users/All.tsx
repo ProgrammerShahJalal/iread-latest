@@ -158,7 +158,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
 
                                                     <td>
-                                                        {i.is_submitted}
+                                                        {i.is_submitted === 1 ? "Yes" : "No"}
                                                     </td>
                                                     <td>
                                                         {i.status}
