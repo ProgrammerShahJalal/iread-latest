@@ -24,7 +24,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
         return moment(date).format('Do MMM YY');
     }
 
-    console.log('state', state);
 
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
