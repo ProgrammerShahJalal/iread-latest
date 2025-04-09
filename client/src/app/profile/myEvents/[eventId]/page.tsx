@@ -27,16 +27,27 @@ const formatDateTime = (isoDate: string): string => {
   });
 };
 
-const EventDetailsPage = async ({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ eventId: string }>;
-  searchParams: { uid?: string };
+type Params = Promise<{ eventId: string }>
+type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>
+ 
+export async function generateMetadata(props: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const params = await props.params
+  const searchParams = await props.searchParams
+  const eventId = params.eventId
+  const userId = searchParams.uid
+}
 
+const EventDetailsPage = async (props: {
+  params: Params
+  searchParams: SearchParams
 }) => {
-  const { eventId} = await params;
-  const uid = searchParams.uid || "";
+  const params = await props.params
+  const searchParams = await props.searchParams
+  const eventId = params.eventId
+  const userId = searchParams.uid
 
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
@@ -69,16 +80,13 @@ const EventDetailsPage = async ({
       <ProfileLayout>
         <div className="container my-10">
         <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
-      <Link href={`/profile/feedback/${eventId}?uid=${uid}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/feedback/${eventId}?uid=${userId}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Give Feedback
       </Link>
-      <Link href={`/profile/session/${eventId}?uid=${uid}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/session/${eventId}?uid=${userId}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Take Session
       </Link>
-      {/* <Link href={`/profile/participants/${eventId}?uid=${uid}`} className="bg-black rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Participants
-      </Link> */}
-      <Link href={`/profile/certificate/${eventId}?uid=${uid}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+      <Link href={`/profile/certificate/${eventId}?uid=${userId}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
         Certificate
       </Link>
     </div>

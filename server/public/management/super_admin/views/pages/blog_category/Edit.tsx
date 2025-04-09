@@ -83,6 +83,9 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                         <InputImage
                                                             label={'image'}
                                                             name={'image'}
+                                                            defalut_preview={get_value(
+                                                                'image',
+                                                            )}
                                                         />
 
                                                     </div>

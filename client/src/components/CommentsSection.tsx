@@ -142,8 +142,8 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
       {commentts.length > 0 ? (
         <ul className="mt-4 space-y-6">
           {commentts.map((comment, index) => (
-            <li key={comment.id || index} className="border-b pb-4">
-              <div key={comment.id} className="flex items-start space-x-4">
+            <li key={index} className="border-b pb-4">
+              <div key={index} className="items-start space-x-4">
                 <Image
                   src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
                   alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
@@ -196,19 +196,21 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                   {/* Display Replies */}
                   {comment.replies && comment.replies.length > 0 && (
                     <ul className="mt-2 ml-8 border-l pl-4">
-                      {comment.replies.map((reply) => (
-                        <><div>
+                      {comment.replies.map((reply, index) => (
+                        <div key={index}><div
+                          key={index}
+                        >
                           <Image
-                           src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin.png`}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin.png`}
                             alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
                             width={40}
                             height={40}
-                            className="rounded-full object-cover w-10 h-10"
+                            className="rounded-full object-cover w-10 h-[40px]"
                           />
                         </div><li key={reply.id} className="mt-2">
                             <p className="font-semibold">Admin</p>
                             <p className="text-gray-600">{reply.comment}</p>
-                          </li></>
+                          </li></div>
                       ))}
                     </ul>
                   )}

@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'event_id,user_id,scores,grade,date,status',
+                'event_id,user_id,scores,grade,date,is_submitted,status',
             ),
         );
         dispatch(all({}));
@@ -95,6 +95,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
+                                            label={`Is Submitted`}
+                                            col_name={`is_submitted`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
@@ -152,6 +157,9 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
 
+                                                    <td>
+                                                        {i.is_submitted === 1 ? "Yes" : "No"}
+                                                    </td>
                                                     <td>
                                                         {i.status}
                                                     </td>

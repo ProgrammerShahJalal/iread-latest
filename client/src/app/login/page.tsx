@@ -92,7 +92,7 @@ const LoginPage: React.FC = () => {
       // Dispatch event to update Navbar immediately
       window.dispatchEvent(new Event("userUpdated"));
 
-      router.push(`/profile?slug=${slug}`);
+      router.push(`/profile?slug=${slug}&uid=${id}`);
 
       // if (!(userRolesMap[role_serial] === "admin")) {
       //   router.push(`/profile?slug=${slug}`);

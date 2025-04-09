@@ -25,6 +25,7 @@ export const modelName = 'EventCertifiedUsersModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
+type IsSubmitted = '1' | '0';
 type status = 'active' | 'deactive';
 
 class DataModel extends Model<Infer, InferCreation> {
@@ -35,7 +36,8 @@ class DataModel extends Model<Infer, InferCreation> {
     declare scores: number;
     declare grade: string;
     declare date: string;
-    declare is_submitted: boolean;
+    declare is_submitted: IsSubmitted;
+    declare image: string;
 
     declare status?: status;
     declare creator?: number;
@@ -74,8 +76,12 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             is_submitted: {
-                type: DataTypes.BOOLEAN(),
-                defaultValue: false,
+                type: DataTypes.ENUM('1', '0'),
+                defaultValue: '0',
+            },
+            image: {
+                type: DataTypes.STRING(),
+                allowNull: true,
             },
 
             status: {
