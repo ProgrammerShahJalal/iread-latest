@@ -24,6 +24,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
         return moment(date).format('Do MMM YY');
     }
 
+    console.log('state', state);
 
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
@@ -43,7 +44,9 @@ const QuickView: React.FC<Props> = (props: Props) => {
 
                     <div className="data_content">
                         <table className="table quick_modal_table">
-                            <tbody>
+                            <tbody
+                            key={state.item.user_id}
+                            >
                                 <tr>
                                     <th>Event ID</th>
                                     <th>:</th>
@@ -72,7 +75,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Is Submitted</th>
                                     <th>:</th>
-                                    <th>{state.item.is_submitted ? "Yes" : "No"}</th>
+                                    <th>{state.item.is_submitted === 1 ? "Yes" : "No"}</th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

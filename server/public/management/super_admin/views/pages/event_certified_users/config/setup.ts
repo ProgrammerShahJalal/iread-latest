@@ -9,7 +9,7 @@ const setup: setup_type = {
 
     api_host: location.origin,
     api_prefix: 'event-certified-users', // api route
-    select_fields: 'id,title,status',
+    select_fields: 'id,user_id,event_id,scores,grade,date,is_submitted,image,status',
 
     store_prefix: 'event_certified_users',
     layout_title: prefix + ' Management',
