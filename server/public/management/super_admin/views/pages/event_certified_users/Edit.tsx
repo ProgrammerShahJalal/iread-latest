@@ -10,6 +10,7 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
+import InputImage from './components/management_data_page/InputImage';
 import Select from 'react-select';
 import DateEl from '../../components/DateEl';
 import EventDropDown from "../events/components/dropdown/DropDown";
@@ -103,22 +104,66 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'scores',
                                             'grade',
                                             'date',
+                                            'is_submitted',
+                                            'image',
 
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                {
-                                                    i === 'date' ? (
-                                                        <><label>Date</label><DateEl
-                                                            value={get_value('date')}
-                                                            name="date"
-                                                            handler={() => console.log('Date added')} /></>
+                                                {i === 'date' ? (
+                                                <>
+                                                    <label>Date</label>
+                                                    <DateEl
+                                                        value={get_value('date')}
+                                                        name="date"
+                                                        handler={() => console.log('Date added')}
+                                                    />
+                                                </>
+                                            ) : i === 'is_submitted' ? (
+                                                <>
+                                                    <label>Is Submitted?</label>
+                                                    <div className='flex flex-1'>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name="is_submitted"
+                                                                value="1"
+                                                                defaultChecked={get_value('is_submitted') === 1}
+                                                            />{' '}
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input
+                                                                type="radio"
+                                                                name="is_submitted"
+                                                                value="0"
+                                                                defaultChecked={get_value('is_submitted') !== 1}
+                                                            />{' '}
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                </>
+                                            ) :
+                                                (
+
+                                                    i === 'image' ? (
+                                                        <div className="form-group grid_full_width form-vertical">
+                                                            <InputImage
+                                                                label={'image'}
+                                                                name={'image'}
+                                                                defalut_preview={get_value(
+                                                                    'image',
+                                                                )}
+                                                            />
+
+                                                        </div>
                                                     ) : (
                                                         <Input
                                                             name={i}
                                                             value={get_value(i)}
                                                         />
                                                     )
-                                                }
+                                                )
+                                            }
                                             </div>
                                         ))}
 

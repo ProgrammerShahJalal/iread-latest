@@ -67,7 +67,7 @@ const Blog = async() => {
 
                                         </div>
                                         <p className="text-justify mt-3">{blog.short_description}</p>
-                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more">
+                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more text-blue-700 hover:text-red-500">
                                             Read more
                                         </Link>
                                     </div>

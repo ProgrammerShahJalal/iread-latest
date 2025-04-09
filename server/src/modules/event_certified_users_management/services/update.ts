@@ -55,11 +55,22 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-
+    
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
+
+            let image_path = data?.image || 'avatar.png';
+        if (body['image']?.ext) {
+            image_path =
+                'uploads/event_certified_users/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body['image'].name;
+            await (fastify_instance as any).upload(body['image'], image_path);
+        }
+
+        
             let inputs: InferCreationAttributes<typeof user_model> = {
                 user_id: body.users?.[1] || data?.user_id,
                 event_id: body.events?.[1] || data?.event_id,
@@ -67,6 +78,7 @@ async function update(
                 grade: body.grade || data?.grade,
                 date: body.date || data?.date,
                 is_submitted: body.is_submitted || data?.is_submitted,
+                image: image_path || data?.image,
             };
             (await data.update(inputs)).save();
             

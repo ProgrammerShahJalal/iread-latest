@@ -35,15 +35,10 @@ function Hero() {
                             The World’s Best Education in Our University
                         </h2>
                         <h4 className="text-theme-colored text-3xl md:text-lg">
-                            Lorem ipsum dolor sit amet soluta saepe odit error, maxime
-                            praesentium sunt udiandae!
+                        Empowering Minds, Shaping Futures!
                         </h4>
                         <p className="my-5">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
-                            atque officiis maxime suscipit expedita obcaecati nulla in ducimus
-                            iure quos quam recusandae dolor quas et perspiciatis voluptatum
-                            accusantium delectus nisi reprehenderit, eveniet fuga modi pariatur,
-                            eius vero. Ea vitae maiores.
+                        Join a community of passionate learners and world-class educators. At our university, we provide an exceptional learning experience, cutting-edge research opportunities, and a supportive environment to help you thrive academically and personally.
                         </p>
                         <Link
                             className="btn btn-theme-colored btn-flat btn-lg mt-10 mb-sm-30"
