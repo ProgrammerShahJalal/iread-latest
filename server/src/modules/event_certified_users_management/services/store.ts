@@ -56,6 +56,15 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
+
+    let image_path = 'avatar.png';
+        if (body['image']?.ext) {
+            image_path =
+                'uploads/event_certified_users/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body['image'].name;
+            await (fastify_instance as any).upload(body['image'], image_path);
+        }
     
 
     /** store data into database */
@@ -68,6 +77,7 @@ async function store(
             grade: body.grade,
             date: body.date,
             is_submitted: body.is_submitted,
+            image: image_path,
         };
         (await data.update(inputs)).save();
 

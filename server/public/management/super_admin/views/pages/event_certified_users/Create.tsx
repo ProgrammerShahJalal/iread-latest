@@ -85,6 +85,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         'grade',
                                         'date',
                                         'is_submitted',
+                                        'image',
                                     ].map((i) => (
                                         <div key={i} className="form-group form-vertical">
                                             {i === 'date' ? (
@@ -120,11 +121,25 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         </label>
                                                     </div>
                                                 </>
-                                            ) : (
-                                                <>
-                                                    <Input name={i} value={get_value(i)} />
-                                                </>
-                                            )}
+                                            ) :
+                                                (
+
+                                                    i === 'image' ? (
+                                                        <div className="form-group grid_full_width form-vertical">
+                                                            <InputImage
+                                                                label={'image'}
+                                                                name={'image'}
+                                                            />
+
+                                                        </div>
+                                                    ) : (
+                                                        <Input
+                                                            name={i}
+                                                            value={get_value(i)}
+                                                        />
+                                                    )
+                                                )
+                                            }
                                         </div>
                                     ))}
                                 </div>
