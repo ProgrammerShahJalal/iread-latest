@@ -73,7 +73,7 @@ const BlogsPage: React.FC = async() => {
                                         <p className="text-justify mt-3">
                                             {blog.short_description}
                                         </p>
-                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more">
+                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more text-blue-600 hover:text-red-600">
                                             Read more
                                         </Link>
                                     </div>
