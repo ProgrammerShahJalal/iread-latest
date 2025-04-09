@@ -56,6 +56,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         'scores',
                                         'grade',
                                         'date',
+                                        'is_submitted',
                                         'status',
                                     ].map((i) => (
                                         <tr>
@@ -65,7 +66,11 @@ const Details: React.FC<Props> = (props: Props) => {
                                                 i === 'date' ? (
                                                     <td>{formateDate(get_value(i))}</td>
                                                 ) : (
-                                                    <td>{get_value(i)}</td>
+                                                    i === 'is_submitted' ? (
+                                                        <td>{get_value(i) === 'true' ? 'Yes' : 'No'}</td>
+                                                    ): (
+                                                        <td>{get_value(i)}</td>
+                                                    )
                                                 )
                                             }
                                         </tr>
