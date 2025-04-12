@@ -170,6 +170,8 @@ class FastifyApp {
             ? process.env.FRONTEND_LIVE_URL
             : process.env.FRONTEND_URL;
 
+            // console.log('===FRONTEND URL===', FRONTEND_URL);
+
         this.fastify.register(fastifyCors, {
             origin: `${FRONTEND_URL}`,
             methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods

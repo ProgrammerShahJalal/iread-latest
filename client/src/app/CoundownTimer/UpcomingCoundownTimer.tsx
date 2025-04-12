@@ -24,7 +24,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
       return curr.session_start_date_time > prev.session_start_date_time
         ? curr
         : prev;
-    }, events[0]).session_start_date_time;
+    }, events[0])?.session_start_date_time;
 
     const countDownDate = new Date(dateTill).getTime();
 
