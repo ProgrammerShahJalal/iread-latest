@@ -39,13 +39,6 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-                                {/* <DropDown
-                                    multiple={false}
-                                    get_selected_data={(result) =>
-                                        console.log(result)
-                                    }
-                                    name={`contact_messages_list`}
-                                /> */}
 
                                 <h5 className="mb-4">Comments Informations</h5>
 

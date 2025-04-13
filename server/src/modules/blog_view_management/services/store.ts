@@ -20,7 +20,8 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'id',
+        'blog_id',
+        'user_id',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -34,87 +35,68 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
-
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 async function store(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
-    /** validation */
+    // Validation
     let validate_result = await validate(req as Request);
     if (!validate_result.isEmpty()) {
         return response(422, 'validation error', validate_result.array());
     }
 
-    /** initializations */
+    // Initializations
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-     /** Check for existing record by IP address */
-     const existingRecord = await models[modelName].findOne({
-        where: { ip: req.ip },
-        order: [['id', 'DESC']], // Get the most recent record by IP
+    // Check if a record with same user_id and blog_id already exists
+    const existingRecord = await models[modelName].findOne({
+        where: {
+            blog_id: body.blog_id,
+            user_id: body.user_id,
+        },
     });
 
-    let totalCount = 1; // Default to 1 for new records
-    if (existingRecord) {
-        totalCount = existingRecord.total_count + 1;
-    }
-
-
-    /** Prepare input data */
-    const inputs: InferCreationAttributes<typeof data> = {
-        user_id: body.user_id,
-        blog_id: body.blog_id,
-        date: moment().toISOString(),
-        total_count: totalCount,
-        ip: req.ip,
-    };
-
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
-    /** store data into database */
     try {
-        (await data.update(inputs)).save();
+        let result;
 
-        return response(201, 'data created', {
-            data,
+        if (existingRecord) {
+            // If record exists for same user_id and blog_id, update only the total_count
+            existingRecord.total_count += 1;
+            existingRecord.date = moment().toISOString();
+            existingRecord.ip = req.ip;
+
+            await existingRecord.save();
+
+            result = existingRecord;
+        } else {
+            // Else insert a new record
+            const newData = await models[modelName].create({
+                user_id: body.user_id,
+                blog_id: body.blog_id,
+                date: moment().toISOString(),
+                total_count: 1,
+                ip: req.ip,
+            });
+
+            result = newData;
+        }
+
+        return response(201, 'data stored/updated', {
+            data: result,
         });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
         throw new custom_error('server error', 500, error.message, uid);
-        // throw error;
     }
 }
+
 
 export default store;
 

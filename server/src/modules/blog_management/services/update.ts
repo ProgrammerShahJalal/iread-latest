@@ -92,7 +92,7 @@ async function update(
                 is_published: body.is_published || data?.is_published,
                 publish_date: body.publish_date || data?.publish_date,
 
-                slug: body.slug || data?.slug,
+                slug:  data?.slug,
                 seo_title: body.seo_title || data?.seo_title,
                 seo_keyword: body.seo_keyword || data?.seo_keyword,
                 seo_description: body.seo_description || data?.seo_description,
@@ -127,7 +127,7 @@ async function update(
             );
 
 
-            return response(201, 'data updated', { data });
+            return response(201, 'Blog updated', { data });
         } else {
             throw new custom_error(
                 'data not found',

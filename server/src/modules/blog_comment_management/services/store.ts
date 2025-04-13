@@ -57,16 +57,26 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-    // Convert stringified arrays to actual arrays
-    const usersArray = JSON.parse(body.users || "[]");
-    const blogsArray = JSON.parse(body.blogs || "[]");
-
-    console.log('userArrray', usersArray);
-    console.log('blogsArray', usersArray);
+    // Helper function to extract ID whether it comes as array or direct value
+    const extractId = (value: any): number => {
+        if (Array.isArray(value)) {
+            return Number(value[0]);
+        } else if (typeof value === 'string') {
+            // Handle case where it might be a string representation of array
+            try {
+                const parsed = JSON.parse(value);
+                return Array.isArray(parsed) ? Number(parsed[0]) : Number(parsed);
+            } catch {
+                return Number(value);
+            }
+        }
+        return Number(value);
+    };
+ 
 
     let inputs: InferCreationAttributes<typeof data> = {
-        user_id: body.users || usersArray[0], 
-        blog_id: body.blogs || blogsArray[0], 
+        user_id: extractId(body.users),
+        blog_id: extractId(body.blogs),
         comment: body.comment,
     };
 

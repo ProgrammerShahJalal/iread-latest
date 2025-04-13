@@ -152,7 +152,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 <li>
                     <a className="sidebar-header" href="/api/v1/auth/logout" onClick={(e) => {
                         e.preventDefault();
-                        return (window as any).confirm('logout!!') &&
+                        return (window as any).confirm('Are you sure you want to log out? Your session will be ended.') &&
                             (document.getElementById('logout_form') as HTMLFormElement)?.submit();
                     }}>
                         <i className="icon-lock"></i>
