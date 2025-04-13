@@ -65,13 +65,13 @@ const EventsPage = async () => {
                           <div key={event.event_id}>
                             <div className="col-sm-6 col-md-4 col-lg-4">
                               <div className="schedule-box maxwidth500 bg-light mb-30">
-                                <div className="thumb">
+                                <div  className="relative h-48 w-full">
                                   <Image
-                                    className="w-full rounded mb-4"
-                                    alt=""
-                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
-                                    width={400}
-                                    height={300}
+                               className="object-cover"
+                                   alt={event.title}
+                                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                                   fill
+                                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                   />
                                 </div>
                                 <div className="schedule-details clearfix p-15 pt-10">
