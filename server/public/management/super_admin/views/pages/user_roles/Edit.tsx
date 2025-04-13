@@ -10,10 +10,6 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import InputImage from './components/management_data_page/InputImage';
-import DropDown from './components/dropdown/DropDown';
-import Select from './components/management_data_page/Select';
-import { anyObject } from '../../../common_types/object';
 export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
@@ -33,6 +29,7 @@ const Edit: React.FC<Props> = (props: Props) => {
         e.preventDefault();
         let form_data = new FormData(e.target);
         const response = await dispatch(update(form_data) as any);
+        console.log('response', response);
     }
 
     function get_value(key) {

@@ -4,7 +4,7 @@ import { getBlogs } from "../../api/blogApi";
 import Link from "next/link";
 
 
-const BlogsPage: React.FC = async() => {
+const BlogsPage: React.FC = async () => {
     const formatDate = (isoDate: string): string => {
         const date = new Date(isoDate);
         const options: Intl.DateTimeFormatOptions = {
@@ -15,7 +15,7 @@ const BlogsPage: React.FC = async() => {
         return date.toLocaleDateString("en-GB", options);
     };
 
-  let blogsData: Blog[] = await getBlogs();
+    let blogsData: Blog[] = await getBlogs();
 
 
 
@@ -45,13 +45,15 @@ const BlogsPage: React.FC = async() => {
                                 <article className="post mb-30">
                                     <div className="entry-header">
                                         {blog.cover_image && (
-                                            <Image
-                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
-                                                alt={blog.title}
-                                                className="w-full h-64 object-cover rounded-md"
-                                                width={400}
-                                                height={250}
-                                            />
+                                            <Link href={`/blogs/${blog.slug}`}>
+                                                <Image
+                                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                                                    alt={blog.title}
+                                                    className="w-full h-64 object-cover rounded-md"
+                                                    width={400}
+                                                    height={250}
+                                                />
+                                            </Link>
                                         )}
                                     </div>
                                     <div className="entry-content p-20 bg-lighter">

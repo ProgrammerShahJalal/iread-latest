@@ -10,21 +10,22 @@ interface UpcomingCountdownTimerProps {
 const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
   events,
 }) => {
-  const [timerDays, setTimerDays] = useState<number | null>(null);
-  const [timerHours, setTimerHours] = useState<number | null>(null);
-  const [timerMinutes, setTimerMinutes] = useState<number | null>(null);
-  const [timerSeconds, setTimerSeconds] = useState<number | null>(null);
+  const [timerDays, setTimerDays] = useState<number>(0);
+  const [timerHours, setTimerHours] = useState<number>(0);
+  const [timerMinutes, setTimerMinutes] = useState<number>(0);
+  const [timerSeconds, setTimerSeconds] = useState<number>(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTimer = useCallback(() => {
-    // dateTill will be the latest date => we will get the date from events array, in which object session_start_date_time is more close
+    if (!events.length) return;
 
+    // Get the upcoming session date
     let dateTill = events.reduce((prev, curr) => {
       return curr.session_start_date_time > prev.session_start_date_time
         ? curr
         : prev;
-    }, events[0]).session_start_date_time;
+    }, events[0])?.session_start_date_time;
 
     const countDownDate = new Date(dateTill).getTime();
 
@@ -36,6 +37,11 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
         }
+        // Optional: Set all values to 0 if time is up
+        setTimerDays(0);
+        setTimerHours(0);
+        setTimerMinutes(0);
+        setTimerSeconds(0);
       } else {
         const days = Math.floor(distance / (24 * 60 * 60 * 1000));
         const hours = Math.floor(
