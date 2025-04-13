@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 interface BlogComment {
   id: number;
@@ -122,6 +123,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
 
       if (response.status === 201) {
         setCommentts((prevComments) => [...prevComments, response.data.data]);
+        toast.success("Comment Posted Successfully!")
         setCommentText("");
         fetchComments();
       }

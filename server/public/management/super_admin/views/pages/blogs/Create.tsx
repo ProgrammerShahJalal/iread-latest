@@ -46,6 +46,13 @@ const Create: React.FC<Props> = (props: Props) => {
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
 
+         // Check if full_description is empty
+         const fullDescription = data.getData();
+         if (!fullDescription || fullDescription.trim() === '') {
+            (window as anyObject).toaster('Full description is required');
+             return; // Stop form submission
+         }
+         
 
         const title = form_data.get('title') as string;
         let slug = generateSlug(title);
@@ -122,7 +129,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
 
                                         <label className='mb-4'> Full Description</label>
-                                        <div id='full_description'>
+                                        <div id='full_description' className="form-control">
 
                                         </div>
                                         <div className="form-group">
