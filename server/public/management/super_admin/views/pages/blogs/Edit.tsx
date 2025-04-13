@@ -173,10 +173,10 @@ const Edit: React.FC = () => {
                                             value={get_value('title')}
                                             name="title"
                                         />
-                                        <Input
+                                        {/* <Input
                                             value={get_value('slug')}
                                             name="slug"
-                                        />
+                                        /> */}
                                         <label>Blog Categories</label>
                                         <BlogCategoryDropDown
                                             name="blog_categories"

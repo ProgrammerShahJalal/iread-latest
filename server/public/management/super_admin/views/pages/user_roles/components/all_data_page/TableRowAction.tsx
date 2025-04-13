@@ -31,7 +31,7 @@ const TableRowAction: React.FC<Props> = ({ item }: Props) => {
                             Edit
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <DeleteButton item={item} />
                     </li>
                     <li>
@@ -39,7 +39,7 @@ const TableRowAction: React.FC<Props> = ({ item }: Props) => {
                     </li>
                     <li>
                         <RestoreButton item={item} />
-                    </li>
+                    </li> */}
                 </ul>
             </div>
         </>

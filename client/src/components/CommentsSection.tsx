@@ -73,7 +73,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
       console.error("Error fetching blog views:", error);
     }
   };
-  
+
   useEffect(() => {
     const match = blogViews?.find(
       (blogView) => Number(blogView.blog_id) === Number(blogs)
@@ -188,36 +188,43 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
           <ul className="mt-4 space-y-6">
             {commentts.map((comment, index) => (
               <li key={index} className="border-b pb-4">
-                <div key={index} className="items-start space-x-4">
+                <div className="flex gap-3">
                   <Image
-                    src={comment.user?.photo ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}` : `${process.env.NEXT_PUBLIC_BACKEND_URL}/avatar.png`}
+                    src={comment.user?.photo
+                      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}`
+                      : '/default-avatar.png'} // Use a local default avatar
                     alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover w-10 h-10"
+                    width={48}
+                    height={48}
+                    className="rounded-full mr-10 aspect-square object-cover"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                    }}
                   />
+                  <div className="flex-1">
+                    <div className="bg-gray-100 rounded-xl p-3 w-fit mb-6 max-w-full">
+                      <p className="font-semibold text-sm sm:text-base">
+                        {comment?.user?.first_name} {comment?.user?.last_name}
+                      </p>
+                      <p className="text-gray-700 text-sm sm:text-base break-words">{comment.comment}</p>
+                    </div>
 
-                  <div>
-                    <p className="font-semibold">
-                      {comment?.user?.first_name} {comment?.user?.last_name}
-                    </p>
-                    <p className="text-gray-600">{comment.comment}</p>
-
-                    {/* Admin Reply Button */}
+                    {/* Reply Button */}
                     {user?.role_serial && userRolesMap[Number(user.role_serial)] === "admin" && (
                       <button
-                        className="mt-2 text-blue-500 hover:underline"
+                        className="mt-1 text-blue-500 hover:underline text-sm"
                         onClick={() => setReplyingTo(comment.id)}
                       >
                         Reply
                       </button>
                     )}
 
-                    {/* Reply Input Box */}
+                    {/* Reply Input */}
                     {replyingTo === comment.id && (
-                      <div className="mt-2">
+                      <div className="mt-2 space-y-2">
                         <textarea
-                          className="w-full border rounded p-2"
+                          className="w-full border rounded p-2 text-sm"
                           rows={2}
                           placeholder="Write a reply..."
                           value={replyText[comment.id] || ""}
@@ -229,7 +236,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                           }
                         />
                         <button
-                          className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
+                          className="px-4 py-2 bg-green-500 text-white rounded text-sm"
                           onClick={() => handleReplySubmit(comment.id)}
                           disabled={loading}
                         >
@@ -238,24 +245,27 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                       </div>
                     )}
 
-                    {/* Display Replies */}
+                    {/* Replies */}
                     {comment.replies && comment.replies.length > 0 && (
-                      <ul className="mt-2 ml-8 border-l pl-4">
+                      <ul className="mt-3 space-y-2 pl-4 border-l mb-6 border-gray-300">
                         {comment.replies.map((reply, index) => (
-                          <div key={index}><div
-                            key={index}
-                          >
+                          <li key={reply.id} className="flex gap-2">
                             <Image
                               src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin.png`}
-                              alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
+                              alt="Admin"
                               width={40}
                               height={40}
-                              className="rounded-full object-cover w-10 h-[40px]"
+                              className="rounded-full aspect-square object-cover"
+                              style={{
+                                width: '40px',
+                                height: '40px',
+                              }}
                             />
-                          </div><li key={reply.id} className="mt-2">
-                              <p className="font-semibold">Admin</p>
-                              <p className="text-gray-600">{reply.comment}</p>
-                            </li></div>
+                            <div className="bg-gray-100 rounded-xl p-3 w-fit max-w-full">
+                              <p className="font-semibold text-sm">Admin</p>
+                              <p className="text-gray-700 text-sm break-words">{reply.comment}</p>
+                            </div>
+                          </li>
                         ))}
                       </ul>
                     )}
@@ -264,10 +274,10 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
               </li>
             ))}
           </ul>
-
         ) : (
           <p className="text-gray-500 mt-4">No comments yet.</p>
         )}
+
 
         {
           user === null ? (

@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,cover_image,is_published,publish_date,status',
+                'title,cover_image,is_published,publish_date,status,created_at',
             ),
         );
         dispatch(all({}));
@@ -89,11 +89,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`publish_date`}
                                             sort={false}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -149,10 +149,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                    { formateTime(i.publish_date)}
                                                     </td>
 
-                                                    <td>
+                                                    {/* <td>
                                                         {i.status}
 
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         },

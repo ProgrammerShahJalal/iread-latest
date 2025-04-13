@@ -60,12 +60,14 @@ async function login(
                 },
             });
 
-            userRole = await models.UserRolesModel.findOne({
-                where: {
-                    serial: data?.role_serial,
-                },
-            });
             if (data) {
+
+                userRole = await models.UserRolesModel.findOne({
+                    where: {
+                        serial: data?.role_serial,
+                    },
+                });
+
                 let check_pass = await bcrypt.compare(
                     body.password,
                     data.password,
@@ -113,12 +115,12 @@ async function login(
                     data.count_wrong_attempts = 0;
                     await data.save();
 
-            
+
                     (req as anyObject).body = {
-                        ...(typeof req.body === 'object' && req.body !== null ? req.body : {}), 
+                        ...(typeof req.body === 'object' && req.body !== null ? req.body : {}),
                         user_id: data.id,
                     };
-                
+
                     try {
                         await loginHistoryStore(fastify_instance, req);
                     } catch (err) {

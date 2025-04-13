@@ -153,9 +153,9 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     type="text" className="form-control" name='title' id="title" aria-describedby="titleHelp" placeholder="Enter Blog Title" />
 
                                             </div>
-                                            <div className="form-group form-vertical">
+                                            {/* <div className="form-group form-vertical">
                                                 <Input name="slug" value={slug} />
-                                            </div>
+                                            </div> */}
 
                                             <div className="form-group form-vertical">
                                                 <label>Blog Categories</label>

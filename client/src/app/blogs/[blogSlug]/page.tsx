@@ -19,7 +19,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
   if (!blogSlug) {
     return <div className="py-24 text-center">Invalid blog request.</div>;
   }
-  
+
 
 
   try {
@@ -33,7 +33,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
         </div>
       );
     }
-    
+
 
     // ✅ Fetch blog comments
     const comments = await getBlogComments(blog.blog_id);
@@ -69,11 +69,20 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                       By: <span className="text-theme-color-2">{blog.author ? blog.author.name : 'Admin'}</span>
                     </li>
                     <li>
-                      Categories: <span className="text-theme-color-2">{blog.categories?.map((category: any) => category.title).join(', ')}</span>
+                      Categories: <span className="text-theme-color-2">
+                        {blog.categories?.length > 0
+                          ? blog.categories.map((category: any) => category.title).join(', ')
+                          : 'N/A'}
+                      </span>
                     </li>
                     <li>
-                      Tags: <span className="text-theme-color-2">{blog.tags?.map((tag: any) => tag.title).join(', ')}</span>
+                      Tags: <span className="text-theme-color-2">
+                        {blog.tags?.length > 0
+                          ? blog.tags.map((tag: any) => tag.title).join(', ')
+                          : 'N/A'}
+                      </span>
                     </li>
+
                   </ul>
                 </div>
                 <div className="post-content mt-10">
