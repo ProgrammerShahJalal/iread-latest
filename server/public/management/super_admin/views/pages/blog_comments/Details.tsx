@@ -48,6 +48,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                     {[
                                         'id',
                                         'user_id',
+                                        'blog_id',
                                         'comment',
                                         'status',
                                     ].map((i) => (
@@ -57,6 +58,8 @@ const Details: React.FC<Props> = (props: Props) => {
                                             <td>{get_value(i)}</td>
                                         </tr>
                                     ))}
+                                    {/* <td>User: {user?.first_name} {user?.last_name}</td>
+                                    <td>Blog Title: {blog?.title}</td> */}
                                 </tbody>
                             </table>
                         </div>
