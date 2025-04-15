@@ -83,7 +83,7 @@ async function all(
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
+    if (role && role != 'all') {
         query.where = {
             ...query.where,
             role: role,
@@ -91,6 +91,8 @@ async function all(
     }
 
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
         query.where = {
             ...query.where,
             [Op.or]: [

@@ -70,7 +70,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id','event_id','event_session_id','event_session_assesment_id','submitted_content','mark','obtained_mark','grade','status'];
+        select_fields = ['id', 'event_id', 'event_session_id', 'event_session_assesment_id', 'submitted_content', 'mark', 'obtained_mark', 'grade', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -83,7 +83,7 @@ async function all(
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
+    if (role && role != 'all') {
         query.where = {
             ...query.where,
             role: role,
@@ -91,6 +91,8 @@ async function all(
     }
 
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
         query.where = {
             ...query.where,
             [Op.or]: [

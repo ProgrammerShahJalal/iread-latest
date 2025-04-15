@@ -57,7 +57,7 @@ async function all(
     let models = Models.get();
     // let models = await db();
     let query_param = req.query as any;
-// console.log('models', models);
+    // console.log('models', models);
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
     let orderByCol = query_param.orderByCol || 'id';
@@ -72,7 +72,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id','uid','email','token','status',];
+        select_fields = ['id', 'uid', 'email', 'token', 'status',];
     }
 
     let query: FindAndCountOptions = {
@@ -87,9 +87,11 @@ async function all(
     query.attributes = select_fields;
 
 
-    
+
 
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
         query.where = {
             ...query.where,
             [Op.or]: [

@@ -84,15 +84,15 @@ async function all(
 
     query.attributes = select_fields;
 
- 
+
 
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
         query.where = {
             ...query.where,
             [Op.or]: [
                 { title: { [Op.like]: `%${search_key}%` } },
-                // { email: { [Op.like]: `%${search_key}%` } },
-                // { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
             ],
         };
