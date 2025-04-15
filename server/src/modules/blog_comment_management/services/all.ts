@@ -79,7 +79,21 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [
+            {
+                model: models.UserModel,
+                as: 'user',
+                attributes: ['first_name', 'last_name'],
+                required: false,
+            },
+            {
+                model: models.BlogModel,
+                as: 'blog',
+                attributes: ['title'],
+                required: false,
+            }
+        ],
+        attributes: select_fields,
     };
 
     query.attributes = select_fields;

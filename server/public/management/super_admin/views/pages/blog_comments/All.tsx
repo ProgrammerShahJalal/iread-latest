@@ -29,8 +29,6 @@ const All: React.FC<Props> = (props: Props) => {
     let [searchParams] = useSearchParams();
 
     useEffect(() => {
-        // dispatch(storeSlice.actions.set_role('all'));
-
         dispatch(
             storeSlice.actions.set_select_fields(
                 'id,user_id,blog_id,comment,status',
@@ -43,7 +41,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-  
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -65,12 +63,12 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User ID`}
+                                            label={`User`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Blog ID`}
+                                            label={`Blog Title`}
                                             col_name={`blog_id`}
                                             sort={true}
                                         />
@@ -79,7 +77,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`comment`}
                                             sort={true}
                                         />
-                                    
+
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -104,8 +102,8 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.user_id}</td>
-                                                    <td>{i.blog_id}</td>
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
+                                                    <td>{i.blog?.title}</td>
 
                                                     <td>
                                                         <span
@@ -114,10 +112,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.comment} 
+                                                            {i.comment}
                                                         </span>
                                                     </td>
-                                                    
+
                                                     <td>
                                                         {i.status}
                                                     </td>
