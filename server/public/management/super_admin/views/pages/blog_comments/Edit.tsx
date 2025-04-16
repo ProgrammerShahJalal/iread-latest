@@ -103,7 +103,9 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'comment',
 
                                         ].map((i) => (
-                                            <div className="form-group form-vertical">
+                                            <div 
+                                            key={i}
+                                            className="form-group form-vertical">
                                                 <Input
                                                     name={i}
                                                     value={get_value(i)}

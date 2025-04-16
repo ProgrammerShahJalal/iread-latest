@@ -87,7 +87,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     />
                                 </div>
 
-                                <div className="form-group form-vertical">
+                                {/* <div className="form-group form-vertical">
                                     <label>Users</label>
                                     <UserDropDown name="users"
                                         multiple={false}
@@ -96,7 +96,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             console.log(data)
                                         }}
                                     />
-                                </div>
+                                </div> */}
 
                                 <div className="form-group form-vertical">
                                     <label>Parent Comment</label>

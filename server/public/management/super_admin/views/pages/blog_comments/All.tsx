@@ -63,7 +63,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User`}
+                                            label={`User Name`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />

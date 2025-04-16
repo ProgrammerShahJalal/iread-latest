@@ -9,7 +9,7 @@ import { details } from './config/store/async_actions/details';
 import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -26,6 +26,16 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+            
+            // Handle nested blog object
+            if (key === 'blog_id' && state.item.blog) {
+                return state.item.blog.title;
+            }
+            
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -42,7 +52,7 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
@@ -52,14 +62,29 @@ const Details: React.FC<Props> = (props: Props) => {
                                         'comment',
                                         'status',
                                     ].map((i) => (
-                                        <tr>
+                                        i === 'user_id' ? (
+                                            <tr key={i}>
+                                            <td>User Name</td>
+                                            <td>:</td>
+                                            <td>{get_value(i)}</td>
+                                        </tr>
+                                        ) : (
+                                            i === 'blog_id' ? (
+                                                <tr key={i}>
+                                            <td>Blog Title</td>
+                                            <td>:</td>
+                                            <td>{get_value(i)}</td>
+                                        </tr>
+                                            ) : (
+                                                <tr key={i}>
                                             <td>{i.replaceAll('_', ' ')}</td>
                                             <td>:</td>
                                             <td>{get_value(i)}</td>
                                         </tr>
+                                            )
+                                        )
                                     ))}
-                                    {/* <td>User: {user?.first_name} {user?.last_name}</td>
-                                    <td>Blog Title: {blog?.title}</td> */}
+
                                 </tbody>
                             </table>
                         </div>
