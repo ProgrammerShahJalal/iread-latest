@@ -110,14 +110,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'poster',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                
+
                                                 {
                                                     i === 'poster' ? <div className="form-group grid_full_width form-vertical">
-                                                    <InputImage
-                                                        label={'Poster'}
-                                                        name={'poster'}
-                                                    />
-                                                </div> : <Input name={i} />
+                                                        <InputImage
+                                                            label={'Poster'}
+                                                            name={'poster'}
+                                                        />
+                                                    </div> : <Input name={i} />
                                                 }
                                             </div>
                                         ))}
@@ -140,7 +140,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     type="text" className="form-control" name='place' id="place" aria-describedby="placeHelp" placeholder="Enter Event Place" />
 
                                             </div>
-                                           
+
 
                                             <div className="form-group form-vertical">
                                                 <label>Event Categories</label>
@@ -162,48 +162,26 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
                                             {/* RADIO OPTIONS */}
                                             <label>Event Type</label>
-                                            <div style={{
-                                                paddingBottom: 10
-                                            }}>
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        name="event_type"
-                                                        value="online"
-                                                        checked={get_value('status') === 'online'}
-                                                        onChange={(e) => {
-                                                            const formData = new FormData();
-                                                            formData.set('status', e.target.value);
-                                                            dispatch(
-                                                                storeSlice.actions.set_item({
-                                                                    ...state.item,
-                                                                    status: e.target.value,
-                                                                })
-                                                            );
-                                                        }}
-                                                    />
-                                                    Online
-                                                </label>
-                                                <br />
-                                                <label>
-                                                    <input
-                                                        type="radio"
-                                                        name="event_type"
-                                                        value="offline"
-                                                        checked={get_value('status') === 'offline'}
-                                                        onChange={(e) => {
-                                                            const formData = new FormData();
-                                                            formData.set('status', e.target.value);
-                                                            dispatch(
-                                                                storeSlice.actions.set_item({
-                                                                    ...state.item,
-                                                                    status: e.target.value,
-                                                                })
-                                                            );
-                                                        }}
-                                                    />
-                                                    Offline
-                                                </label>
+                                            <div style={{ paddingBottom: 10 }}>
+                                                {['online', 'offline'].map((type) => (
+                                                    <label key={type} style={{ display: 'block', marginBottom: 4 }}>
+                                                        <input
+                                                            type="radio"
+                                                            name="event_type"
+                                                            value={type}
+                                                            checked={get_value('event_type') === type}
+                                                            onChange={(e) => {
+                                                                dispatch(
+                                                                    storeSlice.actions.set_item({
+                                                                        ...state.item,
+                                                                        event_type: e.target.value,
+                                                                    })
+                                                                );
+                                                            }}
+                                                        />
+                                                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                                                    </label>
+                                                ))}
                                             </div>
 
 
