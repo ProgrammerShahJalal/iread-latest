@@ -11,6 +11,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -53,7 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    let models = await db();
+    let models = await Models.get();
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
@@ -74,7 +75,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'status'];
+        select_fields = ['id', 'event_id', 'title', 'url', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -82,7 +83,14 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [
+            {
+                model: models.EventModel,
+                as: 'event',
+                attributes: ['title'],
+                required: false,
+            },
+        ],
     };
 
     query.attributes = select_fields;

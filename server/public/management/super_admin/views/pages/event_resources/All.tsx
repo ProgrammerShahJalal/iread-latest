@@ -66,12 +66,12 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Title`}
+                                            label={`Resource Title`}
                                             col_name={`title`}
                                             sort={true}
                                         />
@@ -104,7 +104,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
+                                                    <td>{i.event?.title}</td>
 
                                                     <td>
                                                         <span
@@ -117,7 +117,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td> 
                                                     <td>
-                                                            {i.url}
+                                                    <a href={i.url} target="_blank" rel="noopener noreferrer"> View</a>
                                                     </td> 
 
                                                     <td>
