@@ -47,14 +47,14 @@ const QuickView: React.FC<Props> = (props: Props) => {
                             key={state.item.user_id}
                             >
                                 <tr>
-                                    <th>Event ID</th>
+                                    <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state.item.event_id}</th>
+                                    <th>{state.item.event?.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>User Name</th>
                                     <th>:</th>
-                                    <th>{state.item.user_id}</th>
+                                    <th>{state.item.user?.first_name} {state.item.user?.last_name}</th>
                                 </tr>
                                 <tr>
                                     <th>Scores</th>
@@ -76,11 +76,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>:</th>
                                     <th>{state.item.is_submitted === 1 ? "Yes" : "No"}</th>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <th>Status</th>
                                     <th>:</th>
                                     <th>{state.item.status}</th>
-                                </tr>
+                                </tr> */}
                             </tbody>
                         </table>
                     </div>

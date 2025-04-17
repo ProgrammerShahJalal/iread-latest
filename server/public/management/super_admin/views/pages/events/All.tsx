@@ -116,11 +116,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
 
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -149,18 +149,11 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title?.slice(0, 40)}{i.title?.length > 40 && '...'}
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {i.place}
-                                                        </span>
+                                                        {i.place}
                                                     </td>
                                                     <td>
                                                         <div
@@ -192,10 +185,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                         ${i.discount_price}
                                                     </td>
 
-                                                    <td>
+                                                    {/* <td>
                                                         {i.status}
 
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         },
