@@ -94,7 +94,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'obtained_mark',
                                             'grade',
                                         ].map((i) => (
-                                            <div className="form-group form-vertical">
+                                            <div key={i} className="form-group form-vertical">
                                                 {
                                                     i === 'mark' ? (
                                                         <>

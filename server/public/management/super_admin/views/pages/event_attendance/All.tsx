@@ -81,17 +81,17 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session ID`}
+                                            label={`Session Title`}
                                             col_name={`event_session_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User ID`}
+                                            label={`User Name`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />
@@ -110,11 +110,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`is_present`}
                                             sort={true}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -134,9 +134,18 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.event_session_id}</td>
-                                                    <td>{i.user_id}</td>
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                        >
+                                                            {i.event?.title}
+                                                        </span>
+                                                    </td>
+                                                    <td>{i.session?.title}</td>
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
 
                                                     <td>
                                                         <span
@@ -148,22 +157,13 @@ const All: React.FC<Props> = (props: Props) => {
                                                             {formateDate(i.date)}
                                                         </span>
                                                     </td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {formateTime(i.time)}
-                                                        </span>
-                                                    </td>
+                                                    <td>{i.time}</td>
                                                     <td>
                                                     {i.is_present !== undefined ? (i.is_present ? 'Yes' : 'No') : 'N/A'}
                                                     </td>
-                                                    <td>
+                                                    {/* <td>
                                                         {i.status}
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         },

@@ -53,19 +53,19 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state?.item.id}</th>
                                 </tr>
                                 <tr>
-                                    <th>Event ID</th>
+                                    <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.event_id}</th>
+                                    <th>{state?.item.event?.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Event Session ID</th>
+                                    <th>Session Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.event_session_id}</th>
+                                    <th>{state?.item.session?.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Event Session Assesment ID</th>
+                                    <th>Assesment Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.event_session_assesment_id}</th>
+                                    <th>{state?.item.assesment?.title}</th>
                                 </tr>
                                 <tr>
                                     <th>Mark</th>
@@ -75,7 +75,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Obtained Mark</th>
                                     <th>:</th>
-                                    <th>{state?.item.obtained_mark || 'Pending'}</th>
+                                    <th>{state?.item.obtained_mark || 'N/A'}</th>
                                 </tr>
                                 <tr>
                                     <th>Grade</th>

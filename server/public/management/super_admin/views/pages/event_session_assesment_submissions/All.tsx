@@ -128,12 +128,12 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            <td>{i.assesment?.title}</td> 
+                                                            <td style={{color: '#0AAE96', fontWeight: 400}}>{i.assesment?.title}</td> 
                                                         </span>
                                                     </td> 
 
                                                     <td>{i.mark}</td> 
-                                                    <td>{i.obtained_mark || 'Pending'}</td> 
+                                                    <td>{i.obtained_mark || 'N/A'}</td> 
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -141,7 +141,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            <td style={{color: 'green', fontWeight: 900}}>{i.grade}</td> 
+                                                            <td style={{color: '#0AAE96', fontWeight: 900}}>{i.grade || 'Pending'}</td> 
                                                         </span>
                                                     </td> 
                                                     <td>{i.status}</td>

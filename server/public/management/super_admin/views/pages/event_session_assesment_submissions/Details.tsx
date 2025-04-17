@@ -83,11 +83,12 @@ const Details: React.FC<Props> = (props: Props) => {
 
                                         key === 'submitted_content' ? (
                                             <div
+                                            key={key}
                                                 className="post-content form-group form-vertical"
                                                 dangerouslySetInnerHTML={{ __html: get_value(key) }}
                                             />
                                         ) : (
-                                            <table className="table quick_modal_table table-hover">
+                                            <table key={key} className="table quick_modal_table table-hover">
                                                 <tbody>
                                                 <tr key={key}>
                                                 <td>{label || key.replaceAll('_', ' ')}</td>
