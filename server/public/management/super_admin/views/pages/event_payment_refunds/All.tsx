@@ -71,25 +71,16 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User ID`}
+                                            label={`User Name`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />
-                                         <TableHeading
-                                            label={`Event Enrollment ID`}
-                                            col_name={`event_enrollment_id`}
-                                            sort={true}
-                                        />
-                                        <TableHeading
-                                            label={`Event Payment ID`}
-                                            col_name={`event_payment_id`}
-                                            sort={true}
-                                        />
+                                         
                                        
                                         <TableHeading
                                             label={`Date`}
@@ -126,10 +117,18 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.user_id}</td>
-                                                    <td>{i.event_enrollment_id}</td>
-                                                    <td>{i.event_payment_id}</td>
+                                                    
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                        >
+                                                            {i.event?.title}
+                                                        </span>
+                                                    </td> 
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
 
                                                     <td>
                                                         <span

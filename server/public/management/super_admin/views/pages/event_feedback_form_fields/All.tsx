@@ -66,7 +66,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
@@ -94,18 +94,18 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-
-                                                    {/* <td>
+                                                    <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                             <td>{i.event_id}</td>
+                                                             <td style={{
+                                                                color: '#0AAE96', fontWeight: 400
+                                                             }}>{i.event?.title}</td>
                                                         </span>
-                                                    </td>  */}
+                                                    </td> 
                                                     <td>
                                                         {i.status}
                                                     </td>
