@@ -71,17 +71,17 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session ID`}
+                                            label={`Session Title`}
                                             col_name={`event_session_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Title`}
+                                            label={` Assesment Title`}
                                             col_name={`title`}
                                             sort={false}
                                         />
@@ -125,8 +125,8 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.event_session_id}</td>
+                                                    <td>{i.event?.title}</td>
+                                                    <td>{i.session?.title}</td>
 
                                                     <td>
                                                         <span

@@ -48,17 +48,22 @@ const QuickView: React.FC<Props> = (props: Props) => {
                         <table className="table quick_modal_table">
                             <tbody>
                                 <tr>
-                                    <th>Event ID</th>
+                                    <th>ID</th>
                                     <th>:</th>
-                                    <th>{state.item.event_id}</th>
+                                    <th>{state.item.id}</th>
                                 </tr>
                                 <tr>
-                                    <th>Event Session ID</th>
+                                    <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state.item.event_session_id}</th>
+                                    <th>{state.item.event?.title}</th>
                                 </tr>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>Session Title</th>
+                                    <th>:</th>
+                                    <th>{state.item.session?.title}</th>
+                                </tr>
+                                <tr>
+                                    <th> Assesment Title</th>
                                     <th>:</th>
                                     <th>{state.item.title}</th>
                                 </tr>

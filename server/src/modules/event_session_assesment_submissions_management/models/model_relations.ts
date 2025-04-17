@@ -7,4 +7,20 @@ export function init() {
         foreignKey: "event_session_id",
         as: "event_session_assesment_submissions",
     })
+
+    models.EventSessionAssesmentSubmissionsModel.belongsTo(models.EventModel, {
+        foreignKey: "event_id",
+        targetKey: "id",
+        as: "event",
+    });
+    models.EventSessionAssesmentSubmissionsModel.belongsTo(models.EventSessionsModel, {
+        foreignKey: "event_session_id",
+        targetKey: "id",
+        as: "session",
+    });
+    models.EventSessionAssesmentSubmissionsModel.belongsTo(models.EventSessionsAssesmentsModel, {
+        foreignKey: "event_session_id",
+        targetKey: "id",
+        as: "assesment",
+    });
 }

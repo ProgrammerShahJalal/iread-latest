@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,11 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested blog object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -44,7 +49,7 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
@@ -53,11 +58,19 @@ const Details: React.FC<Props> = (props: Props) => {
                                         'description',
                                         'status',
                                     ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
-                                            <td>:</td>
-                                                    <td>{get_value(i)}</td>
-                                        </tr>
+                                        i === 'event_id' ? (
+                                            <tr>
+                                                <td>Event Title</td>
+                                                <td>:</td>
+                                                <td>{get_value(i)}</td>
+                                            </tr>
+                                        ) : (
+                                            <tr>
+                                                <td>{i.replaceAll('_', ' ')}</td>
+                                                <td>:</td>
+                                                <td>{get_value(i)}</td>
+                                            </tr>
+                                        )
                                     ))}
                                 </tbody>
                             </table>

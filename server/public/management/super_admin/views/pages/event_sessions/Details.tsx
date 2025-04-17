@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,12 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+
+            // Handle nested blog object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -48,32 +54,23 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'event_id',
-                                        'title',
-                                        'topics',
-                                        'start',
-                                        'end',
-                                        'total_time',
-                                        'status',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
+                                        { key: 'id' },
+                                        { key: 'event_id', label: 'Event Title' },
+                                        { key: 'title', label: 'Session Title' },
+                                        { key: 'topics' },
+                                        { key: 'start', formatter: formatTime },
+                                        { key: 'end', formatter: formatTime },
+                                        { key: 'total_time', formatter: (val) => `${val} Minutes` },
+                                        { key: 'status' },
+                                    ].map(({ key, label, formatter }) => (
+                                        <tr key={key}>
+                                            <td>{label || key.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                                   {
-                                                    i === 'total_time' ? (
-                                                        <td>{get_value(i)} Minutes</td>
-                                                    ) : (
-                                                        i === 'start' || i === 'end' ? (
-                                                            <td>{formatTime(get_value(i))}</td>
-                                                        ) : (
-                                                            <td>{get_value(i)}</td>
-                                                        )
-                                                    )
-                                                   }
+                                            <td>{formatter ? formatter(get_value(key)) : get_value(key)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

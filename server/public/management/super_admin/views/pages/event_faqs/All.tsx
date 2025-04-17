@@ -66,20 +66,10 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
-                                        <TableHeading
-                                            label={`Title`}
-                                            col_name={`title`}
-                                            sort={true}
-                                        />
-                                        {/* <TableHeading
-                                            label={`Description`}
-                                            col_name={`description`}
-                                            sort={true}
-                                        /> */}
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -104,8 +94,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -113,12 +101,9 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.event?.title}
                                                         </span>
                                                     </td> 
-                                                    {/* <td>
-                                                            {i.description}
-                                                    </td>  */}
 
                                                     <td>
                                                         {i.status}

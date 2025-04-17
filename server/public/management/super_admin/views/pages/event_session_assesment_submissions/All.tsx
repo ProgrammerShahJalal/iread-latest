@@ -65,17 +65,17 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session ID`}
+                                            label={`Session Title`}
                                             col_name={`event_session_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session Assessment ID`}
+                                            label={`Assessment Title`}
                                             col_name={`event_session_assesment_id`}
                                             sort={true}
                                         />
@@ -119,9 +119,18 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.event_session_id}</td>
-                                                    <td>{i.event_session_assesment_id}</td>
+                                                    <td>{i.event?.title}</td>
+                                                    <td>{i.session?.title}</td>
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                        >
+                                                            <td>{i.assesment?.title}</td> 
+                                                        </span>
+                                                    </td> 
 
                                                     <td>{i.mark}</td> 
                                                     <td>{i.obtained_mark || 'Pending'}</td> 

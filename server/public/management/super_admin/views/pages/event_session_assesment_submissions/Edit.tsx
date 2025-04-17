@@ -63,7 +63,7 @@ const Edit: React.FC<Props> = (props: Props) => {
         <>
             <div className="page_content">
                 <div className="explore_window fixed_size">
-                    <Header page_title={setup.edit_page_title}></Header>
+                    <Header page_title={'Assign Marks to Event Session Assesment Submissons'}></Header>
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
@@ -84,7 +84,9 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                 <div>
                                     <div>
-                                        <label className='mb-4'>Submitted Content</label>
+                                        <label style={{
+                                            cursor: 'text'!,
+                                        }} className='mb-4'>Submitted Content</label>
 
                                         {[
                                             'submitted_content',
