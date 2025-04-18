@@ -7,7 +7,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { InferCreationAttributes, json } from 'sequelize';
-import moment from 'moment';
+import moment from 'moment/moment';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';

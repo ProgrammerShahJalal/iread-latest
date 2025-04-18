@@ -15,11 +15,10 @@ import Select from 'react-select';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import DateTime from '../../components/DateTime';
-import EventCategoryDropDown from "../event_category/components/dropdown/DropDown";
-import EventTagDropDown from "../event_tags/components/dropdown/DropDown";
+import EventCategoryDropDown from '../event_category/components/dropdown/DropDown';
+import EventTagDropDown from '../event_tags/components/dropdown/DropDown';
 
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -28,12 +27,20 @@ const Create: React.FC<Props> = (props: Props) => {
 
     const [data, setData] = useState<anyObject>({});
 
-
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
 
+        // Check if full_description is empty
+        const fullDescription = data.getData();
+        if (!fullDescription || fullDescription.trim() === '') {
+            (window as anyObject).toaster(
+                'Full description is required',
+                'warning',
+            ); // Add 'warning' as second parameter
+            return; // Stop form submission
+        }
 
         form_data.append('full_description', data.getData());
 
@@ -44,8 +51,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
-
-
     const dispatch = useAppDispatch();
     const params = useParams();
 
@@ -53,8 +58,6 @@ const Create: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
-
-
 
     function get_value(key) {
         try {
@@ -70,9 +73,7 @@ const Create: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         let editor = CKEDITOR.replace('full_description');
         setData(editor);
-    }, [])
-
-
+    }, []);
 
     return (
         <>
@@ -85,21 +86,22 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-
                                 <h5 className="mb-4">Events Informations</h5>
                                 <div className="row">
-
-                                    <div className='col-8'>
-
-
-                                        <label className='mb-4'> Full Description</label>
-                                        <div id='full_description'>
-
-                                        </div>
+                                    <div className="col-8">
+                                        <label className="mb-4">
+                                            {' '}
+                                            Full Description
+                                        </label>
+                                        <div id="full_description"></div>
                                         <div className="form-group">
                                             <label>Short Description</label>
-                                            <textarea className="form-control" name='short_description' id="short_description" rows={3}></textarea>
+                                            <textarea
+                                                className="form-control"
+                                                name="short_description"
+                                                id="short_description"
+                                                rows={3}
+                                            ></textarea>
                                         </div>
 
                                         {[
@@ -110,88 +112,127 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'poster',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-
-                                                {
-                                                    i === 'poster' ? <div className="form-group grid_full_width form-vertical">
+                                                {i === 'poster' ? (
+                                                    <div className="form-group grid_full_width form-vertical">
                                                         <InputImage
                                                             label={'Poster'}
                                                             name={'poster'}
                                                         />
-                                                    </div> : <Input name={i} />
-                                                }
+                                                    </div>
+                                                ) : (
+                                                    <Input name={i} />
+                                                )}
                                             </div>
                                         ))}
-
                                     </div>
 
-                                    <div className='col-4'>
-
+                                    <div className="col-4">
                                         <div className="form_auto_fit">
-
                                             <div className="form-group form-vertical">
                                                 <label>Title</label>
                                                 <input
-                                                    type="text" className="form-control" name='title' id="title" aria-describedby="titleHelp" placeholder="Enter Event Title" />
-
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="title"
+                                                    id="title"
+                                                    aria-describedby="titleHelp"
+                                                    placeholder="Enter Event Title"
+                                                />
                                             </div>
                                             <div className="form-group form-vertical">
                                                 <label>Place</label>
                                                 <input
-                                                    type="text" className="form-control" name='place' id="place" aria-describedby="placeHelp" placeholder="Enter Event Place" />
-
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="place"
+                                                    id="place"
+                                                    aria-describedby="placeHelp"
+                                                    placeholder="Enter Event Place"
+                                                />
                                             </div>
-
 
                                             <div className="form-group form-vertical">
                                                 <label>Event Categories</label>
-                                                <EventCategoryDropDown name="event_categories"
+                                                <EventCategoryDropDown
+                                                    name="event_categories"
                                                     multiple={true}
-                                                    get_selected_data={(data) => {
-                                                        console.log(data)
+                                                    get_selected_data={(
+                                                        data,
+                                                    ) => {
+                                                        console.log(data);
                                                     }}
                                                 />
                                             </div>
                                             <div className="form-group form-vertical">
                                                 <label>Event Tags</label>
-                                                <EventTagDropDown name="event_tags"
+                                                <EventTagDropDown
+                                                    name="event_tags"
                                                     multiple={true}
-                                                    get_selected_data={(data) => {
-                                                        console.log(data)
+                                                    get_selected_data={(
+                                                        data,
+                                                    ) => {
+                                                        console.log(data);
                                                     }}
                                                 />
                                             </div>
                                             {/* RADIO OPTIONS */}
                                             <label>Event Type</label>
                                             <div style={{ paddingBottom: 10 }}>
-                                                {['online', 'offline'].map((type) => (
-                                                    <label key={type} style={{ display: 'block', marginBottom: 4 }}>
-                                                        <input
-                                                            type="radio"
-                                                            name="event_type"
-                                                            value={type}
-                                                            checked={get_value('event_type') === type}
-                                                            onChange={(e) => {
-                                                                dispatch(
-                                                                    storeSlice.actions.set_item({
-                                                                        ...state.item,
-                                                                        event_type: e.target.value,
-                                                                    })
-                                                                );
+                                                {['online', 'offline'].map(
+                                                    (type) => (
+                                                        <label
+                                                            key={type}
+                                                            style={{
+                                                                display:
+                                                                    'block',
+                                                                marginBottom: 4,
                                                             }}
-                                                        />
-                                                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                                                    </label>
-                                                ))}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                name="event_type"
+                                                                value={type}
+                                                                checked={
+                                                                    get_value(
+                                                                        'event_type',
+                                                                    ) === type
+                                                                }
+                                                                onChange={(
+                                                                    e,
+                                                                ) => {
+                                                                    dispatch(
+                                                                        storeSlice.actions.set_item(
+                                                                            {
+                                                                                ...state.item,
+                                                                                event_type:
+                                                                                    e
+                                                                                        .target
+                                                                                        .value,
+                                                                            },
+                                                                        ),
+                                                                    );
+                                                                }}
+                                                            />
+                                                            {type
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                                type.slice(1)}
+                                                        </label>
+                                                    ),
+                                                )}
                                             </div>
-
-
 
                                             <div className="form-group grid_full_width form-vertical">
                                                 <label>Reg Start Date</label>
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_start_date'}
-                                                    handler={(data) => { console.log('arguments', data) }}
+                                                    handler={(data) => {
+                                                        console.log(
+                                                            'arguments',
+                                                            data,
+                                                        );
+                                                    }}
                                                 ></DateEl>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
@@ -199,30 +240,51 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_end_date'}
-                                                    handler={(data) => { console.log('arguments', data) }}
+                                                    handler={(data) => {
+                                                        console.log(
+                                                            'arguments',
+                                                            data,
+                                                        );
+                                                    }}
                                                 ></DateEl>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
-                                                <label>Session Start Date Time</label>
+                                                <label>
+                                                    Session Start Date Time
+                                                </label>
                                                 <DateTime
                                                     value={''}
-                                                    name={'session_start_date_time'}
-                                                    handler={(data) => { console.log('arguments', data) }}
+                                                    name={
+                                                        'session_start_date_time'
+                                                    }
+                                                    handler={(data) => {
+                                                        console.log(
+                                                            'arguments',
+                                                            data,
+                                                        );
+                                                    }}
                                                 ></DateTime>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
-                                                <label>Session End Date Time</label>
+                                                <label>
+                                                    Session End Date Time
+                                                </label>
                                                 <DateTime
                                                     value={''}
-                                                    name={'session_end_date_time'}
-                                                    handler={(data) => { console.log('arguments', data) }}
+                                                    name={
+                                                        'session_end_date_time'
+                                                    }
+                                                    handler={(data) => {
+                                                        console.log(
+                                                            'arguments',
+                                                            data,
+                                                        );
+                                                    }}
                                                 ></DateTime>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
 
                             <div className="form-group form-vertical">

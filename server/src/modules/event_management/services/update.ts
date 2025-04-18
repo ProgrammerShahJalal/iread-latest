@@ -12,7 +12,7 @@ import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
 
-import moment from 'moment';
+import moment from 'moment/moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
@@ -37,13 +37,6 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
-
 async function update(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -58,10 +51,6 @@ async function update(
     let models = await Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
 
@@ -88,9 +77,13 @@ async function update(
             reg_start_date: body.reg_start_date || data?.reg_start_date,
             reg_end_date: body.reg_end_date || data?.reg_end_date,
             session_start_date_time:
-                body.session_start_date_time || data?.session_start_date_time,
+                moment(body.session_start_date_time).format(
+                    'YYYY-MM-DD HH:mm:ss',
+                ) || (data?.session_start_date_time as string),
             session_end_date_time:
-                body.session_end_date_time || data?.session_end_date_time,
+                moment(body.session_end_date_time).format(
+                    'YYYY-MM-DD HH:mm:ss',
+                ) || (data?.session_end_date_time as string),
             place: body.place || data?.place,
             short_description:
                 body.short_description || data?.short_description,
@@ -132,6 +125,14 @@ async function update(
                         event_tag_id: tagId,
                     });
                 }),
+            );
+            console.log(
+                '== after saving SESSION START DATE TIME',
+                body.session_start_date_time,
+            );
+            console.log(
+                '== after saving SESSION END DATE TIME',
+                body.session_end_date_time,
             );
             return response(201, 'data updated', { data });
         } else {
