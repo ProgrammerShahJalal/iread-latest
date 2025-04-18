@@ -11,10 +11,10 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import Select from 'react-select';
-import BlogDropDown from "../blogs/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import BlogDropDown from '../blogs/components/dropdown/DropDown';
+import UserDropDown from '../users/components/dropdown/DropDown';
 
-export interface Props { }
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -29,13 +29,10 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-
     let statusOptions = [
         { value: 'active', label: 'Active' },
         { value: 'deactive', label: 'Deactive' },
     ];
-
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -72,47 +69,29 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 />
 
                                 <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
-
                                     <div className="form-group form-vertical">
-                                    <label>Blogs</label>
-                                    <BlogDropDown name="blogs"
-                                        multiple={false}
-                                        default_value={get_value('blog_id') ? [{ id: get_value('blog_id') }] : []}
-                                        get_selected_data={(data) => {
-                                            console.log(data)
-                                        }}
-                                    />
-                                </div>
+                                        <h6>
+                                            Blog Title: {state.item.blog?.title}
+                                        </h6>
+                                        <h6>
+                                            User Name:{' '}
+                                            {state.item.user?.first_name}{' '}
+                                            {state.item.user?.last_name}
+                                        </h6>
+                                    </div>
 
-                                <div className="form-group form-vertical">
-                                    <label>Users</label>
-                                    <UserDropDown name="users"
-                                    default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
-                                        multiple={false}
-                                        get_selected_data={(data) => {
-                                            console.log(data)
-                                        }}
-                                    />
-                                </div>
-                                
                                     <div className="form_auto_fit">
-                                        {[
-                                            'comment',
-
-                                        ].map((i) => (
-                                            <div 
-                                            key={i}
-                                            className="form-group form-vertical">
+                                        {['comment'].map((i) => (
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
                                                 <Input
                                                     name={i}
                                                     value={get_value(i)}
                                                 />
                                             </div>
                                         ))}
-
                                     </div>
 
                                     {/* DROPDOWN SELECT OPTIONS */}
@@ -152,10 +131,6 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             }),
                                         }}
                                     /> */}
-
-
-
-
                                 </div>
 
                                 <div className="form-group form-vertical">

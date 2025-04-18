@@ -19,7 +19,7 @@ import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 import moment from 'moment/moment';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -32,11 +32,7 @@ const All: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         // dispatch(storeSlice.actions.set_role('all'));
 
-        dispatch(
-            storeSlice.actions.set_select_fields(
-                'id,event_id,status',
-            ),
-        );
+        dispatch(storeSlice.actions.set_select_fields('id,event_id,status'));
         dispatch(all({}));
     }, [searchParams]);
 
@@ -101,14 +97,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                             <td style={{
-                                                                color: '#0AAE96', fontWeight: 400
-                                                             }}>{i.event?.title}</td>
+                                                            {i.event?.title}
                                                         </span>
-                                                    </td> 
-                                                    <td>
-                                                        {i.status}
                                                     </td>
+                                                    <td>{i.status}</td>
                                                 </tr>
                                             );
                                         },

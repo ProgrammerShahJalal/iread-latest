@@ -18,7 +18,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -94,7 +94,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`grade`}
                                             sort={true}
                                         />
-                                    
+
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -127,23 +127,37 @@ const All: React.FC<Props> = (props: Props) => {
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
+                                                            style={{
+                                                                color: '#0AAE96',
+                                                                fontWeight: 400,
+                                                                cursor: 'pointer',
+                                                            }}
                                                         >
-                                                            <td style={{color: '#0AAE96', fontWeight: 400}}>{i.assesment?.title}</td> 
+                                                            {i.assesment?.title}
                                                         </span>
-                                                    </td> 
+                                                    </td>
 
-                                                    <td>{i.mark}</td> 
-                                                    <td>{i.obtained_mark || 'N/A'}</td> 
+                                                    <td>{i.mark}</td>
+                                                    <td>
+                                                        {i.obtained_mark ||
+                                                            'N/A'}
+                                                    </td>
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
+                                                            style={{
+                                                                color: '#0AAE96',
+                                                                fontWeight: 900,
+                                                                cursor: 'pointer',
+                                                            }}
                                                         >
-                                                            <td style={{color: '#0AAE96', fontWeight: 900}}>{i.grade || 'Pending'}</td> 
+                                                            {i.grade ||
+                                                                'Pending'}
                                                         </span>
-                                                    </td> 
+                                                    </td>
                                                     <td>{i.status}</td>
                                                 </tr>
                                             );

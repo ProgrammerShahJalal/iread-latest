@@ -10,11 +10,11 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import BlogDropDown from "../blogs/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
-import CommentDropDown from "../blog_comments/components/dropdown/DropDown";
+import BlogDropDown from '../blogs/components/dropdown/DropDown';
+import UserDropDown from '../users/components/dropdown/DropDown';
+import CommentDropDown from '../blog_comments/components/dropdown/DropDown';
 
-export interface Props { }
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -29,13 +29,10 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-
     let statusOptions = [
         { value: 'active', label: 'Active' },
         { value: 'deactive', label: 'Deactive' },
     ];
-
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -67,8 +64,6 @@ const Edit: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    console.log('item', state.item);
-
     return (
         <>
             <div className="page_content">
@@ -89,23 +84,36 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                 <div>
                                     <div className="form-group form-vertical">
-                                    <h6>Blog Title: {state?.item?.blog?.title}</h6>
-                                    <p>Parent Comment: {state?.item?.parent_comment?.comment}</p>
-                                </div>
+                                        <h6>
+                                            Blog Title:{' '}
+                                            {state?.item?.blog?.title}
+                                        </h6>
+                                        <p>
+                                            Parent Comment:{' '}
+                                            {
+                                                state?.item?.parent_comment
+                                                    ?.comment
+                                            }
+                                        </p>
+                                    </div>
                                     <div className="form_auto_fit">
-                                        {[
-                                            'comment',
-
-                                        ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                <label style={{
-                                                    cursor: 'text'!,
-                                                }}>Replay</label>
+                                        {['comment'].map((i) => (
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                <label
+                                                    style={{
+                                                        cursor: 'text'!,
+                                                    }}
+                                                >
+                                                    Replay
+                                                </label>
                                                 <textarea
-                                                style={{
-                                                    width: '50%',
-                                                }}
-                                                className="form-control"
+                                                    style={{
+                                                        width: '50%',
+                                                    }}
+                                                    className="form-control"
                                                     name={i}
                                                     value={get_value(i)}
                                                     rows={5}
@@ -113,9 +121,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 />
                                             </div>
                                         ))}
-
                                     </div>
-
                                 </div>
 
                                 <div className="form-group form-vertical">

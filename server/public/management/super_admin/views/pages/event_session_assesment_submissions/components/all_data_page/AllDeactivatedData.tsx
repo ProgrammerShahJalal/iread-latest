@@ -26,7 +26,7 @@ const AllDeactivatedData: React.FC<Props> = (props: Props) => {
 
     return (
         <>
-            {state?.show_active_data ? (
+            {state.show_active_data ? (
                 <a href="#" onClick={(e) => handle_recycle_data(false, e)}>
                     <span className="material-symbols-outlined fill">
                         delete

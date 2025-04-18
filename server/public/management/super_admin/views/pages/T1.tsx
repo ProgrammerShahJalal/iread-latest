@@ -1,8 +1,20 @@
-import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
-import { Chart, BarController, BarElement, PointElement, ArcElement, PieController, LinearScale, Tooltip, Legend, Title, CategoryScale } from "chart.js";
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from 'react';
+import {
+    Chart,
+    BarController,
+    BarElement,
+    PointElement,
+    ArcElement,
+    PieController,
+    LinearScale,
+    Tooltip,
+    Legend,
+    Title,
+    CategoryScale,
+} from 'chart.js';
 
-export interface Props { }
+export interface Props {}
 
 const T1: React.FC<Props> = () => {
     const [students, setStudents] = useState<any[]>([]);
@@ -17,27 +29,53 @@ const T1: React.FC<Props> = () => {
     const pieChartInstance = useRef<Chart | null>(null);
 
     useEffect(() => {
-        axios.get(`/api/v1/auth?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`)
+        axios
+            .get(
+                `/api/v1/auth?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`,
+            )
             .then((res) => {
                 const users = res.data.data.data;
-                setAdmins(users.filter((item: any) => item.role?.title === "admin"));
-                setParents(users.filter((item: any) => item.role?.title === "parent"));
-                setStudents(users.filter((item: any) => item.role?.title === "student"));
+                setAdmins(
+                    users.filter((item: any) => item.role?.title === 'admin'),
+                );
+                setParents(
+                    users.filter((item: any) => item.role?.title === 'parent'),
+                );
+                setStudents(
+                    users.filter((item: any) => item.role?.title === 'student'),
+                );
             });
     }, []);
 
     useEffect(() => {
-        axios.get(`/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`)
-            .then(res => setBlogs(res.data.data.data));
+        axios
+            .get(
+                `/api/v1/blogs?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`,
+            )
+            .then((res) => setBlogs(res.data.data.data));
     }, []);
 
     useEffect(() => {
-        axios.get(`/api/v1/events?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`)
-            .then(res => setEvents(res.data.data.data));
+        axios
+            .get(
+                `/api/v1/events?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10`,
+            )
+            .then((res) => setEvents(res.data.data.data));
     }, []);
 
     useEffect(() => {
-        Chart.register(BarController, BarElement, PointElement, ArcElement, PieController, LinearScale, Title, CategoryScale, Tooltip, Legend);
+        Chart.register(
+            BarController,
+            BarElement,
+            PointElement,
+            ArcElement,
+            PieController,
+            LinearScale,
+            Title,
+            CategoryScale,
+            Tooltip,
+            Legend,
+        );
 
         // Destroy previous charts if they exist
         if (barChartInstance.current) barChartInstance.current.destroy();
@@ -46,15 +84,33 @@ const T1: React.FC<Props> = () => {
         // Bar Chart
         if (barChartRef.current) {
             barChartInstance.current = new Chart(barChartRef.current, {
-                type: "bar",
+                type: 'bar',
                 data: {
-                    labels: ["Students", "Parents", "Admins", "Blogs", "Events"],
+                    labels: [
+                        'Students',
+                        'Parents',
+                        'Admins',
+                        'Blogs',
+                        'Events',
+                    ],
                     datasets: [
                         {
-                            label: "Total Count",
-                            data: [students.length, parents.length, admins.length, blogs.length, events.length],
-                            backgroundColor: ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#A133FF"],
-                            borderColor: "black",
+                            label: 'Total Count',
+                            data: [
+                                students.length,
+                                parents.length,
+                                admins.length,
+                                blogs.length,
+                                events.length,
+                            ],
+                            backgroundColor: [
+                                '#FF5733',
+                                '#33FF57',
+                                '#3357FF',
+                                '#FF33A1',
+                                '#A133FF',
+                            ],
+                            borderColor: 'black',
                             borderWidth: 1,
                         },
                     ],
@@ -64,7 +120,7 @@ const T1: React.FC<Props> = () => {
                     plugins: {
                         title: {
                             display: true,
-                            text: "User and Content Statistics",
+                            text: 'User and Content Statistics',
                         },
                     },
                     scales: {
@@ -79,13 +135,17 @@ const T1: React.FC<Props> = () => {
         // Pie Chart
         if (pieChartRef.current) {
             pieChartInstance.current = new Chart(pieChartRef.current, {
-                type: "pie",
+                type: 'pie',
                 data: {
-                    labels: ["Students", "Blogs", "Events"],
+                    labels: ['Students', 'Blogs', 'Events'],
                     datasets: [
                         {
-                            data: [students.length, blogs.length, events.length],
-                            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                            data: [
+                                students.length,
+                                blogs.length,
+                                events.length,
+                            ],
+                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
                         },
                     ],
                 },
@@ -94,12 +154,12 @@ const T1: React.FC<Props> = () => {
                     plugins: {
                         title: {
                             display: true,
-                            text: "Distribution of Students, Blogs, and Events",
+                            text: 'Distribution of Students, Blogs, and Events',
                         },
                         tooltip: {
                             callbacks: {
                                 label: function (context) {
-                                    let label = "Total Count";
+                                    let label = 'Total Count';
                                     let value = context.raw || 0;
                                     return `${label}: ${value}`;
                                 },
@@ -113,7 +173,6 @@ const T1: React.FC<Props> = () => {
 
     return (
         <div className="container">
-
             <div className="row my-4">
                 <div className="col-xl-3 col-lg-4">
                     <div className="card" data-intro="This is card">
@@ -127,7 +186,7 @@ const T1: React.FC<Props> = () => {
                                 </div>
                                 <img
                                     width={100}
-                                    height={"auto"}
+                                    height={'auto'}
                                     src="/assets/dashboard/images/student.png"
                                     alt="Students"
                                 />
@@ -147,7 +206,7 @@ const T1: React.FC<Props> = () => {
                                 </div>
                                 <img
                                     width={100}
-                                    height={"auto"}
+                                    height={'auto'}
                                     src="/assets/dashboard/images/parent.png"
                                     alt="Parents"
                                 />
@@ -168,7 +227,7 @@ const T1: React.FC<Props> = () => {
                                 </div>
                                 <img
                                     width={100}
-                                    height={"auto"}
+                                    height={'auto'}
                                     src="/assets/dashboard/images/event-list.png"
                                     alt="Events"
                                 />
@@ -188,7 +247,7 @@ const T1: React.FC<Props> = () => {
                                 </div>
                                 <img
                                     width={100}
-                                    height={"auto"}
+                                    height={'auto'}
                                     src="/assets/dashboard/images/blog.png"
                                     alt="Blogs"
                                 />
@@ -202,22 +261,21 @@ const T1: React.FC<Props> = () => {
                 <div className="col-md-6">
                     <div className="card">
                         <div className="card-header">
-                            <h3>Bar Chart</h3>
+                            <h3>User and Content Statistics</h3>
                             <canvas ref={barChartRef}></canvas>
                         </div>
-
                     </div>
-
                 </div>
                 <div className="col-md-6">
                     <div className="card">
                         <div className="card-header py-1">
-                            <h3 className="m-0">Pie Chart</h3>
+                            <h3 className="m-0">
+                                Distrubution of Students, Events and Blogs
+                            </h3>
                         </div>
                         <div className="card-body">
                             <canvas ref={pieChartRef}></canvas>
                         </div>
-
                     </div>
                 </div>
             </div>

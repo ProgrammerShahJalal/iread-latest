@@ -3,7 +3,7 @@ import React from 'react';
 import MenuDropDown from './MenuDropDown';
 import MenuDropDownItem from './MenuDropDownItem';
 import MenuSingle from './MenuSingle';
-export interface Props { }
+export interface Props {}
 
 const SideBar: React.FC<Props> = (props: Props) => {
     setTimeout(() => {
@@ -33,15 +33,12 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     group_title="Blog"
                     icon="fa fa-book"
                 >
-                    <MenuDropDownItem label="Blogs" to="/blogs" />
                     <MenuDropDownItem
                         label="Blog Category"
                         to="/blog-categories"
                     />
-                    <MenuDropDownItem
-                        label="Blog Tags"
-                        to="/blog-tags"
-                    />
+                    <MenuDropDownItem label="Blog Tags" to="/blog-tags" />
+                    <MenuDropDownItem label="Blogs" to="/blogs" />
                     <MenuDropDownItem
                         label="Blog Comments"
                         to="/blog-comments"
@@ -52,44 +49,28 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     />
                 </MenuDropDown>
                 {/* EVENT  */}
-                <MenuDropDown
-                    group_title="Event"
-                    icon="fa fa-calendar"
-                >
-                    <MenuDropDownItem
-                        label="Events"
-                        to="/events"
-                    />
+                <MenuDropDown group_title="Event" icon="fa fa-calendar">
                     <MenuDropDownItem
                         label="Event Category"
                         to="/event-categories"
                     />
-                    <MenuDropDownItem
-                        label="Event Tags"
-                        to="/event-tags"
-                    />
-                    <MenuDropDownItem
-                        label="Event Certified Users"
-                        to="/event-certified-users"
-                    />
+                    <MenuDropDownItem label="Event Tags" to="/event-tags" />
+                    <MenuDropDownItem label="Events" to="/events" />
                     <MenuDropDownItem
                         label="Event Resources"
                         to="/event-resources"
                     />
-                    <MenuDropDownItem
-                        label="Event FAQs"
-                        to="/event-faqs"
-                    />
+                    <MenuDropDownItem label="Event FAQs" to="/event-faqs" />
                     <MenuDropDownItem
                         label="Event Sessions"
                         to="/event-sessions"
                     />
                     <MenuDropDownItem
-                        label="Event Sessions Assesments"
+                        label="Sessions Assessments"
                         to="/event-session-assesments"
                     />
                     <MenuDropDownItem
-                        label="Event Session Assesment Submissions"
+                        label="Assessment Submissions"
                         to="/event-session-assesment-submissions"
                     />
                     <MenuDropDownItem
@@ -101,6 +82,10 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         to="/event-enrollments"
                     />
                     <MenuDropDownItem
+                        label="Event Certified Users"
+                        to="/event-certified-users"
+                    />
+                    <MenuDropDownItem
                         label="Event Payments"
                         to="/event-payments"
                     />
@@ -109,7 +94,7 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         to="/event-payment-refunds"
                     />
                     <MenuDropDownItem
-                        label="Event Feedback Form Fields"
+                        label="Event Feedback Form"
                         to="/event-feedback-form-fields"
                     />
                 </MenuDropDown>
@@ -141,25 +126,39 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     <MenuDropDownItem label="Due Report" to="/due_report" />
                     <MenuDropDownItem label="Incentive Report" to="/incentive_report" />
                 </MenuDropDown> */}
-                
+
                 {/* Users  */}
                 <MenuDropDown group_title="User" icon="icon-user">
                     <MenuDropDownItem label="Users" to="/auth" />
                     <MenuDropDownItem label="User Roles" to="/user-roles" />
-                    <MenuDropDownItem label="User Login Histories" to="/user-login-histories" />
+                    <MenuDropDownItem
+                        label="User Login Histories"
+                        to="/user-login-histories"
+                    />
                 </MenuDropDown>
 
                 <li>
-                    <a className="sidebar-header" href="/api/v1/auth/logout" onClick={(e) => {
-                        e.preventDefault();
-                        return (window as any).confirm('Are you sure you want to log out? Your session will be ended.') &&
-                            (document.getElementById('logout_form') as HTMLFormElement)?.submit();
-                    }}>
+                    <a
+                        className="sidebar-header"
+                        href="/api/v1/auth/logout"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            return (
+                                (window as any).confirm(
+                                    'Are you sure you want to log out? Your session will be ended.',
+                                ) &&
+                                (
+                                    document.getElementById(
+                                        'logout_form',
+                                    ) as HTMLFormElement
+                                )?.submit()
+                            );
+                        }}
+                    >
                         <i className="icon-lock"></i>
                         <span> Logout</span>
                     </a>
                 </li>
-
             </ul>
         </>
     );
@@ -174,9 +173,11 @@ function active_link(hash) {
     (window as any)
         .$(`.sidebar-submenu a[href="${url.hash}"]`)
         .parent('li')
-        .parent('ul').css({ display: 'block' }).addClass('menu-open')
-        .parent('li').addClass('active')
-
+        .parent('ul')
+        .css({ display: 'block' })
+        .addClass('menu-open')
+        .parent('li')
+        .addClass('active');
 }
 
 function init_nav_action() {
