@@ -74,24 +74,24 @@ const Create: React.FC<Props> = (props: Props) => {
                                         'total_time',
                                     ].map((i) => (
                                         <div key={i} className="form-group form-vertical">
-                                           {
-                                            i === 'start' || i === 'end' ? (
-                                                <Input
-                                                type='time'
-                                                name={i}
-                                                />
-                                            ): (
-                                                i === 'total_time' ? (
-                                                    <Input 
-                                                    name={i} 
-                                                    placeholder="Enter total time in minutes"
+                                            {
+                                                i === 'start' || i === 'end' ? (
+                                                    <Input
+                                                        type='time'
+                                                        name={i}
                                                     />
-                                                ):
-                                                (
-                                                    <Input name={i}/>
+                                                ) : (
+                                                    i === 'total_time' ? (
+                                                        <Input
+                                                            name={i}
+                                                            placeholder="Enter total time in minutes"
+                                                        />
+                                                    ) :
+                                                        (
+                                                            <Input name={i} />
+                                                        )
                                                 )
-                                            )
-                                           }
+                                            }
                                         </div>
                                     ))}
                                 </div>

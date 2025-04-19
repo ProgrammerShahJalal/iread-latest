@@ -103,15 +103,24 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-   
 
+    let event_id: number;
+    if (Array.isArray(body.events) && body.events.length > 0) {
+        // Take the first element if it exists,
+        event_id = parseInt(body.events[0]);
+    } else if (typeof body.events === 'string' || typeof body.events === 'number') {
+        event_id = parseInt(body.events as string);
+    } else {
+        // Handle missing/invalid event ID case
+        throw new custom_error('Invalid or missing event ID', 422, 'Validation error');
+    }
     /** store data into database */
     try {
         let data = new models[modelName]();
 
         let inputs: InferCreationAttributes<typeof data> = {
 
-            event_id: body.events?.[1],
+            event_id: event_id,
             title: body.title,
             topics: body.topics,
             start: body.start,

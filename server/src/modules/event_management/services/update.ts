@@ -73,18 +73,25 @@ async function update(
         }
 
 
-        let sessionStartDateTime = body.session_start_date_time;
-        let sessionEndDateTime = body.session_end_date_time;
+        let sessionStartDateTime = body.session_start_date_time
+            ? moment(body.session_start_date_time).utc().toDate()
+            : data?.session_start_date_time as any;
 
-        console.log('sessionStartDateTime', sessionStartDateTime);
-        console.log('sessionEndDateTime', sessionEndDateTime);
+        let sessionEndDateTime = body.session_end_date_time
+            ? moment(body.session_end_date_time).utc().toDate()
+            : data?.session_end_date_time as any;
+
+        console.log('Formatted sessionStartDateTime', sessionStartDateTime);
+        console.log('Formatted sessionEndDateTime', sessionEndDateTime);
+
+        console.log(moment('2025-08-14T10:30').format('YYYY-MM-DD HH:mm:ss'));
 
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
             reg_start_date: body.reg_start_date || data?.reg_start_date as string,
             reg_end_date: body.reg_end_date || data?.reg_end_date as string,
-            session_start_date_time: sessionStartDateTime || data?.session_start_date_time as string,
-            session_end_date_time: sessionEndDateTime || data?.session_end_date_time as string,
+            session_start_date_time: sessionStartDateTime || data?.session_start_date_time,
+            session_end_date_time: sessionEndDateTime || data?.session_end_date_time,
             place: body.place || data?.place,
             short_description:
                 body.short_description || data?.short_description,
@@ -127,7 +134,7 @@ async function update(
                     });
                 }),
             );
-            
+
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(
