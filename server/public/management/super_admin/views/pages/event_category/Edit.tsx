@@ -47,6 +47,12 @@ const Edit: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+    // Status options for dropdown
+    const statusOptions = [
+        { value: 'active', label: 'Active' },
+        { value: 'deactive', label: 'Deactive' },
+    ];
+
     return (
         <>
             <div className="page_content">
@@ -70,31 +76,29 @@ const Edit: React.FC<Props> = (props: Props) => {
                                         Input Data
                                     </h5>
                                     <div className="form_auto_fit">
-                                        {[
-                                            'title',
-                                            'image',
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                {
-                                                    i === 'title' ? <Input
-                                                        name={i}
-                                                        value={get_value(i)}
-                                                    /> : <div className="form-group grid_full_width form-vertical">
-                                                        <InputImage
-                                                            label={'image'}
-                                                            name={'image'}
-                                                            defalut_preview={get_value(
-                                                                'image',
-                                                            )}
-                                                        />
+                                        <div className="form-group form-vertical">
+                                            <Input
+                                                name="title"
+                                                value={get_value('title')}
+                                            />
+                                        </div>
 
-                                                    </div>
-                                                }
+                                        <div className="form-group grid_full_width form-vertical">
+                                            <InputImage
+                                                label={'image'}
+                                                name={'image'}
+                                                defalut_preview={get_value('image')}
+                                            />
+                                        </div>
 
-                                            </div>
-                                        ))}
-
-
+                                        <div className="form-group form-vertical">
+                                            <Select
+                                                name="status"
+                                                label="Status"
+                                                values={statusOptions}
+                                                value={get_value('status')}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
