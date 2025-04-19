@@ -29,9 +29,7 @@ const formatDateTime = (isoDate: string): string => {
     minute: "2-digit",
     hour12: true, // Set to false if you prefer 24-hour format\
   };
-
-  // Use the browser's default locale and timezone
-  return localDate.toLocaleString(undefined, options);
+  return localDate.toLocaleString("en-GB", options);
 };
 
 const EventDetailsPage = async ({
