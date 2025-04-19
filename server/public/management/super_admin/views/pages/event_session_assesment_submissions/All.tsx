@@ -119,8 +119,8 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event?.title}</td>
-                                                    <td>{i.session?.title}</td>
+                                                    <td>{i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '..'}</td>
+                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '..'}</td>
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -133,7 +133,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 cursor: 'pointer',
                                                             }}
                                                         >
-                                                            {i.assesment?.title}
+                                                            {i.assesment?.title?.slice(0, 30)}{i.assesment?.title?.length > 30 && '..'}
                                                         </span>
                                                     </td>
 

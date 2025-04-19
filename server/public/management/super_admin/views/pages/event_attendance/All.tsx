@@ -141,10 +141,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.event?.title}
+                                                            {i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '...'}
                                                         </span>
                                                     </td>
-                                                    <td>{i.session?.title}</td>
+                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '...'}</td>
                                                     <td>{i.user?.first_name} {i.user?.last_name}</td>
 
                                                     <td>

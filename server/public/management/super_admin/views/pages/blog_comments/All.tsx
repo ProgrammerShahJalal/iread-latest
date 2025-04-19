@@ -103,8 +103,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td>{i.id}</td>
                                                     <td>{i.user?.first_name} {i.user?.last_name}</td>
-                                                    <td>{i.blog?.title}</td>
-
+                                                    <td>{i.blog?.title?.slice(0, 40)}{i.blog?.title?.length > 40 && '...'}</td>
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -112,7 +111,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.comment}
+                                                            {i.comment?.slice(0, 40)}{i.comment?.length > 40 && '...'}
                                                         </span>
                                                     </td>
 

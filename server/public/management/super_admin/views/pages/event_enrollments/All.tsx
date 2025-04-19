@@ -120,7 +120,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.event?.title}
+                                                            {i.event?.title?.slice(0, 40)}{i.event?.title?.length> 40 && "..."}
                                                         </span>
                                                     </td>
                                                     <td>{i.user?.first_name} {i.user?.last_name}</td>

@@ -104,7 +104,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event?.title}</td>
+                                                    <td>{i.event?.title?.slice(0, 40)}{i.event?.title?.length > 40 && '...'}</td>
 
                                                     <td>
                                                         <span
@@ -113,7 +113,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title?.slice(0, 40)} {i.title?.length > 40 && '...'}
                                                         </span>
                                                     </td> 
                                                     <td>
