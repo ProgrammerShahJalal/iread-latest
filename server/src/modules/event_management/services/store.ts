@@ -18,8 +18,7 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
+    const fields = [
         'title',
         'reg_start_date',
         'reg_end_date',
@@ -36,20 +35,74 @@ async function validate(req: Request) {
         'discount_price',
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
+    // Basic field presence validation
+    for (const field of fields) {
         await body(field)
             .not()
             .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
+            .withMessage(`the <b>${field.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
 
-    let result = await validationResult(req);
+    // Custom date validations
+    await body('reg_end_date')
+        .custom((value, { req }) => {
+            const regStart = moment(req.body.reg_start_date);
+            const regEnd = moment(value);
+            if (regEnd.isBefore(regStart)) {
+                throw new Error('Registration end date cannot be before registration start date');
+            }
+            return true;
+        })
+        .run(req);
 
-    return result;
+    await body('session_end_date_time')
+        .custom((value, { req }) => {
+            const sessionStart = moment(req.body.session_start_date_time);
+            const sessionEnd = moment(value);
+            if (sessionEnd.isBefore(sessionStart)) {
+                throw new Error('Session end date/time cannot be before session start date/time');
+            }
+            return true;
+        })
+        .run(req);
+
+    await body('session_start_date_time')
+        .custom((value, { req }) => {
+            const regEnd = moment(req.body.reg_end_date);
+            const sessionStart = moment(value);
+            if (sessionStart.isBefore(regEnd)) {
+                throw new Error('Session cannot start before registration ends');
+            }
+            return true;
+        })
+        .run(req);
+
+    // Additional validation: Ensure registration period is reasonable (at least 1 day)
+    await body('reg_end_date')
+        .custom((value, { req }) => {
+            const regStart = moment(req.body.reg_start_date);
+            const regEnd = moment(value);
+            if (regEnd.diff(regStart, 'hours') < 24) {
+                throw new Error('Registration period should be at least 24 hours');
+            }
+            return true;
+        })
+        .run(req);
+
+    // Additional validation: Ensure session duration is reasonable (at least 30 minutes)
+    await body('session_end_date_time')
+        .custom((value, { req }) => {
+            const sessionStart = moment(req.body.session_start_date_time);
+            const sessionEnd = moment(value);
+            if (sessionEnd.diff(sessionStart, 'minutes') < 30) {
+                throw new Error('Session duration should be at least 30 minutes');
+            }
+            return true;
+        })
+        .run(req);
+
+    return await validationResult(req);
 }
 
 async function store(
