@@ -20,19 +20,38 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'id',
+        { name: 'events', isArray: true },
+        { name: 'users', isArray: true },
+        { name: 'scores', isArray: false },
+        { name: 'grade', isArray: false },
+        { name: 'date', isArray: false },
+        { name: 'image', isArray: false },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
+    //validate array fields
+    for (const field of fields.filter(f => f.isArray)) {
+        await body(field.name)
+            .custom(value => {
+                try {
+                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
+
+    // Validate other fields
+    for (const field of fields.filter(f => !f.isArray)) {
+        await body(field.name)
+            .not()
+            .isEmpty()
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .run(req);
+    }
+
 
     let result = await validationResult(req);
 
@@ -55,6 +74,16 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
    
 
     /** store data into database */
@@ -62,7 +91,7 @@ async function update(
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
+                event_id: body.events?.[0] || data.event_id,
                 title: body.title || data.title,
                 description: body.description || data.description,
             };

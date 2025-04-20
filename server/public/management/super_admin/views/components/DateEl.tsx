@@ -11,30 +11,29 @@ interface TargetWithPicker {
     showPicker?: () => void;
 }
 
-export function formated_date(value) {
-    if (value) {
-        return moment(value).format('DD MMMM YYYY');
-    } else {
-        return moment().format('DD MMMM YYYY');
-    }
+export function formated_date(value: string | null) {
+    return value
+        ? moment(value).format('DD MMMM YYYY')
+        : moment().format('DD MMMM YYYY');
 }
 
 const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     const date_input = useRef<HTMLInputElement>(null);
     const [input_value, setInput_value] = useState<string | null>(null);
+    const [minDate, setMinDate] = useState<string>(
+        moment().format('YYYY-MM-DD'),
+    );
 
     useEffect(() => {
         setInput_value(value);
-
         return () => {
             setInput_value(null);
         };
-    }, []);
+    }, [value]);
 
     function date_handler() {
-        if (date_input?.current) {
-            const input_value = date_input.current?.value;
-            console.log('date_input value', date_input?.current?.value);
+        if (date_input?.current?.value) {
+            const input_value = date_input.current.value;
             setInput_value(input_value);
             handler({
                 [name]: input_value,
@@ -52,22 +51,24 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     };
 
     return (
-        <><label
-            htmlFor={name}
-            className="text-capitalize d-block date_custom_control"
-        >
-            <input
-                type="date"
-                ref={date_input}
-                onClick={(e) => handleClick(e)}
-                id={name}
-                name={name}
-                onChange={date_handler}
-                className="form-control" />
-
-        </label>
+        <>
+            <label
+                htmlFor={name}
+                className="text-capitalize d-block date_custom_control"
+            >
+                <input
+                    type="date"
+                    ref={date_input}
+                    onClick={handleClick}
+                    id={name}
+                    name={name}
+                    onChange={date_handler}
+                    min={minDate}
+                    className="form-control"
+                />
+            </label>
             <div className="form-control preview">
-                {input_value && formated_date(input_value)}
+                {input_value ? formated_date(input_value) : formated_date(null)}
             </div>
         </>
     );

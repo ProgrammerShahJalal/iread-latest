@@ -17,10 +17,10 @@ export async function init() {
         foreignKey: 'event_id',
     });
 
-    models.EventTagsModel.belongsTo(models.EventModel, {
-        as: 'tag_event',
-        foreignKey: 'event_id',
-    });
+    // models.EventTagsModel.belongsTo(models.EventModel, {
+    //     as: 'tag_event',
+    //     foreignKey: 'event_id',
+    // });
 
     console.log(
         'Event Tag management relation models initialized successfully',

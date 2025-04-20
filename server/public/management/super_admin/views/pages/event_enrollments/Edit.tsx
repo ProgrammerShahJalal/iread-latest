@@ -90,6 +90,20 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 }}
                                             />
                                         </div>
+
+                                        <div className="form-group form-vertical">
+                                        <label>Is Paid?</label>
+                                        <select
+                                            name="is_paid"
+                                            defaultValue={get_value('is_paid')}
+                                            className="form-control"
+                                            onChange={(e) => console.log('is_paid Changed', e.target.value)}
+                                        >
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+
                                         <div className="form-group form-vertical">
                                             <label>Status</label>
                                             <select

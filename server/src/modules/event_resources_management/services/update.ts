@@ -59,15 +59,41 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+    
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+    
     let user_model = new models[modelName]();
 
+
+    if(body.url){
+        const isUrl =
+        body.url && (body.url.startsWith('http://') || body.url.startsWith('https://'));
+    
+        if (!isUrl) {
+            return response(422, 'Invalid url. Please enter a valid url starting with http:// or https://', {
+                data: [{
+                    path: 'url',
+                    msg: 'Please enter a valid url starting with http:// or https://',
+                }]
+            });
+        }
+    }
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
+                event_id: body.events?.[0] || data.event_id,
                 title: body.title || data.title,
                 url: body.url || data.url,
             };

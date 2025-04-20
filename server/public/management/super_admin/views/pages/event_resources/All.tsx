@@ -66,12 +66,12 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Title`}
+                                            label={`Resource Title`}
                                             col_name={`title`}
                                             sort={true}
                                         />
@@ -104,7 +104,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
+                                                    <td>{i.event?.title?.slice(0, 40)}{i.event?.title?.length > 40 && '...'}</td>
 
                                                     <td>
                                                         <span
@@ -113,11 +113,11 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title?.slice(0, 40)} {i.title?.length > 40 && '...'}
                                                         </span>
                                                     </td> 
                                                     <td>
-                                                            {i.url}
+                                                    <a href={i.url} target="_blank" rel="noopener noreferrer"> View</a>
                                                     </td> 
 
                                                     <td>

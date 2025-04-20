@@ -18,7 +18,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -65,17 +65,17 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session ID`}
+                                            label={`Session Title`}
                                             col_name={`event_session_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event Session Assessment ID`}
+                                            label={`Assessment Title`}
                                             col_name={`event_session_assesment_id`}
                                             sort={true}
                                         />
@@ -94,7 +94,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`grade`}
                                             sort={true}
                                         />
-                                    
+
                                         <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
@@ -119,22 +119,45 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.event_session_id}</td>
-                                                    <td>{i.event_session_assesment_id}</td>
-
-                                                    <td>{i.mark}</td> 
-                                                    <td>{i.obtained_mark || 'Pending'}</td> 
+                                                    <td>{i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '..'}</td>
+                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '..'}</td>
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
+                                                            style={{
+                                                                color: '#0AAE96',
+                                                                fontWeight: 400,
+                                                                cursor: 'pointer',
+                                                            }}
                                                         >
-                                                            <td style={{color: 'green', fontWeight: 900}}>{i.grade}</td> 
+                                                            {i.assesment?.title?.slice(0, 30)}{i.assesment?.title?.length > 30 && '..'}
                                                         </span>
-                                                    </td> 
+                                                    </td>
+
+                                                    <td>{i.mark}</td>
+                                                    <td>
+                                                        {i.obtained_mark ||
+                                                            'N/A'}
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            className="quick_view_trigger"
+                                                            onClick={() =>
+                                                                quick_view(i)
+                                                            }
+                                                            style={{
+                                                                color: '#0AAE96',
+                                                                fontWeight: 900,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        >
+                                                            {i.grade ||
+                                                                'Pending'}
+                                                        </span>
+                                                    </td>
                                                     <td>{i.status}</td>
                                                 </tr>
                                             );

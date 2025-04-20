@@ -18,6 +18,10 @@ export function init() {
         sourceKey: "id",
         as: "blog_comments",
     });
-
+    models.BlogCommentModel.belongsTo(models.BlogModel, {
+        foreignKey: "blog_id",
+        targetKey: "id",
+        as: "blog",
+    });
     
 }

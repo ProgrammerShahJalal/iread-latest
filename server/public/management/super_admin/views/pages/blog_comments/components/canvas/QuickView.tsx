@@ -45,19 +45,19 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state.item.id}</th>
                                 </tr>
                                 <tr>
-                                    <th>User ID</th>
+                                    <th>User</th>
                                     <th>:</th>
-                                    <th>{state.item.user_id}</th>
+                                    <th>{state.item.user?.first_name} {state.item.user?.last_name}</th>
                                 </tr>
                                 <tr>
-                                    <th>Blog ID</th>
+                                    <th>Blog Title</th>
                                     <th>:</th>
-                                    <th>{state.item.blog_id}</th>
+                                    <th>{state.item.blog?.title?.slice(0, 40)}{state.item.blog?.title?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Comment</th>
                                     <th>:</th>
-                                    <th>{state.item.comment}</th>
+                                    <th>{state.item.comment.slice(0, 40)}{state.item.comment?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

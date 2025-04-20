@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,20 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+
+            // Handle nested event object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+            // Handle nested session object
+            if (key === 'event_session_id' && state.item.session) {
+                return state.item.session.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -36,19 +50,19 @@ const Details: React.FC<Props> = (props: Props) => {
     }
 
 
-    
-let formateDate = (date: string) => {
+
+    let formateDate = (date: string) => {
         return moment(date).format('Do MMM YY');
     };
     const formateTime = (time: string) => {
-        
+
         const formattedTime = moment(time, ['HH:mm:ss', 'h:mm A', 'YYYY-MM-DD HH:mm:ss']).format('h:mm A');
-    
+
         if (formattedTime === 'Invalid date') {
             console.error('Invalid time format:', time);
             return 'Invalid time';
         }
-    
+
         return formattedTime;
     };
 
@@ -61,37 +75,31 @@ let formateDate = (date: string) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'event_id',
-                                        'event_session_id',
-                                        'user_id',
-                                        'date',
-                                        'time',
-                                        'is_present',
-                                        'status',
-                                    ].map((i) => (
-                                        <tr key={i}>
-                                            <td>{i.replaceAll('_', ' ')}</td>
+                                        { key: 'event_id', label: 'Event Title' },
+                                        { key: 'event_session_id', label: 'Session Title' },
+                                        { key: 'user_id', label: 'User Name' },
+                                        {
+                                            key: 'date',
+                                            formatter: formateDate
+                                        },
+                                        {
+                                            key: 'time',
+                                            formatter: formateTime
+                                        },
+                                        {
+                                            key: 'is_present',
+                                            formatter: (value) => value !== undefined ? (value ? 'Yes' : 'No') : 'N/A'
+                                        },
+                                        // { key: 'status' },
+                                    ].map(({ key, label, formatter }) => (
+                                        <tr key={key}>
+                                            <td>{label || key.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                                   {
-                                                    i === 'date' ? (
-                                                        <td>{formateDate(get_value(i))}</td>
-                                                    ) : (
-                                                        i === 'time' ? (
-                                                            <td>{formateTime(get_value(i))}</td>
-                                                        ): (
-                                                            i === 'is_present' ? (
-                                                                <td>{get_value(i) !== undefined ? (get_value(i) ? 'Yes' : 'No') : 'N/A'}</td>
-                                                            ) : (
-                                                                <td>{get_value(i)}</td>
-                                                            )
-                                                            
-                                                        )
-                                                    )
-                                                   }
+                                            <td>{formatter ? formatter(get_value(key)) : get_value(key)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

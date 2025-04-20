@@ -70,12 +70,12 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Title`}
+                                            label={`Session Title`}
                                             col_name={`title`}
                                             sort={true}
                                         />
@@ -123,7 +123,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
+                                                    <td>{i.event?.title?.slice(0, 40)}{i.event?.title?.length > 40 && '...'}</td>
 
                                                     <td>
                                                         <span
@@ -132,10 +132,10 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title?.slice(0, 30)}{i.title?.length > 30 && '...'}
                                                         </span>
                                                     </td> 
-                                                    <td>{i.topics}</td> 
+                                                    <td>{i.topics?.slice(0, 30)}{i.topics?.length > 30 && '...'}</td> 
                                                     <td>{formatTime(i.start)}</td> 
                                                     <td>{formatTime(i.end)}</td> 
                                                     <td>{i.total_time} Minutes</td> 

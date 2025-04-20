@@ -7,4 +7,10 @@ export function init() {
         foreignKey: "event_id",
         as: "event_faqs",
     })
+
+    models.EventFaqsModel.belongsTo(models.EventModel, {
+        foreignKey: "event_id",
+        targetKey: "id",
+        as: "event",
+    });
 }

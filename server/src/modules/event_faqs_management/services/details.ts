@@ -26,12 +26,14 @@ async function details(
             where: {
                 id: params.id,
             },
-            // include:[
-            //     {
-            //         model: models.BlogModel,
-            //         as: 'blogs',
-            //     }
-            // ]
+            include: [
+                {
+                    model: models.EventModel,
+                    as: 'event',
+                    attributes: ['title'],
+                    required: false,
+                },
+            ],
         });
 
         if (data) {

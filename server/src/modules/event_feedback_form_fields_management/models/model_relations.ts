@@ -14,4 +14,10 @@ export function init() {
         foreignKey: "event_form_field_id",
         as: "feedback_form_field",
     });
+
+    models.EventFeedbackFormFieldsModel.belongsTo(models.EventModel, {
+        foreignKey: "event_id",
+        targetKey: "id",
+        as: "event",
+    });
 }

@@ -10,7 +10,7 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import Select from 'react-select';
+import Select from './components/management_data_page/Select';
 
 export interface Props { }
 
@@ -28,13 +28,6 @@ const Edit: React.FC<Props> = (props: Props) => {
     }, []);
 
 
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
-
-
-
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
@@ -50,6 +43,13 @@ const Edit: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
+
+    // Status options for dropdown
+    const statusOptions = [
+        { value: 'active', label: 'Active' },
+        { value: 'deactive', label: 'Deactive' },
+    ];
+
 
     return (
         <>
@@ -69,7 +69,9 @@ const Edit: React.FC<Props> = (props: Props) => {
                                     defaultValue={get_value(`id`)}
                                 />
 
-                                <div>
+                                <div style={{
+                                    width: '60%',
+                                }}>
                                     <h5 className="mb-4">
                                         Input Data
                                     </h5>
@@ -78,7 +80,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'title',
 
                                         ].map((i) => (
-                                            <div className="form-group form-vertical">
+                                            <div key={i} className="form-group form-vertical">
                                                 <Input
                                                     name={i}
                                                     value={get_value(i)}
@@ -88,46 +90,14 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                     </div>
 
-                                    {/* DROPDOWN SELECT OPTIONS */}
-                                    {/* <Select
-                                        name="status"
-                                        options={statusOptions}
-                                        value={statusOptions.find((option) => option.value === get_value('status'))}
-                                        onChange={(selectedOption: { value: string; label: string } | null) => {
-                                            const formData = new FormData();
-                                            if (selectedOption) {
-                                                formData.set('status', selectedOption.value);
-                                                dispatch(
-                                                    storeSlice.actions.set_item({
-                                                        ...state.item,
-                                                        status: selectedOption.value,
-                                                    })
-                                                );
-                                            }
-                                        }}
-                                        styles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Default text color for the input
-                                            }),
-                                            singleValue: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for selected value
-                                            }),
-                                            menu: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for dropdown options
-                                            }),
-                                            option: (provided, state) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for each dropdown option
-                                                backgroundColor: state.isFocused ? '#f1f1f1' : 'white', // Highlight color for focused options
-                                            }),
-                                        }}
-                                    /> */}
-
-
-
+                                    <div className="form-group form-vertical">
+                                        <Select
+                                            name="status"
+                                            label="Status"
+                                            values={statusOptions}
+                                            value={get_value('status')}
+                                        />
+                                    </div>
 
                                 </div>
 

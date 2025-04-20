@@ -67,7 +67,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                   
+
                                     <div className="form-group form-vertical">
                                         <label>Users</label>
                                         <UserDropDown name="users"
@@ -78,13 +78,38 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                            <DateEl
-                                                name={"date"}
-                                                value={get_value('date')}
-                                                handler={(data) => console.log('Date Changed', data)}
-                                            />
+                                        <DateEl
+                                            name={"date"}
+                                            value={get_value('date')}
+                                            handler={(data) => console.log('Date Changed', data)}
+                                        />
                                     </div>
-                                   
+
+                                    <div className="form-group form-vertical">
+                                        <label>Is Paid?</label>
+                                        <select
+                                            name="is_paid"
+                                            className="form-control"
+                                            onChange={(e) => console.log('is_paid Changed', e.target.value)}
+                                        >
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group form-vertical">
+                                        <label>Status</label>
+                                        <select
+                                            name="status"
+                                            className="form-control"
+                                            onChange={(e) => console.log('Status Changed', e.target.value)}
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="rejected">Rejected</option>
+                                            <option value="accepted">Accepted</option>
+                                        </select>
+                                    </div>
+
                                 </div>
 
                             </div>

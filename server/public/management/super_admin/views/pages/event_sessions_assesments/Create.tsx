@@ -31,7 +31,15 @@ const Create: React.FC<Props> = (props: Props) => {
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
-
+        // Check if description is empty
+        const description = data.getData();
+        if (!description || description.trim() === '') {
+            (window as anyObject).toaster(
+                'Description is required',
+                'warning',
+            ); // Add 'warning' as second parameter
+            return; // Stop form submission
+        }
         form_data.append('description', data.getData());
 
         const response = await dispatch(store(form_data) as any);
@@ -101,7 +109,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'pass_mark',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                    <Input name={i} />
+                                                <Input name={i} />
                                             </div>
                                         ))}
 
@@ -131,17 +139,17 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
 
                                             {[
-                                            'start',
-                                            'end',
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                <Input
-                                                type='time'
-                                                name={i}
-                                                />
-                                               
-                                            </div>
-                                        ))}
+                                                'start',
+                                                'end',
+                                            ].map((i) => (
+                                                <div className="form-group form-vertical">
+                                                    <Input
+                                                        type='time'
+                                                        name={i}
+                                                    />
+
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
 

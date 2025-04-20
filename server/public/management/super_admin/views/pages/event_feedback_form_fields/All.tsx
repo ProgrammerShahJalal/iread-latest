@@ -19,7 +19,7 @@ import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 import moment from 'moment/moment';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -32,11 +32,7 @@ const All: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         // dispatch(storeSlice.actions.set_role('all'));
 
-        dispatch(
-            storeSlice.actions.set_select_fields(
-                'id,event_id,status',
-            ),
-        );
+        dispatch(storeSlice.actions.set_select_fields('id,event_id,status'));
         dispatch(all({}));
     }, [searchParams]);
 
@@ -66,7 +62,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
@@ -94,21 +90,17 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-
-                                                    {/* <td>
+                                                    <td>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                             <td>{i.event_id}</td>
+                                                            {i.event?.title?.slice(0, 40)}{i.event?.title?.length > 40 && '...'}
                                                         </span>
-                                                    </td>  */}
-                                                    <td>
-                                                        {i.status}
                                                     </td>
+                                                    <td>{i.status}</td>
                                                 </tr>
                                             );
                                         },

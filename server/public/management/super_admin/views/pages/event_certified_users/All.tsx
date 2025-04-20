@@ -70,12 +70,12 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Event ID`}
+                                            label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User ID`}
+                                            label={`User Name`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />
@@ -99,11 +99,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`is_submitted`}
                                             sort={true}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -123,9 +123,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event_id}</td>
-                                                    <td>{i.user_id}</td>
-
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -133,36 +130,20 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.scores}
+                                                            {i.event?.title?.slice(0, 40)}{i.event?.title?.length > 40 && '...'}
                                                         </span>
                                                     </td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {i.grade}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {formateDate(i.date)}
-                                                        </span>
-                                                    </td>
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
+                                                    <td>{i.scores}</td>
+                                                    <td>{i.grade}</td>
+                                                    <td>{i.date}</td>
 
                                                     <td>
                                                         {i.is_submitted === 1 ? "Yes" : "No"}
                                                     </td>
-                                                    <td>
+                                                    {/* <td>
                                                         {i.status}
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         },

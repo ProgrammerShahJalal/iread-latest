@@ -42,19 +42,19 @@ const QuickView: React.FC<Props> = (props: Props) => {
                         <table className="table quick_modal_table">
                             <tbody>
                                 <tr>
-                                    <th>Event ID</th>
+                                    <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state.item.event_id}</th>
+                                    <th>{state.item.event?.title?.slice(0, 40)}{state.item.event?.title?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>Resource Title</th>
                                     <th>:</th>
-                                    <th>{state.item.title}</th>
+                                    <th>{state.item.title?.slice(0, 30)}{state.item.title?.length > 30 && '...'}</th>
                                 </tr>
                                 <tr>
-                                    <th>URL</th>
+                                    <th>Resource URL</th>
                                     <th>:</th>
-                                    <th>{state.item.url}</th>
+                                    <th><a href={state.item.url} target="_blank" rel="noopener noreferrer"> View</a></th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

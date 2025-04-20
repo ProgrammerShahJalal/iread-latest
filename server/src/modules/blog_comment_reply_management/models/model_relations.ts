@@ -6,9 +6,18 @@ export function init() {
     models.BlogCommentRepliesModel.belongsTo(models.BlogCommentModel, {
         foreignKey: "parent_comment_id",
         targetKey: "id",
-        as: "comments",
+        as: "parent_comment",
     });
-    
 
+    models.BlogCommentRepliesModel.belongsTo(models.UserModel, {
+        foreignKey: "user_id",
+        targetKey: "id",
+        as: "user",
+    });
 
+    models.BlogCommentRepliesModel.belongsTo(models.BlogModel, {
+        foreignKey: "blog_id",
+        targetKey: "id",
+        as: "blog",
+    });
 }

@@ -19,8 +19,8 @@ const TableHeading: React.FC<Props> = (props: Props) => {
 
     function handle_sort() {
         if (props.sort) {
-            const active_col_name = state?.orderByCol;
-            const active_order_by_asc = state?.orderByAsc;
+            const active_col_name = state.orderByCol;
+            const active_order_by_asc = state.orderByAsc;
 
             dispatch(storeSlice.actions.set_order_by_col(props.col_name));
             dispatch(storeSlice.actions.set_only_latest_data(true));
@@ -45,8 +45,8 @@ const TableHeading: React.FC<Props> = (props: Props) => {
                     className={`table_heading_label ${props.sort ? 'sort' : ''}`}
                 >
                     <span>{props.label}</span>
-                    {state?.orderByCol == props.col_name &&
-                        (state?.orderByAsc ? (
+                    {state.orderByCol == props.col_name &&
+                        (state.orderByAsc ? (
                             <span className="material-symbols-outlined fill icon">
                                 vertical_align_top
                             </span>

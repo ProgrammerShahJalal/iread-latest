@@ -26,12 +26,26 @@ async function details(
             where: {
                 id: params.id,
             },
-            // include:[
-            //     {
-            //         model: models.BlogCommentModel,
-            //         as: 'replies',
-            //     }
-            // ]
+            include: [
+                {
+                    model: models.UserModel,
+                    as: 'user',
+                    attributes: ['first_name', 'last_name'],
+                    required: false,
+                },
+                {
+                    model: models.BlogModel,
+                    as: 'blog',
+                    attributes: ['title'],
+                    required: false,
+                },
+                {
+                    model: models.BlogCommentModel,
+                    as: 'parent_comment',
+                    attributes: ['comment'],
+                    required: false,
+                }
+            ],
         });
 
         if (data) {
