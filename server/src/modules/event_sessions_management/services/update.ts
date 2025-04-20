@@ -6,7 +6,7 @@ import {
     responseObject,
     Request,
 } from '../../../common_types/object';
-import { InferCreationAttributes } from 'sequelize';
+import { InferCreationAttributes, Op } from 'sequelize';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
@@ -56,12 +56,83 @@ async function update(
     let user_model = new models[modelName]();
 
 
+    // Validate start and end times
+    if (body?.start && body?.end) {
+        const startTime = moment(body?.start, 'hh:mmA');
+        const endTime = moment(body?.end, 'hh:mmA');
+
+        if (!startTime.isValid() || !endTime.isValid()) {
+            return response(422, 'Invalid time format. Use hh:mmAM/PM format.', {
+                data: [{
+                    path: 'start/end',
+                    msg: 'Invalid time format. Use hh:mmAM/PM format.'
+                }]
+            });
+        }
+
+        if (startTime.isSameOrAfter(endTime)) {
+            return response(422, 'Invalid time range! The start time must be before the end time.', {
+                data: [{
+                    path: 'start',
+                    msg: 'The start time must be before the end time.'
+                }]
+            });
+        }
+
+        // Calculate the duration in minutes
+        const duration = moment.duration(endTime.diff(startTime)).asMinutes();
+        if (duration !== parseInt(body?.total_time, 10)) {
+            return response(422, `The total time should be ${duration} minutes based on start and end times.`, {
+                data: [{
+                    path: 'total_time',
+                    msg: `The total time should be ${duration} minutes based on start and end times.`
+                }]
+            });
+        }
+
+        // Check for overlapping sessions
+        const overlappingSession = await models[modelName].findOne({
+            where: {
+                [Op.or]: [
+                    { start: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
+                    { end: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
+                    {
+                        [Op.and]: [
+                            { start: { [Op.lte]: startTime.format('HH:mm') } },
+                            { end: { [Op.gte]: endTime.format('HH:mm') } },
+                        ],
+                    },
+                ],
+            },
+        });
+
+        if (overlappingSession) {
+            return response(422, 'Time overlap! The selected time overlaps with another session.', {
+                data: [{
+                    path: 'start/end',
+                    msg: 'The selected time overlaps with another session.'
+                }]
+            });
+        }
+
+    }
+
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
+                event_id: body.events?.[0] || data.event_id,
                 title: body.title || data.title,
                 topics: body.topics || data.topics,
                 start: body.start || data.start,

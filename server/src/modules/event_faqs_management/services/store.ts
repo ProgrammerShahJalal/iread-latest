@@ -17,19 +17,40 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let fields = ['title', 'description', 'events'];
+    let field = '';
+    let fields = [
+        { name: 'events', isArray: true },
+        { name: 'title', isArray: false },
+        { name: 'description', isArray: false },
+    ];
 
-    for (let field of fields) {
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `The <b>${field.replaceAll('_', ' ')}</b> field is required`
-            )
+    //validate array fields
+    for (const field of fields.filter(f => f.isArray)) {
+        await body(field.name)
+            .custom(value => {
+                try {
+                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
 
+    // Validate other fields
+    for (const field of fields.filter(f => !f.isArray)) {
+        await body(field.name)
+            .not()
+            .isEmpty()
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .run(req);
+    }
+
+
     let result = await validationResult(req);
+
     return result;
 }
 
@@ -43,16 +64,24 @@ async function store(
         return response(422, 'Validation error', validate_result.array());
     }
 
-
-    console.log('req body ==>', req.body);
-
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+
     let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.events?.[1],
+        event_id: body.events?.[0],
         title: body.title,
         description: body.description,
     };
