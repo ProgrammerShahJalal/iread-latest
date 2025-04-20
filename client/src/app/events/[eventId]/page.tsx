@@ -19,19 +19,17 @@ const formatDate = (isoDate: string): string => {
 };
 
 const formatDateTime = (isoDate: string): string => {
-  const localDate = new Date(isoDate);
-
+  const date = new Date(isoDate);
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true, // Set to false if you prefer 24-hour format\
+    // second: "2-digit",
+    hour12: true, // Use 12-hour format (set to false for 24-hour format)
   };
-
-  // Use the browser's default locale and timezone
-  return localDate.toLocaleString(undefined, options);
+  return date.toLocaleString("en-GB", options);
 };
 
 const EventDetailsPage = async ({

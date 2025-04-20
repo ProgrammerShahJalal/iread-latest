@@ -7,11 +7,9 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
 
-
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -21,14 +19,40 @@ const Create: React.FC<Props> = (props: Props) => {
 
     async function handle_submit(e) {
         e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(store(form_data) as any);
-        if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
-            e.target.reset();
-            // init_nominee();
+        try {
+            let form_data = new FormData(e.target);
+            const response = await dispatch(store(form_data) as any);
+
+            if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+                e.target.reset();
+                (window as any).toaster(
+                    'Event session created successfully!',
+                    'success',
+                );
+            }
+        } catch (error: any) {
+            console.log('error', error);
+            // Handle the new error response format
+            if (error.response?.data?.status) {
+                (window as any).toaster(error.response.data.status, 'warning');
+            }
+            // Handle validation array errors
+            else if (error.response?.data?.data) {
+                const errorMessages = error.response.data.data
+                    .map((err: any) => err.msg.replace(/<b>|<\/b>/g, ''))
+                    .join('<br>');
+                (window as any).toaster(errorMessages, 'warning');
+            }
+            // Fallback for other errors
+            else {
+                (window as any).toaster(
+                    error.response?.data?.message ||
+                        'An unexpected error occurred',
+                    'error',
+                );
+            }
         }
     }
-
 
     function get_value(key) {
         try {
@@ -39,7 +63,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
-
 
     return (
         <>
@@ -52,16 +75,17 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event Session Informations</h5>
+                                <h5 className="mb-4">
+                                    Event Session Informations
+                                </h5>
                                 <div className="form_auto_fit">
-
                                     <div className="form-group form-vertical">
                                         <label>Events</label>
-                                        <EventDropDown name="events"
+                                        <EventDropDown
+                                            name="events"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                console.log(data);
                                             }}
                                         />
                                     </div>
@@ -73,29 +97,23 @@ const Create: React.FC<Props> = (props: Props) => {
                                         'end',
                                         'total_time',
                                     ].map((i) => (
-                                        <div key={i} className="form-group form-vertical">
-                                           {
-                                            i === 'start' || i === 'end' ? (
+                                        <div
+                                            key={i}
+                                            className="form-group form-vertical"
+                                        >
+                                            {i === 'start' || i === 'end' ? (
+                                                <Input type="time" name={i} />
+                                            ) : i === 'total_time' ? (
                                                 <Input
-                                                type='time'
-                                                name={i}
-                                                />
-                                            ): (
-                                                i === 'total_time' ? (
-                                                    <Input 
-                                                    name={i} 
+                                                    name={i}
                                                     placeholder="Enter total time in minutes"
-                                                    />
-                                                ):
-                                                (
-                                                    <Input name={i}/>
-                                                )
-                                            )
-                                           }
+                                                />
+                                            ) : (
+                                                <Input name={i} />
+                                            )}
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
 
                             <div className="form-group form-vertical">

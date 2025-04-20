@@ -17,25 +17,33 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'events',
-        'title',
-        'topics',
-        'start',
-        'end',
-        'total_time',
+    const fields = [
+        { name: 'events', isArray: true },
+        { name: 'title', isArray: false },
+        { name: 'topics', isArray: false },
+        { name: 'start', isArray: false },
+        { name: 'end', isArray: false },
+        { name: 'total_time', isArray: false },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
-            .run(req);
+    // Validate required fields
+    for (const field of fields) {
+        if (field.isArray) {
+            await body(field.name)
+                .isArray({ min: 1 })
+                .withMessage(
+                    `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
+                )
+                .run(req);
+        } else {
+            await body(field.name)
+                .not()
+                .isEmpty()
+                .withMessage(
+                    `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
+                )
+                .run(req);
+        }
     }
     let models = Models.get();
     // Retrieve request data
@@ -47,25 +55,51 @@ async function validate(req: Request) {
         const endTime = moment(bodyData?.end, 'hh:mmA');
 
         if (!startTime.isValid() || !endTime.isValid()) {
-            throw new custom_error('Invalid time format. Use hh:mmAM/PM format.', 422, 'Invalid time format');
+            throw new custom_error(
+                'Invalid time format. Use hh:mmAM/PM format.',
+                422,
+                'Invalid time format',
+            );
         }
 
         if (startTime.isSameOrAfter(endTime)) {
-            throw new custom_error('The start time must be before the end time.', 422, 'Invalid time range');
+            throw new custom_error(
+                'The start time must be before the end time.',
+                422,
+                'Invalid time range',
+            );
         }
 
         // Calculate the duration in minutes
         const duration = moment.duration(endTime.diff(startTime)).asMinutes();
         if (duration !== parseInt(bodyData?.total_time, 10)) {
-            throw new custom_error(`The total time should be ${duration} minutes based on start and end times.`, 422, 'Invalid total time');
+            throw new custom_error(
+                `The total time should be ${duration} minutes based on start and end times.`,
+                422,
+                'Invalid total time',
+            );
         }
 
         // Check for overlapping sessions
         const overlappingSession = await models[modelName].findOne({
             where: {
                 [Op.or]: [
-                    { start: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
-                    { end: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
+                    {
+                        start: {
+                            [Op.between]: [
+                                startTime.format('HH:mm'),
+                                endTime.format('HH:mm'),
+                            ],
+                        },
+                    },
+                    {
+                        end: {
+                            [Op.between]: [
+                                startTime.format('HH:mm'),
+                                endTime.format('HH:mm'),
+                            ],
+                        },
+                    },
                     {
                         [Op.and]: [
                             { start: { [Op.lte]: startTime.format('HH:mm') } },
@@ -77,13 +111,13 @@ async function validate(req: Request) {
         });
 
         if (overlappingSession) {
-            throw new custom_error('The selected time overlaps with another session.', 422, 'Time overlap');
+            throw new custom_error(
+                'The selected time overlaps with another session.',
+                422,
+                'Time overlap',
+            );
         }
-
     }
-
-
-
 
     let result = await validationResult(req);
 
@@ -103,14 +137,12 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-   
 
     /** store data into database */
     try {
         let data = new models[modelName]();
 
         let inputs: InferCreationAttributes<typeof data> = {
-
             event_id: body.events?.[1],
             title: body.title,
             topics: body.topics,
@@ -118,7 +150,6 @@ async function store(
             end: body.end,
             total_time: body.total_time,
         };
-
 
         (await data.update(inputs)).save();
 
@@ -131,6 +162,5 @@ async function store(
         // throw error;
     }
 }
-
 
 export default store;
