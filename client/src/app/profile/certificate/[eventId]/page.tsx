@@ -3,39 +3,45 @@ import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventCertificate } from "../../../../api/eventCertificateApi";
 
 const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
+  return new Date(isoDate).toLocaleString("en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-  };
-  return date.toLocaleString("en-GB", options);
+  });
 };
-type Params = Promise<{ eventId: string }>
-type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>
- 
-export async function generateMetadata(props: {
-  params: Params
-  searchParams: SearchParams
+
+type Params = Promise<{ eventId: string }>;
+type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>;
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
 }) {
-  const params = await props.params
-  const searchParams = await props.searchParams
-  const eventId = params.eventId
-  const userId = searchParams.uid
+  const { eventId } = await params;
+  const { uid: userId } = await searchParams;
+
+  return {
+    title: `Certificate for Event ${eventId}`,
+    description: userId
+      ? `View certificate for user ${userId} and event ${eventId}`
+      : "Invalid certificate request",
+  };
 }
 
-const MyEventCertificatePage = async (props: {
-    params: Params
-    searchParams: SearchParams
+const MyEventCertificatePage = async ({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
 }) => {
-    const params = await props.params
-    const searchParams = await props.searchParams
-    const eventId = params.eventId
-    const userId = searchParams.uid
-
+  const [{ eventId }, { uid: userId }] = await Promise.all([params, searchParams]);
 
   if (!userId || !eventId) {
     return (
@@ -52,9 +58,9 @@ const MyEventCertificatePage = async (props: {
       <div className="flex">
         <div className="flex-1 p-6 text-center">
           <h1 className="text-3xl font-bold mb-6">My Certificate</h1>
-           {myCertificate ? (
+          {myCertificate ? (
             <div className="space-y-4">
-              {myCertificate.image && (
+              {myCertificate.image ? (
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${myCertificate.image}`}
                   alt="Certificate"
@@ -62,6 +68,8 @@ const MyEventCertificatePage = async (props: {
                   height={400}
                   className="rounded shadow mx-auto"
                 />
+              ) : (
+                <p>Certificate image not available.</p>
               )}
             </div>
           ) : (
