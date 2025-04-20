@@ -96,6 +96,23 @@ async function store(
         await (fastify_instance as any).upload(body['image'], image_path);
     }
 
+    const isExists =
+        await models[modelName].findOne({
+            where: {
+                event_id: body.events?.[0],
+                user_id: body.users?.[0],
+            },
+        });
+
+    if (isExists) {
+        return response(422, 'This user is already certified for this event', {
+            data: [{
+                path: 'users',
+                msg: 'This user is already certified for this event'
+            }]
+        });
+    }
+
 
     /** store data into database */
     try {
