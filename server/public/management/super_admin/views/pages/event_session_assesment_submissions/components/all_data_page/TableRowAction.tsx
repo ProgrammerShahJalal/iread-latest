@@ -28,7 +28,7 @@ const TableRowAction: React.FC<Props> = ({ item }: Props) => {
                     </li>
                     <li>
                         <Link to={`/${setup.route_prefix}/edit/${item.id}`}>
-                        Assign Marks
+                            Assign Marks
                         </Link>
                     </li>
                     <li>

@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Login successful:", data);
+      // console.log("Login successful:", data);
 
       // Store user info in localStorage
       const {

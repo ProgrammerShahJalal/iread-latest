@@ -1,9 +1,10 @@
 import React from 'react';
+
 export interface Props {
     label?: string;
     name: string;
     value?: string | number;
-    values: { value: string; text: string }[];
+    values: { value: string; text?: string; label?: string }[];
 }
 
 const Select: React.FC<Props> = ({ label, name, values, value }: Props) => {
@@ -14,7 +15,7 @@ const Select: React.FC<Props> = ({ label, name, values, value }: Props) => {
                 <select name={name} id={name} defaultValue={value}>
                     {values.map((i) => (
                         <option value={i.value} key={i.value}>
-                            {i.text ? i.text : i.value}
+                            {i.text || i.label || i.value}
                         </option>
                     ))}
                 </select>

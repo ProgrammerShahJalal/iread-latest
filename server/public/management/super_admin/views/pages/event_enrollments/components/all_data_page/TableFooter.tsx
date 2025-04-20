@@ -30,9 +30,9 @@ const Footer: React.FC<Props> = (props: Props) => {
                     <li>
                         <ExportSelected />
                     </li>
-                    <li>
+                    {/* <li>
                         <AllDeactivatedData />
-                    </li>
+                    </li> */}
                     {/* <li>
                         <a href="#">
                             <span className="material-symbols-outlined fill">

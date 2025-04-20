@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,16 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+
+            // Handle nested blog object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -35,9 +45,9 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    let  formateDate = (date: string) => {
+    let formateDate = (date: string) => {
         return moment(date).format('Do MMM YY');
-        }
+    }
 
     return (
         <>
@@ -47,34 +57,29 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'event_id',
-                                        'user_id',
-                                        'scores',
-                                        'grade',
-                                        'date',
-                                        'is_submitted',
-                                        'status',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
-                                            <td>:</td>
-                                            {
-                                                i === 'date' ? (
-                                                    <td>{formateDate(get_value(i))}</td>
-                                                ) : (
-                                                    i === 'is_submitted' ? (
-                                                        <td>{get_value(i) === 1 ? 'Yes' : 'No'}</td>
-                                                    ): (
-                                                        <td>{get_value(i)}</td>
-                                                    )
-                                                )
-                                            }
-                                        </tr>
-                                    ))}
+                                        { key: 'event_id', label: 'Event Title' },
+                                        { key: 'user_id', label: 'User Name' },
+                                        { key: 'scores' },
+                                        { key: 'grade' },
+                                        { key: 'date', formatter: formateDate },
+                                        { key: 'is_submitted', formatter: (val) => val === 1 ? 'Yes' : 'No' },
+                                        { key: 'status' },
+                                    ].map(({ key, label, formatter }) => {
+                                        const value = formatter ? formatter(get_value(key)) : get_value(key);
+                                        const displayKey = label || key.replaceAll('_', ' ');
+
+                                        return (
+                                            <tr key={key}>
+                                                <td>{displayKey}</td>
+                                                <td>:</td>
+                                                <td>{value}</td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>

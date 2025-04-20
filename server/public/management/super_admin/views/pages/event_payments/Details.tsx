@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,16 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+
+            // Handle nested event object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -35,7 +45,7 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    
+
     let formateDate = (date: string) => {
         return moment(date).format('Do MMM YY');
     };
@@ -48,38 +58,27 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
-                            
+
                             <table className="table quick_modal_table table-hover">
                                 <tbody>
                                     {[
-                                        'event_id',
-                                        'user_id',
-                                        'event_enrollment_id',
-                                        'date',
-                                        'amount',
-                                        'trx_id',
-                                        'media',
-                                        'is_refunded',
-                                        'status',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
+                                        { key: 'event_id', label: 'Event Title' },
+                                        { key: 'user_id', label: 'User Name' },
+                                        { key: 'date', formatter: formateDate },
+                                        { key: 'amount', formatter: (val) => `$${val}` },
+                                        { key: 'trx_id', label: 'Transaction ID' },
+                                        { key: 'media' },
+                                        {
+                                            key: 'is_refunded',
+                                            label: 'Refund Status',
+                                            formatter: (val) => val ? 'Yes' : 'No'
+                                        },
+                                        { key: 'status' },
+                                    ].map(({ key, label, formatter }) => (
+                                        <tr key={key}>
+                                            <td>{label || key.replaceAll('_', ' ')}</td>
                                             <td>:</td>
-                                                   {
-                                                    i === 'amount' ? (
-                                                        <td>${get_value(i)}</td>
-                                                    ) : (
-                                                        i === 'is_refunded' ? (
-                                                            <td>{get_value(i) === true ? 'Yes' : 'No'}</td>
-                                                        ) : (
-                                                            i === 'date' ? (
-                                                                <td>{formateDate(get_value(i))}</td>
-                                                            ) : (
-                                                                <td>{get_value(i)}</td>
-                                                            )
-                                                        )
-                                                    )
-                                                   }
+                                            <td>{formatter ? formatter(get_value(key)) : get_value(key)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

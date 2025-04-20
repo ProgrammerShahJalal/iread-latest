@@ -39,12 +39,6 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -81,8 +75,8 @@ async function update(
                 event_session_assesment_id: body.event_session_assesment_id || data.event_session_assesment_id,
                 submitted_content: body.submitted_content || data.submitted_content,
                 mark: body.mark || data.mark,
-                obtained_mark: body.obtained_mark || data.obtained_mark,
-                grade: body.grade || data.grade,
+                obtained_mark: body.obtained_mark || null,
+                grade: body.grade || 'Pending',
             };
 
             data.update(inputs);

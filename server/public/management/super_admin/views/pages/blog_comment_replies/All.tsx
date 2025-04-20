@@ -43,7 +43,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-  
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -64,31 +64,25 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`id`}
                                             sort={true}
                                         />
-                                        <TableHeading
-                                            label={`User ID`}
+                                        {/* <TableHeading
+                                            label={`Replier`}
                                             col_name={`user_id`}
                                             sort={true}
-                                        />
+                                        /> */}
                                         <TableHeading
-                                            label={`Blog ID`}
+                                            label={`Blog Title`}
                                             col_name={`blog_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Parent Comment ID`}
+                                            label={`Parent Comment`}
                                             col_name={`parent_comment_id`}
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Comment`}
+                                            label={`Replay`}
                                             col_name={`comment`}
                                             sort={true}
-                                        />
-                                    
-                                        <TableHeading
-                                            label={`Status`}
-                                            col_name={`status`}
-                                            sort={false}
                                         />
                                     </tr>
                                 </thead>
@@ -108,25 +102,32 @@ const All: React.FC<Props> = (props: Props) => {
                                                     <td>
                                                         <SelectItem item={i} />
                                                     </td>
-                                                    <td>{i.id}</td>
-                                                    <td>{i.user_id}</td>
-                                                    <td>{i.blog_id}</td>
-                                                    <td>{i.parent_comment_id}</td>
+                                                    <td className="text-nowrap">
+                                                        {i.id}
+                                                    </td>
 
-                                                    <td>
+                                                    <td className="text-truncate" style={{ maxWidth: '200px' }} title={i.blog?.title}>
+                                                        {i.blog?.title?.slice(0, 40)}{i.blog?.title?.length > 40 && '...'}
+                                                    </td>
+
+                                                    <td className="text-truncate" style={{ maxWidth: '150px' }} title={i.parent_comment?.comment}>
+                                                        {i.parent_comment?.comment?.slice(0, 30)}{i.parent_comment?.comment?.length > 30 && '...'}
+                                                    </td>
+
+                                                    <td className="text-truncate" style={{ maxWidth: '150px' }} title={i.comment}>
                                                         <span
                                                             className="quick_view_trigger"
                                                             onClick={() =>
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.comment} 
+                                                            {i.comment?.slice(0, 30)}{i.comment?.length > 30 && '...'}
                                                         </span>
                                                     </td>
-                                                    
-                                                    <td>
+
+                                                    {/* <td>
                                                         {i.status}
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
                                             );
                                         },

@@ -54,6 +54,20 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+
+        // Parse fields that might be stringified
+        const parseField = (field: any) => {
+            try {
+                return typeof field === 'string' ? JSON.parse(field) : field;
+            } catch {
+                return field;
+            }
+        };
+    
+        body.events = parseField(body.events);
+        body.users = parseField(body.users);
+
+
     let user_model = new models[modelName]();
 
 
@@ -62,14 +76,12 @@ async function update(
     try {
         let data = await models[modelName].findByPk(body.id);
 
-        // if status equal to 'accepted' then the is_paid field will be set to true that means the payment is done ==> is_paid = 1;
-        
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
-                user_id: body.users?.[1] || data.user_id,
+                event_id: body.events?.[0] || data.event_id,
+                user_id: body.users?.[0] || data.user_id,
                 date: body.date || data.date,
-                is_paid: body.status === 'accepted' ? '1' : data.is_paid,
+                is_paid: body.is_paid || data.is_paid,
                 status: body.status || data.status,
             };
             data.update(inputs);

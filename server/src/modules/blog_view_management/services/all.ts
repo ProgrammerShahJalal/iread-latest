@@ -66,6 +66,10 @@ async function all(
     let select_fields: string[] = [];
     let exclude_fields: string[] = ['password'];
 
+    // Add date range parameters
+    let start_date = query_param.start_date;
+    let end_date = query_param.end_date;
+
     if (query_param.select_fields) {
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
@@ -83,14 +87,50 @@ async function all(
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
+    if (role && role != 'all') {
         query.where = {
             ...query.where,
             role: role,
         }
     }
 
+    // Add date range filtering if both start and end dates are provided
+    if (start_date && end_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.between]: [start_date, end_date]
+            }
+        };
+    } 
+    // Optional: handle cases where only one date is provided
+    else if (start_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.gte]: start_date
+            }
+        };
+    } 
+    else if (end_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.lte]: end_date
+            }
+        };
+    }
+
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
+        paginate = 200;
         query.where = {
             ...query.where,
             [Op.or]: [

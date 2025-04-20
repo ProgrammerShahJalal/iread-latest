@@ -47,6 +47,13 @@ const Edit: React.FC<Props> = (props: Props) => {
         return '';
     }
 
+    // Status options for dropdown
+    const statusOptions = [
+        { value: 'active', label: 'Active' },
+        { value: 'deactive', label: 'Deactive' },
+    ];
+
+
     return (
         <>
             <div className="page_content">
@@ -74,7 +81,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             'title',
                                             'image',
                                         ].map((i) => (
-                                            <div className="form-group form-vertical">
+                                            <div key={i} className="form-group form-vertical">
                                                 {
                                                     i === 'title' ? <Input
                                                         name={i}
@@ -93,7 +100,14 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                             </div>
                                         ))}
-
+                                        <div className="form-group form-vertical">
+                                            <Select
+                                                name="status"
+                                                label="Status"
+                                                values={statusOptions}
+                                                value={get_value('status')}
+                                            />
+                                        </div>
 
                                     </div>
                                 </div>

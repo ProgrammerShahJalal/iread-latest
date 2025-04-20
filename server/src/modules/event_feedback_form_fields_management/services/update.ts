@@ -55,13 +55,23 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
+                event_id: body.events?.[0] || data.event_id,
                 fields: body.fields || data.fields,
             };
             data.update(inputs);

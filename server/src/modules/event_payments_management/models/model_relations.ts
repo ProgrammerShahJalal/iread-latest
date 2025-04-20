@@ -7,4 +7,16 @@ export function init() {
         foreignKey: "event_id",
         as: "event_payments",
     })
+
+    models.EventPaymentsModel.belongsTo(models.UserModel, {
+        foreignKey: "user_id",
+        targetKey: "id",
+        as: "user",
+    });
+
+    models.EventPaymentsModel.belongsTo(models.EventModel, {
+        foreignKey: "event_id",
+        targetKey: "id",
+        as: "event",
+    });
 }

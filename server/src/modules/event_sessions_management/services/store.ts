@@ -19,71 +19,37 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'events',
-        'title',
-        'topics',
-        'start',
-        'end',
-        'total_time',
+        { name: 'events', isArray: true },
+        { name: 'title', isArray: false },
+        { name: 'topics', isArray: false },
+        { name: 'start', isArray: false },
+        { name: 'end', isArray: false },
+        { name: 'total_time', isArray: false },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
+    //validate array fields
+    for (const field of fields.filter(f => f.isArray)) {
+        await body(field.name)
+            .custom(value => {
+                try {
+                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
-    let models = Models.get();
-    // Retrieve request data
-    const bodyData = req.body as anyObject;
 
-    // Validate start and end times
-    if (bodyData?.start && bodyData?.end) {
-        const startTime = moment(bodyData?.start, 'hh:mmA');
-        const endTime = moment(bodyData?.end, 'hh:mmA');
-
-        if (!startTime.isValid() || !endTime.isValid()) {
-            throw new custom_error('Invalid time format. Use hh:mmAM/PM format.', 422, 'Invalid time format');
-        }
-
-        if (startTime.isSameOrAfter(endTime)) {
-            throw new custom_error('The start time must be before the end time.', 422, 'Invalid time range');
-        }
-
-        // Calculate the duration in minutes
-        const duration = moment.duration(endTime.diff(startTime)).asMinutes();
-        if (duration !== parseInt(bodyData?.total_time, 10)) {
-            throw new custom_error(`The total time should be ${duration} minutes based on start and end times.`, 422, 'Invalid total time');
-        }
-
-        // Check for overlapping sessions
-        const overlappingSession = await models[modelName].findOne({
-            where: {
-                [Op.or]: [
-                    { start: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
-                    { end: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
-                    {
-                        [Op.and]: [
-                            { start: { [Op.lte]: startTime.format('HH:mm') } },
-                            { end: { [Op.gte]: endTime.format('HH:mm') } },
-                        ],
-                    },
-                ],
-            },
-        });
-
-        if (overlappingSession) {
-            throw new custom_error('The selected time overlaps with another session.', 422, 'Time overlap');
-        }
-
+    // Validate other fields
+    for (const field of fields.filter(f => !f.isArray)) {
+        await body(field.name)
+            .not()
+            .isEmpty()
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .run(req);
     }
-
-
-
 
     let result = await validationResult(req);
 
@@ -103,15 +69,87 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-   
 
+
+
+    // Validate start and end times
+    if (body?.start && body?.end) {
+        const startTime = moment(body?.start, 'hh:mmA');
+        const endTime = moment(body?.end, 'hh:mmA');
+
+        if (!startTime.isValid() || !endTime.isValid()) {
+            return response(422, 'Invalid time format. Use hh:mmAM/PM format.', {
+                data: [{
+                    path: 'start/end',
+                    msg: 'Invalid time format. Use hh:mmAM/PM format.'
+                }]
+            });
+        }
+
+        if (startTime.isSameOrAfter(endTime)) {
+            return response(422, 'Invalid time range! The start time must be before the end time.', {
+                data: [{
+                    path: 'start',
+                    msg: 'The start time must be before the end time.'
+                }]
+            });
+        }
+
+        // Calculate the duration in minutes
+        const duration = moment.duration(endTime.diff(startTime)).asMinutes();
+        if (duration !== parseInt(body?.total_time, 10)) {
+            return response(422, `The total time should be ${duration} minutes based on start and end times.`, {
+                data: [{
+                    path: 'total_time',
+                    msg: `The total time should be ${duration} minutes based on start and end times.`
+                }]
+            });
+        }
+
+        // Check for overlapping sessions
+        const overlappingSession = await models[modelName].findOne({
+            where: {
+                [Op.or]: [
+                    { start: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
+                    { end: { [Op.between]: [startTime.format('HH:mm'), endTime.format('HH:mm')] } },
+                    {
+                        [Op.and]: [
+                            { start: { [Op.lte]: startTime.format('HH:mm') } },
+                            { end: { [Op.gte]: endTime.format('HH:mm') } },
+                        ],
+                    },
+                ],
+            },
+        });
+
+        if (overlappingSession) {
+            return response(422, 'Time overlap! The selected time overlaps with another session.', {
+                data: [{
+                    path: 'start/end',
+                    msg: 'The selected time overlaps with another session.'
+                }]
+            });
+        }
+
+    }
+
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
     /** store data into database */
     try {
         let data = new models[modelName]();
 
         let inputs: InferCreationAttributes<typeof data> = {
 
-            event_id: body.events?.[1],
+            event_id: body.event?.[0],
             title: body.title,
             topics: body.topics,
             start: body.start,

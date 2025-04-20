@@ -19,9 +19,7 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = [
-        'id',
-    ];
+    let fields = ['id'];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -39,7 +37,6 @@ async function validate(req: Request) {
     return result;
 }
 
-
 async function update(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
@@ -55,23 +52,27 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let image_path = 'avatar.png';
-         if (body['image']?.ext) {
-             image_path =
-                 'uploads/event_categories/' +
-                 moment().format('YYYYMMDDHHmmss') +
-                 body['image'].name;
-             await (fastify_instance as any).upload(body['image'], image_path);
-         }
-    
+
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
-        let inputs: InferCreationAttributes<typeof user_model> = {
-            title: body.title,
-            image: image_path || data?.image,
-        };
         if (data) {
+
+            let image_path = data?.image || 'avatar.png';
+            if (body['image']?.ext) {
+                image_path =
+                    'uploads/blog_categories/' +
+                    moment().format('YYYYMMDDHHmmss') +
+                    body['image'].name;
+                await (fastify_instance as any).upload(body['image'], image_path);
+            }
+
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                title: body.title || data?.title,
+                image: image_path || data?.image,
+                status: body.status || data?.status,
+            };
+
             data.update(inputs);
             await data.save();
             return response(201, 'data updated', { data });

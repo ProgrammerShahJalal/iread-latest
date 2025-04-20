@@ -53,27 +53,41 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+    body.users = parseField(body.users);
+
+
     let user_model = new models[modelName]();
 
-    
+
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
 
             let image_path = data?.image || 'avatar.png';
-        if (body['image']?.ext) {
-            image_path =
-                'uploads/event_certified_users/' +
-                moment().format('YYYYMMDDHHmmss') +
-                body['image'].name;
-            await (fastify_instance as any).upload(body['image'], image_path);
-        }
+            if (body['image']?.ext) {
+                image_path =
+                    'uploads/event_certified_users/' +
+                    moment().format('YYYYMMDDHHmmss') +
+                    body['image'].name;
+                await (fastify_instance as any).upload(body['image'], image_path);
+            }
 
-        
+
             let inputs: InferCreationAttributes<typeof user_model> = {
-                user_id: body.users?.[1] || data?.user_id,
-                event_id: body.events?.[1] || data?.event_id,
+                user_id: body.users?.[0] || data?.user_id,
+                event_id: body.events?.[0] || data?.event_id,
                 scores: body.scores || data?.scores,
                 grade: body.grade || data?.grade,
                 date: body.date || data?.date,
@@ -81,7 +95,7 @@ async function update(
                 image: image_path || data?.image,
             };
             (await data.update(inputs)).save();
-            
+
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

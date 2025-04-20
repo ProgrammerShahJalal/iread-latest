@@ -14,11 +14,19 @@ const TopHeader: React.FC<Props> = (props: Props) => {
                     <div className="logo-wrapper">
                         <a href="#/">
                             <img
-                                src="https://techparkit.org/frontend/assets/images/tech_park_it_logo/logo_big.png"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                            }}
+                                src="https://i.ibb.co.com/23gQkKMV/ireadwhite.png"
                                 className="image-dark"
                             />
                             <img
-                               src="https://techparkit.org/frontend/assets/images/tech_park_it_logo/logo_big.png"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                            }}
+                               src="https://i.ibb.co.com/23gQkKMV/ireadwhite.png"
                                 className="image-light"
                             />
                         </a>

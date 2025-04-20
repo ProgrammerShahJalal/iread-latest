@@ -18,7 +18,7 @@ const ExportSelected: React.FC<Props> = (props: Props) => {
         const columns = ['id', 'name', 'email'];
         const rows: string[][] = [];
 
-        state?.selected.forEach((data: anyObject) => {
+        state.selected.forEach((data: anyObject) => {
             const row: Array<string> = [];
             columns.forEach((key: string) => {
                 row.push(data[key]);
@@ -32,7 +32,7 @@ const ExportSelected: React.FC<Props> = (props: Props) => {
             .exportFile();
     }
 
-    if (state?.selected.length <= 0) {
+    if (state.selected.length <= 0) {
         return <></>;
     }
 
@@ -40,7 +40,7 @@ const ExportSelected: React.FC<Props> = (props: Props) => {
         <>
             <a href="#" onClick={(e) => handle_export(e)}>
                 <span className="material-symbols-outlined fill">download</span>
-                <div className="text">Export ({state?.selected.length})</div>
+                <div className="text">Export ({state.selected.length})</div>
             </a>
         </>
     );

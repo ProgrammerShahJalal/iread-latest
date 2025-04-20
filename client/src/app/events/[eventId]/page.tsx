@@ -19,17 +19,17 @@ const formatDate = (isoDate: string): string => {
 };
 
 const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
+  const localDate = new Date(isoDate);
+
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    // second: "2-digit",
-    hour12: true, // Use 12-hour format (set to false for 24-hour format)
+    hour12: true, // Set to false if you prefer 24-hour format\
   };
-  return date.toLocaleString("en-GB", options);
+  return localDate.toLocaleString("en-GB", options);
 };
 
 const EventDetailsPage = async ({
@@ -62,9 +62,6 @@ const EventDetailsPage = async ({
         </div>
       );
     }
-
-
-
 
     return (
       <section>
@@ -180,7 +177,10 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                <EventEnrollProcess eventId={event.event_id} eventPrice={event.discount_price}/>
+                <EventEnrollProcess
+                  eventId={event.event_id}
+                  eventPrice={event.discount_price}
+                />
               </div>
             </div>
           </div>

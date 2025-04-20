@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,20 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+
+            // Handle nested event object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+            // Handle nested session object
+            if (key === 'event_session_id' && state.item.session) {
+                return state.item.session.title;
+            }
+            // Handle nested session object
+            if (key === 'event_session_assesment_id' && state.item.assesment) {
+                return state.item.assesment.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -35,9 +49,9 @@ const Details: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-       let formatTime = (time: string) => {
-            return moment(time, 'HH:mm').format('h:mmA');
-        };
+    let formatTime = (time: string) => {
+        return moment(time, 'HH:mm').format('h:mmA');
+    };
 
 
     return (
@@ -48,37 +62,47 @@ const Details: React.FC<Props> = (props: Props) => {
 
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
+
                             
-                            <table className="table quick_modal_table table-hover">
-                                <tbody>
+                                
                                     {[
-                                        'event_id',
-                                        'event_session_id',
-                                        'title',
-                                        'mark',
-                                        'pass_mark',
-                                        'start',
-                                        'end',
-                                        'status',
-                                    ].map((i) => (
-                                        <tr>
-                                            <td>{i.replaceAll('_', ' ')}</td>
-                                            <td>:</td>
-                                                   {
-                                                    i === 'total_time' ? (
-                                                        <td>{get_value(i)} Minutes</td>
-                                                    ) : (
-                                                        i === 'start' || i === 'end' ? (
-                                                            <td>{formatTime(get_value(i))}</td>
-                                                        ) : (
-                                                            <td>{get_value(i)}</td>
-                                                        )
-                                                    )
-                                                   }
-                                        </tr>
+                                        { key: 'submitted_content' },
+                                        { key: 'event_id', label: 'Event Title' },
+                                        { key: 'event_session_id', label: 'Session Title' },
+                                        { key: 'event_session_assesment_id', label: 'Assessment Title' },
+                                        { key: 'mark' },
+                                        {
+                                            key: 'obtained_mark',
+                                            formatter: (value) => value || 'N/A'
+                                        },
+                                        {
+                                            key: 'grade',
+                                            formatter: (value) => value || 'N/A'
+                                        },
+                                    ].map(({ key, label, formatter }) => (
+
+                                        key === 'submitted_content' ? (
+                                            <div
+                                            key={key}
+                                                className="post-content form-group form-vertical"
+                                                dangerouslySetInnerHTML={{ __html: get_value(key) }}
+                                            />
+                                        ) : (
+                                            <table key={key} className="table quick_modal_table table-hover">
+                                                <tbody>
+                                                <tr key={key}>
+                                                <td>{label || key.replaceAll('_', ' ')}</td>
+                                                <td>:</td>
+                                                <td>{formatter ? formatter(get_value(key)) : get_value(key)}</td>
+                                            </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                        )
+
                                     ))}
-                                </tbody>
-                            </table>
+                                
+                            
                         </div>
                     )}
 
@@ -92,7 +116,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                     <span className="material-symbols-outlined fill">
                                         edit_square
                                     </span>
-                                    <div className="text">Edit</div>
+                                    <div className="text">Assign Marks</div>
                                 </Link>
                             </li>
                         )}

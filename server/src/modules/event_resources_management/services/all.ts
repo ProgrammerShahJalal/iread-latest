@@ -11,6 +11,7 @@ import {
     Request,
 } from '../../../common_types/object';
 import { modelName } from '../models/model';
+import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -53,7 +54,7 @@ async function all(
         return response(422, 'validation error', validate_result.array());
     }
     /** initializations */
-    let models = await db();
+    let models = await Models.get();
     let query_param = req.query as any;
 
     const { Op } = require('sequelize');
@@ -65,12 +66,16 @@ async function all(
     let paginate = parseInt((req.query as any).paginate) || 10;
     let select_fields: string[] = [];
     let exclude_fields: string[] = ['password'];
+    
+    // Add date range parameters
+    let start_date = query_param.start_date;
+    let end_date = query_param.end_date;
 
     if (query_param.select_fields) {
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'status'];
+        select_fields = ['id', 'event_id', 'title', 'url', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -78,19 +83,62 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [models.Project],
+        include: [
+            {
+                model: models.EventModel,
+                as: 'event',
+                attributes: ['title'],
+                required: false,
+            },
+        ],
     };
 
     query.attributes = select_fields;
 
-    if(role && role != 'all'){
+    if (role && role != 'all') {
         query.where = {
             ...query.where,
             role: role,
         }
     }
 
+    // Add date range filtering if both start and end dates are provided
+    if (start_date && end_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.between]: [start_date, end_date]
+            }
+        };
+    } 
+    // Optional: handle cases where only one date is provided
+    else if (start_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.gte]: start_date
+            }
+        };
+    } 
+    else if (end_date) {
+        query_param.page = 1;
+        paginate = 200;
+        query.where = {
+            ...query.where,
+            created_at: {
+                [Op.lte]: end_date
+            }
+        };
+    }
+
     if (search_key) {
+        // When searching, we should reset to the first page
+        query_param.page = 1;
+        paginate = 200;
         query.where = {
             ...query.where,
             [Op.or]: [
