@@ -116,7 +116,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                     <span className="material-symbols-outlined fill">
                                         edit_square
                                     </span>
-                                    <div className="text">Asign Marks</div>
+                                    <div className="text">Assign Marks</div>
                                 </Link>
                             </li>
                         )}
