@@ -22,7 +22,7 @@ async function findByEventId(
     let params = req.params as any;
 
     try {
-        let data = await models[modelName].findOne({
+        let data = await models[modelName].findAll({
             where: {
                 event_id: params.eventId,
             },
