@@ -104,18 +104,32 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     />
                                                 ) : (
                                                     i === 'media' ? (
-                                                        <><label>Media</label>
-                                                            <select>
-                                                                <option value="Stripe">Stripe</option>
-                                                                <option value="Bank">Bank</option>
-                                                            </select></>
+                                                        <>
+                                                            <div className="form-group form-vertical">
+                                                                <label>Media</label>
+                                                                <select
+                                                                    name="media"
+                                                                    className="form-control"
+                                                                    onChange={(e) => console.log('media Changed', e.target.value)}
+                                                                >
+                                                                    <option value="Manual">Manual</option>
+                                                                    <option value="Stripe">Stripe</option>
+                                                                </select>
+                                                            </div></>
                                                     ) : (
                                                         i === 'is_refunded' ? (
-                                                            <><label>Is Refunded</label>
-                                                                <select>
-                                                                    <option value="false">False</option>
-                                                                    <option value="true">True</option>
-                                                                </select>
+                                                            <>
+                                                                <div className="form-group form-vertical">
+                                                                    <label>Is Refunded</label>
+                                                                    <select
+                                                                        name="is_refunded"
+                                                                        className="form-control"
+                                                                        onChange={(e) => console.log('is_refunded Changed', e.target.value)}
+                                                                    >
+                                                                        <option value="false">False</option>
+                                                                        <option value="true">True</option>
+                                                                    </select>
+                                                                </div>
                                                             </>
                                                         ) : (
                                                             <Input name={i} />

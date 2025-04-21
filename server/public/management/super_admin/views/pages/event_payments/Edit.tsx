@@ -142,7 +142,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                             onChange={(e) => console.log('Media Changed', e.target.value)}
                                                             >
                                                                 <option value="Stripe">Stripe</option>
-                                                                <option value="Bank">Bank</option>
+                                                                <option value="Manual">Manual</option>
                                                             </select></>
                                                     ) : (
                                                         i === 'is_refunded' ? (

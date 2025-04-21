@@ -26,7 +26,7 @@ export const modelName = 'EventPaymentRefundsModel';
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'success' | 'failed';
-type media = 'Stripe' | 'Bank';
+type media = 'Stripe' | 'Manual';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
@@ -84,7 +84,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             media: {
-                type: DataTypes.ENUM('Stripe', 'Bank'),
+                type: DataTypes.ENUM('Stripe', 'Manual'),
                 defaultValue: 'Stripe',
             },
 

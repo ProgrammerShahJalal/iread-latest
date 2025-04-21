@@ -15,7 +15,8 @@ import Select from 'react-select';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
-import SessionDropDown from "../event_sessions/components/dropdown/DropDown";
+import SessionDropDown from "../event_sessions/components/dropdownMatch/DropDown";
+import axios from 'axios';
 
 export interface Props { }
 
@@ -26,6 +27,12 @@ const Create: React.FC<Props> = (props: Props) => {
     );
 
     const [data, setData] = useState<anyObject>({});
+    const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+        const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+        const [event, setEvent] = useState<Event | null>(null);
+        const [sessions, setSessions] = useState<any[]>([]);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState<string | null>(null);
 
 
     async function handle_submit(e) {
@@ -59,6 +66,35 @@ const Create: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
+
+        // Fetch sessions when event is selected
+        useEffect(() => {
+            if (!selectedEventId) {
+                setSessions([]);
+                setSelectedSessionId(null);
+                return;
+            }
+    
+            const fetchEventAndSessions = async () => {
+                setLoading(true);
+                setError(null);
+                try {
+                    const [eventRes, sessionsRes] = await Promise.all([
+                        axios.get(`/api/v1/events/${selectedEventId}`),
+                        axios.get(`/api/v1/event-sessions/event/${selectedEventId}`),
+                    ]);
+    
+                    setEvent(eventRes.data.data);
+                    setSessions(sessionsRes.data.data);
+                } catch {
+                    setError('Failed to fetch event data.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+    
+            fetchEventAndSessions();
+        }, [selectedEventId]);
 
 
     function get_value(key) {
@@ -124,16 +160,22 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <EventDropDown name="events"
                                                     multiple={false}
                                                     get_selected_data={(data) => {
-                                                        console.log(data)
+                                                        setSelectedEventId(Number(data.ids))
                                                     }}
                                                 />
                                             </div>
                                             <div className="form-group form-vertical">
                                                 <label>Sessions</label>
-                                                <SessionDropDown name="sessions"
+                                                <SessionDropDown
+                                                    name="sessions"
                                                     multiple={false}
+                                                    disabled={!selectedEventId}
+                                                    options={sessions.map(session => ({
+                                                        id: session.id,
+                                                        title: session.title,
+                                                    }))}
                                                     get_selected_data={(data) => {
-                                                        console.log(data)
+                                                        setSelectedSessionId(Number(data.ids));
                                                     }}
                                                 />
                                             </div>

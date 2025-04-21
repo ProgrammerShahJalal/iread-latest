@@ -17,27 +17,43 @@ import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
 /** validation rules */
+
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'event_id',
-        'user_id',
-        'event_enrollment_id',
-        'payment_id',
-        'trx_id',
+        { name: 'event_id', isArray: true },
+        { name: 'user_id', isArray: true },
+        { name: 'event_enrollment_id', isArray: true },
+        { name: 'event_payment_id', isArray: true },
+        { name: 'trx_id', isArray: false },
+        { name: 'date', isArray: false },
+        { name: 'amount', isArray: false },
+        { name: 'media', isArray: false },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
+    //validate array fields
+    for (const field of fields.filter(f => f.isArray)) {
+        await body(field.name)
+            .custom(value => {
+                try {
+                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
 
+    // Validate other fields
+    for (const field of fields.filter(f => !f.isArray)) {
+        await body(field.name)
+            .not()
+            .isEmpty()
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .run(req);
+    }
 
     let result = await validationResult(req);
 
@@ -59,8 +75,8 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-     // Check if refund request already exists
-     let existingRefund = await models[modelName].findOne({
+    // Check if refund request already exists
+    let existingRefund = await models[modelName].findOne({
         where: {
             user_id: body.user_id,
             event_id: body.event_id,
@@ -73,13 +89,26 @@ async function store(
     if (existingRefund) {
         return response(409, 'Refund request already exists.', { existingRefund });
     }
-    
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.event_id = parseField(body.event_id);
+    body.event_enrollment_id = parseField(body.event_enrollment_id);
+    body.user_id = parseField(body.user_id);
+    body.event_payment_id = parseField(body.event_payment_id);
+
     let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id: body.event_id?.[1] || body.event_id,
-        user_id: body.user_id?.[1] || body.user_id,
-        event_enrollment_id: body.event_enrollment_id?.[1] || body.event_enrollment_id,
-        event_payment_id: body.payment_id?.[1] || body.payment_id,
+
+        event_id: body.event_id?.[0] || body.event_id,
+        user_id: body.user_id?.[0] || body.user_id,
+        event_enrollment_id: body.event_enrollment_id?.[0] || body.event_enrollment_id,
+        event_payment_id: body.payment_id?.[0] || body.payment_id,
         date: body.date || moment().toISOString(),
         amount: body.amount,
         trx_id: body.trx_id,
