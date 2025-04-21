@@ -60,7 +60,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                     <div className="form-group form-vertical">
                                         <label>Events</label>
-                                        <EventDropDown name="events"
+                                        <EventDropDown name="event_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
@@ -70,7 +70,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                     <div className="form-group form-vertical">
                                         <label>Users</label>
-                                        <UserDropDown name="users"
+                                        <UserDropDown name="user_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)

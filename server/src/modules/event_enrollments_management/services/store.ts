@@ -20,8 +20,8 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'events', isArray: true },
-        { name: 'users', isArray: true },
+        { name: 'event_id', isArray: true || false },
+        { name: 'user_id', isArray: true || false },
         { name: 'date', isArray: false },
     ];
 
@@ -77,14 +77,14 @@ async function store(
         }
     };
 
-    body.events = parseField(body.events);
-    body.users = parseField(body.users);
+    body.event_id = parseField(body.event_id);
+    body.user_id = parseField(body.user_id);
 
     let data = new models[modelName]();
 
     let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.event_id || body.events?.[0],
-        user_id: body.user_id || body.users?.[0],
+        event_id: body.event_id || body.event_id?.[0],
+        user_id: body.user_id || body.user_id?.[0],
         date: body.date,
         is_paid: body.is_paid || '0',
         status: body.status,
@@ -94,8 +94,8 @@ async function store(
         /** Check if user is already enrolled in the event */
         let existingEnrollment = await models[modelName].findOne({
             where: {
-                event_id: body.event_id || body.events?.[0],
-                user_id: body.user_id || body.users?.[0],
+                event_id: body.event_id || body.event_id?.[0],
+                user_id: body.user_id || body.user_id?.[0],
             },
         });
 

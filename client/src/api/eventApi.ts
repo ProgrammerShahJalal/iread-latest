@@ -3,7 +3,7 @@ import "server-only";
 import { query } from "../lib/db";
 
 export async function getEvents() {
-  let event_query = `
+    let event_query = `
         SELECT 
             e.id AS event_id,
             e.title,
@@ -46,12 +46,12 @@ export async function getEvents() {
         ORDER BY e.reg_start_date DESC;
     `;
 
-  const events = (await query(event_query)) as any;
-  return events;
+    const events = (await query(event_query)) as any;
+    return events;
 }
 
 export async function getMyEvents(user_id: number) {
-  let myEventsQuery = `
+    let myEventsQuery = `
         SELECT DISTINCT
             e.id AS event_id,
             e.title,
@@ -92,10 +92,10 @@ export async function getMyEvents(user_id: number) {
             ) AS tags
         FROM events e
         JOIN event_enrollments ee ON e.id = ee.event_id
-        WHERE ee.user_id = ?
+        WHERE ee.user_id = ? AND ee.status = 'accepted'
         ORDER BY e.reg_start_date DESC;
     `;
 
-  const myEvents = (await query(myEventsQuery, [user_id])) as any;
-  return myEvents;
+    const myEvents = (await query(myEventsQuery, [user_id])) as any;
+    return myEvents;
 }
