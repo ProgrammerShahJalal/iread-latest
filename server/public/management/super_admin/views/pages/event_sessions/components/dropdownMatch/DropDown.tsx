@@ -5,6 +5,7 @@ import setup from '../../config/setup';
 import { anyObject } from '../../../../../common_types/object';
 import DropDownCheckbox from './DropDownCheckbox';
 import DropDownSelectedItem from './DropDownSelectedItem';
+import HeadSearch from '../all_data_page/HeadSearch';
 
 export interface Props {
     name: string;
@@ -81,6 +82,7 @@ const DropDown: React.FC<Props> = ({
             {showDropDownList && (
                 <div className="drop_down_items">
                     <div className="drop_down_header">
+                    <HeadSearch />
                         <button
                             type="button"
                             onClick={() => setShowDropDownList(false)}

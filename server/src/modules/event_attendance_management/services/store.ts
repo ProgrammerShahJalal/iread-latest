@@ -14,7 +14,6 @@ import error_trace from '../../../helpers/error_trace';
 
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
-import db from '../models/db';
 import initializeDB from '../models/db';
 
 /** Validation rules */

@@ -1,12 +1,7 @@
 import Models from "../../../database/models";
 
-export function init() {
+export async function init() {
     const models = Models.get();
-
-    models.EventModel.hasMany(models.EventAttendanceModel, {
-        foreignKey: "event_id",
-        as: "event_attendance",
-    })
 
     models.EventAttendanceModel.belongsTo(models.UserModel, {
         foreignKey: "user_id",
@@ -24,4 +19,6 @@ export function init() {
         targetKey: "id",
         as: "session",
     });
+
+    console.log('Event Attendance relation models initialized successfully');
 }

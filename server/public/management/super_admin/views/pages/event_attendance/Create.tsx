@@ -34,6 +34,12 @@ const Create: React.FC<Props> = () => {
     );
     const dispatch = useAppDispatch();
 
+    // Get today's date in YYYY-MM-DD format
+    const getTodayDate = () => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    };
+
     // Fetch sessions when event is selected
     useEffect(() => {
         if (!selectedEventId) {
@@ -82,13 +88,18 @@ const Create: React.FC<Props> = () => {
                 const usersRes = await axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`);
                 
                 setUsers(usersRes.data.data);
+                
+                // Get the selected session to use its start time as default
+                const selectedSession = sessions.find(s => s.id === selectedSessionId);
+                const defaultTime = selectedSession?.start_time || '';
+                
                 setUserAttendances(
                     usersRes.data.data.map((user: User) => ({
                         event_id: selectedEventId,
                         event_session_id: selectedSessionId,
-                        date: selectedDate,
+                        date: selectedDate || getTodayDate(), // Use selected date or today's date
                         user_id: user.id,
-                        time: selectedTime || '',
+                        time: selectedTime || defaultTime, // Use selected time or session start time
                         is_present: false,
                     }))
                 );
@@ -100,17 +111,7 @@ const Create: React.FC<Props> = () => {
         };
 
         fetchUsers();
-    }, [selectedEventId, selectedSessionId]);
-
-    // Function to split the date and time
-    const splitDateTime = (dateTimeString: string) => {
-        if (!dateTimeString) return { date: null, time: null };
-        
-        const dateTime = new Date(dateTimeString);
-        const date = dateTime.toISOString().split('T')[0];
-        const time = dateTime.toTimeString().split(' ')[0];
-        return { date, time };
-    };
+    }, [selectedEventId, selectedSessionId, selectedDate, selectedTime]);
 
     const handleTimeChange = (userId: number, time: string) => {
         setUserAttendances(prev =>
@@ -128,7 +129,14 @@ const Create: React.FC<Props> = () => {
         }
 
         try {
-            const response = await dispatch(store(userAttendances) as any);
+            // Prepare attendance data with defaults
+            const attendanceData = userAttendances.map(attendance => ({
+                ...attendance,
+                date: attendance.date || getTodayDate(),
+                time: attendance.time || sessions.find(s => s.id === selectedSessionId)?.start || '',
+            }));
+
+            const response = await dispatch(store(attendanceData) as any);
             if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
                 toast.success('Attendance saved successfully!');
             }
@@ -188,13 +196,14 @@ const Create: React.FC<Props> = () => {
                                     <label>Date</label>
                                     <DateEl
                                         name="date"
-                                        value={selectedDate || get_value('date')}
+                                        value={selectedDate || getTodayDate()}
                                         handler={(data) => {
-                                            setSelectedDate(data?.date);
+                                            const dateValue = data?.date || getTodayDate();
+                                            setSelectedDate(dateValue);
                                             setUserAttendances(prev =>
                                                 prev.map(record => ({
                                                     ...record,
-                                                    date: data?.date,
+                                                    date: dateValue,
                                                 })),
                                             );
                                         }}
@@ -215,7 +224,6 @@ const Create: React.FC<Props> = () => {
                                     </div>
                                     
                                     <table className="w-full border-collapse border border-gray-300 mt-4">
-                                        {/* Table content remains the same */}
                                         <thead>
                                             <tr className="bg-gray-100">
                                                 <th className="border p-2">#</th>
@@ -250,7 +258,9 @@ const Create: React.FC<Props> = () => {
                                                     <td className="border p-2">
                                                         <Time
                                                             name={`time_${user.id}`}
-                                                            default_value={selectedTime}
+                                                            default_value={
+                                                                sessions.find(s => s.id === selectedSessionId)?.start_time || ''
+                                                            }
                                                             value={
                                                                 userAttendances.find(
                                                                     record => record.user_id === user.id
@@ -317,3 +327,4 @@ const Create: React.FC<Props> = () => {
 };
 
 export default Create;
+
