@@ -8,8 +8,9 @@ import { RootState, useAppDispatch } from '../../../../../store';
 import setup from '../../config/setup';
 import HeadSearch from '../all_data_page/HeadSearch';
 import { anyObject } from '../../../../../common_types/object';
-import DropDownCheckbox from './DropDownCheckbox';
 import DropDownSelectedItem from './DropDownSelectedItem';
+import DropDownCheckbox from './DropDownCheckbox';
+
 
 export interface Props {
     name: string;

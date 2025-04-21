@@ -1,5 +1,4 @@
 import { FindAndCountOptions } from 'sequelize';
-import db from '../models/db';
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import response from '../../../helpers/response';
 import error_trace from '../../../helpers/error_trace';
@@ -56,6 +55,26 @@ async function all(
     /** initializations */
     let models = await Models.get();
     let query_param = req.query as any;
+
+    if (!models.EventAttendanceModel.associations.user || !models.EventAttendanceModel.associations.event || !models.EventAttendanceModel.associations.session) {
+        models.EventAttendanceModel.belongsTo(models.UserModel, {
+            foreignKey: "user_id",
+            targetKey: "id",
+            as: "user",
+        });
+
+        models.EventAttendanceModel.belongsTo(models.EventModel, {
+            foreignKey: "event_id",
+            targetKey: "id",
+            as: "event",
+        });
+        models.EventAttendanceModel.belongsTo(models.EventSessionsModel, {
+            foreignKey: "event_session_id",
+            targetKey: "id",
+            as: "session",
+        });
+
+    }
 
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
@@ -124,7 +143,7 @@ async function all(
                 [Op.between]: [start_date, end_date]
             }
         };
-    } 
+    }
     // Optional: handle cases where only one date is provided
     else if (start_date) {
         query_param.page = 1;
@@ -135,7 +154,7 @@ async function all(
                 [Op.gte]: start_date
             }
         };
-    } 
+    }
     else if (end_date) {
         query_param.page = 1;
         paginate = 200;
