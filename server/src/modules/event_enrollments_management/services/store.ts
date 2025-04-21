@@ -20,33 +20,21 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'event_id', isArray: true || false },
-        { name: 'user_id', isArray: true || false },
-        { name: 'date', isArray: false },
+        'event_id',
+        'user_id',
+        'date',
     ];
 
-    //validate array fields
-    for (const field of fields.filter(f => f.isArray)) {
-        await body(field.name)
-            .custom(value => {
-                try {
-                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
-                    return Array.isArray(parsed) && parsed.length > 0;
-                } catch {
-                    return false;
-                }
-            })
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
-            .run(req);
-    }
-
-    // Validate other fields
-    for (const field of fields.filter(f => !f.isArray)) {
-        await body(field.name)
+    for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        await body(field)
             .not()
             .isEmpty()
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .withMessage(
+                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+            )
             .run(req);
+
     }
 
     let result = await validationResult(req);

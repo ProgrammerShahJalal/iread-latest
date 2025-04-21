@@ -78,6 +78,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
+                                        <label>Date</label>
                                         <DateEl
                                             name={"date"}
                                             value={get_value('date')}

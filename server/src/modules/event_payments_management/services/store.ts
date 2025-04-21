@@ -18,39 +18,29 @@ import Models from '../../../database/models';
 import Stripe from 'stripe';
 
 /** validation rules */
+
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'event_id', isArray: true },
-        { name: 'user_id', isArray: true },
-        { name: 'event_enrollment_id', isArray: true },
-        { name: 'date', isArray: false },
-        { name: 'amount', isArray: false },
-        { name: 'trx_id', isArray: false },
+        'event_id',
+        'user_id',
+        'event_enrollment_id',
+        'date',
+        'amount',
+        'trx_id',
+
     ];
 
-    //validate array fields
-    for (const field of fields.filter(f => f.isArray)) {
-        await body(field.name)
-            .custom(value => {
-                try {
-                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
-                    return Array.isArray(parsed) && parsed.length > 0;
-                } catch {
-                    return false;
-                }
-            })
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
-            .run(req);
-    }
-
-    // Validate other fields
-    for (const field of fields.filter(f => !f.isArray)) {
-        await body(field.name)
+    for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        await body(field)
             .not()
             .isEmpty()
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .withMessage(
+                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+            )
             .run(req);
+
     }
 
     let result = await validationResult(req);

@@ -67,9 +67,9 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
                     className="form-control"
                 />
             </label>
-            {/* <div className="form-control preview">
+            <div className="form-control preview">
                 {input_value ? formated_date(input_value) : formated_date(null)}
-            </div> */}
+            </div>
         </>
     );
 };
