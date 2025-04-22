@@ -24,6 +24,9 @@ const Create: React.FC<Props> = (props: Props) => {
     const [isPaid, setIsPaid] = useState('0');
     const [status, setStatus] = useState('pending');
 
+    const [selectedEventId, setSelectedEventId] = useState(0);
+    const [selectedUserId, setSelectedUserId] = useState(0);
+
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
@@ -33,6 +36,8 @@ const Create: React.FC<Props> = (props: Props) => {
             // init_nominee();
             setIsPaid('0');
             setStatus('pending');
+            setSelectedEventId(0);
+            setSelectedUserId(0);
         }
     }
 
@@ -83,6 +88,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
+                                                setSelectedEventId(Number(data?.ids))
                                             }}
                                         />
                                     </div>
@@ -93,6 +99,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             multiple={false}
                                             get_selected_data={(data) => {
                                                 console.log(data)
+                                                setSelectedUserId(Number(data?.ids));
                                             }}
                                         />
                                     </div>
@@ -136,14 +143,26 @@ const Create: React.FC<Props> = (props: Props) => {
 
                             </div>
 
-                            <div className="form-group form-vertical">
-                                <label></label>
-                                <div className="form_elements">
-                                    <button className="btn btn_1 btn-outline-info">
-                                        submit
-                                    </button>
+                            {/* Conditionally render the submit button */}
+                            {selectedEventId && selectedUserId ? (
+                                <div className="form-group form-vertical">
+                                    <label></label>
+                                    <div className="form_elements">
+                                        <button type="submit" className="btn btn_1 btn-outline-info">
+                                            submit
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            ) :
+
+                                <div className="form-group form-vertical">
+                                    <label></label>
+                                    <div className="form_elements">
+
+                                    </div>
+                                </div>
+
+                            }
                         </form>
                     </div>
                     <Footer></Footer>
