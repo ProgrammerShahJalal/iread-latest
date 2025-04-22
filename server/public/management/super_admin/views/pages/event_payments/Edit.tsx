@@ -95,26 +95,6 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Enrollments</label>
-                                        <EnrollmentDropDown name="enrollments"
-                                            multiple={false}
-                                            default_value={get_value('event_enrollment_id') ? [{ id: get_value('event_enrollment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Payments</label>
-                                        <PaymentDropDown name="payments"
-                                            multiple={false}
-                                            default_value={get_value('event_payment_id') ? [{ id: get_value('event_payment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
                                       
                                         {[
                                             'amount',

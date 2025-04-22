@@ -77,15 +77,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Enrollments</label>
-                                        <EventEnrollmentDropDown name="event_enrollment_id"
-                                            multiple={false}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
 
                                     {[
                                         'date',

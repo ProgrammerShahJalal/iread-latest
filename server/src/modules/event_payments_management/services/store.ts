@@ -186,7 +186,7 @@ async function store(
 
         // Update `is_paid` to true in the EventEnrollmentsModel
         await models.EventEnrollmentsModel.update(
-            { is_paid: '1' },
+            { is_paid: '1', status: 'accepted' },
             { where: { id: event_enrollment_id } }
 
         );
