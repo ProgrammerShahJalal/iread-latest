@@ -33,8 +33,8 @@ class DataModel extends Model<Infer, InferCreation> {
 
     declare event_id: number;
     declare user_id: number;
-    declare event_enrollment_id: number;
-    declare event_payment_id: number;
+    declare event_enrollment_id?: number;
+    declare event_payment_id?: number;
     declare date: string;
     declare amount: number;
     declare trx_id: string;
