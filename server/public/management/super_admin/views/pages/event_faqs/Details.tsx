@@ -10,6 +10,9 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
+import DeleteButton from './components/all_data_page/DeleteButton';
+import DestroyButton from './components/all_data_page/DestroyButton';
+import RestoreButton from './components/all_data_page/RestoreButton';
 export interface Props { }
 
 export interface FAQ {
@@ -87,9 +90,31 @@ const Details: React.FC<Props> = (props: Props) => {
                                     <div className="space-y-4">
                                         {faqs.map((faq: FAQ, index) => (
                                             <details key={faq.id || index} className="rounded-md shadow-sm p-4 cursor-pointer border">
-                                                <summary className="font-medium text-gray-800">
-                                                    {faq.title}
+
+                                                <summary className="flex justify-between items-center font-medium text-gray-100">
+                                                    <span>{faq.title}</span>
+
+                                                    {state.item?.id && (
+                                                        <ul className="flex space-x-4 text-sm text-indigo-400">
+                                                            <li>
+                                                                <Link to={`/${setup.route_prefix}/edit/${faq.id}`} className="hover:underline">
+                                                                    Edit
+                                                                </Link>
+                                                            </li>
+                                                            {/* <li>
+                                                                <DeleteButton item={faq} />
+                                                            </li>
+                                                            <li>
+                                                                <DestroyButton item={faq} />
+                                                            </li>
+                                                            <li>
+                                                                <RestoreButton item={faq} />
+                                                            </li> */}
+                                                        </ul>
+                                                    )}
                                                 </summary>
+
+
                                                 <p className="text-gray-600 mt-2">{faq.description}</p>
                                             </details>
                                         ))}
@@ -101,7 +126,7 @@ const Details: React.FC<Props> = (props: Props) => {
                     )}
 
                     <Footer>
-                        {state.item?.id && (
+                        {/* {state.item?.id && (
                             <li>
                                 <Link
                                     to={`/${setup.route_prefix}/edit/${state.item.id}`}
@@ -113,7 +138,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                     <div className="text">Edit</div>
                                 </Link>
                             </li>
-                        )}
+                        )} */}
                     </Footer>
                 </div>
             </div>
