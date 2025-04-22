@@ -21,6 +21,9 @@ const Create: React.FC<Props> = (props: Props) => {
     );
     const dispatch = useAppDispatch();
 
+    const [isPaid, setIsPaid] = useState('0');
+    const [status, setStatus] = useState('pending');
+
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
@@ -28,9 +31,25 @@ const Create: React.FC<Props> = (props: Props) => {
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
             // init_nominee();
+            setIsPaid('0');
+            setStatus('pending');
         }
     }
 
+    function handleIsPaidChange(e) {
+        const value = e.target.value;
+        setIsPaid(value);
+        // Auto-update status based on is_paid value
+        if (value === '1') {
+            setStatus('accepted');
+        } else {
+            setStatus('pending');
+        }
+    }
+
+    function handleStatusChange(e) {
+        setStatus(e.target.value);
+    }
 
     function get_value(key) {
         try {
@@ -91,7 +110,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <select
                                             name="is_paid"
                                             className="form-control"
-                                            onChange={(e) => console.log('is_paid Changed', e.target.value)}
+                                            value={isPaid}
+                                            onChange={handleIsPaidChange}
                                         >
                                             <option value="0">No</option>
                                             <option value="1">Yes</option>
@@ -103,7 +123,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <select
                                             name="status"
                                             className="form-control"
-                                            onChange={(e) => console.log('Status Changed', e.target.value)}
+                                            value={status}
+                                            onChange={handleStatusChange}
                                         >
                                             <option value="pending">Pending</option>
                                             <option value="rejected">Rejected</option>
