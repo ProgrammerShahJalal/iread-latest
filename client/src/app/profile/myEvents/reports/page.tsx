@@ -2,6 +2,7 @@ import React from "react";
 import { getEventPayments } from "../../../../api/eventPaymentsApi";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import RefundButton from "../../../../components/RefundButton";
+import { getEventById } from "../../../../api/eventApi";
 
 
 interface PageProps {
@@ -11,11 +12,24 @@ interface PageProps {
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
   const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   };
   return date.toLocaleDateString("en-GB", options);
+};
+
+const isRefundAllowed = (sessionStartDateTime: string): boolean => {
+  if (!sessionStartDateTime) return true;
+
+  const sessionDate = new Date(sessionStartDateTime);
+  const today = new Date();
+
+  // Compare only the date parts (ignore time)
+  sessionDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  return today <= sessionDate;
 };
 
 const ReportsPage = async ({ searchParams }: PageProps) => {
@@ -44,6 +58,9 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
 
   try {
     const paymentReports = await getEventPayments(Number(eventId), Number(uid));
+    const event: Event = await getEventById(eventId);
+    const refundAllowed = isRefundAllowed(event?.session_start_date_time);
+
     return (
       <ProfileLayout>
         <div className="p-6">
@@ -96,11 +113,10 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                         {payment.user_id}
                       </td>
                       <td
-                        className={`border border-gray-300 px-4 py-2 ${
-                          payment.status === "success"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
+                        className={`border border-gray-300 px-4 py-2 ${payment.status === "success"
+                          ? "text-green-600"
+                          : "text-red-600"
+                          }`}
                       >
                         {payment.status}
                       </td>
@@ -121,19 +137,23 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         {!payment.is_refunded ? (
-                          <RefundButton
-                            paymentId={payment.payment_id}
-                            userId={payment.user_id}
-                            eventId={payment.event_id}
-                            eventEnrollmentId={payment.event_enrollment_id}
-                            trxId={payment.trx_id}
-                            amount={payment.amount}
-                            media={payment.media}
-                          />
+                          refundAllowed ? (
+                            <RefundButton
+                              paymentId={payment.payment_id}
+                              userId={payment.user_id}
+                              eventId={payment.event_id}
+                              eventEnrollmentId={payment.event_enrollment_id}
+                              trxId={payment.trx_id}
+                              amount={payment.amount}
+                              media={payment.media}
+                            />
+                          ) : (
+                            <span className="text-gray-400">
+                              Refund not allowed after event date
+                            </span>
+                          )
                         ) : (
-                          <span className="text-gray-400">
-                            Already Refunded
-                          </span>
+                          <span className="text-gray-400">Already Refunded</span>
                         )}
                       </td>
                     </tr>
