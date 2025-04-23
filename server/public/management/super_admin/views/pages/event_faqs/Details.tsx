@@ -20,6 +20,7 @@ export interface FAQ {
     event_id: number;
     title: string;
     description: string;
+    status: string;
 }
 
 const Details: React.FC<Props> = (props: Props) => {
@@ -30,7 +31,7 @@ const Details: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
     const params = useParams();
 
-    const [faqs, setFaqs] = React.useState([]);
+    const [faqs, setFaqs] = React.useState<FAQ[]>([]);
 
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
@@ -40,18 +41,17 @@ const Details: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         const fetchFAQs = async () => {
             try {
-                const eventId = state.item?.event_id || state.item?.event?._id;
+                const eventId = state.item?.event_id || state.item?.event?.id;
                 if (!eventId) return;
 
                 const response = await axios.get(`/api/v1/event-faqs/by-event/${eventId}`);
-                console.log('response', response.data)
-                setFaqs(response.data.data);
+                setFaqs(response?.data?.data?.filter((faq: FAQ) => faq.status === 'active'));
             } catch (error) {
                 console.error("Failed to load FAQs", error);
             }
         };
 
-        if (state.item?.event_id || state.item?.event?._id) {
+        if (state.item?.event_id || state.item?.event?.id) {
             fetchFAQs();
         }
     }, [state.item]);
@@ -91,25 +91,45 @@ const Details: React.FC<Props> = (props: Props) => {
                                         {faqs.map((faq: FAQ, index) => (
                                             <details key={faq.id || index} className="rounded-md shadow-sm p-4 cursor-pointer border">
 
-                                                <summary className="flex justify-between items-center font-medium text-gray-100">
+                                                <summary className="font-medium text-gray-100"
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+
+
+                                                    }}
+                                                >
                                                     <span>{faq.title}</span>
 
                                                     {state.item?.id && (
-                                                        <ul className="flex space-x-4 text-sm text-indigo-400">
+                                                        <ul className="space-x-4 text-sm text-indigo-400"
+                                                            style={{
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'flex-between',
+                                                                alignItems: 'center',
+                                                                gap: 10
+
+                                                            }}
+                                                        >
                                                             <li>
                                                                 <Link to={`/${setup.route_prefix}/edit/${faq.id}`} className="hover:underline">
                                                                     Edit
                                                                 </Link>
                                                             </li>
-                                                            {/* <li>
-                                                                <DeleteButton item={faq} />
+                                                            <li>
+                                                                <DeleteButton item={faq} onDelete={(id) => {
+                                                                    setFaqs(prev => prev.filter(f => f.id !== id));
+                                                                }} />
+
                                                             </li>
                                                             <li>
-                                                                <DestroyButton item={faq} />
+                                                                <DestroyButton item={faq} onDelete={(id)=>{
+                                                                    setFaqs(prev => prev.filter(f => f.id !== id));
+                                                                }}/>
                                                             </li>
-                                                            <li>
-                                                                <RestoreButton item={faq} />
-                                                            </li> */}
                                                         </ul>
                                                     )}
                                                 </summary>
@@ -126,19 +146,6 @@ const Details: React.FC<Props> = (props: Props) => {
                     )}
 
                     <Footer>
-                        {/* {state.item?.id && (
-                            <li>
-                                <Link
-                                    to={`/${setup.route_prefix}/edit/${state.item.id}`}
-                                    className="btn-outline-info outline"
-                                >
-                                    <span className="material-symbols-outlined fill">
-                                        edit_square
-                                    </span>
-                                    <div className="text">Edit</div>
-                                </Link>
-                            </li>
-                        )} */}
                     </Footer>
                 </div>
             </div>

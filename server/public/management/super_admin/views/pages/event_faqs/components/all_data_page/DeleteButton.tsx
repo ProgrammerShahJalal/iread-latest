@@ -7,6 +7,7 @@ import { initialState } from '../../config/store/inital_state';
 import { useSelector } from 'react-redux';
 export interface Props {
     item: anyObject;
+    onDelete: (id: number) => void;
 }
 
 const DeleteButton: React.FC<Props> = (props: Props) => {
@@ -21,6 +22,7 @@ const DeleteButton: React.FC<Props> = (props: Props) => {
         const confirm = await (window as anyObject).s_confirm('delete data');
         if (confirm) {
             dispatch(soft_delete({ id: props.item.id }) as any);
+            props.onDelete(props.item.id);
         }
     }
     if (!state.show_active_data) {
