@@ -5,9 +5,10 @@ import { useAppDispatch } from '../../../../../store';
 import { destroy } from '../../config/store/async_actions/destroy';
 export interface Props {
     item: anyObject;
+    onDelete: (id: number) => void;
 }
 
-const DestroyButton: React.FC<Props> = (props: Props) => {
+const DestroyButtonSub: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
 
     async function handle_delete(e: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -18,6 +19,7 @@ const DestroyButton: React.FC<Props> = (props: Props) => {
         );
         if (confirm) {
             dispatch(destroy({ id: props.item.id }) as any);
+            props.onDelete(props.item.id);
         }
     }
     return (
@@ -32,4 +34,4 @@ const DestroyButton: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default DestroyButton;
+export default DestroyButtonSub;

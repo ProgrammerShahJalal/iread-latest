@@ -71,16 +71,25 @@ const All: React.FC<Props> = (props: Props) => {
                                     <th />
                                     <th><SelectAll /></th>
                                     <TableHeading label="ID" col_name="id" sort />
+                                    <TableHeading label="FAQ Title" col_name="title" sort />
                                     <TableHeading label="Event Title" col_name="event_id" sort />
                                     <TableHeading label="Status" col_name="status" sort={false} />
                                 </tr>
                             </thead>
                             <tbody id="all_list">
-                                {uniqueFaqs?.map((i: any) => (
+                                { (state.all as any)?.data?.map((i: any) => (
                                     <tr key={i.id} className={`table_rows table_row_${i.id}`}>
                                         <td><TableRowAction item={i} /></td>
                                         <td><SelectItem item={i} /></td>
                                         <td>{i.id}</td>
+                                        <td>
+                                            <span
+                                                className="quick_view_trigger"
+                                                onClick={() => quick_view(i)}
+                                            >
+                                                {i?.title?.slice(0, 40)}{i?.title?.length > 40 && "..."}
+                                            </span>
+                                        </td>
                                         <td>
                                             <span
                                                 className="quick_view_trigger"

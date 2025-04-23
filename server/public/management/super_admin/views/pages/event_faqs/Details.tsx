@@ -10,9 +10,8 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-import DeleteButton from './components/all_data_page/DeleteButton';
-import DestroyButton from './components/all_data_page/DestroyButton';
-import RestoreButton from './components/all_data_page/RestoreButton';
+import DeleteButtonSub from './components/all_data_page/DeleteButtonSub';
+import DestroyButtonSub from './components/all_data_page/DestroyButtonSub';
 export interface Props { }
 
 export interface FAQ {
@@ -120,13 +119,13 @@ const Details: React.FC<Props> = (props: Props) => {
                                                                 </Link>
                                                             </li>
                                                             <li>
-                                                                <DeleteButton item={faq} onDelete={(id) => {
+                                                                <DeleteButtonSub item={faq} onDelete={(id) => {
                                                                     setFaqs(prev => prev.filter(f => f.id !== id));
                                                                 }} />
 
                                                             </li>
                                                             <li>
-                                                                <DestroyButton item={faq} onDelete={(id)=>{
+                                                                <DestroyButtonSub item={faq} onDelete={(id)=>{
                                                                     setFaqs(prev => prev.filter(f => f.id !== id));
                                                                 }}/>
                                                             </li>
