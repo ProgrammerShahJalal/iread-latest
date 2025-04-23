@@ -8,6 +8,16 @@ interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
 }
 
+const formatDate = (isoDate: string): string => {
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+  };
+  return date.toLocaleDateString("en-GB", options);
+};
+
 const ReportsPage = async ({ searchParams }: PageProps) => {
   // Extract uid and eventId from searchParams
   const params = await searchParams;
@@ -59,6 +69,9 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                     Amount
                   </th>
                   <th className="border border-gray-300 px-4 py-2 text-center">
+                    Date
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-center">
                     Transaction ID
                   </th>
                   <th className="border border-gray-300 px-4 py-2 text-center">
@@ -95,6 +108,9 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                         ${payment.amount}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
+                        {formatDate(payment.date)}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
                         {payment.trx_id}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
@@ -112,6 +128,7 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                             eventEnrollmentId={payment.event_enrollment_id}
                             trxId={payment.trx_id}
                             amount={payment.amount}
+                            media={payment.media}
                           />
                         ) : (
                           <span className="text-gray-400">

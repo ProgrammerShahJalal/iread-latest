@@ -25,7 +25,7 @@ export const modelName = 'EventPaymentRefundsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'success' | 'failed';
+type status = 'success' | 'pending' | 'failed';
 type media = 'Stripe' | 'Manual';
 
 class DataModel extends Model<Infer, InferCreation> {
@@ -90,8 +90,8 @@ function init(sequelize: Sequelize) {
 
 
             status: {
-                type: new DataTypes.ENUM('success', 'failed'),
-                defaultValue: 'success',
+                type: new DataTypes.ENUM('success', 'pending', 'failed'),
+                defaultValue: 'pending',
             },
 
             created_at: DataTypes.DATE,

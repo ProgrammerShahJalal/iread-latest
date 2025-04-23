@@ -81,7 +81,7 @@ async function all(
     let query: FindAndCountOptions = {
         order: [[orderByCol, orderByAsc == 'true' ? 'ASC' : 'DESC']],
         where: {
-            status: show_active_data == 'true' ? 'success' : 'failed',
+            status: show_active_data === 'true' ? ['success', 'pending'] : 'failed',
         },
         include: [
             {

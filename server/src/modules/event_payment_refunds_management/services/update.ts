@@ -56,7 +56,7 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    // Parse fields that might be stringified
+    // Helper to parse or return original value
     const parseField = (field: any) => {
         try {
             return typeof field === 'string' ? JSON.parse(field) : field;
@@ -65,27 +65,40 @@ async function update(
         }
     };
 
-    body.events = parseField(body.events);
-    body.enrollments = parseField(body.enrollments);
-    body.users = parseField(body.users);
-    body.payments = parseField(body.payments);
+    // Parse the whole body’s fields in one go
+    Object.keys(body).forEach(key => {
+        body[key] = parseField(body[key]);
+    });
+
+    // Helper to get clean value
+    const getValue = (val: any) => Array.isArray(val) ? val[0] : val;
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[0] || data.event_id,
-                user_id: body.users?.[0] || data.user_id,
-                event_enrollment_id: body.enrollments?.[0] || data.event_enrollment_id,
-                event_payment_id: body.payments?.[0] || data.event_payment_id,
+                event_id: getValue(body.event_id) || data.event_id,
+                user_id: getValue(body.user_id) || data.user_id,
+                event_enrollment_id: getValue(body.event_enrollment_id) || data.event_enrollment_id,
+                event_payment_id: getValue(body.event_payment_id) || data.event_payment_id,
                 date: body.date || data.date,
                 amount: body.amount || data.amount,
                 trx_id: body.trx_id || data.trx_id,
                 media: body.media || data.media,
+                status: body.status || data.status,
             };
             data.update(inputs);
             await data.save();
+
+            if (data.status === 'success') {
+                await models.EventPaymentsModel.update(
+                    { is_refunded: true },
+                    { where: { id: data.event_payment_id } }
+
+                );
+            }
+
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(
