@@ -28,11 +28,11 @@ const Create: React.FC<Props> = (props: Props) => {
 
     const [data, setData] = useState<anyObject>({});
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-        const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
-        const [event, setEvent] = useState<Event | null>(null);
-        const [sessions, setSessions] = useState<any[]>([]);
-        const [loading, setLoading] = useState(false);
-        const [error, setError] = useState<string | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [event, setEvent] = useState<Event | null>(null);
+    const [sessions, setSessions] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
 
     async function handle_submit(e) {
@@ -67,34 +67,34 @@ const Create: React.FC<Props> = (props: Props) => {
     }, []);
 
 
-        // Fetch sessions when event is selected
-        useEffect(() => {
-            if (!selectedEventId) {
-                setSessions([]);
-                setSelectedSessionId(null);
-                return;
+    // Fetch sessions when event is selected
+    useEffect(() => {
+        if (!selectedEventId) {
+            setSessions([]);
+            setSelectedSessionId(null);
+            return;
+        }
+
+        const fetchEventAndSessions = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const [eventRes, sessionsRes] = await Promise.all([
+                    axios.get(`/api/v1/events/${selectedEventId}`),
+                    axios.get(`/api/v1/event-sessions/event/${selectedEventId}`),
+                ]);
+
+                setEvent(eventRes.data.data);
+                setSessions(sessionsRes.data.data);
+            } catch {
+                setError('Failed to fetch event data.');
+            } finally {
+                setLoading(false);
             }
-    
-            const fetchEventAndSessions = async () => {
-                setLoading(true);
-                setError(null);
-                try {
-                    const [eventRes, sessionsRes] = await Promise.all([
-                        axios.get(`/api/v1/events/${selectedEventId}`),
-                        axios.get(`/api/v1/event-sessions/event/${selectedEventId}`),
-                    ]);
-    
-                    setEvent(eventRes.data.data);
-                    setSessions(sessionsRes.data.data);
-                } catch {
-                    setError('Failed to fetch event data.');
-                } finally {
-                    setLoading(false);
-                }
-            };
-    
-            fetchEventAndSessions();
-        }, [selectedEventId]);
+        };
+
+        fetchEventAndSessions();
+    }, [selectedEventId]);
 
 
     function get_value(key) {
