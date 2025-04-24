@@ -56,8 +56,8 @@ const All: React.FC<Props> = (props: Props) => {
     }
 
     let formateDateTime = (date: string) => {
-           return moment(date).format('Do MMM YY, h:mm:ss A');
-       };
+        return moment(date).format('Do MMM YY, h:mm:ss A');
+    };
 
     return (
         <div className="page_content">
@@ -124,9 +124,8 @@ const All: React.FC<Props> = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                    {(state.all as any)?.data?.map(
-                                        (i: { [key: string]: any },index) => {
-
+                                    {(state.all as any)?.data?.length > 0 ? (
+                                        (state.all as any).data.map((i: { [key: string]: any }, index) => {
                                             return (
                                                 <tr
                                                     key={i.id}
@@ -169,29 +168,26 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 alt="poster"
                                                             />
                                                         </div>
-
                                                     </td>
 
                                                     <td>
-                                                    {formateDateTime(i.session_start_date_time)}
+                                                        {formateDateTime(i.session_start_date_time)}
                                                     </td>
-                                                    {/* <td>
-                                                    {formateDateTime(i.session_end_date_time)}
-                                                    </td> */}
                                                     <td>
                                                         ${i.price}
                                                     </td>
                                                     <td>
                                                         ${i.discount_price}
                                                     </td>
-
-                                                    {/* <td>
-                                                        {i.status}
-
-                                                    </td> */}
                                                 </tr>
                                             );
-                                        },
+                                        })
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={9} className="text-center py-4">
+                                                No data found
+                                            </td>
+                                        </tr>
                                     )}
                                 </tbody>
                             </table>

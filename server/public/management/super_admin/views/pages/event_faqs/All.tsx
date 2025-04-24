@@ -77,7 +77,8 @@ const All: React.FC<Props> = (props: Props) => {
                                 </tr>
                             </thead>
                             <tbody id="all_list">
-                                { (state.all as any)?.data?.map((i: any) => (
+                            {(state.all as any)?.data?.length > 0 ? (
+                                 (state.all as any)?.data?.map((i: any) => (
                                     <tr key={i.id} className={`table_rows table_row_${i.id}`}>
                                         <td><TableRowAction item={i} /></td>
                                         <td><SelectItem item={i} /></td>
@@ -100,7 +101,14 @@ const All: React.FC<Props> = (props: Props) => {
                                         </td>
                                         <td>{i.status}</td>
                                     </tr>
-                                ))}
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={9} className="text-center py-4">
+                                        No data found
+                                    </td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>
