@@ -28,6 +28,10 @@ const Details: React.FC<Props> = (props: Props) => {
     function get_value(key) {
         try {
 
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return state.item.user.first_name + " " + state.item.user.last_name;
+            }
             // Handle nested event object
             if (key === 'event_id' && state.item.event) {
                 return state.item.event.title;
@@ -70,6 +74,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         { key: 'event_id', label: 'Event Title' },
                                         { key: 'event_session_id', label: 'Session Title' },
                                         { key: 'event_session_assesment_id', label: 'Assessment Title' },
+                                        { key: 'user_id', label: 'User Name' },
                                         { key: 'mark' },
                                         {
                                             key: 'obtained_mark',

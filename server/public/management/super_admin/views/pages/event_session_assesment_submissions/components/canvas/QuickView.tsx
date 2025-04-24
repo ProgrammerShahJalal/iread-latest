@@ -68,6 +68,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state?.item.assesment?.title?.slice(0, 30)}{state.item.assesment?.title?.length > 30 && '...'}</th>
                                 </tr>
                                 <tr>
+                                    <th>User Name</th>
+                                    <th>:</th>
+                                    <th>{state?.item.user.first_name} {state?.item.user.last_name}</th>
+                                </tr>
+                                <tr>
                                     <th>Mark</th>
                                     <th>:</th>
                                     <th>{state?.item.mark}</th>
@@ -83,11 +88,11 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                     <th>{state?.item.grade}</th>
                                 </tr>
                                 
-                                <tr>
+                                {/* <tr>
                                     <th>Status</th>
                                     <th>:</th>
                                     <th>{state?.item.status}</th>
-                                </tr>
+                                </tr> */}
                             </tbody>
                         </table>
                     </div>

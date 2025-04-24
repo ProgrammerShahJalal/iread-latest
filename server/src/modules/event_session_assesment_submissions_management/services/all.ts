@@ -85,6 +85,12 @@ async function all(
         },
         include: [
             {
+                model: models.UserModel,
+                as: 'user',
+                attributes: ['first_name', 'last_name'],
+                required: false,
+            },
+            {
                 model: models.EventModel,
                 as: 'event',
                 attributes: ['title'],
