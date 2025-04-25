@@ -6,15 +6,13 @@ import { initialState } from '../../config/store/inital_state';
 import { useSelector } from 'react-redux';
 import setup from '../../config/setup';
 import moment from 'moment/moment';
-export interface Props { }
+export interface Props {}
 
 const modalRoot = document.getElementById('filter-root');
 
 let formatTime = (time: string) => {
     return moment(time, 'HH:mm').format('h:mmA');
 };
-
-
 
 const QuickView: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -26,7 +24,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
     function close_canvas(action: boolean = true) {
         dispatch(storeSlice.actions.set_show_quick_view_canvas(action));
     }
-
 
     if (modalRoot && state?.show_quick_view_canvas) {
         return createPortal(
@@ -55,17 +52,43 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.event?.title?.slice(0, 30)}{state?.item.event?.title?.length > 30 && '...'}</th>
+                                    <th>
+                                        {state?.item.event?.title?.slice(0, 30)}
+                                        {state?.item.event?.title?.length >
+                                            30 && '...'}
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Session Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.session?.title?.slice(0, 30)}{state?.item.session?.title?.length > 30 && '...'}</th>
+                                    <th>
+                                        {state?.item.session?.title?.slice(
+                                            0,
+                                            30,
+                                        )}
+                                        {state?.item.session?.title?.length >
+                                            30 && '...'}
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Assesment Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.assesment?.title?.slice(0, 30)}{state.item.assesment?.title?.length > 30 && '...'}</th>
+                                    <th>
+                                        {state?.item.assesment?.title?.slice(
+                                            0,
+                                            30,
+                                        )}
+                                        {state.item.assesment?.title?.length >
+                                            30 && '...'}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>:</th>
+                                    <th>
+                                        {state?.item.user.first_name}{' '}
+                                        {state?.item.user.last_name}
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Mark</th>
@@ -75,19 +98,21 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Obtained Mark</th>
                                     <th>:</th>
-                                    <th>{state?.item.obtained_mark || 'N/A'}</th>
+                                    <th>
+                                        {state?.item.obtained_mark || 'N/A'}
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Grade</th>
                                     <th>:</th>
                                     <th>{state?.item.grade}</th>
                                 </tr>
-                                
-                                <tr>
+
+                                {/* <tr>
                                     <th>Status</th>
                                     <th>:</th>
                                     <th>{state?.item.status}</th>
-                                </tr>
+                                </tr> */}
                             </tbody>
                         </table>
                     </div>

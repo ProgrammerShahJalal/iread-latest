@@ -20,18 +20,32 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'title',
-        'url',
+        { name: 'events', isArray: true },
+        { name: 'title', isArray: false },
+        { name: 'url', isArray: false },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
+    //validate array fields
+    for (const field of fields.filter(f => f.isArray)) {
+        await body(field.name)
+            .custom(value => {
+                try {
+                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .run(req);
+    }
+
+    // Validate other fields
+    for (const field of fields.filter(f => !f.isArray)) {
+        await body(field.name)
             .not()
             .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
+            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
             .run(req);
     }
 
@@ -53,19 +67,40 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+
     let data = new models[modelName]();
-    
+
     let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id: body.events?.[1],
+
+        event_id: body.events?.[0],
         title: body.title,
         url: body.url,
     };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
+    const isUrl =
+        body.url && (body.url.startsWith('http://') || body.url.startsWith('https://'));
+    
+        if (!isUrl) {
+            return response(422, 'Invalid url. Please enter a valid url starting with http:// or https://', {
+                data: [{
+                    path: 'url',
+                    msg: 'Please enter a valid url starting with http:// or https://',
+                }]
+            });
+        }
 
+ 
     /** store data into database */
     try {
         (await data.update(inputs)).save();

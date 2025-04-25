@@ -73,6 +73,7 @@ async function update(
                 event_id: body.event_id || data.event_id,
                 event_session_id: body.event_session_id || data.event_session_id,
                 event_session_assesment_id: body.event_session_assesment_id || data.event_session_assesment_id,
+                user_id: body.user_id || data.user_id,
                 submitted_content: body.submitted_content || data.submitted_content,
                 mark: body.mark || data.mark,
                 obtained_mark: body.obtained_mark || null,

@@ -19,7 +19,11 @@ import Models from '../../../database/models';
 /** validation rules */
 async function validate(req: Request) {
     let field = '';
-    let fields = ['event_id', 'user_id', 'date'];
+    let fields = [
+        'event_id',
+        'user_id',
+        'date',
+    ];
 
     for (let index = 0; index < fields.length; index++) {
         const field = fields[index];
@@ -30,6 +34,7 @@ async function validate(req: Request) {
                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
             )
             .run(req);
+
     }
 
     let result = await validationResult(req);
@@ -50,11 +55,24 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.event_id = parseField(body.event_id);
+    body.user_id = parseField(body.user_id);
+
     let data = new models[modelName]();
 
     let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.event_id || body.event_id?.[1],
-        user_id: body.user_id || body.user_id?.[1],
+        event_id: body.event_id || body.event_id?.[0],
+        user_id: body.user_id || body.user_id?.[0],
         date: body.date,
         is_paid: body.is_paid || '0',
         status: body.status,
@@ -64,14 +82,17 @@ async function store(
         /** Check if user is already enrolled in the event */
         let existingEnrollment = await models[modelName].findOne({
             where: {
-                event_id: inputs.event_id,
-                user_id: inputs.user_id,
+                event_id: body.event_id || body.event_id?.[0],
+                user_id: body.user_id || body.user_id?.[0],
             },
         });
 
         if (existingEnrollment) {
-            return response(409, 'User is already enrolled in this event', {
-                data,
+            return response(422, 'User is already enrolled in this event', {
+                data: [{
+                    path: 'user_id',
+                    msg: 'User is already enrolled in this event'
+                }]
             });
         }
         /** store data into database */

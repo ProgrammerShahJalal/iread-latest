@@ -53,8 +53,66 @@ async function update(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
+    
+    // Validate start and end times
+    if (body?.start && body?.end) {
+        const startTime = moment(body?.start, 'hh:mmA');
+        const endTime = moment(body?.end, 'hh:mmA');
+
+        if (!startTime.isValid() || !endTime.isValid()) {
+            return response(422, 'Invalid time format. Use hh:mmAM/PM format.', {
+                data: [{
+                    path: 'start/end',
+                    msg: 'Invalid time format. Use hh:mmAM/PM format.'
+                }]
+            });
+        }
+
+        if (startTime.isSameOrAfter(endTime)) {
+            return response(422, 'Invalid time range! The start time must be before the end time.', {
+                data: [{
+                    path: 'start',
+                    msg: 'The start time must be before the end time.'
+                }]
+            });
+        }
+
+
+    }
+    
     let user_model = new models[modelName]();
 
+    
+    if (body.description === null) {
+        return response(422, 'Description is required.', {
+            data: [{
+                path: 'description',
+                msg: 'Description is required.'
+            }]
+        });
+    }
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+    body.sessions = parseField(body.sessions);
+    body.mark = parseField(body.mark);
+    body.pass_mark = parseField(body.pass_mark);
+
+    if (body.mark < body.pass_mark) {
+        return response(422, 'Mark should be greater than or equal to pass mark.', {
+            data: [{
+                path: 'mark',
+                msg: 'Mark should be greater than or equal to pass mark.'
+            }]
+        });
+    }
 
     /** store data into database */
     try {
@@ -62,8 +120,8 @@ async function update(
         if (data) {
 
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
-                event_session_id: body.sessions?.[1] || data.event_session_id,
+                event_id: body.events?.[0] || data.event_id,
+                event_session_id: body.sessions?.[0] || data.event_session_id,
                 title: body.title || data.title,
                 description: body.description || data.description,
                 mark: body.mark || data.mark,

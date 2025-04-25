@@ -81,7 +81,7 @@ async function all(
     let query: FindAndCountOptions = {
         order: [[orderByCol, orderByAsc == 'true' ? 'ASC' : 'DESC']],
         where: {
-            status: show_active_data == 'true' ? 'success' : 'failed',
+            status: show_active_data === 'true' ? ['success', 'pending'] : 'failed',
         },
         include: [
             {
@@ -149,9 +149,12 @@ async function all(
             ...query.where,
             [Op.or]: [
                 { amount: { [Op.like]: `%${search_key}%` } },
-                // { email: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
+                // Add these lines to search by user name (first or last)
+                { '$user.first_name$': { [Op.like]: `%${search_key}%` } },
+                { '$user.last_name$': { [Op.like]: `%${search_key}%` } }, 
+                { '$event.title$': { [Op.like]: `%${search_key}%` } }, 
             ],
         };
     }

@@ -57,37 +57,40 @@ axios.interceptors.response.use(
     function (error) {
         (window as any).loader('out');
         if (error.response.data.status === 422) {
-            let errors = error.response.data.data;
-            errors.forEach((error) => {
-                let el = document.querySelector(`[name="${error.path}"]`);
-                if (el) {
-                    (el.parentNode as HTMLElement).classList.add('has_error');
-                    (el.parentNode as HTMLElement)?.insertAdjacentHTML(
-                        'beforeend',
-                        `
-                        <div class="form_error">
-                            ${error.msg}
-                        </div>
-                        `,
-                    );
-                }
-            });
-
+            // Show the error message in toaster
             (window as anyObject).toaster(
-                `${error.response.status} - ${error.response.statusText}`,
+                error.response.data.message || `${error.response.status} - ${error.response.statusText}`,
                 'warning',
             );
 
-            let error_el = document.querySelector('.has_error');
-            if (error_el) {
-                setTimeout(() => {
-                    error_el.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                    });
-                }, 300);
+            // If there are form errors (in data.data array), display them
+            if (error.response.data.data && Array.isArray(error.response.data.data)) {
+                let errors = error.response.data.data;
+                errors.forEach((error) => {
+                    let el = document.querySelector(`[name="${error.path}"]`);
+                    if (el) {
+                        (el.parentNode as HTMLElement).classList.add('has_error');
+                        (el.parentNode as HTMLElement)?.insertAdjacentHTML(
+                            'beforeend',
+                            `
+                            <div class="form_error">
+                                ${error.msg}
+                            </div>
+                            `,
+                        );
+                    }
+                });
+
+                let error_el = document.querySelector('.has_error');
+                if (error_el) {
+                    setTimeout(() => {
+                        error_el.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center',
+                        });
+                    }, 300);
+                }
             }
-            console.log(error.response);
         }
         return Promise.reject(error);
     },

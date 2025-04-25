@@ -23,17 +23,23 @@ const Edit: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
     const params = useParams();
 
+
+    const [isPaid, setIsPaid] = useState('');
+    const [status, setStatus] = useState('');
+
+
     useEffect(() => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-
-    async function handle_submit(e) {
-        e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(update(form_data) as any);
-    }
+    useEffect(() => {
+        // when data is loaded, update local state
+        if (state.item && state.item.id) {
+            setIsPaid(state.item.is_paid ?? '0');
+            setStatus(state.item.status ?? 'pending');
+        }
+    }, [state.item]);
 
     function get_value(key) {
         try {
@@ -43,6 +49,27 @@ const Edit: React.FC<Props> = (props: Props) => {
             return '';
         }
         return '';
+    }
+
+    async function handle_submit(e) {
+        e.preventDefault();
+        let form_data = new FormData(e.target);
+        const response = await dispatch(update(form_data) as any);
+    }
+
+    function handleIsPaidChange(e) {
+        const value = e.target.value;
+        setIsPaid(value);
+        // Auto-update status based on is_paid value
+        if (value === '1') {
+            setStatus('accepted');
+        } else {
+            setStatus('pending');
+        }
+    }
+
+    function handleStatusChange(e) {
+        setStatus(e.target.value);
     }
 
     return (
@@ -90,13 +117,27 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 }}
                                             />
                                         </div>
+
+                                        <div className="form-group form-vertical">
+                                            <label>Is Paid?</label>
+                                            <select
+                                                name="is_paid"
+                                                className="form-control"
+                                                value={isPaid}
+                                                onChange={handleIsPaidChange}
+                                            >
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+
                                         <div className="form-group form-vertical">
                                             <label>Status</label>
                                             <select
                                                 name="status"
                                                 className="form-control"
-                                                defaultValue={get_value('status')}
-                                                onChange={(e) => console.log('Status Changed', e.target.value)}
+                                                value={status}
+                                                onChange={handleStatusChange}
                                             >
                                                 <option value="pending">Pending</option>
                                                 <option value="rejected">Rejected</option>

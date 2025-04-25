@@ -17,7 +17,8 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    const fields = [
+    let field = '';
+    let fields = [
         { name: 'events', isArray: true },
         { name: 'title', isArray: false },
         { name: 'topics', isArray: false },
@@ -26,57 +27,103 @@ async function validate(req: Request) {
         { name: 'total_time', isArray: false },
     ];
 
-    // Validate required fields
-    for (const field of fields) {
-        if (field.isArray) {
-            await body(field.name)
-                .isArray({ min: 1 })
-                .withMessage(
-                    `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
-                )
-                .run(req);
-        } else {
-            await body(field.name)
-                .not()
-                .isEmpty()
-                .withMessage(
-                    `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
-                )
-                .run(req);
-        }
+    //validate array fields
+    for (const field of fields.filter((f) => f.isArray)) {
+        await body(field.name)
+            .custom((value) => {
+                try {
+                    const parsed =
+                        typeof value === 'string' ? JSON.parse(value) : value;
+                    return Array.isArray(parsed) && parsed.length > 0;
+                } catch {
+                    return false;
+                }
+            })
+            .withMessage(
+                `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
+            )
+            .run(req);
     }
+
+    // Validate other fields
+    for (const field of fields.filter((f) => !f.isArray)) {
+        await body(field.name)
+            .not()
+            .isEmpty()
+            .withMessage(
+                `the <b>${field.name.replaceAll('_', ' ')}</b> field is required`,
+            )
+            .run(req);
+    }
+
+    let result = await validationResult(req);
+
+    return result;
+}
+
+async function store(
+    fastify_instance: FastifyInstance,
+    req: FastifyRequest,
+): Promise<responseObject> {
+    /** validation */
+    let validate_result = await validate(req as Request);
+    if (!validate_result.isEmpty()) {
+        return response(422, 'validation error', validate_result.array());
+    }
+
+    /** initializations */
     let models = Models.get();
-    // Retrieve request data
-    const bodyData = req.body as anyObject;
+    let body = req.body as anyObject;
 
     // Validate start and end times
-    if (bodyData?.start && bodyData?.end) {
-        const startTime = moment(bodyData?.start, 'hh:mmA');
-        const endTime = moment(bodyData?.end, 'hh:mmA');
+    if (body?.start && body?.end) {
+        const startTime = moment(body?.start, 'hh:mmA');
+        const endTime = moment(body?.end, 'hh:mmA');
 
         if (!startTime.isValid() || !endTime.isValid()) {
-            throw new custom_error(
-                'Invalid time format. Use hh:mmAM/PM format.',
+            return response(
                 422,
-                'Invalid time format',
+                'Invalid time format. Use hh:mmAM/PM format.',
+                {
+                    data: [
+                        {
+                            path: 'start/end',
+                            msg: 'Invalid time format. Use hh:mmAM/PM format.',
+                        },
+                    ],
+                },
             );
         }
 
         if (startTime.isSameOrAfter(endTime)) {
-            throw new custom_error(
-                'The start time must be before the end time.',
+            return response(
                 422,
-                'Invalid time range',
+                'Invalid time range! The start time must be before the end time.',
+                {
+                    data: [
+                        {
+                            path: 'start',
+                            msg: 'The start time must be before the end time.',
+                        },
+                    ],
+                },
             );
         }
 
         // Calculate the duration in minutes
         const duration = moment.duration(endTime.diff(startTime)).asMinutes();
-        if (duration !== parseInt(bodyData?.total_time, 10)) {
-            throw new custom_error(
-                `The total time should be ${duration} minutes based on start and end times.`,
+        if (duration !== parseInt(body?.total_time, 10)) {
+            return response(
                 422,
-                'Invalid total time',
+                `The total time should be ${duration} minutes based on start and end times.`,
+                {
+                    data: [
+                        {
+                            path: 'total_time',
+                            msg: `The total time should be ${duration} minutes based on start and end times.`,
+                        },
+                    ],
+                },
             );
         }
 
@@ -111,56 +158,37 @@ async function validate(req: Request) {
         });
 
         if (overlappingSession) {
-            throw new custom_error(
-                'The selected time overlaps with another session.',
+            return response(
                 422,
-                'Time overlap',
+                'Time overlap! The selected time overlaps with another session.',
+                {
+                    data: [
+                        {
+                            path: 'start/end',
+                            msg: 'The selected time overlaps with another session.',
+                        },
+                    ],
+                },
             );
         }
     }
 
-    let result = await validationResult(req);
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
 
-    return result;
-}
-
-async function store(
-    fastify_instance: FastifyInstance,
-    req: FastifyRequest,
-): Promise<responseObject> {
-    /** validation */
-    let validate_result = await validate(req as Request);
-    if (!validate_result.isEmpty()) {
-        return response(422, 'validation error', validate_result.array());
-    }
-
-    /** initializations */
-    let models = Models.get();
-    let body = req.body as anyObject;
-
-    let event_id: number;
-    if (Array.isArray(body.events) && body.events.length > 0) {
-        // Take the first element if it exists,
-        event_id = parseInt(body.events[0]);
-    } else if (
-        typeof body.events === 'string' ||
-        typeof body.events === 'number'
-    ) {
-        event_id = parseInt(body.events as string);
-    } else {
-        // Handle missing/invalid event ID case
-        throw new custom_error(
-            'Invalid or missing event ID',
-            422,
-            'Validation error',
-        );
-    }
+    body.events = parseField(body.events);
     /** store data into database */
     try {
         let data = new models[modelName]();
 
         let inputs: InferCreationAttributes<typeof data> = {
-            event_id: body.events?.[1],
+            event_id: body.event?.[0],
             title: body.title,
             topics: body.topics,
             start: body.start,

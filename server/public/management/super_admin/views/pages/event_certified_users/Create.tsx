@@ -13,7 +13,8 @@ import DateEl from '../../components/DateEl';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import UserDropDownMatch from "../users/components/dropdownMatch/DropDown";
+import axios from 'axios';
 
 export interface Props { }
 
@@ -22,6 +23,13 @@ const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
+
+    const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [event, setEvent] = useState<Event | null>(null);
+    const [users, setUsers] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const dispatch = useAppDispatch();
 
     async function handle_submit(e) {
@@ -34,6 +42,36 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
+    // Fetch sessions when event is selected
+    useEffect(() => {
+        if (!selectedEventId) {
+            setUsers([]);
+            setSelectedSessionId(null);
+            return;
+        }
+
+        const fetchEventAndSessions = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const [eventRes, usersRes] = await Promise.all([
+                    axios.get(`/api/v1/events/${selectedEventId}`),
+                    axios.get(`/api/v1/event-certified-users/event/${selectedEventId}`),
+                ]);
+
+                setEvent(eventRes.data.data);
+                setUsers(usersRes.data.data);
+            } catch {
+                setError('Failed to fetch event data.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEventAndSessions();
+    }, [selectedEventId]);
+
+console.log('users', users);
 
     function get_value(key) {
         try {
@@ -66,16 +104,22 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <EventDropDown name="events"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                setSelectedEventId(Number(data.ids))
                                             }}
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
                                         <label>Users</label>
-                                        <UserDropDown name="users"
+                                        <UserDropDownMatch name="users"
                                             multiple={false}
+                                            disabled={!selectedEventId}
+                                            options={users.map(user => ({
+                                                id: user.id,
+                                                first_name: user?.user?.first_name,
+                                                last_name: user?.user?.last_name
+                                            }))}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                setSelectedSessionId(Number(data.ids));
                                             }}
                                         />
                                     </div>
