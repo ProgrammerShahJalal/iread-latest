@@ -72,18 +72,26 @@ async function update(
             await (fastify_instance as any).upload(body['poster'], image_path);
         }
 
+
+        let sessionStartDateTime = body.session_start_date_time
+            ? moment(body.session_start_date_time).utc().toDate()
+            : data?.session_start_date_time as any;
+
+        let sessionEndDateTime = body.session_end_date_time
+            ? moment(body.session_end_date_time).utc().toDate()
+            : data?.session_end_date_time as any;
+
+        console.log('Formatted sessionStartDateTime', sessionStartDateTime);
+        console.log('Formatted sessionEndDateTime', sessionEndDateTime);
+
+        console.log(moment('2025-08-14T10:30').format('YYYY-MM-DD HH:mm:ss'));
+
         let inputs: InferCreationAttributes<typeof user_model> = {
             title: body.title || data?.title,
-            reg_start_date: body.reg_start_date || data?.reg_start_date,
-            reg_end_date: body.reg_end_date || data?.reg_end_date,
-            session_start_date_time:
-                moment(body.session_start_date_time).format(
-                    'YYYY-MM-DD HH:mm:ss',
-                ) || (data?.session_start_date_time as string),
-            session_end_date_time:
-                moment(body.session_end_date_time).format(
-                    'YYYY-MM-DD HH:mm:ss',
-                ) || (data?.session_end_date_time as string),
+            reg_start_date: body.reg_start_date || data?.reg_start_date as string,
+            reg_end_date: body.reg_end_date || data?.reg_end_date as string,
+            session_start_date_time: sessionStartDateTime || data?.session_start_date_time,
+            session_end_date_time: sessionEndDateTime || data?.session_end_date_time,
             place: body.place || data?.place,
             short_description:
                 body.short_description || data?.short_description,
@@ -126,14 +134,7 @@ async function update(
                     });
                 }),
             );
-            console.log(
-                '== after saving SESSION START DATE TIME',
-                body.session_start_date_time,
-            );
-            console.log(
-                '== after saving SESSION END DATE TIME',
-                body.session_end_date_time,
-            );
+
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(

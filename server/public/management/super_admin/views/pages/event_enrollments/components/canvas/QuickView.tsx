@@ -48,7 +48,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state.item.event?.title}</th>
+                                    <th>{state.item.event?.title?.slice(0, 40)}{state.item.event?.title?.length > 40 && '...'}</th>
                                 </tr>
                              
                                 <tr>

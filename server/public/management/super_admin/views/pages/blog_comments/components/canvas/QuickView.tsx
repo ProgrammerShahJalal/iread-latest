@@ -52,12 +52,12 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Blog Title</th>
                                     <th>:</th>
-                                    <th>{state.item.blog?.title}</th>
+                                    <th>{state.item.blog?.title?.slice(0, 40)}{state.item.blog?.title?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Comment</th>
                                     <th>:</th>
-                                    <th>{state.item.comment}</th>
+                                    <th>{state.item.comment.slice(0, 40)}{state.item.comment?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

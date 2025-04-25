@@ -55,17 +55,17 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Event Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.event?.title}</th>
+                                    <th>{state?.item.event?.title?.slice(0, 30)}{state?.item.event?.title?.length > 30 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Session Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.session?.title}</th>
+                                    <th>{state?.item.session?.title?.slice(0, 30)}{state?.item.session?.title?.length > 30 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Assesment Title</th>
                                     <th>:</th>
-                                    <th>{state?.item.assesment?.title}</th>
+                                    <th>{state?.item.assesment?.title?.slice(0, 30)}{state.item.assesment?.title?.length > 30 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Mark</th>

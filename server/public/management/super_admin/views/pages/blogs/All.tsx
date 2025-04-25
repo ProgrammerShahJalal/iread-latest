@@ -121,7 +121,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                                 quick_view(i)
                                                             }
                                                         >
-                                                            {i.title}
+                                                            {i.title?.slice(0, 40)}{i.title?.length > 40 && '...'}
                                                         </span>
                                                     </td>
                                                     <td>

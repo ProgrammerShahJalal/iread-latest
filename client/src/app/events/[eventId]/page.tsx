@@ -29,7 +29,7 @@ const formatDateTime = (isoDate: string): string => {
     // second: "2-digit",
     hour12: true, // Use 12-hour format (set to false for 24-hour format)
   };
-  return date.toLocaleString("en-GB", options);
+  return localDate.toLocaleString("en-GB", options);
 };
 
 const EventDetailsPage = async ({

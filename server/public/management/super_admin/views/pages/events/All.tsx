@@ -153,7 +153,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        {i.place}
+                                                        {i.place?.slice(0, 30)} {i.place?.length > 30 && '...'}
                                                     </td>
                                                     <td>
                                                         <div

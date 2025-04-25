@@ -49,7 +49,7 @@ const QuickView: React.FC<Props> = (props: Props) => {
                                 <tr>
                                     <th>Title</th>
                                     <th>:</th>
-                                    <th>{state.item.title}</th>
+                                    <th>{state.item.title.slice(0, 40)}{state.item.title?.length > 40 && '...'}</th>
                                 </tr>
                                 <tr>
                                     <th>Cover Image</th>

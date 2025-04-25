@@ -59,19 +59,15 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        title: body.title,
-        status: body.status,
-    };
-
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                title: body.title || data.title,
+                status: body.status || data.status,
+            };
             data.update(inputs);
             await data.save();
             return response(201, 'data updated', { data });
