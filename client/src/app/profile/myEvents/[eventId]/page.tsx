@@ -5,6 +5,8 @@ import EventFaqCard from "./EventFaqCard";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventResources } from "../../../../api/eventResourcesApi";
 import Link from "next/link";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { getUserByUid } from "../../../../api/userApi";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -29,7 +31,7 @@ const formatDateTime = (isoDate: string): string => {
 
 type Params = Promise<{ eventId: string }>
 type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>
- 
+
 export async function generateMetadata(props: {
   params: Params
   searchParams: SearchParams
@@ -54,6 +56,7 @@ const EventDetailsPage = async (props: {
   }
 
   try {
+    const me = await getUserByUid(Number(userId));
     const events = await getEvents();
     const faqs = await getFaqs();
     const eventResources = await getEventResources(Number(eventId));
@@ -74,22 +77,31 @@ const EventDetailsPage = async (props: {
         </ProfileLayout>
       );
     }
-    
+
 
     return (
       <ProfileLayout>
+        <div className="flex justify-end items-center mb-4">
+          <Link
+            href={`/profile/myEvents?uid=${me?.uid}`}
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+          >
+            <ArrowLeftIcon className="h-5 w-5" />
+            Back
+          </Link>
+        </div>
         <div className="container my-10">
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
-      <Link href={`/profile/feedback/${eventId}?uid=${userId}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Give Feedback
-      </Link>
-      <Link href={`/profile/session/${eventId}?uid=${userId}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Take Session
-      </Link>
-      <Link href={`/profile/certificate/${eventId}?uid=${userId}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Certificate
-      </Link>
-    </div>
+          <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
+            <Link href={`/profile/feedback/${eventId}?uid=${userId}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Give Feedback
+            </Link>
+            <Link href={`/profile/session/${eventId}?uid=${userId}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Take Session
+            </Link>
+            <Link href={`/profile/certificate/${eventId}?uid=${userId}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Certificate
+            </Link>
+          </div>
 
           <div className="text-center">
             <Image

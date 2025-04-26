@@ -5,6 +5,9 @@ import RefundButton from "../../../../components/RefundButton";
 import { getEventById } from "../../../../api/eventApi";
 import { getUserByUid } from "../../../../api/userApi";
 import { getEventPaymentRefunds } from "../../../../api/eventPaymentRefundsApi";
+import { Event } from "@/types/event";
+import Link from "next/link";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
@@ -43,14 +46,14 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
   if (!uid) {
     return (
       <ProfileLayout>
-        <div className="py-24 text-center">Invalid user request.</div>;
+        <div className="py-24 text-center">Invalid user request.</div>
       </ProfileLayout>
     );
   }
   if (!eventId) {
     return (
       <ProfileLayout>
-        <div className="py-24 text-center">Invalid event request.</div>;
+        <div className="py-24 text-center">Invalid event request.</div>
       </ProfileLayout>
     );
   }
@@ -64,9 +67,16 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
     return (
       <ProfileLayout>
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-4 text-center">
-            Payment Reports
-          </h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Payment Reports</h1>
+            <Link
+              href={`/profile/myEvents?uid=${uid}`}
+              className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+            >
+              <ArrowLeftIcon className="h-5 w-5"/>
+              Back
+            </Link>
+          </div>
 
           {/* Responsive Table Wrapper */}
           <div className="w-full overflow-x-auto">
@@ -167,7 +177,7 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                 ) : (
                   <tr>
                     <td
-                      colSpan={7}
+                      colSpan={9}
                       className="text-center border border-gray-300 py-4"
                     >
                       No payment records found.
@@ -183,11 +193,13 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
   } catch (error) {
     console.error("Error fetching event payment reports:", error);
     return (
-      <div className="py-24 text-center">
-        <h2 className="font-semibold my-12">
-          Failed to load event payment data
-        </h2>
-      </div>
+      <ProfileLayout>
+        <div className="py-24 text-center">
+          <h2 className="font-semibold my-12">
+            Failed to load event payment data
+          </h2>
+        </div>
+      </ProfileLayout>
     );
   }
 };

@@ -8,6 +8,7 @@ export interface EventTag{
 }
 
 export interface Event {
+    id: number;
     event_id: number;
     title: string;
     reg_start_date: string;

@@ -3,6 +3,8 @@ import { getEventCertificate } from "../../../../api/eventCertificateApi";
 import { getEventById } from "../../../../api/eventApi";
 import { getUserById, getUserByUid } from "../../../../api/userApi";
 import { CertificateViewer } from "../components/CertificateViewer";
+import Link from "next/link";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 
 type Params = Promise<{ eventId: string }>;
@@ -63,6 +65,15 @@ const MyEventCertificatePage = async ({
 
   return (
     <ProfileLayout>
+      <div className="flex justify-end items-center mb-4">
+        <Link
+          href={`/profile/myEvents/${eventId}?uid=${me?.uid}`}
+          className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+        >
+          <ArrowLeftIcon className="h-5 w-5" />
+          Back
+        </Link>
+      </div>
       <div className="flex">
         <div className="flex-1 p-6 text-center">
           <h1 className="text-3xl font-bold mb-6">

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../api/eventApi";
+import { Event } from "@/types/event";
 
 const formatDateTime = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -77,7 +78,7 @@ const EventsPage = async () => {
                                 <div className="schedule-details clearfix p-15 pt-10">
                                   <h5 className="font-16 title">
                                     <Link href={`/events/${event?.event_id}`}>
-                                      {event?.title}
+                                      {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                                     </Link>
                                   </h5>
                                   <ul className="list-inline font-11 mb-20">
@@ -93,7 +94,7 @@ const EventsPage = async () => {
                                       {event?.place}
                                     </li>
                                   </ul>
-                                  <p>{event?.short_description}</p>
+                                  <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
                                   <div className="mt-10">
                                     <Link
                                       href={`/events/${event?.event_id}`}

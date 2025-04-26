@@ -3,6 +3,7 @@ import { getMyEvents } from "../../../api/eventApi";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
 import { getUserByUid } from "../../../api/userApi";
+import { Event } from "@/types/event";
 
 // Function to format date & time
 const formatDateTime = (isoDate: string): string => {
@@ -37,7 +38,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
 
 
   const me = await getUserByUid(userUid);
-  const myEvents = await getMyEvents(me?.id);
+  const myEvents: Event[] = await getMyEvents(me?.id);
 
   return (
     <ProfileLayout>
@@ -66,7 +67,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                         <div className="schedule-details clearfix p-15 pt-10">
                           <h5 className="font-16 title">
                             <Link href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}>
-                              {event.title}
+                              {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                             </Link>
                           </h5>
                           <ul className="list-inline font-11 mb-20">
@@ -79,7 +80,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                               {event.place}
                             </li>
                           </ul>
-                          <p>{event.short_description}</p>
+                          <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
                           <div className="flex justify-between items-center">
                             <div className="mt-10">
                               <Link

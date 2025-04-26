@@ -216,7 +216,7 @@ function Navbar() {
                   </button>
                 ) : (
                   <Link href="/login" className="text-white">
-                    Login
+                    Login / Register
                   </Link>
                 )}
 

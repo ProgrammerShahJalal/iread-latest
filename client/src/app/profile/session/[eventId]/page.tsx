@@ -7,6 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { FaCalendarAlt, FaClock, FaListAlt, FaCheckCircle, FaBook, FaAward } from 'react-icons/fa';
 import moment from 'moment/moment';
 import { Event } from '@/types/event';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 interface Session {
     id: number;
@@ -84,9 +86,9 @@ function EventSessionPage() {
                 }
 
                 // Only fetch assessments if session has ended
-                if (eventResponse.data.data?.session_end_date_time && 
+                if (eventResponse.data.data?.session_end_date_time &&
                     new Date() >= new Date(eventResponse.data.data.session_end_date_time)) {
-                    
+
                     const assessmentResponse = await axios.get(`${BASE_URL}/api/v1/event-session-assesments/event/${eventId}`);
                     if (assessmentResponse?.data?.status === 200) {
                         setSessionAssesment(assessmentResponse?.data?.data);
@@ -167,11 +169,20 @@ function EventSessionPage() {
         }
     };
 
-    const isAssessmentAvailable = eventData?.session_end_date_time && 
-                                new Date() >= new Date(eventData.session_end_date_time);
+    const isAssessmentAvailable = eventData?.session_end_date_time &&
+        new Date() >= new Date(eventData.session_end_date_time);
 
     return (
         <ProfileLayout>
+            <div className="flex justify-end items-center mb-4">
+                <Link
+                    href={`/profile/myEvents/${eventId}?uid=${user?.uid}`}
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                >
+                    <ArrowLeftIcon className="h-5 w-5" />
+                    Back
+                </Link>
+            </div>
             <div className="p-8">
                 <div className="mb-12">
                     <h2 className="text-3xl font-bold text-gray-800">Event Session</h2>
