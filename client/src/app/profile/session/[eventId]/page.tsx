@@ -280,7 +280,7 @@ function EventSessionPage() {
                                 </svg>
                             </div>
                             <div className="ml-3">
-                                <p className="text-sm text-yellow-700">
+                                <p className="text-base md:text-sm text-yellow-700">
                                     The assessment will be available after the session ends on {moment(eventData?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}.
                                 </p>
                             </div>
