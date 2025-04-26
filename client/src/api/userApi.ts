@@ -21,3 +21,24 @@ export async function getUsers() {
     const users = (await query(user_query)) as any;
     return users;
 }
+
+export async function getUserById(id: string | number) {
+    let user_query = `
+        SELECT 
+            u.id,
+            u.uid,
+            u.role_serial,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.phone_number,
+            u.photo,
+            u.slug
+        FROM users u
+        WHERE u.is_blocked = '0'
+        AND u.id = ?
+    `;
+
+    const user = (await query(user_query, [id])) as any;
+    return user.length > 0 ? user[0] : null;
+}

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventCertificate } from "../../../../api/eventCertificateApi";
+import { getEventById } from "../../../../api/eventApi";
+import { getUserById } from "../../../../api/userApi";
 
 const formatDateTime = (isoDate: string): string => {
   return new Date(isoDate).toLocaleString("en-GB", {
@@ -26,10 +28,13 @@ export async function generateMetadata({
   const { eventId } = await params;
   const { uid: userId } = await searchParams;
 
+  let event = await getEventById(Number(eventId));
+  let user = await getUserById(Number(userId));
+
   return {
-    title: `Certificate for Event ${eventId}`,
+    title: `Certificate of ${user.first_name} ${user.last_name} for ${event.title}`,
     description: userId
-      ? `View certificate for user ${userId} and event ${eventId}`
+      ? `View certificate for user ${user.first_name} ${user.last_name} and event ${event.title}`
       : "Invalid certificate request",
   };
 }
