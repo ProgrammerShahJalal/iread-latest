@@ -65,6 +65,7 @@ const LoginPage: React.FC = () => {
       // Store user info in localStorage
       const {
         id,
+        uid,
         first_name,
         last_name,
         email,
@@ -78,6 +79,7 @@ const LoginPage: React.FC = () => {
         "user",
         JSON.stringify({
           id,
+          uid,
           first_name,
           last_name,
           email,
@@ -92,7 +94,7 @@ const LoginPage: React.FC = () => {
       // Dispatch event to update Navbar immediately
       window.dispatchEvent(new Event("userUpdated"));
 
-      router.push(`/profile?slug=${slug}&uid=${id}`);
+      router.push(`/profile?slug=${slug}&uid=${uid}`);
 
       // if (!(userRolesMap[role_serial] === "admin")) {
       //   router.push(`/profile?slug=${slug}`);

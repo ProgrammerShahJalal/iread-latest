@@ -6,12 +6,7 @@ import error_trace from '../../../helpers/error_trace';
 import custom_error from '../../../helpers/custom_error';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
-// async function details(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+
 
 async function findByEventId(
     fastify_instance: FastifyInstance,

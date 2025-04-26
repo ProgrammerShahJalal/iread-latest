@@ -4,6 +4,7 @@ import React, { useEffect, useState, use } from 'react';
 import axios from 'axios';
 import ProfileLayout from '../../../../components/ProfileLayout';
 import { useParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 // Define the type for a form field
@@ -19,7 +20,7 @@ interface FormField {
 }
 
 function EventFeedbackPage() {
-      const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [feedbackFields, setFeedbackFields] = useState<FormField[] | null>(null);
     const [eventFormFieldId, setEventFormFieldId] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -108,13 +109,13 @@ function EventFeedbackPage() {
                 payload
             );
             if (response.data.status === 201) {
-                alert("Feedback submitted successfully!");
+                toast.success("Feedback submitted successfully!");
             } else {
-                alert("Failed to submit feedback.");
+                toast.error("Failed to submit feedback.");
             }
         } catch (err: any) {
             console.error("Error submitting feedback:", err);
-            alert("An error occurred while submitting feedback.");
+            toast.error("An error occurred while submitting feedback.");
         }
     };
 

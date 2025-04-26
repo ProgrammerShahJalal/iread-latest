@@ -133,8 +133,8 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                                 defaultValue={get_value('is_refunded')}
                                                                 onChange={(e) => console.log('Is Refunded Changed', e.target.value)}
                                                                 >
-                                                                    <option value="false">False</option>
-                                                                    <option value="true">True</option>
+                                                                    <option value="false">No</option>
+                                                                    <option value="true">Yes</option>
                     
                                                                 </select>
                                                             </>

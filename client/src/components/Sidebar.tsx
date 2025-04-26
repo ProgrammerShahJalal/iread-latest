@@ -20,7 +20,7 @@ const Sidebar = () => {
           setUser(parsedUser);
 
           const uidFromQuery = searchParams.get("uid");
-          if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+          if (!uidFromQuery || uidFromQuery !== String(parsedUser.uid)) {
             router.replace("/profile/404");
           }
         } catch (error) {
@@ -37,10 +37,10 @@ const Sidebar = () => {
   const navLinks = [
     {
       name: "My Profile",
-      path: user ? `/profile?slug=${user.slug}&uid=${user.id}` : "/profile",
+      path: user ? `/profile?slug=${user.slug}&uid=${user.uid}` : "/profile",
     },
-    { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
-    { name: "Settings", path: `/profile/settings?uid=${user?.id}` },
+    { name: "My Events", path: `/profile/myEvents?uid=${user?.uid}` },
+    { name: "Settings", path: `/profile/settings?uid=${user?.uid}` },
   ];
 
   return (

@@ -227,7 +227,7 @@ function Navbar() {
                     </li>
                     <li>
                       <Link
-                        href={`/profile?slug=${user.slug}&uid=${user.id}`}
+                        href={`/profile?slug=${user.slug}&uid=${user.uid}`}
                         className="block px-4 py-2 hover:bg-gray-100"
                       >
                         Your Profile

@@ -63,6 +63,12 @@ export async function getMyEvents(user_id: number) {
         ${eventBaseQuery}
         JOIN event_enrollments ee ON e.id = ee.event_id
         WHERE ee.user_id = ? AND ee.status = 'accepted'
+        AND NOT EXISTS (
+            SELECT 1 FROM event_payment_refunds epr
+            WHERE epr.event_id = e.id
+            AND epr.user_id = ee.user_id
+            AND epr.status = 'success'
+        )
         ${orderByClause}
     `;
 

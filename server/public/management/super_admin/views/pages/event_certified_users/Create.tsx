@@ -56,7 +56,7 @@ const Create: React.FC<Props> = (props: Props) => {
             try {
                 const [eventRes, usersRes] = await Promise.all([
                     axios.get(`/api/v1/events/${selectedEventId}`),
-                    axios.get(`/api/v1/event-certified-users/event/${selectedEventId}`),
+                    axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`),
                 ]);
 
                 setEvent(eventRes.data.data);
@@ -113,10 +113,10 @@ console.log('users', users);
                                         <UserDropDownMatch name="users"
                                             multiple={false}
                                             disabled={!selectedEventId}
-                                            options={users.map(user => ({
-                                                id: user.id,
-                                                first_name: user?.user?.first_name,
-                                                last_name: user?.user?.last_name
+                                            options={users?.map(user => ({
+                                                id: user?.id,
+                                                first_name: user?.first_name,
+                                                last_name: user?.last_name
                                             }))}
                                             get_selected_data={(data) => {
                                                 setSelectedSessionId(Number(data.ids));

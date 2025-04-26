@@ -1,13 +1,13 @@
-interface EventCategory{
+export interface EventCategory{
     title: string;
     image: string;
 }
 
-interface EventTag{
+export interface EventTag{
     title: string;
 }
 
-interface Event {
+export interface Event {
     event_id: number;
     title: string;
     reg_start_date: string;

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getMyEvents } from "../../../api/eventApi";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
+import { getUserByUid } from "../../../api/userApi";
 
 // Function to format date & time
 const formatDateTime = (isoDate: string): string => {
@@ -24,9 +25,9 @@ interface PageProps {
 // ✅ Server Component: Fetch data before rendering
 const MyEventsPage = async ({ searchParams }: PageProps) => {
   const params = await searchParams;
-  const userId = params?.uid ? parseInt(params.uid, 10) : null;
+  const userUid = params?.uid ? parseInt(params.uid, 10) : null;
 
-  if (!userId) {
+  if (!userUid) {
     return (
       <ProfileLayout>
         <p className="text-red-500">Invalid User ID.</p>
@@ -34,8 +35,9 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
-  // Fetch events on the server
-  const myEvents = await getMyEvents(userId);
+
+  const me = await getUserByUid(userUid);
+  const myEvents = await getMyEvents(me?.id);
 
   return (
     <ProfileLayout>
@@ -63,7 +65,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                         </div>
                         <div className="schedule-details clearfix p-15 pt-10">
                           <h5 className="font-16 title">
-                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userId}`}>
+                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}>
                               {event.title}
                             </Link>
                           </h5>
@@ -81,7 +83,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                           <div className="flex justify-between items-center">
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
+                                href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}
                                 className="btn btn-dark btn-sm mt-10"
                               >
                                 Details
@@ -89,7 +91,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                             </div>
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/reports?uid=${userId}&eventId=${event.event_id}`}
+                                href={`/profile/myEvents/reports?uid=${userUid}&eventId=${event.event_id}`}
                                 className="btn bg-[#F2184F] text-white btn-sm mt-10"
                               >
                                 Reports

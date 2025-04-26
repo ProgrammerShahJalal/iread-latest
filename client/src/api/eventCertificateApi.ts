@@ -13,6 +13,7 @@ export async function getEventCertificate(eventId: number, userId: number) {
     FROM event_certified_users
     WHERE event_id = ? 
     AND user_id = ?
+    AND is_submitted = '1'
     LIMIT 1;
   `;
 
@@ -23,3 +24,4 @@ export async function getEventCertificate(eventId: number, userId: number) {
 
   return eventCertificate?.[0] || null;
 }
+

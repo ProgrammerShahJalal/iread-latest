@@ -3,7 +3,8 @@ import { getEventPayments } from "../../../../api/eventPaymentsApi";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import RefundButton from "../../../../components/RefundButton";
 import { getEventById } from "../../../../api/eventApi";
-
+import { getUserByUid } from "../../../../api/userApi";
+import { getEventPaymentRefunds } from "../../../../api/eventPaymentRefundsApi";
 
 interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
@@ -36,11 +37,9 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
   // Extract uid and eventId from searchParams
   const params = await searchParams;
   const uid = params?.uid ? Number(params?.uid) : undefined;
-  const eventId = params?.eventId
-    ? Number(params?.eventId)
-    : undefined;
+  const eventId = params?.eventId ? Number(params?.eventId) : undefined;
 
-
+  const me = await getUserByUid(Number(uid));
   if (!uid) {
     return (
       <ProfileLayout>
@@ -57,7 +56,8 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
   }
 
   try {
-    const paymentReports = await getEventPayments(Number(eventId), Number(uid));
+    const eventPaymentRefunds = await getEventPaymentRefunds(Number(eventId), Number(me?.id));
+    const paymentReports = await getEventPayments(Number(eventId), Number(me?.id));
     const event: Event = await getEventById(eventId);
     const refundAllowed = isRefundAllowed(event?.session_start_date_time);
 
@@ -104,40 +104,52 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
               </thead>
               <tbody>
                 {paymentReports.length > 0 ? (
-                  paymentReports.map((payment: any) => (
-                    <tr key={payment.trx_id} className="text-center">
-                      <td className="border border-gray-300 px-4 py-2">
-                        {payment.event_id}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {payment.user_id}
-                      </td>
-                      <td
-                        className={`border border-gray-300 px-4 py-2 ${payment.status === "success"
-                          ? "text-green-600"
-                          : "text-red-600"
+                  paymentReports.map((payment: any) => {
+                    const hasRefundRequest = eventPaymentRefunds.length > 0;
+                    const canShowRefundButton = !payment.is_refunded && refundAllowed && !hasRefundRequest;
+
+                    return (
+                      <tr key={payment.trx_id} className="text-center">
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.event_id}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.user_id}
+                        </td>
+                        <td
+                          className={`border border-gray-300 px-4 py-2 ${
+                            payment.status === "success"
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
-                      >
-                        {payment.status}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        ${payment.amount}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {formatDate(payment.date)}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {payment.trx_id}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {payment.media}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {payment.is_refunded ? "Yes" : "No"}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {!payment.is_refunded ? (
-                          refundAllowed ? (
+                        >
+                          {payment.status}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          ${payment.amount}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {formatDate(payment.date)}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.trx_id}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.media}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.is_refunded ? "Yes" : "No"}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {payment.is_refunded ? (
+                            <span className="text-gray-400">Already Refunded</span>
+                          ) : hasRefundRequest ? (
+                            <span className="text-gray-400">Refund Requested</span>
+                          ) : !refundAllowed ? (
+                            <span className="text-gray-400">
+                              Refund not allowed after event date
+                            </span>
+                          ) : (
                             <RefundButton
                               paymentId={payment.payment_id}
                               userId={payment.user_id}
@@ -147,17 +159,11 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
                               amount={payment.amount}
                               media={payment.media}
                             />
-                          ) : (
-                            <span className="text-gray-400">
-                              Refund not allowed after event date
-                            </span>
-                          )
-                        ) : (
-                          <span className="text-gray-400">Already Refunded</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
