@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 function Navbar() {
@@ -11,6 +11,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // Controls hamburger menu
   const [dropdownOpen, setDropdownOpen] = useState(false); // Controls profile dropdown
   const router = useRouter();
+  const pathname = usePathname();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -99,6 +100,15 @@ function Navbar() {
     setDropdownOpen(false);
   };
 
+  // Helper function to determine if link is active
+  const isActive = (href: string) => {
+    // Exact match for home, otherwise startsWith
+    if (href === "/") {
+      return pathname === href;
+    }
+    return pathname.startsWith(href);
+  };
+
   return (
     <div>
       <div className="header-nav">
@@ -121,93 +131,84 @@ function Navbar() {
                 {/* Mobile Menu */}
                 <div className={`mobile-menu ${isOpen ? "active" : ""}`}>
                   <ul className="mobile-menu-list">
-                    <li>
-                      <Link href="/" onClick={() => setIsOpen(false)}>
-                        Home
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/about" onClick={() => setIsOpen(false)}>
-                        About Us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/events" onClick={() => setIsOpen(false)}>
-                        Events
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/courses" onClick={() => setIsOpen(false)}>
-                        Courses
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/forum" onClick={() => setIsOpen(false)}>
-                        Forum
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/blogs" onClick={() => setIsOpen(false)}>
-                        Blogs
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/trainers" onClick={() => setIsOpen(false)}>
-                        Trainers
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/aiModels" onClick={() => setIsOpen(false)}>
-                        AI Models
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/contact" onClick={() => setIsOpen(false)}>
-                        Contact
-                      </Link>
-                    </li>
+                    {[
+                      { href: "/", name: "Home" },
+                      { href: "/about", name: "About Us" },
+                      { href: "/events", name: "Events" },
+                      { href: "/courses", name: "Courses" },
+                      { href: "/forum", name: "Forum" },
+                      { href: "/blogs", name: "Blogs" },
+                      { href: "/trainers", name: "Trainers" },
+                      { href: "/aiModels", name: "AI Models" },
+                      { href: "/contact", name: "Contact" },
+                    ].map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`
+                            block px-4 py-2 rounded-2xl
+                            transition-all duration-300 ease-in-out
+                            hover:bg-white hover:text-gray-900
+                            ${isActive(link.href) 
+                              ? "bg-white text-gray-900 font-medium" 
+                              : "text-white hover:bg-opacity-20"}
+                          `}
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
 
               {/* Desktop Menu */}
               <ul className="desktop-menu md:flex text-white">
-                <li>
-                  <Link href="/">Home</Link>
-                </li>
-                <li>
-                  <Link href="/about">About Us</Link>
-                </li>
-                <li>
-                  <Link href="/events">Events</Link>
-                </li>
-                <li>
-                  <Link href="/courses">Courses</Link>
-                </li>
-                <li>
-                  <Link href="/forum">Forum</Link>
-                </li>
-                <li>
-                  <Link href="/blogs">Blogs</Link>
-                </li>
-                <li>
-                  <Link href="/trainers">Trainers</Link>
-                </li>
-                <li>
-                  <Link href="/aiModels">AI Models</Link>
-                </li>
-                <li>
-                  <Link href="/contact">Contact</Link>
-                </li>
+                {[
+                  { href: "/", name: "Home" },
+                  { href: "/about", name: "About Us" },
+                  { href: "/events", name: "Events" },
+                  { href: "/courses", name: "Courses" },
+                  { href: "/forum", name: "Forum" },
+                  { href: "/blogs", name: "Blogs" },
+                  { href: "/trainers", name: "Trainers" },
+                  { href: "/aiModels", name: "AI Models" },
+                  { href: "/contact", name: "Contact" },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`
+                        relative block px-4 py-2 rounded-2xl
+                        transition-all duration-300 ease-in-out
+                        hover:bg-white hover:text-gray-900
+                        focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50
+                        ${isActive(link.href) 
+                          ? "bg-white text-gray-900 font-medium" 
+                          : "text-white hover:bg-opacity-20"}
+                      `}
+                      aria-current={isActive(link.href) ? "page" : undefined}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
 
               <ul>
                 <li>
                   <Link
-                    className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
-                    data-toggle="modal"
-                    data-target="#BSParentModal"
                     href="/donate"
+                    className={`
+                      btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15
+                      transition-all duration-300 ease-in-out
+                      hover:bg-white hover:text-gray-900
+                      focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50
+                      ${isActive("/donate") 
+                        ? "bg-white text-gray-900 font-medium" 
+                        : "hover:bg-opacity-80"}
+                    `}
                   >
                     Donate Us
                   </Link>
@@ -228,7 +229,12 @@ function Navbar() {
                     />
                   </button>
                 ) : (
-                  <Link href="/login" className="text-white">
+                  <Link href="/login"  className={`
+                    text-white px-4 py-2 rounded-lg
+                    transition-all duration-300 ease-in-out
+                    hover:bg-white hover:text-gray-900
+                    ${isActive("/login") ? "bg-white text-gray-900 font-medium" : ""}
+                  `}>
                     Login / Register
                   </Link>
                 )}
@@ -241,7 +247,12 @@ function Navbar() {
                     <li>
                       <Link
                         href={`/profile?slug=${user.slug}&uid=${user.uid}`}
-                        className="block px-4 py-2 hover:bg-gray-100"
+                        className={`
+                          block px-4 py-2 
+                          transition-all duration-300 ease-in-out
+                          hover:bg-gray-100
+                          ${isActive("/profile") ? "bg-gray-100 font-medium" : ""}
+                        `}
                       >
                         Your Profile
                       </Link>
@@ -249,7 +260,11 @@ function Navbar() {
                     <li>
                       <button
                         onClick={openLogoutConfirmation}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                        className={`
+                          w-full text-left px-4 py-2 
+                          transition-all duration-300 ease-in-out
+                          hover:bg-gray-100
+                        `}
                       >
                         Logout
                       </button>
