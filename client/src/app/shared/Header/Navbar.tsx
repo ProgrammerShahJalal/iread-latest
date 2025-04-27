@@ -4,12 +4,14 @@ import "./Navbar.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false); // Controls hamburger menu
   const [dropdownOpen, setDropdownOpen] = useState(false); // Controls profile dropdown
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -76,14 +78,25 @@ function Navbar() {
         localStorage.removeItem("user");
         window.dispatchEvent(new Event("userUpdated"));
         setUser(null);
+        toast.success("Logout successful!");
         router.push("/login");
       } else {
         const errorText = await response.text();
         console.error("Logout failed:", errorText);
+        toast.error("Logout failed. Please try again.");
       }
     } catch (error) {
       console.error("Logout error:", error);
+      toast.error("An error occurred during logout.");
+    } finally {
+      setShowLogoutModal(false);
+      setDropdownOpen(false);
     }
+  };
+
+  const openLogoutConfirmation = () => {
+    setShowLogoutModal(true);
+    setDropdownOpen(false);
   };
 
   return (
@@ -235,7 +248,7 @@ function Navbar() {
                     </li>
                     <li>
                       <button
-                        onClick={handleLogout}
+                        onClick={openLogoutConfirmation}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100"
                       >
                         Logout
@@ -248,6 +261,29 @@ function Navbar() {
           </div>
         </div>
       </div>
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">Confirm Logout</h3>
+            <p className="mb-6">Are you sure you want to logout?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

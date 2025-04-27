@@ -58,13 +58,41 @@
 }
 
 .desktop-menu li a {
+  /* Base styles */
+  display: inline-block;
+  padding: 6px 12px;
   text-decoration: none;
   color: white;
-  transition: color 0.3s ease;
+  
+  /* Transition effects */
+  transition: all 0.3s ease-in-out;
+  
+  /* Border and background */
+  border-radius: 25px;
+  background-color: transparent;
+  
+  /* Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.desktop-menu li a:hover {
-  color: #ddd; /* Optional: add a hover effect */
+.desktop-menu li a:hover,
+.desktop-menu li a:focus,
+.desktop-menu li a:active {
+  /* Hover/active/focus states */
+  background-color: white;
+  color: #000000;
+  
+  /* Optional: subtle shadow for depth */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+  /* Ensure accessibility for focus states */
+  outline: none;
+}
+
+/* Optional: Add focus-visible for better keyboard navigation */
+.desktop-menu li a:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
 .mobile-menu {

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -90,7 +91,7 @@ const LoginPage: React.FC = () => {
           token,
         })
       );
-
+      toast.success("Login Successful!");
       // Dispatch event to update Navbar immediately
       window.dispatchEvent(new Event("userUpdated"));
 
@@ -150,7 +151,7 @@ const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-indigo-600 px-3 py-2 text-white font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="w-full rounded-md bg-[#202C45] px-3 py-2 text-white font-semibold shadow-md hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202C45]"
           >
             {loading ? "Logging in..." : "Log in"}
           </button>

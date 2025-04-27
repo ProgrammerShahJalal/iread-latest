@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -36,7 +37,8 @@ const RegisterPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Registration failed. Please try again.");
+        // throw new Error("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
 
       const data = await response.json();
@@ -47,8 +49,10 @@ const RegisterPage: React.FC = () => {
       localStorage.setItem("user", JSON.stringify({ id, uid, first_name, last_name, email, phone_number, slug, photo }));
 
       router.push(`/login`);
+      toast.success('Registration Successful!')
     } catch (err: any) {
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -75,7 +79,7 @@ const RegisterPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-indigo-600 px-3 py-2 text-white font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="w-full rounded-md bg-[#202C45] px-3 py-2 text-white font-semibold shadow-md hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202C45]"
           >
             {loading ? "Registering..." : "Register"}
           </button>
