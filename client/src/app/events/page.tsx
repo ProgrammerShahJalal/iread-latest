@@ -2,23 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../api/eventApi";
+import { Event } from "@/types/event";
+import moment from "moment/moment";
 
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    // second: "2-digit",
-    hour12: true, // Use 12-hour format (set to false for 24-hour format)
-  };
-  return date.toLocaleString("en-GB", options);
-};
 
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
+  console.log('eventsData', eventsData);
 
   return (
     <section>
@@ -60,7 +50,7 @@ const EventsPage = async () => {
                 <div className="container pb-50 pt-80">
                   <div className="section-content">
                     <div className="row">
-                      {eventsData?.map((event) => {
+                      {eventsData?.map((event: Event) => {
                         return (
                           <div key={event.event_id}>
                             <div className="col-sm-6 col-md-4 col-lg-4">
@@ -77,15 +67,13 @@ const EventsPage = async () => {
                                 <div className="schedule-details clearfix p-15 pt-10">
                                   <h5 className="font-16 title">
                                     <Link href={`/events/${event?.event_id}`}>
-                                      {event?.title}
+                                      {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                                     </Link>
                                   </h5>
                                   <ul className="list-inline font-11 mb-20">
                                     <li>
                                       <i className="fa fa-calendar mr-5" />
-                                      {formatDateTime(
-                                        event?.session_start_date_time
-                                      )}
+                                      {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                                     </li>
 
                                     <li>
@@ -93,7 +81,7 @@ const EventsPage = async () => {
                                       {event?.place}
                                     </li>
                                   </ul>
-                                  <p>{event?.short_description}</p>
+                                  <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
                                   <div className="mt-10">
                                     <Link
                                       href={`/events/${event?.event_id}`}

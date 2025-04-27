@@ -7,6 +7,7 @@ import ProfileLayout from "../../components/ProfileLayout";
 
 interface User {
   id: number;
+  uid: number;
   first_name: string;
   last_name: string;
   email: string;

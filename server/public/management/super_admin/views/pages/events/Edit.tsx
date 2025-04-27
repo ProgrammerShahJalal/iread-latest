@@ -234,7 +234,7 @@ const Edit: React.FC = () => {
                                             <DateTime
                                                 value={get_value('session_start_date_time')}
                                                 name="session_start_date_time"
-                                                handler={() => console.log('DateTime changed')}
+                                                handler={() => console.log('DateTime changed', data)}
                                             />
                                         </div>
 
@@ -243,7 +243,7 @@ const Edit: React.FC = () => {
                                             <DateTime
                                                 value={get_value('session_end_date_time')}
                                                 name="session_end_date_time"
-                                                handler={() => console.log('DateTime changed')}
+                                                handler={() => console.log('DateTime changed', data)}
                                             />
                                         </div>
 

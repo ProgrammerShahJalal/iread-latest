@@ -18,15 +18,16 @@ import Models from '../../../database/models';
 import Stripe from 'stripe';
 
 /** validation rules */
+
 async function validate(req: Request) {
     let field = '';
     let fields = [
         'event_id',
         'user_id',
-        'event_enrollment_id',
         'date',
         'amount',
         'trx_id',
+
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -38,6 +39,7 @@ async function validate(req: Request) {
                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
             )
             .run(req);
+
     }
 
     let result = await validationResult(req);
@@ -61,7 +63,7 @@ interface PaymentRequest {
 interface Payment {
     event_id: number;
     user_id: number;
-    event_enrollment_id: number;
+    event_enrollment_id: number,
     date: string;
     amount: number;
     trx_id: string;
@@ -83,11 +85,53 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-    const { user_id, event_id, event_enrollment_id, trx_id, amount } =
-        req.body as PaymentRequest;
+
+    // Helper to parse or return original value
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    // Parse the whole body’s fields in one go
+    Object.keys(body).forEach(key => {
+        body[key] = parseField(body[key]);
+    });
+
+    // Helper to get clean value
+    const getValue = (val: any) => Array.isArray(val) ? val[0] : val;
+
+    const { user_id, event_id, trx_id, amount } =
+        body as PaymentRequest;
 
     /** store data into database */
     try {
+        // Check if enrollment exists
+        let existingEnrollment = await models.EventEnrollmentsModel.findOne({
+            where: {
+                event_id: event_id,
+                user_id: user_id,
+            },
+        });
+
+        let event_enrollment_id;
+
+        if (existingEnrollment) {
+            event_enrollment_id = existingEnrollment.id;
+        } else {
+            // Create new enrollment
+            const newEnrollment = await models.EventEnrollmentsModel.create({
+                event_id: event_id,
+                user_id: user_id,
+                date: moment().format('YYYY-MM-DD'),
+                is_paid: '1',
+                status: 'accepted',
+            });
+            event_enrollment_id = newEnrollment.id;
+        }
+
         const amountInCents = Math.round(parseFloat(amount) * 100);
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -105,38 +149,46 @@ async function store(
                 },
             ],
             mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${encodeURIComponent(event_enrollment_id)}&trx_id=${encodeURIComponent(trx_id)}&amount=${amount}`,
+            success_url: `${process.env.FRONTEND_URL}/payment/success?user_id=${encodeURIComponent(user_id)}&event_id=${encodeURIComponent(event_id)}&event_enrollment_id=${event_enrollment_id ?? ''}&trx_id=${encodeURIComponent(trx_id)}&amount=${amount}`,
             cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
             metadata: {
-                user_id,
-                event_id,
-                event_enrollment_id,
-                trx_id,
+                user_id: String(getValue(body.user_id)),
+                event_id: String(getValue(body.event_id)),
+                event_enrollment_id: String(event_enrollment_id),
+                trx_id: String(body.trx_id),
             },
         } as Stripe.Checkout.SessionCreateParams);
         // console.log('Stripe Session:', session);
 
+
+        // Insert payment record first (to get event_payment_id)
         let inputs: InferCreationAttributes<typeof data> = {
-            event_id: body.event_id || body.event_id?.[1],
-            user_id: body.user_id || body.user_id?.[1],
-            event_enrollment_id:
-                body.event_enrollment_id || body.event_enrollment_id?.[1],
-            event_payment_id: body.event_payment_id,
+            event_id: getValue(body.event_id),
+            user_id: getValue(body.user_id),
             date: body.date,
             amount: body.amount,
             trx_id: body.trx_id,
             media: body.media,
             session_id: session?.id,
-            is_refunded: body.is_refunded || false,
+            is_refunded: false,
         };
-        // Properly set and save the new data
+
         data.set(inputs);
         await data.save();
 
+        const event_payment_id = data.id;
+
+        // Update payment with event_enrollment_id and event_payment_id
+        await data.update({
+            event_enrollment_id: event_enrollment_id,
+            event_payment_id: event_payment_id,
+        });
+
         // Update `is_paid` to true in the EventEnrollmentsModel
         await models.EventEnrollmentsModel.update(
-            { is_paid: '1' },
-            { where: { id: body.event_enrollment_id } },
+            { is_paid: '1', status: 'accepted' },
+            { where: { id: event_enrollment_id } }
+
         );
 
         return response(201, 'data created', {

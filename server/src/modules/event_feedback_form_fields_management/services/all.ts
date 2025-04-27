@@ -145,6 +145,8 @@ async function all(
                 { event_id: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
+                //sub search
+                { '$event.title$': { [Op.like]: `%${search_key}%` } }, 
             ],
         };
     }

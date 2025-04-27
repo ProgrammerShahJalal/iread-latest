@@ -20,12 +20,9 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'events', isArray: true },
-        { name: 'users', isArray: true },
-        { name: 'scores', isArray: false },
-        { name: 'grade', isArray: false },
-        { name: 'date', isArray: false },
-        { name: 'image', isArray: false },
+        { name: 'event_id', isArray: true },
+        { name: 'title', isArray: false },
+        { name: 'description', isArray: false },
     ];
 
     //validate array fields
@@ -74,7 +71,7 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
-    // Parse fields that might be stringified
+    // Helper to parse or return original value
     const parseField = (field: any) => {
         try {
             return typeof field === 'string' ? JSON.parse(field) : field;
@@ -83,15 +80,19 @@ async function update(
         }
     };
 
-    body.events = parseField(body.events);
-   
+    // Helper to get clean value
+    const getValue = (val: any) => {
+        let parsedValue = parseField(val);
+        return Array.isArray(parsedValue) ? parsedValue[0] : parsedValue;
+    }
+
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[0] || data.event_id,
+                event_id: getValue(body.event_id),
                 title: body.title || data.title,
                 description: body.description || data.description,
             };

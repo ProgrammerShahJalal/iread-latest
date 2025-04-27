@@ -33,7 +33,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'id,event_id,event_session_id,event_session_assesment_id,submitted_content,mark,obtained_mark,grade,status',
+                'id,event_id,event_session_id,event_session_assesment_id,user_id,submitted_content,mark,obtained_mark,grade,status',
             ),
         );
         dispatch(all({}));
@@ -65,6 +65,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
+                                            label={`Assessment Title`}
+                                            col_name={`event_session_assesment_id`}
+                                            sort={true}
+                                        />
+                                        <TableHeading
                                             label={`Event Title`}
                                             col_name={`event_id`}
                                             sort={true}
@@ -75,8 +80,8 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`Assessment Title`}
-                                            col_name={`event_session_assesment_id`}
+                                            label={`User Name`}
+                                            col_name={`user_id`}
                                             sort={true}
                                         />
                                         <TableHeading
@@ -95,15 +100,16 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
 
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                    {(state?.all as any)?.data?.map(
+                                {(state.all as any)?.data?.length > 0 ? (
+                                    (state?.all as any)?.data?.map(
                                         (i: { [key: string]: any }) => {
                                             return (
                                                 <tr
@@ -119,8 +125,6 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '..'}</td>
-                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '..'}</td>
                                                     <td>
                                                         <span
                                                             className="quick_view_trigger"
@@ -136,33 +140,31 @@ const All: React.FC<Props> = (props: Props) => {
                                                             {i.assesment?.title?.slice(0, 30)}{i.assesment?.title?.length > 30 && '..'}
                                                         </span>
                                                     </td>
+                                                    <td>{i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '..'}</td>
+                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '..'}</td>
 
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
                                                     <td>{i.mark}</td>
                                                     <td>
                                                         {i.obtained_mark ||
                                                             'N/A'}
                                                     </td>
                                                     <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                            style={{
-                                                                color: '#0AAE96',
-                                                                fontWeight: 900,
-                                                                cursor: 'pointer',
-                                                            }}
-                                                        >
-                                                            {i.grade ||
-                                                                'Pending'}
-                                                        </span>
+    
+                                                    {i.grade || 'Pending'}
                                                     </td>
-                                                    <td>{i.status}</td>
+                                                    {/* <td>{i.status}</td> */}
                                                 </tr>
                                             );
                                         },
-                                    )}
+                                    )
+                                ) : (
+                                    <tr>
+                                        <td colSpan={9} className="text-center py-4">
+                                            No data found
+                                        </td>
+                                    </tr>
+                                )}
                                 </tbody>
                             </table>
                         </div>

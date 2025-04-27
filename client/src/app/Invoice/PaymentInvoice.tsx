@@ -91,7 +91,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
               </div>
               <div className="text-right">
                 <Image
-                  src="/frontend/images/invoice.png"
+                  src="/frontend/images/ireadblacklogo.png"
                   alt="Logo of Invoice"
                   width={100}
                   height={100}
@@ -118,7 +118,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
                 <p>
                   <strong>Trx ID:</strong> {trx_id}
                 </p>
-                <p>
+                {/* <p>
                   <strong>User ID:</strong> {user_id}
                 </p>
                 <p>
@@ -126,7 +126,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
                 </p>
                 <p>
                   <strong>Event Enrollment ID:</strong> {event_enrollment_id}
-                </p>
+                </p> */}
               </div>
               <div className="text-right">
                 <h1 className="font-bold">Recipient Info</h1>
@@ -136,7 +136,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
                 <br />
                 10000 City, USA
                 <br />
-                hello@iread.com
+                iread.hello@gmail.com
               </div>
             </div>
 
@@ -148,10 +148,10 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
 
             {/* Total */}
             <div className="flex justify-between items-center mb-2 px-3">
-              <div className="text-2xl leading-none">
+              <div className="text-2xl leading-none font-bold text-black">
                 <span>Total</span>:
               </div>
-              <div className="text-2xl text-right font-medium">${amount}</div>
+              <div className="text-2xl text-black text-right font-bold">${amount}</div>
             </div>
 
             {/* Terms and Conditions */}

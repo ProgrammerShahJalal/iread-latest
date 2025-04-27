@@ -20,33 +20,21 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'events', isArray: true },
-        { name: 'users', isArray: true },
-        { name: 'date', isArray: false },
+        'event_id',
+        'user_id',
+        'date',
     ];
 
-    //validate array fields
-    for (const field of fields.filter(f => f.isArray)) {
-        await body(field.name)
-            .custom(value => {
-                try {
-                    const parsed = typeof value === 'string' ? JSON.parse(value) : value;
-                    return Array.isArray(parsed) && parsed.length > 0;
-                } catch {
-                    return false;
-                }
-            })
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
-            .run(req);
-    }
-
-    // Validate other fields
-    for (const field of fields.filter(f => !f.isArray)) {
-        await body(field.name)
+    for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        await body(field)
             .not()
             .isEmpty()
-            .withMessage(`the <b>${field.name.replaceAll('_', ' ')}</b> field is required`)
+            .withMessage(
+                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+            )
             .run(req);
+
     }
 
     let result = await validationResult(req);
@@ -77,14 +65,14 @@ async function store(
         }
     };
 
-    body.events = parseField(body.events);
-    body.users = parseField(body.users);
+    body.event_id = parseField(body.event_id);
+    body.user_id = parseField(body.user_id);
 
     let data = new models[modelName]();
 
     let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.event_id || body.events?.[0],
-        user_id: body.user_id || body.users?.[0],
+        event_id: body.event_id || body.event_id?.[0],
+        user_id: body.user_id || body.user_id?.[0],
         date: body.date,
         is_paid: body.is_paid || '0',
         status: body.status,
@@ -94,8 +82,8 @@ async function store(
         /** Check if user is already enrolled in the event */
         let existingEnrollment = await models[modelName].findOne({
             where: {
-                event_id: body.event_id || body.events?.[0],
-                user_id: body.user_id || body.users?.[0],
+                event_id: body.event_id || body.event_id?.[0],
+                user_id: body.user_id || body.user_id?.[0],
             },
         });
 

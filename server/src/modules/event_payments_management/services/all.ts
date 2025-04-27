@@ -151,7 +151,10 @@ async function all(
                 { amount: { [Op.like]: `%${search_key}%` } },
                 { user_id: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
-                // { id: { [Op.like]: `%${search_key}%` } },
+                // Add these lines to search by user name (first or last)
+                { '$user.first_name$': { [Op.like]: `%${search_key}%` } },
+                { '$user.last_name$': { [Op.like]: `%${search_key}%` } }, 
+                { '$event.title$': { [Op.like]: `%${search_key}%` } }, 
             ],
         };
     }

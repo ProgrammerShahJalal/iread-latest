@@ -15,6 +15,7 @@ module.exports = function (fastify: FastifyInstance, opts: {}, done: () => void)
         .post(`${prefix}/destroy`, controllerInstance.destroy)
         .post(`${prefix}/import`, controllerInstance.import)
         .get(`${prefix}/:id`, controllerInstance.find)
+        .get(`${prefix}/event/:eventId/session/:sessionId/assessment/:assessmentId/user/:userId`, controllerInstance.findbyEventSessionAssessmentUser)
         ;
 
     done();

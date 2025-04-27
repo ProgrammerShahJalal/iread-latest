@@ -17,16 +17,16 @@ const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
-        const [faqs, setFaqs] = useState<{ title: string; description: string }[]>([]);
+    const [faqs, setFaqs] = useState<{ title: string; description: string }[]>([]);
 
     const dispatch = useAppDispatch();
     useEffect(() => {
-            if (state.item?.faqs) {
-                setFaqs(state.item.faqs);
-            }
-        }, [state.item]);
+        if (state.item?.faqs) {
+            setFaqs(state.item.faqs);
+        }
+    }, [state.item]);
 
-const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         formData.append('faqs', JSON.stringify(faqs)); // Append FAQs as JSON string
@@ -70,65 +70,65 @@ const handle_submit = async (e: React.FormEvent<HTMLFormElement>) => {
                             <div>
 
                                 <h5 className="mb-4">Event FAQs Informations</h5>
-                                <div className="form_auto_fit">
-                                <div className="form-group form-vertical">
-                                    <label>Events</label>
-                                    <EventDropDown 
-                                        name="events"
-                                        multiple={false}
-                                    />
-                                </div>
+                                <div>
+                                    <div className="form-group form-vertical">
+                                        <label>Events</label>
+                                        <EventDropDown
+                                            name="event_id"
+                                            multiple={false}
+                                        />
+                                    </div>
 
-                                <div className="form-group form-vertical">
-                                    <Input name="title" value={get_value('title')} />
-                                </div>
+                                    <div className="form-group form-vertical">
+                                        <Input name="title" value={get_value('title')} />
+                                    </div>
 
-                                <div className="form-group form-vertical">
-                                    <label>Description</label>
-                                    <textarea 
-                                        name="description" 
-                                        defaultValue={get_value('description')} 
-                                        className="form-control" 
-                                        rows={5} 
-                                    />
+                                    <div className="form-group form-vertical">
+                                        <label>Description</label>
+                                        <textarea
+                                            name="description"
+                                            defaultValue={get_value('description')}
+                                            className="form-control"
+                                            rows={3}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
                                 {/* FAQ Section */}
-                            <h5 className="mt-4">FAQs</h5>
-                            {faqs.map((faq, index) => (
-                                <div key={index} className="faq-item border p-3 mb-3 rounded">
-                                    <div className="form-group">
-                                        <label>Title</label>
-                                        <br/>
-                                        <input
-                                            className="form-control" 
-                                            value={faq.title} 
-                                            onChange={(e) => handleFaqChange(index, 'title', e.target.value)} 
-                                        />
-                                        
+
+                                {faqs.map((faq, index) => (
+                                    <div key={index} className="faq-item border p-3 mb-3 rounded">
+                                        <div className="form-group">
+                                            <label>Title</label>
+                                            <br />
+                                            <input
+                                                className="form-control"
+                                                value={faq.title}
+                                                onChange={(e) => handleFaqChange(index, 'title', e.target.value)}
+                                            />
+
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Description</label>
+                                            <textarea
+                                                className="form-control"
+                                                rows={3}
+                                                value={faq.description}
+                                                onChange={(e) => handleFaqChange(index, 'description', e.target.value)}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="btn btn-danger btn-sm mt-2"
+                                            onClick={() => removeFaq(index)}
+                                        >
+                                            Remove
+                                        </button>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea 
-                                            className="form-control" 
-                                            rows={3} 
-                                            value={faq.description} 
-                                            onChange={(e) => handleFaqChange(index, 'description', e.target.value)} 
-                                        />
-                                    </div>
-                                    <button 
-                                        type="button" 
-                                        className="btn btn-danger btn-sm mt-2" 
-                                        onClick={() => removeFaq(index)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
-                            <button type="button" className="btn btn-primary" onClick={addFaq}>
-                                + Add FAQ
-                            </button>
+                                ))}
+                                <button type="button" className="btn btn-primary" onClick={addFaq}>
+                                    + Add More FAQ
+                                </button>
 
                             </div>
 

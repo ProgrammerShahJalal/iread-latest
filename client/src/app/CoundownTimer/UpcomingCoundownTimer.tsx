@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import UpClock from "./Clock/UpClock";
+import { Event } from "@/types/event";
+import Link from "next/link";
 
 interface UpcomingCountdownTimerProps {
   events: Event[];
@@ -14,20 +16,25 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
   const [timerHours, setTimerHours] = useState<number>(0);
   const [timerMinutes, setTimerMinutes] = useState<number>(0);
   const [timerSeconds, setTimerSeconds] = useState<number>(0);
+  const [eventTitle, setEventTitle] = useState<string>("");
+  const [eventId, setEventId] = useState<number>(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTimer = useCallback(() => {
     if (!events.length) return;
 
-    // Get the upcoming session date
-    let dateTill = events.reduce((prev, curr) => {
+    // Find the upcoming event
+    const upcomingEvent = events.reduce((prev, curr) => {
       return curr.session_start_date_time > prev.session_start_date_time
         ? curr
         : prev;
-    }, events[0])?.session_start_date_time;
+    }, events[0]);
 
-    const countDownDate = new Date(dateTill).getTime();
+    setEventTitle(upcomingEvent.title);
+    setEventId(upcomingEvent?.event_id);
+
+    const countDownDate = new Date(upcomingEvent.session_start_date_time).getTime();
 
     intervalRef.current = setInterval(() => {
       const now = new Date().getTime();
@@ -70,6 +77,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
 
   return (
     <div>
+      {eventTitle && <h3><strong>Next Up: </strong><Link className="text-[#138E6B] hover:text-[#206a55] font-semibold" href={`events/${eventId}`}>{eventTitle.slice(0, 24)}{eventTitle?.length > 22 && '..'}</Link></h3>}
       <UpClock
         timerDays={timerDays}
         timerHours={timerHours}

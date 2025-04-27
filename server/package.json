@@ -58,6 +58,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/ckeditor": "^4.9.10",
     "@types/ejs": "^3.1.5",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20.17.19",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0",

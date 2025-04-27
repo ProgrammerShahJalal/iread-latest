@@ -33,6 +33,7 @@ class DataModel extends Model<Infer, InferCreation> {
     declare event_id: number;
     declare event_session_id: number;
     declare event_session_assesment_id: number;
+    declare user_id: number;
     declare submitted_content: string;
     declare mark: number;
     declare obtained_mark: number;
@@ -62,6 +63,10 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             event_session_assesment_id: {
+                type: DataTypes.BIGINT.UNSIGNED,
+                allowNull: true,
+            },
+            user_id: {
                 type: DataTypes.BIGINT.UNSIGNED,
                 allowNull: true,
             },

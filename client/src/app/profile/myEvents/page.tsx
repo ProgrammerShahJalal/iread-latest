@@ -2,20 +2,11 @@ import Image from "next/image";
 import { getMyEvents } from "../../../api/eventApi";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
+import { getUserByUid } from "../../../api/userApi";
+import { Event } from "@/types/event";
+import moment from "moment/moment";
 
-// Function to format date & time
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  };
-  return date.toLocaleString("en-GB", options);
-};
+
 
 interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
@@ -24,9 +15,9 @@ interface PageProps {
 // ✅ Server Component: Fetch data before rendering
 const MyEventsPage = async ({ searchParams }: PageProps) => {
   const params = await searchParams;
-  const userId = params?.uid ? parseInt(params.uid, 10) : null;
+  const userUid = params?.uid ? parseInt(params.uid, 10) : null;
 
-  if (!userId) {
+  if (!userUid) {
     return (
       <ProfileLayout>
         <p className="text-red-500">Invalid User ID.</p>
@@ -34,9 +25,10 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
-  // Fetch events on the server
-  const myEvents = await getMyEvents(userId);
 
+  const me = await getUserByUid(userUid);
+  const myEvents: Event[] = await getMyEvents(me?.id);
+console.log('my events all', myEvents);
   return (
     <ProfileLayout>
       <div className="flex">
@@ -63,25 +55,25 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                         </div>
                         <div className="schedule-details clearfix p-15 pt-10">
                           <h5 className="font-16 title">
-                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userId}`}>
-                              {event.title}
+                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}>
+                              {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                             </Link>
                           </h5>
                           <ul className="list-inline font-11 mb-20">
                             <li>
                               <i className="fa fa-calendar mr-5" />
-                              {formatDateTime(event.session_start_date_time)}
+                              {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                             </li>
                             <li>
                               <i className="fa fa-map-marker mr-5" />
                               {event.place}
                             </li>
                           </ul>
-                          <p>{event.short_description}</p>
+                          <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
                           <div className="flex justify-between items-center">
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
+                                href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}
                                 className="btn btn-dark btn-sm mt-10"
                               >
                                 Details
@@ -89,7 +81,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                             </div>
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/reports?uid=${userId}&eventId=${event.event_id}`}
+                                href={`/profile/myEvents/reports?uid=${userUid}&eventId=${event.event_id}`}
                                 className="btn bg-[#F2184F] text-white btn-sm mt-10"
                               >
                                 Reports

@@ -56,16 +56,30 @@ async function update(
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
 
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.events = parseField(body.events);
+    body.enrollments = parseField(body.enrollments);
+    body.users = parseField(body.users);
+    body.payments = parseField(body.payments);
+
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
-                event_id: body.events?.[1] || data.event_id,
-                user_id: body.users?.[1] || data.user_id,
-                event_enrollment_id: body.enrollments?.[1] || data.event_enrollment_id,
-                event_payment_id: body.payments?.[1] || data.event_payment_id,
+                event_id: body.events?.[0] || data.event_id,
+                user_id: body.users?.[0] || data.user_id,
+                event_enrollment_id: body.enrollments?.[0] || data.event_enrollment_id,
+                event_payment_id: body.payments?.[0] || data.event_payment_id,
                 date: body.date || data.date,
                 amount: body.amount || data.amount,
                 trx_id: body.trx_id || data.trx_id,
