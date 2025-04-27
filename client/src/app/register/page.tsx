@@ -4,6 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+interface FormErrors {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  phone_number?: string;
+  password?: string;
+}
+
 const RegisterPage: React.FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -14,20 +22,24 @@ const RegisterPage: React.FC = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({}); // Changed from error string to errors object
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (errors[e.target.name as keyof FormErrors]) {
+      setErrors({ ...errors, [e.target.name]: undefined });
+    }
   };
 
   const BASE_URL = process.env.NODE_ENV === "production"
-  ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-  : process.env.NEXT_PUBLIC_BACKEND_URL;
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setErrors({}); // Clear previous errors
 
     try {
       const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
@@ -37,27 +49,48 @@ const RegisterPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        // throw new Error("Registration failed. Please try again.");
-        toast.error("Registration failed. Please try again.");
+        const errorData = await response.json().catch(() => null);
+
+        if (errorData) {
+          // Handle validation errors (422 status)
+          if (response.status === 422 && errorData.data?.length > 0) {
+            // Transform validation errors into field-specific errors
+            const newErrors: FormErrors = {};
+            errorData.data.forEach((error: any) => {
+              const fieldName = error.path;
+              const cleanMsg = error.msg.replace(/<[^>]*>/g, '');
+              newErrors[fieldName as keyof FormErrors] = cleanMsg;
+            });
+            setErrors(newErrors);
+            return; // Don't proceed with success flow
+          }
+          // Use the general message if available
+          else if (errorData.message) {
+            toast.error(errorData.message);
+            return;
+          }
+        }
+        // Fallback to status-based messages
+        throw new Error("Registration failed. Please try again.");
       }
 
       const data = await response.json();
-      // console.log("Registration successful:", data);
-
+      
       // Store user info in localStorage
-      const {id, uid, first_name, last_name, email, phone_number, slug, photo } = data?.data;
-      localStorage.setItem("user", JSON.stringify({ id, uid, first_name, last_name, email, phone_number, slug, photo }));
+      const { id, uid, first_name, last_name, email, phone_number, slug, photo } = data?.data;
+      localStorage.setItem(
+        "user", 
+        JSON.stringify({ id, uid, first_name, last_name, email, phone_number, slug, photo })
+      );
 
       router.push(`/login`);
-      toast.success('Registration Successful!')
+      toast.success('Registration Successful!');
     } catch (err: any) {
-      setError(err.message);
       toast.error(err.message);
     } finally {
       setLoading(false);
     }
-};
-
+  };
 
   return (
     <div className="bg-slate-200 flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -68,13 +101,49 @@ const RegisterPage: React.FC = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
-        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <InputField id="first_name" label="First Name" type="text" value={formData.first_name} onChange={handleChange} required />
-          <InputField id="last_name" label="Last Name" type="text" value={formData.last_name} onChange={handleChange} required />
-          <InputField id="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} required autoComplete="email" />
-          <InputField id="phone_number" label="Phone Number" type="tel" value={formData.phone_number} onChange={handleChange} required />
-          <InputField id="password" label="Password" type="password" value={formData.password} onChange={handleChange} required autoComplete="new-password" />
+          <InputField 
+            id="first_name" 
+            label="First Name" 
+            type="text" 
+            value={formData.first_name} 
+            onChange={handleChange} 
+            error={errors.first_name}
+          />
+          <InputField 
+            id="last_name" 
+            label="Last Name" 
+            type="text" 
+            value={formData.last_name} 
+            onChange={handleChange} 
+            error={errors.last_name}
+          />
+          <InputField 
+            id="email" 
+            label="Email Address" 
+            type="email" 
+            value={formData.email} 
+            onChange={handleChange} 
+            autoComplete="email"
+            error={errors.email}
+          />
+          <InputField 
+            id="phone_number" 
+            label="Phone Number" 
+            type="tel" 
+            value={formData.phone_number} 
+            onChange={handleChange} 
+            error={errors.phone_number}
+          />
+          <InputField 
+            id="password" 
+            label="Password" 
+            type="password" 
+            value={formData.password} 
+            onChange={handleChange} 
+            autoComplete="new-password"
+            error={errors.password}
+          />
 
           <button
             type="submit"
@@ -104,9 +173,19 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   autoComplete?: string;
+  error?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ id, label, type, value, onChange, required, autoComplete }) => (
+const InputField: React.FC<InputFieldProps> = ({ 
+  id, 
+  label, 
+  type, 
+  value, 
+  onChange, 
+  required, 
+  autoComplete,
+  error 
+}) => (
   <div>
     <label htmlFor={id} className="block text-sm font-medium text-gray-900">
       {label}
@@ -119,8 +198,11 @@ const InputField: React.FC<InputFieldProps> = ({ id, label, type, value, onChang
       onChange={onChange}
       required={required}
       autoComplete={autoComplete}
-      className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      className={`mt-2 block w-full rounded-md border ${error ? 'border-red-500' : 'border-gray-300'} px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
     />
+    {error && (
+      <p className="mt-1 text-sm text-red-600">{error}</p>
+    )}
   </div>
 );
 
