@@ -4,6 +4,7 @@ import UpcomingCountdownTimer from "@/CoundownTimer/UpcomingCoundownTimer";
 import Navbar from "./Navbar";
 import Link from "next/link";
 import { getEvents } from "../../../api/eventApi";
+import { Event } from "@/types/event";
 
 async function Header() {
   let events: Event[] = await getEvents();
@@ -105,9 +106,9 @@ async function Header() {
                     <i className="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block" />
                   </li>
                   <li>
-                    <p className="font-12 text-gray text-uppercase">
+                    {/* <p className="font-12 text-gray text-uppercase">
                       Upcoming Event!
-                    </p>
+                    </p> */}
                     <UpcomingCountdownTimer events={events} />
                   </li>
                 </ul>

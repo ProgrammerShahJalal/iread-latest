@@ -45,11 +45,11 @@ const Edit: React.FC = () => {
                             <input type="hidden" name="id" defaultValue={get_value('id')} />
                             
                             <h5 className="mb-4">Input Data</h5>
-                            <div className="form_auto_fit">
+                            <div>
                                 <div className="form-group form-vertical">
                                     <label>Events</label>
                                     <EventDropDown 
-                                        name="events"
+                                        name="event_id"
                                         multiple={false}
                                         default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
                                     />

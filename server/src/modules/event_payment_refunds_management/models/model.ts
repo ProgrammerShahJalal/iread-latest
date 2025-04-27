@@ -25,16 +25,16 @@ export const modelName = 'EventPaymentRefundsModel';
 
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
-type status = 'success' | 'failed';
-type media = 'Stripe' | 'Bank';
+type status = 'success' | 'pending' | 'failed';
+type media = 'Stripe' | 'Manual';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
     declare user_id: number;
-    declare event_enrollment_id: number;
-    declare event_payment_id: number;
+    declare event_enrollment_id?: number;
+    declare event_payment_id?: number;
     declare date: string;
     declare amount: number;
     declare trx_id: string;
@@ -84,14 +84,14 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             media: {
-                type: DataTypes.ENUM('Stripe', 'Bank'),
+                type: DataTypes.ENUM('Stripe', 'Manual'),
                 defaultValue: 'Stripe',
             },
 
 
             status: {
-                type: new DataTypes.ENUM('success', 'failed'),
-                defaultValue: 'success',
+                type: new DataTypes.ENUM('success', 'pending', 'failed'),
+                defaultValue: 'pending',
             },
 
             created_at: DataTypes.DATE,

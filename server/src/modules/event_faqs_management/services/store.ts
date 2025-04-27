@@ -19,7 +19,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        { name: 'events', isArray: true },
+        { name: 'event_id', isArray: true },
         { name: 'title', isArray: false },
         { name: 'description', isArray: false },
     ];
@@ -69,7 +69,7 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-    // Parse fields that might be stringified
+    // Helper to parse or return original value
     const parseField = (field: any) => {
         try {
             return typeof field === 'string' ? JSON.parse(field) : field;
@@ -78,43 +78,46 @@ async function store(
         }
     };
 
-    body.events = parseField(body.events);
+    // Helper to get clean value
+    const getValue = (val: any) => {
+        let parsedValue = parseField(val);
+        return Array.isArray(parsedValue) ? parsedValue[0] : parsedValue;
+    }
 
     let inputs: InferCreationAttributes<typeof data> = {
-        event_id: body.events?.[0],
+        event_id: getValue(body.event_id),
         title: body.title,
         description: body.description,
     };
 
     try {
-                /** Store event data */
-                let savedData = await (await data.update(inputs)).save();
+        /** Store event data */
+        let savedData = await (await data.update(inputs)).save();
 
-                /** Parse and store FAQs */
-                let faqRecords = [];
-                if (body.faqs) {
-                    let faqs = JSON.parse(body.faqs);
-                    if (Array.isArray(faqs)) {
-                        for (let faq of faqs) {
-                            let createdFaq = await models.EventFaqsModel.create({
-                                event_id: body.events?.[1], // Link FAQ to the event
-                                title: faq.title,
-                                description: faq.description,
-                            });
-                            faqRecords.push(createdFaq);
-                        }
-                    }
+        /** Parse and store FAQs */
+        let faqRecords = [];
+        if (body.faqs) {
+            let faqs = JSON.parse(body.faqs);
+            if (Array.isArray(faqs)) {
+                for (let faq of faqs) {
+                    let createdFaq = await models.EventFaqsModel.create({
+                        event_id: getValue(body.event_id), // Link FAQ to the event
+                        title: faq.title,
+                        description: faq.description,
+                    });
+                    faqRecords.push(createdFaq);
                 }
-        
-                /** Fetch all FAQs for the event */
-                let allFaqs = await models.EventFaqsModel.findAll({
-                    where: { event_id: body.events?.[1] },
-                });
-        
-                return response(201, 'Data created', {
-                    faqs: allFaqs, // Include all stored FAQs
-                });
-        
+            }
+        }
+
+        /** Fetch all FAQs for the event */
+        let allFaqs = await models.EventFaqsModel.findAll({
+            where: { event_id: getValue(body.event_id), },
+        });
+
+        return response(201, 'Data created', {
+            faqs: allFaqs, // Include all stored FAQs
+        });
 
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);

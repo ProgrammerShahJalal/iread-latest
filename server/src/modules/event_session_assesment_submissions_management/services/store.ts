@@ -69,6 +69,7 @@ async function store(
         event_id: body.event_id,
         event_session_id: body.event_session_id,
         event_session_assesment_id: body.event_session_assesment_id,
+        user_id: body.user_id,
         submitted_content: body.submitted_content,
         mark: sesionAssesmentdata?.mark || 0,
         obtained_mark: body.obtained_mark || null,

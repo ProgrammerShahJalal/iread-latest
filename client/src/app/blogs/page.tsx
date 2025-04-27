@@ -67,13 +67,13 @@ const BlogsPage: React.FC = async () => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title}</Link>
+                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title?.slice(0, 50)}{blog.title?.length > 50 && '...'}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
                                         </div>
                                         <p className="text-justify mt-3">
-                                            {blog.short_description}
+                                        {blog.short_description?.slice(0, 150)}{blog.short_description?.length > 150 && '...'}
                                         </p>
                                         <Link href={`/blogs/${blog.slug}`} className="btn-read-more text-blue-600 hover:text-red-600">
                                             Read more

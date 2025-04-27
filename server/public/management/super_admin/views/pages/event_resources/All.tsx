@@ -88,7 +88,8 @@ const All: React.FC<Props> = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                    {(state.all as any)?.data?.map(
+                                {(state.all as any)?.data?.length > 0 ? (
+                                    (state.all as any)?.data?.map(
                                         (i: { [key: string]: any }) => {
                                             return (
                                                 <tr
@@ -126,7 +127,14 @@ const All: React.FC<Props> = (props: Props) => {
                                                 </tr>
                                             );
                                         },
-                                    )}
+                                    )
+                                ) : (
+                                    <tr>
+                                        <td colSpan={9} className="text-center py-4">
+                                            No data found
+                                        </td>
+                                    </tr>
+                                )}
                                 </tbody>
                             </table>
                         </div>

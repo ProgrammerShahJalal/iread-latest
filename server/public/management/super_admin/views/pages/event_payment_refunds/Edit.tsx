@@ -43,6 +43,16 @@ const Edit: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+
+            // Handle nested event object
+            if (key === 'event_id' && state.item.event) {
+                return state.item.event.title;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -70,97 +80,36 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 />
 
                                 <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
                                     <div className="form_auto_fit">
-                    
-                                    <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
-                                            multiple={false}
-                                            default_value={get_value('event_id') ? [{ id: get_value('event_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="users"
-                                            multiple={false}
-                                            default_value={get_value('user_id') ? [{ id: get_value('user_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Enrollments</label>
-                                        <EnrollmentDropDown name="enrollments"
-                                            multiple={false}
-                                            default_value={get_value('event_enrollment_id') ? [{ id: get_value('event_enrollment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Payments</label>
-                                        <PaymentDropDown name="payments"
-                                            multiple={false}
-                                            default_value={get_value('event_payment_id') ? [{ id: get_value('event_payment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                      
-                                        {[
-                                            'amount',
-                                            'date',
-                                            'trx_id',
-                                            'media',
-                    
 
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                        {
-                                                i === 'date' ? (
-                                                    <DateEl
-                                                        name={"date"}
-                                                        value={get_value('date')}
-                                                        handler={(data) => console.log('Date Changed', data)}
-                                                    />
-                                                ) : (
-                                                    i === 'media' ? (
-                                                        <><label>Media</label>
-                                                            <select
-                                                            name="media"
-                                                            className="form-control"
-                                                            defaultValue={get_value('media')}
-                                                            onChange={(e) => console.log('Media Changed', e.target.value)}
-                                                            >
-                                                                <option value="Stripe">Stripe</option>
-                                                                <option value="Bank">Bank</option>
-                                                            </select></>
-                                                    ) : (
-                                                        
-                                                            <Input name={i}  value={get_value(i)}/>
-                                                        
-                                                    )
-                                                )
-                                            }
-                                            </div>
-                                        ))}
+                                        <div className="form-group form-vertical">
+                                            <h4><strong>Event Title:</strong> {get_value('event_id')}</h4>
+                                            <p><strong>Date:</strong> {get_value('date')}</p>
+                                            <p><strong>Amount:</strong> {get_value('amount')}</p>
+                                            <p><strong>Transaction ID:</strong> {get_value('trx_id')}</p>
+                                            <p><strong>Media:</strong> {get_value('media')}</p>
 
+                                        </div>
                                     </div>
 
+                                    <><label>Update Status</label>
+                                        <select
+                                            name="status"
+                                            className="form-control"
+                                            defaultValue={get_value('status')}
+                                            onChange={(e) => console.log('Status Changed', e.target.value)}
 
+                                            style={{
+                                                width: '30%',
+                                            }}
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="success">Success</option>
+                                        </select></>
 
                                 </div>
 
-                                <div className="form-group form-vertical">
+                                <div className="form-group form-vertical mt-10">
                                     <label></label>
                                     <div className="form_elements">
                                         <button className="btn btn-outline-info">

@@ -17,14 +17,18 @@ import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
 /** validation rules */
+
 async function validate(req: Request) {
     let field = '';
     let fields = [
         'event_id',
         'user_id',
         'event_enrollment_id',
-        'payment_id',
+        'event_payment_id',
         'trx_id',
+        'amount',
+        'media',
+
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -36,8 +40,8 @@ async function validate(req: Request) {
                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
             )
             .run(req);
-    }
 
+    }
 
     let result = await validationResult(req);
 
@@ -58,14 +62,30 @@ async function store(
     let models = Models.get();
     let body = req.body as anyObject;
     let data = new models[modelName]();
+    // Helper to parse or return original value
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
 
-     // Check if refund request already exists
-     let existingRefund = await models[modelName].findOne({
+    // Parse the whole body’s fields in one go
+    Object.keys(body).forEach(key => {
+        body[key] = parseField(body[key]);
+    });
+
+    // Helper to get clean value
+    const getValue = (val: any) => Array.isArray(val) ? val[0] : val;
+
+    // Check if refund request already exists
+    let existingRefund = await models[modelName].findOne({
         where: {
-            user_id: body.user_id,
-            event_id: body.event_id,
-            event_enrollment_id: body.event_enrollment_id,
-            event_payment_id: body.payment_id,
+            event_id: getValue(body.event_id),
+            user_id: getValue(body.user_id),
+            event_enrollment_id: getValue( body.event_enrollment_id),
+            event_payment_id: getValue(body.event_payment_id),
             trx_id: body.trx_id,
         },
     });
@@ -73,13 +93,13 @@ async function store(
     if (existingRefund) {
         return response(409, 'Refund request already exists.', { existingRefund });
     }
-    
+
     let inputs: InferCreationAttributes<typeof data> = {
-     
-        event_id: body.event_id?.[1] || body.event_id,
-        user_id: body.user_id?.[1] || body.user_id,
-        event_enrollment_id: body.event_enrollment_id?.[1] || body.event_enrollment_id,
-        event_payment_id: body.payment_id?.[1] || body.payment_id,
+
+        event_id: getValue(body.event_id),
+        user_id: getValue(body.user_id),
+        event_enrollment_id: getValue( body.event_enrollment_id),
+        event_payment_id: getValue(body.event_payment_id),
         date: body.date || moment().toISOString(),
         amount: body.amount,
         trx_id: body.trx_id,

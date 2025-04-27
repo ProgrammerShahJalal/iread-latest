@@ -11,6 +11,7 @@ import error_trace from '../../../helpers/error_trace';
 import custom_error from '../../../helpers/custom_error';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
+import { ModelStatic } from 'sequelize';
 
 /** validation rules */
 async function validate(req: Request) {
@@ -47,8 +48,31 @@ async function destroy(
         });
 
         if (data) {
+            // Define all dependency tables
+            const dependenciesTable: ModelStatic<any>[] = [
+                models.EventCertifiedUsersModel,
+                models.EventResourcesModel,
+                models.EventFaqsModel,
+                models.EventSessionsModel,
+                models.EventSessionsAssesmentsModel,
+                models.EventSessionAssesmentSubmissionsModel,
+                models.EventAttendanceModel,
+                models.EventEnrollmentsModel,
+                models.EventFeedbackFormFieldsModel
+            ];
+
+            // Delete all dependencies first
+            for (const model of dependenciesTable) {
+                await model.destroy({
+                    where: {
+                        event_id: body.id
+                    }
+                });
+            }
+
+            // Then delete the event
             await data.destroy();
-            return response(200, 'data permanently deleted', {});
+            return response(200, 'data and all dependencies permanently deleted', {});
         } else {
             throw new custom_error(
                 'data not found',

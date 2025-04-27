@@ -4,6 +4,9 @@ import React, { useEffect, useState, use } from 'react';
 import axios from 'axios';
 import ProfileLayout from '../../../../components/ProfileLayout';
 import { useParams } from 'next/navigation';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 
 // Define the type for a form field
@@ -19,7 +22,7 @@ interface FormField {
 }
 
 function EventFeedbackPage() {
-      const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [feedbackFields, setFeedbackFields] = useState<FormField[] | null>(null);
     const [eventFormFieldId, setEventFormFieldId] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -108,13 +111,13 @@ function EventFeedbackPage() {
                 payload
             );
             if (response.data.status === 201) {
-                alert("Feedback submitted successfully!");
+                toast.success("Feedback submitted successfully!");
             } else {
-                alert("Failed to submit feedback.");
+                toast.error("Failed to submit feedback.");
             }
         } catch (err: any) {
             console.error("Error submitting feedback:", err);
-            alert("An error occurred while submitting feedback.");
+            toast.error("An error occurred while submitting feedback.");
         }
     };
 
@@ -128,6 +131,15 @@ function EventFeedbackPage() {
 
     return (
         <ProfileLayout>
+            <div className="flex justify-end items-center mb-4">
+        <Link
+          href={`/profile/myEvents/${eventId}?uid=${user?.uid}`}
+          className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+        >
+          <ArrowLeftIcon className="h-5 w-5" />
+          Back
+        </Link>
+      </div>
             <div className="p-8">
                 <div className="mb-12">
                     <h2 className="text-3xl font-bold text-gray-800">Event Feedback</h2>

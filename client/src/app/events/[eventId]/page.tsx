@@ -7,6 +7,7 @@ import { getEvents } from "../../../api/eventApi";
 import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import EventEnrollProcess from "../../../components/EventEnrollProcess";
+import moment from "moment/moment";
 
 const formatDate = (isoDate: string): string => {
   const date = new Date(isoDate);
@@ -129,9 +130,9 @@ const EventDetailsPage = async ({
                 <h4 className="text-lg font-bold">Event Schedule</h4>
                 <p>
                   <strong>Start:</strong>{" "}
-                  {formatDateTime(event.session_start_date_time)} <br />
+                  {moment(event?.session_start_date_time).format('MMMM Do YYYY, h:mm A')} <br />
                   <strong>End:</strong>{" "}
-                  {formatDateTime(event.session_end_date_time)}
+                  {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                 </p>
               </div>
 

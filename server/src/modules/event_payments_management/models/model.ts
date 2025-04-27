@@ -26,15 +26,15 @@ export const modelName = 'EventPaymentsModel';
 type Infer = InferAttributes<DataModel>;
 type InferCreation = InferCreationAttributes<DataModel>;
 type status = 'success' | 'failed';
-type media = 'Stripe' | 'Bank';
+type media = 'Stripe' | 'Manual';
 
 class DataModel extends Model<Infer, InferCreation> {
     declare id?: CreationOptional<number>;
 
     declare event_id: number;
     declare user_id: number;
-    declare event_enrollment_id: number;
-    declare event_payment_id: number;
+    declare event_enrollment_id?: number;
+    declare event_payment_id?: number;
     declare date: string;
     declare amount: number;
     declare trx_id: string;
@@ -86,7 +86,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             media: {
-                type: DataTypes.ENUM('Stripe', 'Bank'),
+                type: DataTypes.ENUM('Stripe', 'Manual'),
                 defaultValue: 'Stripe',
             },
             session_id: {

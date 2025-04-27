@@ -167,19 +167,23 @@ async function all(
     }
 
     if (search_key) {
-        // When searching, we should reset to the first page
         query_param.page = 1;
         paginate = 200;
         query.where = {
             ...query.where,
             [Op.or]: [
-                // { user_id: { [Op.like]: `%${search_key}%` } },
-                // { email: { [Op.like]: `%${search_key}%` } },
+                { user_id: { [Op.like]: `%${search_key}%` } },
                 { status: { [Op.like]: `%${search_key}%` } },
                 { id: { [Op.like]: `%${search_key}%` } },
+                // Add these lines to search by user name (first or last)
+                { '$user.first_name$': { [Op.like]: `%${search_key}%` } },
+                { '$user.last_name$': { [Op.like]: `%${search_key}%` } }, 
+                { '$event.title$': { [Op.like]: `%${search_key}%` } }, 
+                { '$session.title$': { [Op.like]: `%${search_key}%` } }, 
             ],
         };
     }
+    
 
     try {
         let data = await (fastify_instance as anyObject).paginate(

@@ -116,7 +116,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         <><label>Media</label>
                                                             <select>
                                                                 <option value="Stripe">Stripe</option>
-                                                                <option value="Bank">Bank</option>
+                                                                <option value="Manual">Manual</option>
                                                             </select></>
                                                     ) : (
                                                         i === 'is_refunded' ? (

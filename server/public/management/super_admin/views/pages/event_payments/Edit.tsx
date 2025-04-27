@@ -95,26 +95,6 @@ const Edit: React.FC<Props> = (props: Props) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Enrollments</label>
-                                        <EnrollmentDropDown name="enrollments"
-                                            multiple={false}
-                                            default_value={get_value('event_enrollment_id') ? [{ id: get_value('event_enrollment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="form-group form-vertical">
-                                        <label>Payments</label>
-                                        <PaymentDropDown name="payments"
-                                            multiple={false}
-                                            default_value={get_value('event_payment_id') ? [{ id: get_value('event_payment_id') }] : []}
-                                            get_selected_data={(data) => {
-                                                console.log(data)
-                                            }}
-                                        />
-                                    </div>
                                       
                                         {[
                                             'amount',
@@ -142,7 +122,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                             onChange={(e) => console.log('Media Changed', e.target.value)}
                                                             >
                                                                 <option value="Stripe">Stripe</option>
-                                                                <option value="Bank">Bank</option>
+                                                                <option value="Manual">Manual</option>
                                                             </select></>
                                                     ) : (
                                                         i === 'is_refunded' ? (
@@ -153,8 +133,8 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                                 defaultValue={get_value('is_refunded')}
                                                                 onChange={(e) => console.log('Is Refunded Changed', e.target.value)}
                                                                 >
-                                                                    <option value="false">False</option>
-                                                                    <option value="true">True</option>
+                                                                    <option value="false">No</option>
+                                                                    <option value="true">Yes</option>
                     
                                                                 </select>
                                                             </>

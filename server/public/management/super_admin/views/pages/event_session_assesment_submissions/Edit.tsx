@@ -84,9 +84,11 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                 <div>
                                     <div>
-                                        <label style={{
+                                        <h2 style={{
                                             cursor: 'text'!,
-                                        }} className='mb-4'>Submitted Content</label>
+                                        }} className='mb-4'>Submitted Content</h2>
+                                    </div>
+                                    <div>
 
                                         {[
                                             'submitted_content',
