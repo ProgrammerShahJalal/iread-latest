@@ -200,15 +200,7 @@ function Navbar() {
                 <li>
                   <Link
                     href="/donate"
-                    className={`
-                      btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15
-                      transition-all duration-300 ease-in-out
-                      hover:bg-white hover:text-gray-900
-                      focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50
-                      ${isActive("/donate") 
-                        ? "bg-white text-gray-900 font-medium" 
-                        : "hover:bg-opacity-80"}
-                    `}
+                     className="btn btn-colored btn-flat bg-theme-color-2 text-white font-14 bs-modal-ajax-load mt-0 p-25 pr-15 pl-15"
                   >
                     Donate Us
                   </Link>
@@ -229,12 +221,7 @@ function Navbar() {
                     />
                   </button>
                 ) : (
-                  <Link href="/login"  className={`
-                    text-white px-4 py-2 rounded-lg
-                    transition-all duration-300 ease-in-out
-                    hover:bg-white hover:text-gray-900
-                    ${isActive("/login") ? "bg-white text-gray-900 font-medium" : ""}
-                  `}>
+                  <Link href="/login" className="text-white">
                     Login / Register
                   </Link>
                 )}

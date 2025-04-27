@@ -168,10 +168,9 @@ function EventSessionPage() {
                 return 'bg-gray-100 text-gray-800';
         }
     };
-
     const isAssessmentAvailable = eventData?.session_end_date_time &&
         new Date() >= new Date(eventData.session_end_date_time);
-
+console.log('event Data', eventData);
     return (
         <ProfileLayout>
             <div className="flex justify-end items-center mb-4">
@@ -292,7 +291,7 @@ function EventSessionPage() {
                             </div>
                             <div className="ml-3">
                                 <p className="text-base md:text-sm text-yellow-700">
-                                    The assessment will be available after the session ends on {moment(eventData?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}.
+                                    The assessment will be available after the session ends on {moment.utc(eventData?.session_end_date_time).local().format('LLLL')}.
                                 </p>
                             </div>
                         </div>

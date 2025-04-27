@@ -7,27 +7,9 @@ import { getEventResources } from "../../../../api/eventResourcesApi";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { getUserByUid } from "../../../../api/userApi";
+import moment from "moment/moment";
+import { Event } from "@/types/event";
 
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-};
-
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return date.toLocaleString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-};
 
 type Params = Promise<{ eventId: string }>
 type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>
@@ -57,12 +39,12 @@ const EventDetailsPage = async (props: {
 
   try {
     const me = await getUserByUid(Number(userId));
-    const events = await getEvents();
+    const events: Event[] = await getEvents();
     const faqs = await getFaqs();
     const eventResources = await getEventResources(Number(eventId));
 
     const event = events.find(
-      (event: any) => event.event_id === Number(eventId)
+      (event: Event) => event.event_id === Number(eventId)
     );
     const eventFaqs = faqs.filter(
       (faq: any) => faq.event_id === Number(eventId)
@@ -78,6 +60,7 @@ const EventDetailsPage = async (props: {
       );
     }
 
+    console.log('myevents', event);
 
     return (
       <ProfileLayout>
@@ -126,22 +109,23 @@ const EventDetailsPage = async (props: {
               <tbody>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Registration Start</td>
-                  <td className="p-4">{formatDate(event.reg_start_date)}</td>
+                  <td className="p-4">{moment.utc(event?.reg_start_date).local().format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-white">
                   <td className="p-4 font-semibold">Registration End</td>
-                  <td className="p-4">{formatDate(event.reg_end_date)}</td>
+                  <td className="p-4">{moment.utc(event?.reg_end_date).local().format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Event Start</td>
                   <td className="p-4">
-                    {formatDateTime(event.session_start_date_time)}
+                    {moment.utc(event?.session_start_date_time).local().format('MMMM Do YYYY, h:mm A')}
+
                   </td>
                 </tr>
                 <tr className="bg-white">
                   <td className="p-4 font-semibold">Event End</td>
                   <td className="p-4">
-                    {formatDateTime(event.session_end_date_time)}
+                    {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                   </td>
                 </tr>
                 <tr className="bg-gray-100">

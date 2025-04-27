@@ -3,23 +3,12 @@ import Link from "next/link";
 import React from "react";
 import { getEvents } from "../../api/eventApi";
 import { Event } from "@/types/event";
+import moment from "moment/moment";
 
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    // second: "2-digit",
-    hour12: true, // Use 12-hour format (set to false for 24-hour format)
-  };
-  return date.toLocaleString("en-GB", options);
-};
 
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
+  console.log('eventsData', eventsData);
 
   return (
     <section>
@@ -61,7 +50,7 @@ const EventsPage = async () => {
                 <div className="container pb-50 pt-80">
                   <div className="section-content">
                     <div className="row">
-                      {eventsData?.map((event) => {
+                      {eventsData?.map((event: Event) => {
                         return (
                           <div key={event.event_id}>
                             <div className="col-sm-6 col-md-4 col-lg-4">
@@ -84,9 +73,7 @@ const EventsPage = async () => {
                                   <ul className="list-inline font-11 mb-20">
                                     <li>
                                       <i className="fa fa-calendar mr-5" />
-                                      {formatDateTime(
-                                        event?.session_start_date_time
-                                      )}
+                                      {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                                     </li>
 
                                     <li>

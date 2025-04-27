@@ -4,20 +4,9 @@ import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
 import { getUserByUid } from "../../../api/userApi";
 import { Event } from "@/types/event";
+import moment from "moment/moment";
 
-// Function to format date & time
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  };
-  return date.toLocaleString("en-GB", options);
-};
+
 
 interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
@@ -39,7 +28,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
 
   const me = await getUserByUid(userUid);
   const myEvents: Event[] = await getMyEvents(me?.id);
-
+console.log('my events all', myEvents);
   return (
     <ProfileLayout>
       <div className="flex">
@@ -73,7 +62,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                           <ul className="list-inline font-11 mb-20">
                             <li>
                               <i className="fa fa-calendar mr-5" />
-                              {formatDateTime(event.session_start_date_time)}
+                              {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                             </li>
                             <li>
                               <i className="fa fa-map-marker mr-5" />
