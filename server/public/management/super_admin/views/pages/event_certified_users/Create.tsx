@@ -71,7 +71,6 @@ const Create: React.FC<Props> = (props: Props) => {
         fetchEventAndSessions();
     }, [selectedEventId]);
 
-console.log('users', users);
 
     function get_value(key) {
         try {
@@ -171,7 +170,7 @@ console.log('users', users);
                                                     i === 'image' ? (
                                                         <div className="form-group grid_full_width form-vertical">
                                                             <InputImage
-                                                                label={'image'}
+                                                                label={'Upload certificate image'}
                                                                 name={'image'}
                                                             />
 
