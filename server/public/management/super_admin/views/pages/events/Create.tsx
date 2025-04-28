@@ -18,7 +18,7 @@ import DateTime from '../../components/DateTime';
 import EventCategoryDropDown from '../event_category/components/dropdown/DropDown';
 import EventTagDropDown from '../event_tags/components/dropdown/DropDown';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -34,13 +34,13 @@ const Create: React.FC<Props> = (props: Props) => {
 
         // Check if full_description is empty
         const fullDescription = data.getData();
-        if (!fullDescription || fullDescription.trim() === '') {
-            (window as anyObject).toaster(
-                'Full description is required',
-                'warning',
-            ); // Add 'warning' as second parameter
-            return; // Stop form submission
-        }
+        // if (!fullDescription || fullDescription.trim() === '') {
+        //     (window as anyObject).toaster(
+        //         'Full description is required',
+        //         'warning',
+        //     ); // Add 'warning' as second parameter
+        //     return; // Stop form submission
+        // }
 
         form_data.append('full_description', data.getData());
 
@@ -89,11 +89,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                 <h5 className="mb-4">Events Informations</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-4">
-                                            {' '}
-                                            Full Description
-                                        </label>
-                                        <div id="full_description"></div>
+                                        <div className="form-control form-group">
+                                            <label className="mb-4">
+                                                {' '}
+                                                Full Description
+                                            </label>
+                                            <div
+                                                id="full_description"></div>
+                                        </div>
                                         <div className="form-group">
                                             <label>Short Description</label>
                                             <textarea
@@ -175,9 +178,15 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     }}
                                                 />
                                             </div>
+                                            <div className="form-group-container">
+
+                                            </div>
+
                                             {/* RADIO OPTIONS */}
                                             <label>Event Type</label>
-                                            <div style={{ paddingBottom: 10 }}>
+                                            <div
+                                                className='form-group-container'
+                                                style={{ paddingBottom: 10 }}>
                                                 {['online', 'offline'].map(
                                                     (type) => (
                                                         <label

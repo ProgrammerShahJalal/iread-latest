@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 import BlogCategoryDropDown from '../blog_category/components/dropdown/DropDown';
 import BlogTagDropDown from '../blog_tags/components/dropdown/DropDown';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -26,12 +26,13 @@ const Create: React.FC<Props> = (props: Props) => {
     );
 
     const [data, setData] = useState<anyObject>({});
+    const [fullDescriptionError, setFullDescriptionError] = useState<string | null>(null); // Add error state
 
     const generateSlug = (title: string): string => {
         return title
             .toLowerCase()
             .trim()
-            .replace(/[\s\W-]+/g, '-'); // Replace spaces and special characters with hyphens
+            .replace(/[\s\W-]+/g, '-');
     };
 
     const checkSlugUniqueness = async (slug: string): Promise<boolean> => {
@@ -43,25 +44,22 @@ const Create: React.FC<Props> = (props: Props) => {
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
-        // console.log('data', data.getData())
 
         // Check if full_description is empty
-        const fullDescription = data.getData();
-        if (!fullDescription || fullDescription.trim() === '') {
-            (window as anyObject).toaster(
-                'Full description is required',
-                'warning',
-            ); // Add 'warning' as second parameter
-            return; // Stop form submission
-        }
+        // const fullDescription = data.getData();
+        // if (!fullDescription || fullDescription.trim() === '') {
+        //     setFullDescriptionError('The full description field is required'); // Set error state
+        //     return; // Stop form submission
+        // } else {
+        //     setFullDescriptionError(null); // Clear error if valid
+        // }
 
         const title = form_data.get('title') as string;
         let slug = generateSlug(title);
 
-        // Check slug uniqueness
         const isUnique = await checkSlugUniqueness(slug);
         if (!isUnique) {
-            slug = `${slug}-${Date.now()}`; // Append timestamp for uniqueness
+            slug = `${slug}-${Date.now()}`;
         }
         form_data.set('slug', slug);
 
@@ -70,7 +68,6 @@ const Create: React.FC<Props> = (props: Props) => {
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
-            // init_nominee();
         }
     }
 
@@ -99,7 +96,6 @@ const Create: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-    /* CKEDITOR RICH TEXT*/
     useEffect(() => {
         let editor = CKEDITOR.replace('full_description');
         setData(editor);
@@ -116,17 +112,18 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
+
                                 <h5 className="mb-4">Blogs Informations</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-4">
-                                            {' '}
-                                            Full Description
-                                        </label>
-                                        <div
-                                            id="full_description"
-                                            className="form-control"
-                                        ></div>
+                                        <div className="form-control form-group">
+                                            <label className="mb-4">
+                                                Full Description
+                                            </label>
+                                            <div
+                                                id="full_description"
+                                            ></div>
+                                        </div>
                                         <div className="form-group">
                                             <label>Short Description</label>
                                             <textarea
@@ -162,18 +159,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     placeholder="Enter Blog Title"
                                                 />
                                             </div>
-                                            {/* <div className="form-group form-vertical">
-                                                <Input name="slug" value={slug} />
-                                            </div> */}
 
                                             <div className="form-group form-vertical">
                                                 <label>Blog Categories</label>
                                                 <BlogCategoryDropDown
                                                     name="blog_categories"
                                                     multiple={true}
-                                                    get_selected_data={(
-                                                        data,
-                                                    ) => {
+                                                    get_selected_data={(data) => {
                                                         console.log(data);
                                                     }}
                                                 />
@@ -183,47 +175,28 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <BlogTagDropDown
                                                     name="blog_tags"
                                                     multiple={true}
-                                                    get_selected_data={(
-                                                        data,
-                                                    ) => {
+                                                    get_selected_data={(data) => {
                                                         console.log(data);
                                                     }}
                                                 />
                                             </div>
 
-                                            {/* RADIO OPTIONS */}
                                             <label>Is Published</label>
-                                            <div
-                                                style={{
-                                                    paddingBottom: 10,
-                                                }}
-                                            >
+                                            <div style={{ paddingBottom: 10 }}>
                                                 <label>
                                                     <input
                                                         type="radio"
                                                         name="is_published"
                                                         value="publish"
-                                                        checked={
-                                                            get_value(
-                                                                'status',
-                                                            ) === 'publish'
-                                                        }
+                                                        checked={get_value('status') !== 'draft'} // Defaults to true if status isn't 'draft'
                                                         onChange={(e) => {
-                                                            const formData =
-                                                                new FormData();
-                                                            formData.set(
-                                                                'status',
-                                                                e.target.value,
-                                                            );
+                                                            const formData = new FormData();
+                                                            formData.set('status', e.target.value);
                                                             dispatch(
-                                                                storeSlice.actions.set_item(
-                                                                    {
-                                                                        ...state.item,
-                                                                        status: e
-                                                                            .target
-                                                                            .value,
-                                                                    },
-                                                                ),
+                                                                storeSlice.actions.set_item({
+                                                                    ...state.item,
+                                                                    status: e.target.value,
+                                                                }),
                                                             );
                                                         }}
                                                     />
@@ -235,27 +208,15 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         type="radio"
                                                         name="is_published"
                                                         value="draft"
-                                                        checked={
-                                                            get_value(
-                                                                'status',
-                                                            ) === 'draft'
-                                                        }
+                                                        checked={get_value('status') === 'draft'}
                                                         onChange={(e) => {
-                                                            const formData =
-                                                                new FormData();
-                                                            formData.set(
-                                                                'status',
-                                                                e.target.value,
-                                                            );
+                                                            const formData = new FormData();
+                                                            formData.set('status', e.target.value);
                                                             dispatch(
-                                                                storeSlice.actions.set_item(
-                                                                    {
-                                                                        ...state.item,
-                                                                        status: e
-                                                                            .target
-                                                                            .value,
-                                                                    },
-                                                                ),
+                                                                storeSlice.actions.set_item({
+                                                                    ...state.item,
+                                                                    status: e.target.value,
+                                                                }),
                                                             );
                                                         }}
                                                     />
@@ -269,9 +230,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     value={''}
                                                     name={'publish_date'}
                                                     handler={() => {
-                                                        console.log(
-                                                            'arguments',
-                                                        );
+                                                        console.log('arguments');
                                                     }}
                                                 ></DateEl>
                                             </div>
