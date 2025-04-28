@@ -67,7 +67,7 @@ const BlogsPage: React.FC = async () => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title?.slice(0, 50)}{blog.title?.length > 50 && '...'}</Link>
+                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title?.slice(0, 40)}{blog.title?.length > 40 && '...'}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
