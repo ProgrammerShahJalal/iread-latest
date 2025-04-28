@@ -26,7 +26,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
 
     // Find the upcoming event
     const upcomingEvent = events.reduce((prev, curr) => {
-      return curr.session_start_date_time > prev.session_start_date_time
+      return curr.reg_end_date > prev.reg_end_date
         ? curr
         : prev;
     }, events[0]);
@@ -34,7 +34,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
     setEventTitle(upcomingEvent.title);
     setEventId(upcomingEvent?.event_id);
 
-    const countDownDate = new Date(upcomingEvent.session_start_date_time).getTime();
+    const countDownDate = new Date(upcomingEvent.reg_end_date).getTime();
 
     intervalRef.current = setInterval(() => {
       const now = new Date().getTime();
@@ -77,7 +77,7 @@ const UpcomingCountdownTimer: React.FC<UpcomingCountdownTimerProps> = ({
 
   return (
     <div>
-      {eventTitle && <h3><strong>Next Up: </strong><Link className="text-[#138E6B] hover:text-[#206a55] font-semibold" href={`events/${eventId}`}>{eventTitle.slice(0, 24)}{eventTitle?.length > 22 && '..'}</Link></h3>}
+      {eventTitle && <h3><strong>Next Up: </strong><Link className="text-[#138E6B] hover:text-[#206a55] font-semibold" href={`/events/${eventId}`}>{eventTitle.slice(0, 24)}{eventTitle?.length > 22 && '..'}</Link></h3>}
       <UpClock
         timerDays={timerDays}
         timerHours={timerHours}

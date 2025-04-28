@@ -8,7 +8,6 @@ import moment from "moment/moment";
 
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
-  console.log('eventsData', eventsData);
 
   return (
     <section>

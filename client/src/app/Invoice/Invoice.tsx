@@ -83,7 +83,7 @@ const Invoice: React.FC<InvoiceProps> = ({
               </div>
               <div className="text-right">
                 <Image
-                  src="https://i.ibb.co.com/23gQkKMV/ireadwhite.png"
+                  src="/frontend/images/ireadblacklogo.png"
                   alt="Logo of Invoice"
                   width={100}
                   height={100}
@@ -116,7 +116,7 @@ const Invoice: React.FC<InvoiceProps> = ({
                 <br />
                 10000 City, USA
                 <br />
-                hello@iread.com
+                iread.hello@gmail.com
               </div>
             </div>
 
