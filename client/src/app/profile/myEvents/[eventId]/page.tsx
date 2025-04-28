@@ -60,8 +60,6 @@ const EventDetailsPage = async (props: {
       );
     }
 
-    console.log('myevents', event);
-
     return (
       <ProfileLayout>
         <div className="flex justify-end items-center mb-4">
@@ -109,16 +107,16 @@ const EventDetailsPage = async (props: {
               <tbody>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Registration Start</td>
-                  <td className="p-4">{moment.utc(event?.reg_start_date).local().format('MMMM Do YYYY')}</td>
+                  <td className="p-4">{moment(event?.reg_start_date).format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-white">
                   <td className="p-4 font-semibold">Registration End</td>
-                  <td className="p-4">{moment.utc(event?.reg_end_date).local().format('MMMM Do YYYY')}</td>
+                  <td className="p-4">{moment(event?.reg_end_date).format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Event Start</td>
                   <td className="p-4">
-                    {moment.utc(event?.session_start_date_time).local().format('MMMM Do YYYY, h:mm A')}
+                    {moment(event?.session_start_date_time).format('MMMM Do YYYY, h:mm A')}
 
                   </td>
                 </tr>

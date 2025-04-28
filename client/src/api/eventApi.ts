@@ -1,15 +1,16 @@
 import "server-only";
 import { query } from "../lib/db";
+import { Event } from "@/types/event";
 
 // Common SQL query parts
 const eventBaseQuery = `
     SELECT 
         e.id AS event_id,
         e.title,
-        e.reg_start_date,
-        e.reg_end_date,
-        e.session_start_date_time,
-        e.session_end_date_time,
+        DATE_FORMAT(e.reg_start_date, '%Y-%m-%dT%H:%i:%s.000Z') AS reg_start_date,
+        DATE_FORMAT(e.reg_end_date, '%Y-%m-%dT%H:%i:%s.000Z') AS reg_end_date,
+        DATE_FORMAT(e.session_start_date_time, '%Y-%m-%dT%H:%i:%s.000Z') AS session_start_date_time,
+        DATE_FORMAT(e.session_end_date_time, '%Y-%m-%dT%H:%i:%s.000Z') AS session_end_date_time,
         e.place,
         e.short_description,
         e.full_description,
@@ -48,13 +49,13 @@ const orderByClause = `ORDER BY e.reg_start_date DESC`;
 
 export async function getEvents() {
     const event_query = `${eventBaseQuery} ${orderByClause}`;
-    const events = (await query(event_query)) as any;
+    const events: Event[] = await query(event_query);
     return events;
 }
 
 export async function getEventById(event_id: number) {
     const event_query = `${eventBaseQuery} WHERE e.id = ?`;
-    const events = (await query(event_query, [event_id])) as any;
+    const events:Event[] = await query(event_query, [event_id]);
     return events.length > 0 ? events[0] : null;
 }
 
@@ -72,6 +73,6 @@ export async function getMyEvents(user_id: number) {
         ${orderByClause}
     `;
 
-    const myEvents = (await query(myEventsQuery, [user_id])) as any;
+    const myEvents: Event[] = await query(myEventsQuery, [user_id]);
     return myEvents;
 }
