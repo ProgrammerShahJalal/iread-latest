@@ -12,7 +12,7 @@ const EventEnrollProcess = ({
   eventId,
   eventPrice,
 }: {
-  eventId: string;
+  eventId: number;
   eventPrice: number;
 }) => {
   const [userId, setUserId] = useState<string | null>(null);

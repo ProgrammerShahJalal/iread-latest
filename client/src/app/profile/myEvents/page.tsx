@@ -28,7 +28,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
 
   const me = await getUserByUid(userUid);
   const myEvents: Event[] = await getMyEvents(me?.id);
-console.log('my events all', myEvents);
+
   return (
     <ProfileLayout>
       <div className="flex">
