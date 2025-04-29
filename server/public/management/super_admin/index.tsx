@@ -56,7 +56,7 @@ axios.interceptors.response.use(
     },
     function (error) {
         (window as any).loader('out');
-        if (error.response.data.status === 422) {
+        if (error.response.data.status === 422 || 409) {
             // Show the error message in toaster
             (window as anyObject).toaster(
                 error.response.data.message || `${error.response.status} - ${error.response.statusText}`,
