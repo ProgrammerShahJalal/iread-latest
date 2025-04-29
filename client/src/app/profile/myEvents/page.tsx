@@ -37,36 +37,37 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
           {myEvents.length ? (
             <div className="container pb-50 pt-80">
               <div className="section-content">
-                <div className="row">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {myEvents.map((event: Event) => (
                     <div
                       key={event.event_id}
-                      className="col-sm-6 col-md-4 col-lg-4"
+                      className="flex flex-col h-full"
                     >
-                      <div className="schedule-box maxwidth500 bg-light mb-30">
-                        <div className="thumb">
+                      <div className="bg-light rounded-lg overflow-hidden shadow-md flex flex-col h-full">
+                        <div className="relative h-48 w-full">
                           <Image
-                            className="w-full rounded mb-4"
+                            className="object-cover"
                             alt={event.title}
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
-                            width={400}
-                            height={300}
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+
                           />
                         </div>
-                        <div className="schedule-details clearfix p-15 pt-10">
-                          <h5 className="font-16 title">
+                        <div className="p-4 flex flex-col flex-grow">
+                          <h5 className="md:text-lg font-semibold mb-2 line-clamp-2">
                             <Link href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}>
                               {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                             </Link>
                           </h5>
-                          <ul className="list-inline font-11 mb-20">
-                            <li>
-                              <i className="fa fa-calendar mr-5" />
+                          <ul className="md:text-xs text-gray-600 mb-3 space-y-1">
+                            <li className="flex items-center">
+                              <i className="fa fa-calendar mr-2" />
                               {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                             </li>
-                            <li>
-                              <i className="fa fa-map-marker mr-5" />
-                              {event.place}
+                            <li className="flex items-center">
+                              <i className="fa fa-map-marker mr-2" />
+                              {event?.place}
                             </li>
                           </ul>
                           <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>

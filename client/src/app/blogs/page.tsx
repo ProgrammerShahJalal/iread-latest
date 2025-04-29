@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
 import Link from "next/link";
+import { Blog } from "@/types/blog";
 
 const BlogsPage: React.FC = async () => {
     const formatDate = (isoDate: string): string => {
@@ -33,7 +34,7 @@ const BlogsPage: React.FC = async () => {
             </section>
 
             {/* Blogs List */}
-            <section id="news" className="py-12">
+            <section id="news" className="py-12 bg-[#E2E8F0]">
                 <div className="container">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {blogsData.map((blog) => (
@@ -53,28 +54,28 @@ const BlogsPage: React.FC = async () => {
                                     <div className="p-6 flex-grow">
                                         <div className="flex items-start gap-4 mb-3">
                                             <div className="bg-[#202C45] text-white text-center px-3 py-2 rounded-md min-w-[80px]">
-                                                <span className="text-sm font-medium">
+                                                <span className="font-medium">
                                                     {formatDate(blog.publish_date).split(' ')[0]}
                                                 </span>
-                                                <span className="block text-xs">
+                                                <span className="block">
                                                     {formatDate(blog.publish_date).split(' ').slice(1).join(' ')}
                                                 </span>
                                             </div>
                                             <div>
-                                                <h3 className="text-lg font-bold text-gray-800 line-clamp-2">
-                                                    <Link href={`/blogs/${blog.slug}`} className="hover:text-[#F2184F]">
+                                                <h3 className="md:text-lg text-3xl font-bold text-gray-800 line-clamp-2">
+                                                    <Link href={`/blogs/${blog.slug}`} className="hover:text-gray-600">
                                                         {blog.title}
                                                     </Link>
                                                 </h3>
                                             </div>
                                         </div>
-                                        <p className="text-gray-600 mb-4 text-sm">
+                                        <p className="text-gray-600 mb-4">
                                             {blog.short_description?.slice(0, 150)}
                                             {blog.short_description?.length > 150 && '...'}
                                         </p>
                                         <Link 
                                             href={`/blogs/${blog.slug}`} 
-                                            className="text-blue-600 hover:text-blue-800 font-medium text-sm inline-flex items-center"
+                                            className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center"
                                         >
                                             Read more
                                             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

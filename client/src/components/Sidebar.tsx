@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "@/types/user";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -43,7 +44,7 @@ const Sidebar = () => {
     { 
       name: "My Events", 
       path: `/profile/myEvents?uid=${user?.uid}`,
-      matchPath: (currentPath: string) => currentPath.startsWith('/profile/myEvents')
+      matchPath: (currentPath: string) => currentPath.startsWith('/profile/myEvents') || currentPath.startsWith('/profile/session') || currentPath.startsWith('/profile/feedback') || currentPath.startsWith('/profile/certificate')
     },
     { 
       name: "Settings", 

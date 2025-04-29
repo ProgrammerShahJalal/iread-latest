@@ -2,16 +2,9 @@ import Image from "next/image";
 import { getBlogs } from "../../../api/blogApi";
 import { getBlogComments } from "../../../api/blogCommentApi";
 import CommentsSection from "../../../components/CommentsSection";
+import { getLatestBlogViewById } from "../../../api/blogViewApi";
+import moment from "moment/moment";
 
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  };
-  return date.toLocaleDateString("en-GB", options);
-};
 
 const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string }> }) => {
   const { blogSlug } = await params; // ✅ Await params before using
@@ -37,8 +30,8 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
 
     // ✅ Fetch blog comments
     const comments = await getBlogComments(blog.blog_id);
-
-
+    const blogView = await getLatestBlogViewById(blog.blog_id);
+    console.log('blog view', blogView?.total_count);
     return (
       <section>
         <div className="container my-10 min-h-[100vh]">
@@ -63,7 +56,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                 <div className="entry-meta pl-15">
                   <ul className="list-inline my-6">
                     <li>
-                      Posted: <span className="text-theme-color-2">{formatDate(blog.publish_date)}</span>
+                      Posted: <span className="text-theme-color-2">{moment(blog.publish_date).format('LL')}</span>
                     </li>
                     <li>
                       By: <span className="text-theme-color-2">{blog.author ? blog.author.name : 'Admin'}</span>
@@ -92,7 +85,9 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                   />
                 </div>
               </article>
-
+              <div className="flex justify-end">
+                <h4 className="text-base font-semibold">Total Views: {blogView?.total_count}</h4>
+              </div>
               {/* Blog Comments Form */}
               <CommentsSection blogs={blog.blog_id} comments={comments} />
             </div>

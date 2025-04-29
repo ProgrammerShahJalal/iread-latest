@@ -74,15 +74,14 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
       console.error("Error fetching blog views:", error);
     }
   };
-
+  const match = blogViews?.find(
+    (blogView) => Number(blogView.blog_id) === Number(blogs)
+  );
   useEffect(() => {
-    const match = blogViews?.find(
-      (blogView) => Number(blogView.blog_id) === Number(blogs)
-    );
     if (match) {
       setTotalViews(match.total_count);
     }
-  }, [blogViews, blogs]);
+  }, [blogViews, blogs, match]);
 
 
   useEffect(() => {
@@ -98,13 +97,15 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   }, [blogs]);
 
   useEffect(() => {
-    // ✅ Send blog view count
-    axios.post(`${BASE_URL}/api/v1/blog-views/store`, {
-      user_id: user?.id,
-      blog_id: blogs,
-    }).catch((error) => {
-      console.error("Error recording blog view:", error);
-    });
+  if(user?.id && blogs){
+      // ✅ Send blog view count
+      axios.post(`${BASE_URL}/api/v1/blog-views/store`, {
+        user_id: user?.id,
+        blog_id: blogs,
+      }).catch((error) => {
+        console.error("Error recording blog view:", error);
+      });
+  }
   }, [blogs, user?.id])
 
 
@@ -177,12 +178,8 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
     }
   };
 
-
   return (
     <>
-      <div className="flex justify-end">
-        <h4 className="text-base font-semibold">Total Views: {totalViews}</h4>
-      </div>
       <div className="mt-12 border-t pt-8">
         <h3 className="text-xl font-semibold">Comments</h3>
 
