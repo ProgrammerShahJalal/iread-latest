@@ -5,7 +5,7 @@ export interface Props {
     value: string | null;
     name: string;
     handler: (data: { [key: string]: any }) => void;
-    default_value: string | null;
+    default_value?: string | null;
 }
 
 const formatDate = (value: string | null) => {

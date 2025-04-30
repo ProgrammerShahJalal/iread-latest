@@ -124,6 +124,7 @@ const RegisterPage: React.FC = () => {
             type="email" 
             value={formData.email} 
             onChange={handleChange} 
+            autoComplete="email"
             error={errors.email}
           />
           <InputField 
@@ -140,6 +141,7 @@ const RegisterPage: React.FC = () => {
             type="password" 
             value={formData.password} 
             onChange={handleChange} 
+            autoComplete="new-password"
             error={errors.password}
           />
 
