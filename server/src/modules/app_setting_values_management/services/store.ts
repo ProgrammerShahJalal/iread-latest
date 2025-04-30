@@ -81,10 +81,11 @@ async function store(
 
 
     let inputs: InferCreationAttributes<typeof data> = {
+        app_setting_key_id: body.app_setting_key_id,
         title: body.title,
-        description: body.description,
+        value: body.value,
+        is_default: body.is_default,
         type: body.type,
-
     };
 
     try {

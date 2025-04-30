@@ -6,13 +6,13 @@ import {
     responseObject,
     Request,
 } from '../../../common_types/object';
-import { InferCreationAttributes, json } from 'sequelize';
-import moment from 'moment';
+import { InferCreationAttributes } from 'sequelize';
 
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
 
+import moment from 'moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
@@ -20,8 +20,7 @@ import Models from '../../../database/models';
 async function validate(req: Request) {
     let field = '';
     let fields = [
-        'title',
-        'description',
+        'id',
     ];
 
     for (let index = 0; index < fields.length; index++) {
@@ -35,34 +34,19 @@ async function validate(req: Request) {
             .run(req);
     }
 
-    // field = 'reference';
-    // await body(field)
-    //     .not()
-    //     .isEmpty()
-    //     .custom(async (value) => {
-    //         const length = value.length;
-    //         if (length <= 2) {
-    //             throw new Error(
-    //                 `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //             );
-    //         }
-    //     })
-    //     .withMessage(
-    //         `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-    //     )
-    //     .run(req);
-
     let result = await validationResult(req);
 
     return result;
 }
-// async function store(
+
+// async function update(
 //     fastify_instance: FastifyInstance,
 //     req: FastifyRequest,
 // ): Promise<responseObject> {
 //     throw new Error('500 test');
 // }
-async function store(
+
+async function update(
     fastify_instance: FastifyInstance,
     req: FastifyRequest,
 ): Promise<responseObject> {
@@ -75,46 +59,44 @@ async function store(
     /** initializations */
     let models = Models.get();
     let body = req.body as anyObject;
-    let data = new models[modelName]();
+    let user_model = new models[modelName]();
 
-    let values: number[] = JSON.parse(body['app_setting_values']) || [];
-
-
-    let inputs: InferCreationAttributes<typeof data> = {
+    let inputs: InferCreationAttributes<typeof user_model> = {
+        app_setting_key_id: body.app_setting_key_id,
         title: body.title,
-        description: body.description,
+        value: body.value,
+        is_default: body.is_default,
         type: body.type,
-
     };
 
+
+    /** print request data into console */
+    // console.clear();
+    // (fastify_instance as any).print(inputs);
+
+    /** store data into database */
     try {
-
-        await data.update(inputs);
-        await data.save();
-
-
-        if (!data.id) {
-            throw new Error('Failed to save settings data.');
+        let data = await models[modelName].findByPk(body.id);
+        if (data) {
+            data.update(inputs);
+            await data.save();
+            return response(201, 'data updated', { data });
+        } else {
+            throw new custom_error(
+                'data not found',
+                404,
+                'operation not possible',
+            );
         }
-
-
-        // await Promise.all(
-        //      values.map(async (categoryId) => {
-        //         await AppSettingValuesModel.create({
-        //             app_setting_key_id: data.id || 1,
-        //             title: body.title,
-        //             value: body.value,
-        //             is_default: body.is_default,
-        //         });
-        //     })
-        // );
-
-
-        return response(201, 'data created', { data });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);
-        throw new custom_error('server error', 500, error.message, uid);
+        if (error instanceof custom_error) {
+            error.uid = uid;
+        } else {
+            throw new custom_error('server error', 500, error.message, uid);
+        }
+        throw error;
     }
 }
 
-export default store;
+export default update;
