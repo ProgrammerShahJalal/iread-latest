@@ -82,16 +82,16 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         to="/event-enrollments"
                     />
                     <MenuDropDownItem
-                        label="Event Certified Users"
-                        to="/event-certified-users"
-                    />
-                    <MenuDropDownItem
                         label="Event Payments"
                         to="/event-payments"
                     />
                     <MenuDropDownItem
                         label="Event Payment Refunds"
                         to="/event-payment-refunds"
+                    />
+                    <MenuDropDownItem
+                        label="Event Certified Users"
+                        to="/event-certified-users"
                     />
                     <MenuDropDownItem
                         label="Event Feedback Form"

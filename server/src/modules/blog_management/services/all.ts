@@ -90,8 +90,6 @@ async function all(
 
     // Add date range filtering if both start and end dates are provided
     if (start_date && end_date) {
-        query_param.page = 1;
-        paginate = 200;
         query.where = {
             ...query.where,
             created_at: {
@@ -101,8 +99,6 @@ async function all(
     } 
     // Optional: handle cases where only one date is provided
     else if (start_date) {
-        query_param.page = 1;
-        paginate = 200;
         query.where = {
             ...query.where,
             created_at: {
@@ -111,8 +107,6 @@ async function all(
         };
     } 
     else if (end_date) {
-        query_param.page = 1;
-        paginate = 200;
         query.where = {
             ...query.where,
             created_at: {
@@ -122,9 +116,6 @@ async function all(
     }
 
     if (search_key) {
-        // When searching, we should reset to the first page
-        query_param.page = 1;
-        paginate = 200;
         query.where = {
             ...query.where,
             [Op.or]: [
