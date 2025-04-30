@@ -9,29 +9,84 @@ import {Request} from '../../../common_types/object';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone_number',
-        'password',
+    const fields = [
+        {
+            name: 'first_name',
+            rules: [
+                body('first_name')
+                    .notEmpty()
+                    .withMessage('The <b>first name</b> field is required')
+                    .trim()
+                    .isLength({ min: 2, max: 50 })
+                    .withMessage('First name must be between 2 and 50 characters')
+                    .matches(/^[A-Za-z\s-]+$/)
+                    .withMessage('First name can only contain letters, spaces, and hyphens'),
+            ],
+        },
+        {
+            name: 'last_name',
+            rules: [
+                body('last_name')
+                    .notEmpty()
+                    .withMessage('The <b>last name</b> field is required')
+                    .trim()
+                    .isLength({ min: 2, max: 50 })
+                    .withMessage('Last name must be between 2 and 50 characters')
+                    .matches(/^[A-Za-z\s-]+$/)
+                    .withMessage('Last name can only contain letters, spaces, and hyphens'),
+            ],
+        },
+        {
+            name: 'email',
+            rules: [
+                body('email')
+                    .notEmpty()
+                    .withMessage('The <b>email</b> field is required')
+                    .trim()
+                    .isEmail()
+                    .withMessage('Please provide a valid email address')
+                    .normalizeEmail()
+                    .isLength({ max: 255 })
+                    .withMessage('Email must not exceed 255 characters'),
+            ],
+        },
+        {
+            name: 'phone_number',
+            rules: [
+                body('phone_number')
+                    .notEmpty()
+                    .withMessage('The <b>phone number</b> field is required')
+                    .trim()
+                    .matches(/^\+?[\d\s-]{10,15}$/)
+                    .withMessage('Please provide a valid phone number (10-15 digits, may include +, spaces, or hyphens)'),
+            ],
+        },
+        {
+            name: 'password',
+            rules: [
+                body('password')
+                    .notEmpty()
+                    .withMessage('The <b>password</b> field is required')
+                    .isLength({ min: 8, max: 50 })
+                    .withMessage('Password must be between 8 and 50 characters')
+                    .matches(/[A-Z]/)
+                    .withMessage('Password must contain at least one uppercase letter')
+                    .matches(/[a-z]/)
+                    .withMessage('Password must contain at least one lowercase letter')
+                    .matches(/[0-9]/)
+                    .withMessage('Password must contain at least one number')
+                    .matches(/[!@#$%^&*(),.?":{}|<>]/)
+                    .withMessage('Password must contain at least one special character'),
+            ],
+        },
     ];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
-            .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
-            )
-            .run(req);
-    }
+    // Run all validations in parallel
+    await Promise.all(
+        fields.flatMap(field => field.rules.map(rule => rule.run(req)))
+    );
 
-    let result = await validationResult(req);
-
-    return result;
+    return await validationResult(req);
 }
 
 async function generateUniqueSlug(
