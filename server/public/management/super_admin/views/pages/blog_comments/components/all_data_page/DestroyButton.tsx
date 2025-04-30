@@ -14,10 +14,11 @@ const DestroyButton: React.FC<Props> = (props: Props) => {
         e.preventDefault();
 
         const confirm = await (window as anyObject).s_confirm(
-            'Delete permanently.',
+            'Warning: This will permanently delete the data and all associated dependencies. Proceed?',
         );
         if (confirm) {
             dispatch(destroy({ id: props.item.id }) as any);
+            (window as any).toaster("Data Parmanently Deleted!")
         }
     }
     return (

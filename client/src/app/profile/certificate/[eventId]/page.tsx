@@ -31,8 +31,8 @@ export async function generateMetadata({
   const user = await getUserByUid(Number(userUid));
 
   return {
-    title: `Certificate of ${user.first_name} ${user.last_name} for ${event.title}`,
-    description: `View certificate for user ${user.first_name} ${user.last_name} and event ${event.title}`,
+    title: `Certificate of ${user.first_name} ${user.last_name} for ${event?.title}`,
+    description: `View certificate for user ${user.first_name} ${user.last_name} and event ${event?.title}`,
   };
 }
 

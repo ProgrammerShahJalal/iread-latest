@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
+import { Blog as Bl } from "@/types/blog";
 
 
 
@@ -13,7 +14,7 @@ const Blog = async() => {
         return date.toLocaleDateString('en-GB', options);
     };
 
-     let blogsData: Blog[] = await getBlogs();
+     let blogsData: Bl[] = await getBlogs();
 
     return (
         <section className="container my-12">

@@ -6,6 +6,7 @@ import ProfileLayout from "../../../../../../components/ProfileLayout";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { User } from "@/types/user";
 
 const AssessmentPage = () => {
   const searchParams = useSearchParams();
