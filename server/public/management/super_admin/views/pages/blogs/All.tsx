@@ -34,7 +34,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,cover_image,is_published,publish_date,status,created_at',
+                'title,short_description,full_description,cover_image,is_published,publish_date,slug,seo_title,seo_keyword,seo_description,status,created_at',
             ),
         );
         dispatch(all({}));

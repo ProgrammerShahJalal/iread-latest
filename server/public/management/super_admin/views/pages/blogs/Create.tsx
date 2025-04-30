@@ -123,14 +123,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                     <div className="col-8">
                                         <div className="form-control form-group">
                                             <label className="mb-4">
-                                                Full Description
+                                                Full Description<span style={{ color: 'red' }}>*</span>
                                             </label>
                                             <div
                                                 id="full_description"
                                             ></div>
                                         </div>
                                         <div className="form-group">
-                                            <label>Short Description</label>
+                                            <label>Short Description<span style={{ color: 'red' }}>*</span></label>
                                             <textarea
                                                 className="form-control"
                                                 name="short_description"
@@ -145,7 +145,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'seo_description',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input name={i} />
+                                                <Input name={i} required={true}/>
                                             </div>
                                         ))}
                                     </div>
@@ -153,7 +153,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                     <div className="col-4">
                                         <div className="form_auto_fit">
                                             <div className="form-group form-vertical">
-                                                <label>Title</label>
+                                                <label>Title<span style={{ color: 'red' }}>*</span></label>
                                                 <input
                                                     onChange={handleTitleChange}
                                                     type="text"
@@ -230,7 +230,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
 
                                             <div className="form-group grid_full_width form-vertical">
-                                                <label>Publish Date</label>
+                                                <label>Publish Date<span style={{ color: 'red' }}>*</span></label>
                                                 <DateEl
                                                     value={''}
                                                     name={'publish_date'}
@@ -245,6 +245,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     label={'Cover Image'}
                                                     name={'cover_image'}
                                                     clearPreview={clearImagePreview}
+                                                    required={true}
                                                 />
                                             </div>
                                         </div>

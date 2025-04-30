@@ -4,9 +4,10 @@ export interface Props {
     label: string;
     defalut_preview?: string | null;
     clearPreview?: boolean;
+    required?: boolean;
 }
 
-const InputImage: React.FC<Props> = ({ name, label, defalut_preview, clearPreview, ...props }: Props) => {
+const InputImage: React.FC<Props> = ({ name, label, defalut_preview, clearPreview, required, ...props }: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(defalut_preview || null);
 
@@ -35,7 +36,7 @@ const InputImage: React.FC<Props> = ({ name, label, defalut_preview, clearPrevie
     };
     return (
         <>
-            <label>{label}</label>
+            <label>{label}{required && <span style={{ color: 'red' }}>*</span>}</label>
             <input
                 type="file"
                 name={name}

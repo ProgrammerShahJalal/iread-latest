@@ -90,6 +90,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 <Input
                                                     label='Replay'
                                                     name={'comment'}
+                                                    required={true}
                                                     // value={get_value(i)}
                                                 />
                                             </div>

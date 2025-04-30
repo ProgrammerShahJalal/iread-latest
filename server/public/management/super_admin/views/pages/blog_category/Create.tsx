@@ -48,7 +48,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         'title',
                                     ].map((i) => (
                                         <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                            <Input name={i} required={true} />
                                         </div>
                                     ))}
 
@@ -56,7 +56,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <InputImage
                                             label={'image'}
                                             name={'image'}
-                                            clearPreview={clearImagePreview}
+                                             clearPreview={clearImagePreview}
                                         />
                                     </div>
 
