@@ -27,6 +27,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
     const [data, setData] = useState<anyObject>({});
     const [fullDescriptionError, setFullDescriptionError] = useState<string | null>(null); // Add error state
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     const generateSlug = (title: string): string => {
         return title
@@ -43,6 +44,7 @@ const Create: React.FC<Props> = (props: Props) => {
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
 
         // Check if full_description is empty
@@ -68,7 +70,10 @@ const Create: React.FC<Props> = (props: Props) => {
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     const [slug, setSlug] = useState('');
@@ -239,6 +244,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 <InputImage
                                                     label={'Cover Image'}
                                                     name={'cover_image'}
+                                                    clearPreview={clearImagePreview}
                                                 />
                                             </div>
                                         </div>

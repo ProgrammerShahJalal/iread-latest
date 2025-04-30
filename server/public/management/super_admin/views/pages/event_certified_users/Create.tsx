@@ -30,16 +30,21 @@ const Create: React.FC<Props> = (props: Props) => {
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [clearImagePreview, setClearImagePreview] = useState(false);
     const dispatch = useAppDispatch();
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     // Fetch sessions when event is selected
@@ -172,6 +177,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                             <InputImage
                                                                 label={'Upload certificate image'}
                                                                 name={'image'}
+                                                                clearPreview={clearImagePreview}
                                                             />
 
                                                         </div>

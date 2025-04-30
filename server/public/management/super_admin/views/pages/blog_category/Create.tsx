@@ -15,13 +15,16 @@ export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
     }
@@ -37,13 +40,6 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-                                {/* <DropDown
-                                    multiple={false}
-                                    get_selected_data={(result) =>
-                                        console.log(result)
-                                    }
-                                    name={`contact_messages_list`}
-                                /> */}
 
                                 <h5 className="mb-4">Category Informations</h5>
                                 <div className="form_auto_fit">
@@ -60,6 +56,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <InputImage
                                             label={'image'}
                                             name={'image'}
+                                            clearPreview={clearImagePreview}
                                         />
                                     </div>
 

@@ -15,14 +15,17 @@ export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
             // init_nominee();
+            setClearImagePreview(true); // Trigger clearing the preview
         }
     }
 
@@ -60,6 +63,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <InputImage
                                             label={'image'}
                                             name={'image'}
+                                            clearPreview={clearImagePreview}
                                         />
                                     </div>
 

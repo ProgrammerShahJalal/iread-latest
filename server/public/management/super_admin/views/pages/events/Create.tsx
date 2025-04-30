@@ -26,9 +26,11 @@ const Create: React.FC<Props> = (props: Props) => {
     );
 
     const [data, setData] = useState<anyObject>({});
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
 
@@ -47,8 +49,11 @@ const Create: React.FC<Props> = (props: Props) => {
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     const dispatch = useAppDispatch();
@@ -120,6 +125,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         <InputImage
                                                             label={'Poster'}
                                                             name={'poster'}
+                                                            clearPreview={clearImagePreview}
                                                         />
                                                     </div>
                                                 ) : (
