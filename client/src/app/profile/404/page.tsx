@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import React, { Suspense } from "react";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Image from "next/image";

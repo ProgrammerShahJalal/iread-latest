@@ -64,11 +64,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`id`}
                                             sort={true}
                                         />
-                                        {/* <TableHeading
-                                            label={`Replier`}
+                                        <TableHeading
+                                            label={`Commenter`}
                                             col_name={`user_id`}
                                             sort={true}
-                                        /> */}
+                                        />
                                         <TableHeading
                                             label={`Blog Title`}
                                             col_name={`blog_id`}
@@ -105,6 +105,9 @@ const All: React.FC<Props> = (props: Props) => {
                                                     </td>
                                                     <td className="text-nowrap">
                                                         {i.id}
+                                                    </td>
+                                                    <td className="text-nowrap">
+                                                        {i.user?.first_name} {i.user?.last_name}
                                                     </td>
 
                                                     <td className="text-truncate" style={{ maxWidth: '200px' }} title={i.blog?.title}>

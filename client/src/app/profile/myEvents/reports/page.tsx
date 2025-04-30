@@ -61,7 +61,7 @@ const ReportsPage = async ({ searchParams }: PageProps) => {
   try {
     const eventPaymentRefunds = await getEventPaymentRefunds(Number(eventId), Number(me?.id));
     const paymentReports = await getEventPayments(Number(eventId), Number(me?.id));
-    const event: Event = await getEventById(eventId);
+    const event = await getEventById(eventId) as Event;
     const refundAllowed = isRefundAllowed(event?.session_start_date_time);
 
     return (

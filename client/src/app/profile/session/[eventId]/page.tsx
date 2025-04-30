@@ -9,6 +9,7 @@ import moment from 'moment/moment';
 import { Event } from '@/types/event';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { User } from '@/types/user';
 
 interface Session {
     id: number;

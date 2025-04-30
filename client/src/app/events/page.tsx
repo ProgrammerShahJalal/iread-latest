@@ -5,13 +5,12 @@ import { getEvents } from "../../api/eventApi";
 import { Event } from "@/types/event";
 import moment from "moment/moment";
 
-
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
 
   return (
     <section>
-      <div className="min-h-[100vh]">
+      <div className="min-h-[100vh] bg-[#E2E8F0]">
         <div className="section-content">
           <div className="row">
             <section
@@ -39,56 +38,56 @@ const EventsPage = async () => {
             <div className="container">
               <section
                 id="upcoming-events"
-                className="divider parallax layer-overlay overlay-white-8"
-                data-bg-img="/frontend/images/event/bg1.jpg"
-                style={{
-                  backgroundImage: 'url("/frontend/images/event/bg1.jpg")',
-                  backgroundPosition: "50% 2px",
-                }}
               >
                 <div className="container pb-50 pt-80">
                   <div className="section-content">
-                    <div className="row">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       {eventsData?.map((event: Event) => {
                         return (
-                          <div key={event.event_id}>
-                            <div className="col-sm-6 col-md-4 col-lg-4">
-                              <div className="schedule-box maxwidth500 bg-light mb-30">
-                                <div  className="relative h-48 w-full">
-                                  <Image
-                               className="object-cover"
-                                   alt={event.title}
-                                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
-                                   fill
-                                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                  />
-                                </div>
-                                <div className="schedule-details clearfix p-15 pt-10">
-                                  <h5 className="font-16 title">
-                                    <Link href={`/events/${event?.event_id}`}>
-                                      {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
-                                    </Link>
-                                  </h5>
-                                  <ul className="list-inline font-11 mb-20">
-                                    <li>
-                                      <i className="fa fa-calendar mr-5" />
-                                      {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
-                                    </li>
-
-                                    <li>
-                                      <i className="fa fa-map-marker mr-5" />{" "}
-                                      {event?.place}
-                                    </li>
-                                  </ul>
-                                  <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
-                                  <div className="mt-10">
-                                    <Link
-                                      href={`/events/${event?.event_id}`}
-                                      className="btn btn-dark btn-sm mt-10"
-                                    >
-                                      Details
-                                    </Link>
-                                  </div>
+                          <div 
+                            key={event.event_id}
+                            className="flex flex-col h-full"
+                          >
+                            <div className="bg-light rounded-lg overflow-hidden shadow-md flex flex-col h-full">
+                              <div className="relative h-48 w-full">
+                                <Image
+                                  className="object-cover"
+                                  alt={event.title}
+                                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                                  fill
+                                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                />
+                              </div>
+                              <div className="p-4 flex flex-col flex-grow">
+                                <h5 className="md:text-lg font-semibold mb-2 line-clamp-2">
+                                  <Link href={`/events/${event?.event_id}`}>
+                                    {event.title?.length > 50 
+                                      ? `${event.title.slice(0, 50)}...` 
+                                      : event.title}
+                                  </Link>
+                                </h5>
+                                <ul className="md:text-xs text-gray-600 mb-3 space-y-1">
+                                  <li className="flex items-center">
+                                    <i className="fa fa-calendar mr-2" />
+                                    {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
+                                  </li>
+                                  <li className="flex items-center">
+                                    <i className="fa fa-map-marker mr-2" />
+                                    {event?.place}
+                                  </li>
+                                </ul>
+                                <p className="md:text-sm text-gray-700 mb-4 line-clamp-3 flex-grow">
+                                  {event.short_description?.length > 150
+                                    ? `${event.short_description.slice(0, 150)}...`
+                                    : event.short_description}
+                                </p>
+                                <div className="mt-auto">
+                                  <Link
+                                    href={`/events/${event?.event_id}`}
+                                    className="inline-block bg-gray-800 hover:bg-gray-700 text-white md:text-sm py-2 px-4 rounded transition duration-200"
+                                  >
+                                    Details
+                                  </Link>
                                 </div>
                               </div>
                             </div>

@@ -41,6 +41,9 @@ const EventDetailsPage = async ({
       );
     }
 
+    console.log('event', moment(event?.reg_end_date).format('LLL'));
+ // Check if registration end date has passed
+ const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
     return (
       <section>
         <div
@@ -72,20 +75,20 @@ const EventDetailsPage = async ({
             <div className="col-lg-8">
               <div className="entry-meta pl-15">
                 <ul className="list-inline my-6">
-                  <li>
-                    Categories:{" "}
-                    <span className="text-theme-color-2">
-                      {event.categories
-                        ?.map((category: any) => category.title)
-                        .join(", ")}
-                    </span>
-                  </li>
-                  <li>
-                    Tags:{" "}
-                    <span className="text-theme-color-2">
-                      {event.tags?.map((tag: any) => tag.title).join(", ")}
-                    </span>
-                  </li>
+                <li>
+                      Categories: <span className="text-theme-color-2">
+                        {event.categories?.length > 0
+                          ? event.categories.map((category: any) => category.title).join(', ')
+                          : 'N/A'}
+                      </span>
+                    </li>
+                    <li>
+                      Tags: <span className="text-theme-color-2">
+                        {event.tags?.length > 0
+                          ? event.tags.map((tag: any) => tag.title).join(', ')
+                          : 'N/A'}
+                      </span>
+                    </li>
                 </ul>
               </div>
               <div className="post-content mt-10">
@@ -155,10 +158,18 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                <EventEnrollProcess
-                  eventId={Number(event.event_id)}
-                  eventPrice={Number(event.discount_price)}
-                />
+                {/* Only show enrollment process if registration is still open */}
+                {isRegistrationOpen ? (
+                  <EventEnrollProcess
+                    eventId={Number(event.event_id)}
+                    eventPrice={Number(event.discount_price)}
+                  />
+                ) : (
+                  <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <p className="font-bold">Registration Closed</p>
+                    <p>This event&apos;s registration period has ended.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

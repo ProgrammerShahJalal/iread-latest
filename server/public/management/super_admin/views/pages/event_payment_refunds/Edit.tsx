@@ -16,6 +16,7 @@ import EventDropDown from "../events/components/dropdown/DropDown";
 import UserDropDown from "../users/components/dropdown/DropDown";
 import EnrollmentDropDown from "../event_enrollments/components/dropdown/DropDown";
 import PaymentDropDown from "../event_payments/components/dropdown/DropDown";
+import moment from 'moment/moment';
 
 export interface Props { }
 
@@ -84,7 +85,7 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                         <div className="form-group form-vertical">
                                             <h4><strong>Event Title:</strong> {get_value('event_id')}</h4>
-                                            <p><strong>Date:</strong> {get_value('date')}</p>
+                                            <p><strong>Date:</strong> {moment(get_value('date')).format('LLL')}</p>
                                             <p><strong>Amount:</strong> {get_value('amount')}</p>
                                             <p><strong>Transaction ID:</strong> {get_value('trx_id')}</p>
                                             <p><strong>Media:</strong> {get_value('media')}</p>

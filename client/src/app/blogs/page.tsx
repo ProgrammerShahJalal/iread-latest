@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
 import Link from "next/link";
-
+import { Blog } from "@/types/blog";
 
 const BlogsPage: React.FC = async () => {
     const formatDate = (isoDate: string): string => {
@@ -16,8 +16,6 @@ const BlogsPage: React.FC = async () => {
     };
 
     let blogsData: Blog[] = await getBlogs();
-
-
 
     return (
         <section>
@@ -36,47 +34,53 @@ const BlogsPage: React.FC = async () => {
             </section>
 
             {/* Blogs List */}
-            <section id="news">
+            <section id="news" className="py-12 bg-[#E2E8F0]">
                 <div className="container">
-                    <div className="row">
-
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {blogsData.map((blog) => (
-                            <div key={blog.blog_id} className="col-sm-6 col-md-4">
-                                <article className="post mb-30">
-                                    <div className="entry-header">
-                                        {blog.cover_image && (
-                                            <Link href={`/blogs/${blog.slug}`}>
-                                                <Image
-                                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
-                                                    alt={blog.title}
-                                                    className="w-full h-64 object-cover rounded-md"
-                                                    width={400}
-                                                    height={250}
-                                                />
-                                            </Link>
-                                        )}
-                                    </div>
-                                    <div className="entry-content p-20 bg-lighter">
-                                        <div className="entry-meta">
-                                            <div className="flex justify-between items-center text-center">
-                                                <ul className="bg-theme-colored px-4 py-2 rounded-md w-24 h-16 flex items-center justify-center">
-                                                    <li className="text-white text-sm">
-                                                        {formatDate(blog.publish_date)}
-                                                    </li>
-                                                </ul>
-
-                                                <div className="text-right">
-                                                    <h4 className="text-2xl md:text-xl font-semibold">
-                                                        <Link href={`/blogs/${blog.slug}`}>{blog.title?.slice(0, 50)}{blog.title?.length > 50 && '...'}</Link>
-                                                    </h4>
-                                                </div>
+                            <div key={blog.blog_id} className="group">
+                                <article className="h-full flex flex-col overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                                    {blog.cover_image && (
+                                        <Link href={`/blogs/${blog.slug}`} className="block overflow-hidden">
+                                            <Image
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                                                alt={blog.title}
+                                                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                                                width={400}
+                                                height={250}
+                                            />
+                                        </Link>
+                                    )}
+                                    <div className="p-6 flex-grow">
+                                        <div className="flex items-start gap-4 mb-3">
+                                            <div className="bg-[#202C45] text-white text-center px-3 py-2 rounded-md min-w-[80px]">
+                                                <span className="font-medium">
+                                                    {formatDate(blog.publish_date).split(' ')[0]}
+                                                </span>
+                                                <span className="block">
+                                                    {formatDate(blog.publish_date).split(' ').slice(1).join(' ')}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <h3 className="md:text-lg text-3xl font-bold text-gray-800 line-clamp-2">
+                                                    <Link href={`/blogs/${blog.slug}`} className="hover:text-gray-600">
+                                                        {blog.title}
+                                                    </Link>
+                                                </h3>
                                             </div>
                                         </div>
-                                        <p className="text-justify mt-3">
-                                        {blog.short_description?.slice(0, 150)}{blog.short_description?.length > 150 && '...'}
+                                        <p className="text-gray-600 mb-4">
+                                            {blog.short_description?.slice(0, 150)}
+                                            {blog.short_description?.length > 150 && '...'}
                                         </p>
-                                        <Link href={`/blogs/${blog.slug}`} className="btn-read-more text-blue-600 hover:text-red-600">
+                                        <Link 
+                                            href={`/blogs/${blog.slug}`} 
+                                            className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center"
+                                        >
                                             Read more
+                                            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                            </svg>
                                         </Link>
                                     </div>
                                 </article>
@@ -90,4 +94,3 @@ const BlogsPage: React.FC = async () => {
 };
 
 export default BlogsPage;
-
