@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment/moment';
 
 export interface Props {
+    label?: string;
     value: string | null;
     name: string;
     handler: (data: { [key: string]: any }) => void;
@@ -17,7 +18,7 @@ export function formated_date(value: string | null) {
         : moment().format('DD MMMM YYYY');
 }
 
-const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
+const DateEl: React.FC<Props> = ({ value, name, label, handler }: Props) => {
     const date_input = useRef<HTMLInputElement>(null);
     const [input_value, setInput_value] = useState<string | null>(null);
     const [minDate, setMinDate] = useState<string>(
@@ -53,7 +54,7 @@ const DateEl: React.FC<Props> = ({ value, name, handler }: Props) => {
     return (
         <>
             <label
-                htmlFor={name}
+                htmlFor={name || label}
                 className="text-capitalize d-block date_custom_control"
             >
                 <input

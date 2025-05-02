@@ -7,11 +7,9 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
 
-
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -29,7 +27,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
-
     function get_value(key) {
         try {
             if (state.item[key]) return state.item[key];
@@ -39,7 +36,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
-
 
     return (
         <>
@@ -52,30 +48,39 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event Resources Informations</h5>
+                                <h5 className="mb-4">
+                                    Event Resources Informations
+                                </h5>
                                 <div className="form_auto_fit">
-
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="events"
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <EventDropDown
+                                            name="events"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                console.log(data);
                                             }}
                                         />
                                     </div>
 
-                                    {[
-                                        'title',
-                                        'url',
-                                    ].map((i) => (
-                                        <div key={i} className="form-group form-vertical">
-                                            <Input name={i} value={get_value(i)} />
+                                    {['title', 'url'].map((i) => (
+                                        <div
+                                            key={i}
+                                            className="form-group form-vertical"
+                                        >
+                                            <Input
+                                                name={i}
+                                                value={get_value(i)}
+                                                required={true}
+                                            />
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
 
                             <div className="form-group form-vertical">

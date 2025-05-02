@@ -104,7 +104,12 @@ const Create: React.FC<Props> = (props: Props) => {
                             <div>
                                 <div>
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <EventDropDown
                                             name="events"
                                             multiple={false}

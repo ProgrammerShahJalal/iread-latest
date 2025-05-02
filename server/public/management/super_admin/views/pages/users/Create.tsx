@@ -12,7 +12,7 @@ import UserRolesDropDown from '../user_roles/components/dropdown/DropDown';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
 
-export interface Props { }
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -57,7 +57,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }));
     }, []);
 
-
     return (
         <>
             <div className="page_content">
@@ -69,37 +68,45 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-
-                                <h5 className="mb-4">
-                                    User Informations
-                                </h5>
+                                <h5 className="mb-4">User Informations</h5>
                                 <div className="form_auto_fit">
                                     {[
-                                    'first_name', 
-                                    'last_name', 
-                                    'email', 
-                                    'phone_number', 
-                                    'password', 
-                                    'role',
-                                    'photo', 
-                                ].map((i) => (
+                                        'first_name',
+                                        'last_name',
+                                        'email',
+                                        'phone_number',
+                                        'password',
+                                        'role',
+                                        'photo',
+                                    ].map((i) => (
                                         <div
                                             key={i}
                                             className="form-group form-vertical"
                                         >
                                             {i === 'role' ? (
                                                 <>
-                                                    <label>User Roles</label>
+                                                    <label>
+                                                        User Roles
+                                                        <span
+                                                            style={{
+                                                                color: 'red',
+                                                            }}
+                                                        >
+                                                            *
+                                                        </span>
+                                                    </label>
                                                     <UserRolesDropDown
                                                         name="role"
                                                         multiple={false}
-                                                        get_selected_data={handleRoleSelection}
+                                                        get_selected_data={
+                                                            handleRoleSelection
+                                                        }
                                                     />
                                                 </>
                                             ) : i === 'photo' ? (
                                                 <div className="form-group grid_full_width form-vertical">
                                                     <InputImage
+                                                        required={true}
                                                         label="Photo"
                                                         name="photo"
                                                         defalut_preview={get_value(
@@ -108,7 +115,10 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     />
                                                 </div>
                                             ) : (
-                                                <Input name={i} />
+                                                <Input
+                                                    name={i}
+                                                    required={true}
+                                                />
                                             )}
                                         </div>
                                     ))}

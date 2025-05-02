@@ -80,7 +80,12 @@ const Create: React.FC<Props> = (props: Props) => {
                                 </h5>
                                 <div className="form_auto_fit">
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <EventDropDown
                                             name="events"
                                             multiple={false}
@@ -102,14 +107,22 @@ const Create: React.FC<Props> = (props: Props) => {
                                             className="form-group form-vertical"
                                         >
                                             {i === 'start' || i === 'end' ? (
-                                                <Input type="time" name={i} />
+                                                <Input
+                                                    type="time"
+                                                    name={i}
+                                                    required={true}
+                                                />
                                             ) : i === 'total_time' ? (
                                                 <Input
+                                                    required={true}
                                                     name={i}
                                                     placeholder="Enter total time in minutes"
                                                 />
                                             ) : (
-                                                <Input name={i} />
+                                                <Input
+                                                    name={i}
+                                                    required={true}
+                                                />
                                             )}
                                         </div>
                                     ))}

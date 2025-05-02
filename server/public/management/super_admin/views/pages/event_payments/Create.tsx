@@ -7,14 +7,12 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
-import EventEnrollmentDropDown from "../event_enrollments/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
+import UserDropDown from '../users/components/dropdown/DropDown';
+import EventEnrollmentDropDown from '../event_enrollments/components/dropdown/DropDown';
 import DateEl from '../../components/DateEl';
 
-
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -32,7 +30,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
-
     function get_value(key) {
         try {
             if (state.item[key]) return state.item[key];
@@ -42,7 +39,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
         return '';
     }
-
 
     return (
         <>
@@ -55,25 +51,37 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event Payment Informations</h5>
+                                <h5 className="mb-4">
+                                    Event Payment Informations
+                                </h5>
                                 <div className="form_auto_fit">
-
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="event_id"
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <EventDropDown
+                                            name="event_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                console.log(data);
                                             }}
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="user_id"
+                                        <label>
+                                            Users
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <UserDropDown
+                                            name="user_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
+                                                console.log(data);
                                             }}
                                         />
                                     </div>
@@ -85,53 +93,103 @@ const Create: React.FC<Props> = (props: Props) => {
                                         'media',
                                         'is_refunded',
                                     ].map((i) => (
-                                        <div key={i} className="form-group form-vertical">
-                                            {
-                                                i === 'date' ? (
+                                        <div
+                                            key={i}
+                                            className="form-group form-vertical"
+                                        >
+                                            {i === 'date' ? (
+                                                <>
+                                                    <label>
+                                                        Date
+                                                        <span
+                                                            style={{
+                                                                color: 'red',
+                                                            }}
+                                                        >
+                                                            *
+                                                        </span>
+                                                    </label>
                                                     <DateEl
-                                                        name={"date"}
-                                                        value={get_value('date')}
-                                                        handler={(data) => console.log('Date Changed', data)}
+                                                        name={'date'}
+                                                        value={get_value(
+                                                            'date',
+                                                        )}
+                                                        handler={(data) =>
+                                                            console.log(
+                                                                'Date Changed',
+                                                                data,
+                                                            )
+                                                        }
                                                     />
-                                                ) : (
-                                                    i === 'media' ? (
-                                                        <>
-                                                            <div className="form-group form-vertical">
-                                                                <label>Media</label>
-                                                                <select
-                                                                    name="media"
-                                                                    className="form-control"
-                                                                    onChange={(e) => console.log('media Changed', e.target.value)}
-                                                                >
-                                                                    <option value="Manual">Manual</option>
-                                                                    <option value="Stripe">Stripe</option>
-                                                                </select>
-                                                            </div></>
-                                                    ) : (
-                                                        i === 'is_refunded' ? (
-                                                            <>
-                                                                <div className="form-group form-vertical">
-                                                                    <label>Is Refunded</label>
-                                                                    <select
-                                                                        name="is_refunded"
-                                                                        className="form-control"
-                                                                        onChange={(e) => console.log('is_refunded Changed', e.target.value)}
-                                                                    >
-                                                                        <option value="false">False</option>
-                                                                        <option value="true">True</option>
-                                                                    </select>
-                                                                </div>
-                                                            </>
-                                                        ) : (
-                                                            <Input name={i} />
-                                                        )
-                                                    )
-                                                )
-                                            }
+                                                </>
+                                            ) : i === 'media' ? (
+                                                <>
+                                                    <div className="form-group form-vertical">
+                                                        <label>
+                                                            Media
+                                                            <span
+                                                                style={{
+                                                                    color: 'red',
+                                                                }}
+                                                            >
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <select
+                                                            name="media"
+                                                            className="form-control"
+                                                            onChange={(e) =>
+                                                                console.log(
+                                                                    'media Changed',
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
+                                                        >
+                                                            <option value="Manual">
+                                                                Manual
+                                                            </option>
+                                                            <option value="Stripe">
+                                                                Stripe
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </>
+                                            ) : i === 'is_refunded' ? (
+                                                <>
+                                                    <div className="form-group form-vertical">
+                                                        <label>
+                                                            Is Refunded
+                                                        </label>
+                                                        <select
+                                                            name="is_refunded"
+                                                            className="form-control"
+                                                            onChange={(e) =>
+                                                                console.log(
+                                                                    'is_refunded Changed',
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
+                                                        >
+                                                            <option value="false">
+                                                                False
+                                                            </option>
+                                                            <option value="true">
+                                                                True
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <Input
+                                                    name={i}
+                                                    required={true}
+                                                />
+                                            )}
                                         </div>
                                     ))}
                                 </div>
-
                             </div>
 
                             <div className="form-group form-vertical">

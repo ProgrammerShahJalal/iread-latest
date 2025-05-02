@@ -14,12 +14,11 @@ import { details } from './config/store/async_actions/details';
 import Select from 'react-select';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import SessionDropDown from "../event_sessions/components/dropdownMatch/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
+import SessionDropDown from '../event_sessions/components/dropdownMatch/DropDown';
 import axios from 'axios';
 
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -28,12 +27,13 @@ const Create: React.FC<Props> = (props: Props) => {
 
     const [data, setData] = useState<anyObject>({});
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+        null,
+    );
     const [event, setEvent] = useState<Event | null>(null);
     const [sessions, setSessions] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -41,10 +41,7 @@ const Create: React.FC<Props> = (props: Props) => {
         // Check if description is empty
         const description = data.getData();
         if (!description || description.trim() === '') {
-            (window as anyObject).toaster(
-                'Description is required',
-                'warning',
-            ); // Add 'warning' as second parameter
+            (window as anyObject).toaster('Description is required', 'warning'); // Add 'warning' as second parameter
             return; // Stop form submission
         }
         form_data.append('description', data.getData());
@@ -56,8 +53,6 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
-
-
     const dispatch = useAppDispatch();
     const params = useParams();
 
@@ -65,7 +60,6 @@ const Create: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item({}));
         dispatch(details({ id: params.id }) as any);
     }, []);
-
 
     // Fetch sessions when event is selected
     useEffect(() => {
@@ -81,7 +75,9 @@ const Create: React.FC<Props> = (props: Props) => {
             try {
                 const [eventRes, sessionsRes] = await Promise.all([
                     axios.get(`/api/v1/events/${selectedEventId}`),
-                    axios.get(`/api/v1/event-sessions/event/${selectedEventId}`),
+                    axios.get(
+                        `/api/v1/event-sessions/event/${selectedEventId}`,
+                    ),
                 ]);
 
                 setEvent(eventRes.data.data);
@@ -95,7 +91,6 @@ const Create: React.FC<Props> = (props: Props) => {
 
         fetchEventAndSessions();
     }, [selectedEventId]);
-
 
     function get_value(key) {
         try {
@@ -111,9 +106,7 @@ const Create: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         let editor = CKEDITOR.replace('description');
         setData(editor);
-    }, [])
-
-
+    }, []);
 
     return (
         <>
@@ -126,83 +119,107 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-
-                                <h5 className="mb-4">Events Sessions Assesments Informations</h5>
+                                <h5 className="mb-4">
+                                    Events Sessions Assesments Informations
+                                </h5>
                                 <div className="row">
+                                    <div className="col-8">
+                                        <label className="mb-4">
+                                            Description
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <div
+                                            id="description"
+                                            className="pb-6"
+                                        ></div>
 
-                                    <div className='col-8'>
-
-
-                                        <label className='mb-4'>Description</label>
-                                        <div id='description' className='pb-6'>
-
-                                        </div>
-
-                                        {[
-                                            'title',
-                                            'mark',
-                                            'pass_mark',
-                                        ].map((i) => (
-                                            <div className="form-group form-vertical">
-                                                {
-                                                    i === 'mark' || 'pass_mark' ? (
-                                                        <Input type='number' name={i} />
-                                                    ): (
-                                                        <Input name={i} />
-                                                    )
-                                                }
-                                            </div>
-                                        ))}
-
+                                        {['title', 'mark', 'pass_mark'].map(
+                                            (i) => (
+                                                <div className="form-group form-vertical">
+                                                    {i === 'mark' ||
+                                                    'pass_mark' ? (
+                                                        <Input
+                                                            type="number"
+                                                            name={i}
+                                                            required={true}
+                                                        />
+                                                    ) : (
+                                                        <Input
+                                                            name={i}
+                                                            required={true}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ),
+                                        )}
                                     </div>
 
-                                    <div className='col-4'>
-
+                                    <div className="col-4">
                                         <div className="form_auto_fit">
-
                                             <div className="form-group form-vertical">
-                                                <label>Events</label>
-                                                <EventDropDown name="events"
+                                                <label>
+                                                    Events
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <EventDropDown
+                                                    name="events"
                                                     multiple={false}
-                                                    get_selected_data={(data) => {
-                                                        setSelectedEventId(Number(data.ids))
+                                                    get_selected_data={(
+                                                        data,
+                                                    ) => {
+                                                        setSelectedEventId(
+                                                            Number(data.ids),
+                                                        );
                                                     }}
                                                 />
                                             </div>
                                             <div className="form-group form-vertical">
-                                                <label>Sessions</label>
+                                                <label>
+                                                    Sessions
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
                                                 <SessionDropDown
                                                     name="sessions"
                                                     multiple={false}
                                                     disabled={!selectedEventId}
-                                                    options={sessions.map(session => ({
-                                                        id: session.id,
-                                                        title: session.title,
-                                                    }))}
-                                                    get_selected_data={(data) => {
-                                                        setSelectedSessionId(Number(data.ids));
+                                                    options={sessions.map(
+                                                        (session) => ({
+                                                            id: session.id,
+                                                            title: session.title,
+                                                        }),
+                                                    )}
+                                                    get_selected_data={(
+                                                        data,
+                                                    ) => {
+                                                        setSelectedSessionId(
+                                                            Number(data.ids),
+                                                        );
                                                     }}
                                                 />
                                             </div>
 
-                                            {[
-                                                'start',
-                                                'end',
-                                            ].map((i) => (
+                                            {['start', 'end'].map((i) => (
                                                 <div className="form-group form-vertical">
                                                     <Input
-                                                        type='time'
+                                                        type="time"
                                                         name={i}
+                                                        required={true}
                                                     />
-
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
 
                             <div className="form-group form-vertical">

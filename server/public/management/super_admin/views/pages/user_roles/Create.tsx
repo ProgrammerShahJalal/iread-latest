@@ -53,7 +53,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                             key={i}
                                             className="form-group form-vertical"
                                         >
-                                            <Input name={i} />
+                                            <Input name={i} required={true} />
                                         </div>
                                     ))}
                                 </div>
