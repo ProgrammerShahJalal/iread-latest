@@ -5,31 +5,15 @@ import EventFaqCard from "./EventFaqCard";
 import ProfileLayout from "../../../../components/ProfileLayout";
 import { getEventResources } from "../../../../api/eventResourcesApi";
 import Link from "next/link";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { getUserByUid } from "../../../../api/userApi";
+import moment from "moment/moment";
+import { Event } from "@/types/event";
 
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-};
-
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  return date.toLocaleString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-};
 
 type Params = Promise<{ eventId: string }>
 type SearchParams = Promise<{ [uid: string]: string | string[] | undefined }>
- 
+
 export async function generateMetadata(props: {
   params: Params
   searchParams: SearchParams
@@ -54,12 +38,13 @@ const EventDetailsPage = async (props: {
   }
 
   try {
-    const events = await getEvents();
+    const me = await getUserByUid(Number(userId));
+    const events: Event[] = await getEvents();
     const faqs = await getFaqs();
     const eventResources = await getEventResources(Number(eventId));
 
     const event = events.find(
-      (event: any) => event.event_id === Number(eventId)
+      (event: Event) => event.event_id === Number(eventId)
     );
     const eventFaqs = faqs.filter(
       (faq: any) => faq.event_id === Number(eventId)
@@ -74,22 +59,30 @@ const EventDetailsPage = async (props: {
         </ProfileLayout>
       );
     }
-    
 
     return (
       <ProfileLayout>
+        <div className="flex justify-end items-center mb-4">
+          <Link
+            href={`/profile/myEvents?uid=${me?.uid}`}
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+          >
+            <ArrowLeftIcon className="h-5 w-5" />
+            Back
+          </Link>
+        </div>
         <div className="container my-10">
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
-      <Link href={`/profile/feedback/${eventId}?uid=${userId}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Give Feedback
-      </Link>
-      <Link href={`/profile/session/${eventId}?uid=${userId}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Take Session
-      </Link>
-      <Link href={`/profile/certificate/${eventId}?uid=${userId}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
-        Certificate
-      </Link>
-    </div>
+          <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 mb-12 bg-white rounded-md p-4">
+            <Link href={`/profile/feedback/${eventId}?uid=${userId}`} className="bg-green-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Give Feedback
+            </Link>
+            <Link href={`/profile/session/${eventId}?uid=${userId}`} className="bg-orange-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Take Session
+            </Link>
+            <Link href={`/profile/certificate/${eventId}?uid=${userId}`} className="bg-purple-500 rounded-md px-4 py-2 text-white w-full md:w-auto">
+              Certificate
+            </Link>
+          </div>
 
           <div className="text-center">
             <Image
@@ -114,22 +107,23 @@ const EventDetailsPage = async (props: {
               <tbody>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Registration Start</td>
-                  <td className="p-4">{formatDate(event.reg_start_date)}</td>
+                  <td className="p-4">{moment(event?.reg_start_date).format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-white">
                   <td className="p-4 font-semibold">Registration End</td>
-                  <td className="p-4">{formatDate(event.reg_end_date)}</td>
+                  <td className="p-4">{moment(event?.reg_end_date).format('MMMM Do YYYY')}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="p-4 font-semibold">Event Start</td>
                   <td className="p-4">
-                    {formatDateTime(event.session_start_date_time)}
+                    {moment(event?.session_start_date_time).format('MMMM Do YYYY, h:mm A')}
+
                   </td>
                 </tr>
                 <tr className="bg-white">
                   <td className="p-4 font-semibold">Event End</td>
                   <td className="p-4">
-                    {formatDateTime(event.session_end_date_time)}
+                    {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                   </td>
                 </tr>
                 <tr className="bg-gray-100">

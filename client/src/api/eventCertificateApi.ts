@@ -23,3 +23,4 @@ export async function getEventCertificate(eventId: number, userId: number) {
 
   return eventCertificate?.[0] || null;
 }
+

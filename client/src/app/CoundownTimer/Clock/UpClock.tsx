@@ -19,23 +19,23 @@ const UpClock: FC<ClockProps> = ({
     <div>
       <div className="flex justify-center items-center gap-2">
         <div>
-          <p className='text-2xl md:text-sm lg:text-xs'>{timerDays ?? 0}</p>
-          <small className='text-2xl md:text-sm lg:text-xs'>Days</small>
+          <p className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>{timerDays ?? 0}</p>
+          <small className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>Days</small>
         </div>
-        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
+        <span className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>:</span>
         <div>
-          <p className='text-2xl md:text-sm lg:text-xs'>{timerHours ?? 0}</p>
-          <small className='text-2xl md:text-sm lg:text-xs'>Hours</small>
+          <p className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>{timerHours ?? 0}</p>
+          <small className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>Hours</small>
         </div>
-        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
+        <span className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>:</span>
         <div>
-          <p className='text-2xl md:text-sm lg:text-xs'>{timerMinutes ?? 0}</p>
-          <small className='text-2xl md:text-sm lg:text-xs'>Minutes</small>
+          <p className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>{timerMinutes ?? 0}</p>
+          <small className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>Minutes</small>
         </div>
-        <span className='text-2xl md:text-sm lg:text-xs'>:</span>
+        <span className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>:</span>
         <div>
-          <p className='text-2xl md:text-sm lg:text-xs'>{timerSeconds ?? 0}</p>
-          <small className='text-2xl md:text-sm lg:text-xs'>Seconds</small>
+          <p className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>{timerSeconds ?? 0}</p>
+          <small className='font-semibold text-2xl md:text-sm lg:text-xs text-black'>Seconds</small>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "@/types/user";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,7 +21,7 @@ const Sidebar = () => {
           setUser(parsedUser);
 
           const uidFromQuery = searchParams.get("uid");
-          if (!uidFromQuery || uidFromQuery !== String(parsedUser.id)) {
+          if (!uidFromQuery || uidFromQuery !== String(parsedUser.uid)) {
             router.replace("/profile/404");
           }
         } catch (error) {
@@ -37,11 +38,26 @@ const Sidebar = () => {
   const navLinks = [
     {
       name: "My Profile",
-      path: user ? `/profile?slug=${user.slug}&uid=${user.id}` : "/profile",
+      path: user ? `/profile?slug=${user.slug}&uid=${user.uid}` : "/profile",
+      matchPath: (currentPath: string) => currentPath === '/profile'
     },
-    { name: "My Events", path: `/profile/myEvents?uid=${user?.id}` },
-    { name: "Settings", path: `/profile/settings?uid=${user?.id}` },
+    { 
+      name: "My Events", 
+      path: `/profile/myEvents?uid=${user?.uid}`,
+      matchPath: (currentPath: string) => currentPath.startsWith('/profile/myEvents') || currentPath.startsWith('/profile/session') || currentPath.startsWith('/profile/feedback') || currentPath.startsWith('/profile/certificate')
+    },
+    { 
+      name: "Settings", 
+      path: `/profile/settings?uid=${user?.uid}`,
+      matchPath: (currentPath: string) => currentPath.startsWith('/profile/settings')
+    },
   ];
+
+  // Helper function to determine if link is active
+  const isActive = (link: typeof navLinks[0]) => {
+    const currentPath = pathname.split('?')[0];
+    return link.matchPath(currentPath);
+  };
 
   return (
     <div className="w-36 md:w-64 h-screen">
@@ -50,9 +66,16 @@ const Sidebar = () => {
           <Link
             key={link.path}
             href={link.path}
-            className={`block px-4 py-2 mt-2 rounded ${
-              pathname === link.path ? "bg-gray-600" : "hover:bg-gray-700"
-            }`}
+            className={`
+              relative block px-4 py-2 mt-2 rounded-lg
+              transition-all duration-300 ease-in-out
+              hover:bg-white hover:text-gray-900
+              focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50
+              ${isActive(link) 
+                ? "bg-white text-gray-900 font-medium" 
+                : "hover:bg-opacity-20 hover:text-white"}
+            `}
+            aria-current={isActive(link) ? "page" : undefined}
           >
             {link.name}
           </Link>

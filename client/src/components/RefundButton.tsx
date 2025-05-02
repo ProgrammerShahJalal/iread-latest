@@ -22,6 +22,7 @@ const RefundButton = ({
   media?: string;
 }) => {
   const [loading, setLoading] = useState(false);
+  const [requested, setRequested] = useState(false);
 
   const BASE_URL =
     process.env.NODE_ENV === "production"
@@ -46,6 +47,7 @@ const RefundButton = ({
       );
 
       toast.success(response.data.message || "Refund request submitted successfully.");
+      setRequested(true);
     } catch (error: any) {
       console.error("Error requesting refund:", error);
       toast.error(error.response?.data?.message || "Failed to request refund.");
@@ -59,7 +61,7 @@ const RefundButton = ({
       <button
         onClick={handleRefundRequest}
         className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
-        disabled={loading}
+        disabled={loading || requested}
       >
         {loading ? "Processing..." : "Request Refund"}
       </button>

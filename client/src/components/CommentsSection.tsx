@@ -42,7 +42,6 @@ const BASE_URL =
     ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
     : process.env.NEXT_PUBLIC_BACKEND_URL;
 
-
 const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [commentts, setCommentts] = useState<BlogComment[]>(comments || []);
   const [user, setUser] = useState<User | null>(null);
@@ -55,6 +54,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [blogViews, setBlogViews] = useState<BlogView[]>([]);
   const [totalViews, setTotalViews] = useState(0);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   // ✅ Fetch comments when component mounts or after a new comment is submitted
   const fetchComments = async () => {
@@ -74,15 +74,14 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
       console.error("Error fetching blog views:", error);
     }
   };
-
+  const match = blogViews?.find(
+    (blogView) => Number(blogView.blog_id) === Number(blogs)
+  );
   useEffect(() => {
-    const match = blogViews?.find(
-      (blogView) => Number(blogView.blog_id) === Number(blogs)
-    );
     if (match) {
       setTotalViews(match.total_count);
     }
-  }, [blogViews, blogs]);
+  }, [blogViews, blogs, match]);
 
 
   useEffect(() => {
@@ -98,13 +97,15 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   }, [blogs]);
 
   useEffect(() => {
-    // ✅ Send blog view count
-    axios.post(`${BASE_URL}/api/v1/blog-views/store`, {
-      user_id: user?.id,
-      blog_id: blogs,
-    }).catch((error) => {
-      console.error("Error recording blog view:", error);
-    });
+    if (user?.id && blogs) {
+      // ✅ Send blog view count
+      axios.post(`${BASE_URL}/api/v1/blog-views/store`, {
+        user_id: user?.id,
+        blog_id: blogs,
+      }).catch((error) => {
+        console.error("Error recording blog view:", error);
+      });
+    }
   }, [blogs, user?.id])
 
 
@@ -177,12 +178,8 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
     }
   };
 
-
   return (
     <>
-      <div className="flex justify-end">
-        <h4 className="text-base font-semibold">Total Views: {totalViews}</h4>
-      </div>
       <div className="mt-12 border-t pt-8">
         <h3 className="text-xl font-semibold">Comments</h3>
 
@@ -307,13 +304,16 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                 rows={3}
                 placeholder="Add a comment..."
                 value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                required
+                onChange={(e) => {
+                  setCommentText(e.target.value);
+                  setIsEmpty(e.target.value.trim() === '');
+                }}
               />
               <button
                 type="submit"
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                disabled={loading}
+                className={`mt-2 px-4 py-2 rounded ${isEmpty ? "bg-slate-500 text-slate-700 border border-black mt-2 px-4 py-2 rounded" : "bg-blue-500 text-white"
+                  }`}
+                disabled={loading || isEmpty}
               >
                 {loading ? "Posting..." : "Submit"}
               </button>

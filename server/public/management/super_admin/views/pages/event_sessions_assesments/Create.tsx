@@ -145,7 +145,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                             'pass_mark',
                                         ].map((i) => (
                                             <div className="form-group form-vertical">
-                                                <Input name={i} />
+                                                {
+                                                    i === 'mark' || 'pass_mark' ? (
+                                                        <Input type='number' name={i} />
+                                                    ): (
+                                                        <Input name={i} />
+                                                    )
+                                                }
                                             </div>
                                         ))}
 

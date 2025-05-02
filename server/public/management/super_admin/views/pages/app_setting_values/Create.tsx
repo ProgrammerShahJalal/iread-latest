@@ -45,10 +45,8 @@ const Create: React.FC<Props> = (props: Props) => {
                                     name={`contact_messages_list`}
                                 /> */}
 
-                                <h5 className="mb-4">Blogs Informations</h5>
+                                <h5 className="mb-4">Tags Informations</h5>
                                 <div className="form_auto_fit">
-
-                                
 
                                     {[
                                         'title',
@@ -57,42 +55,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                             <Input name={i} />
                                         </div>
                                     ))}
-                                    {[
-                                        'short_description',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
-                                    {[
-                                        'full_description',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
 
-{[
-                                        'slug',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
- {[
-                                        'seo_title',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
-
-                                    <div className="form-group grid_full_width form-vertical">
+                                    {/* <div className="form-group grid_full_width form-vertical">
                                         <InputImage
-                                            label={'Cover Image'}
-                                            name={'cover_image'}
+                                            label={'image'}
+                                            name={'image'}
                                         />
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
@@ -115,6 +84,3 @@ const Create: React.FC<Props> = (props: Props) => {
 };
 
 export default Create;
-
-
-

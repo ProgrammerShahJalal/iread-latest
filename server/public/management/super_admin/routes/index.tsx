@@ -8,6 +8,9 @@ import user_roles from '../views/pages/user_roles/config/routes';
 import user_login_histories from '../views/pages/user-login-histories/config/routes';
 import contact_messages from '../views/pages/contact_management/config/routes';
 
+import app_settings from '../views/pages/app_settings/config/routes';
+import app_setting_values from '../views/pages/app_setting_values/config/routes';
+
 import blog_category from '../views/pages/blog_category/config/routes';
 import blog_comments from '../views/pages/blog_comments/config/routes';
 import blog_comment_replies from '../views/pages/blog_comment_replies/config/routes';
@@ -63,6 +66,8 @@ const router: RouteTypes[] = [
             event_payments,
             event_payment_refunds,
             event_feedback_form_fields,
+            app_settings,
+            app_setting_values,
         ],
     },
 ];

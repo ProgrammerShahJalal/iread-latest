@@ -2,20 +2,11 @@ import Image from "next/image";
 import { getMyEvents } from "../../../api/eventApi";
 import ProfileLayout from "../../../components/ProfileLayout";
 import Link from "next/link";
+import { getUserByUid } from "../../../api/userApi";
+import { Event } from "@/types/event";
+import moment from "moment/moment";
 
-// Function to format date & time
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  };
-  return date.toLocaleString("en-GB", options);
-};
+
 
 interface PageProps {
   searchParams: Promise<{ uid: string; eventId: string }>;
@@ -24,9 +15,9 @@ interface PageProps {
 // ✅ Server Component: Fetch data before rendering
 const MyEventsPage = async ({ searchParams }: PageProps) => {
   const params = await searchParams;
-  const userId = params?.uid ? parseInt(params.uid, 10) : null;
+  const userUid = params?.uid ? parseInt(params.uid, 10) : null;
 
-  if (!userId) {
+  if (!userUid) {
     return (
       <ProfileLayout>
         <p className="text-red-500">Invalid User ID.</p>
@@ -34,8 +25,9 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
-  // Fetch events on the server
-  const myEvents = await getMyEvents(userId);
+
+  const me = await getUserByUid(userUid);
+  const myEvents: Event[] = await getMyEvents(me?.id);
 
   return (
     <ProfileLayout>
@@ -45,43 +37,44 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
           {myEvents.length ? (
             <div className="container pb-50 pt-80">
               <div className="section-content">
-                <div className="row">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {myEvents.map((event: Event) => (
                     <div
                       key={event.event_id}
-                      className="col-sm-6 col-md-4 col-lg-4"
+                      className="flex flex-col h-full"
                     >
-                      <div className="schedule-box maxwidth500 bg-light mb-30">
-                        <div className="thumb">
+                      <div className="bg-light rounded-lg overflow-hidden shadow-md flex flex-col h-full">
+                        <div className="relative h-48 w-full">
                           <Image
-                            className="w-full rounded mb-4"
+                            className="object-cover"
                             alt={event.title}
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
-                            width={400}
-                            height={300}
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+
                           />
                         </div>
-                        <div className="schedule-details clearfix p-15 pt-10">
-                          <h5 className="font-16 title">
-                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userId}`}>
-                              {event.title}
+                        <div className="p-4 flex flex-col flex-grow">
+                          <h5 className="md:text-lg font-semibold mb-2 line-clamp-2">
+                            <Link href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}>
+                              {event.title?.slice(0, 40)}{event.title?.length > 40 && '...'}
                             </Link>
                           </h5>
-                          <ul className="list-inline font-11 mb-20">
-                            <li>
-                              <i className="fa fa-calendar mr-5" />
-                              {formatDateTime(event.session_start_date_time)}
+                          <ul className="md:text-xs text-gray-600 mb-3 space-y-1">
+                            <li className="flex items-center">
+                              <i className="fa fa-calendar mr-2" />
+                              {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
                             </li>
-                            <li>
-                              <i className="fa fa-map-marker mr-5" />
-                              {event.place}
+                            <li className="flex items-center">
+                              <i className="fa fa-map-marker mr-2" />
+                              {event?.place}
                             </li>
                           </ul>
-                          <p>{event.short_description}</p>
+                          <p>{event.short_description?.slice(0, 150)}{event.short_description?.length > 150 && '...'}</p>
                           <div className="flex justify-between items-center">
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/${event.event_id}?uid=${userId}`}
+                                href={`/profile/myEvents/${event.event_id}?uid=${userUid}`}
                                 className="btn btn-dark btn-sm mt-10"
                               >
                                 Details
@@ -89,7 +82,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                             </div>
                             <div className="mt-10">
                               <Link
-                                href={`/profile/myEvents/reports?uid=${userId}&eventId=${event.event_id}`}
+                                href={`/profile/myEvents/reports?uid=${userUid}&eventId=${event.event_id}`}
                                 className="btn bg-[#F2184F] text-white btn-sm mt-10"
                               >
                                 Reports

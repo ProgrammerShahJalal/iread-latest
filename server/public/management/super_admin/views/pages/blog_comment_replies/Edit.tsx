@@ -10,11 +10,9 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import BlogDropDown from '../blogs/components/dropdown/DropDown';
-import UserDropDown from '../users/components/dropdown/DropDown';
-import CommentDropDown from '../blog_comments/components/dropdown/DropDown';
 
-export interface Props {}
+
+export interface Props { }
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -85,16 +83,14 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 <div>
                                     <div className="form-group form-vertical">
                                         <h6>
-                                            Blog Title:{' '}
-                                            {state?.item?.blog?.title}
+                                            {state.item.user?.first_name} {state.item.user?.last_name} {" "}
+                                            commented on the blog post{" "}
+                                            <em style={{ fontStyle: 'italic' }}>
+                                                "{state.item.blog?.title}"
+                                            </em>{" "}
+                                            saying, "{state?.item?.parent_comment
+                                                ?.comment}"
                                         </h6>
-                                        <p>
-                                            Parent Comment:{' '}
-                                            {
-                                                state?.item?.parent_comment
-                                                    ?.comment
-                                            }
-                                        </p>
                                     </div>
                                     <div className="form_auto_fit">
                                         {['comment'].map((i) => (
@@ -102,22 +98,10 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 key={i}
                                                 className="form-group form-vertical"
                                             >
-                                                <label
-                                                    style={{
-                                                        cursor: 'text'!,
-                                                    }}
-                                                >
-                                                    Replay
-                                                </label>
-                                                <textarea
-                                                    style={{
-                                                        width: '50%',
-                                                    }}
-                                                    className="form-control"
+                                                <Input
                                                     name={i}
+                                                    label='Edit Replay'
                                                     value={get_value(i)}
-                                                    rows={5}
-                                                    id={i}
                                                 />
                                             </div>
                                         ))}

@@ -14,7 +14,7 @@ import Select from 'react-select';
 import BlogDropDown from '../blogs/components/dropdown/DropDown';
 import UserDropDown from '../users/components/dropdown/DropDown';
 
-export interface Props {}
+export interface Props { }
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -37,6 +37,7 @@ const Edit: React.FC<Props> = (props: Props) => {
     async function handle_submit(e) {
         e.preventDefault();
         let form_data = new FormData(e.target);
+        form_data.append('replay', '1');
         const response = await dispatch(update(form_data) as any);
     }
 
@@ -71,66 +72,31 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 <div>
                                     <div className="form-group form-vertical">
                                         <h6>
-                                            Blog Title: {state.item.blog?.title}
-                                        </h6>
-                                        <h6>
-                                            User Name:{' '}
-                                            {state.item.user?.first_name}{' '}
-                                            {state.item.user?.last_name}
+                                            {state.item.user?.first_name} {state.item.user?.last_name} {" "}
+                                            commented on the blog post{" "}
+                                            <em style={{ fontStyle: 'italic' }}>
+                                                "{state.item.blog?.title}"
+                                            </em>{" "}
+                                            saying, "{get_value('comment')}"
                                         </h6>
                                     </div>
 
                                     <div className="form_auto_fit">
-                                        {['comment'].map((i) => (
+                                        
                                             <div
-                                                key={i}
+                                                key={'comment'}
                                                 className="form-group form-vertical"
                                             >
                                                 <Input
-                                                    name={i}
-                                                    value={get_value(i)}
+                                                    label='Replay'
+                                                    name={'comment'}
+                                                    required={true}
+                                                    // value={get_value(i)}
                                                 />
                                             </div>
-                                        ))}
+                                        
                                     </div>
-
-                                    {/* DROPDOWN SELECT OPTIONS */}
-                                    {/* <Select
-                                        name="status"
-                                        options={statusOptions}
-                                        value={statusOptions.find((option) => option.value === get_value('status'))}
-                                        onChange={(selectedOption: { value: string; label: string } | null) => {
-                                            const formData = new FormData();
-                                            if (selectedOption) {
-                                                formData.set('status', selectedOption.value);
-                                                dispatch(
-                                                    storeSlice.actions.set_item({
-                                                        ...state.item,
-                                                        status: selectedOption.value,
-                                                    })
-                                                );
-                                            }
-                                        }}
-                                        styles={{
-                                            control: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Default text color for the input
-                                            }),
-                                            singleValue: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for selected value
-                                            }),
-                                            menu: (provided) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for dropdown options
-                                            }),
-                                            option: (provided, state) => ({
-                                                ...provided,
-                                                color: 'black', // Text color for each dropdown option
-                                                backgroundColor: state.isFocused ? '#f1f1f1' : 'white', // Highlight color for focused options
-                                            }),
-                                        }}
-                                    /> */}
+                                    
                                 </div>
 
                                 <div className="form-group form-vertical">

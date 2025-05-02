@@ -83,7 +83,7 @@ const Invoice: React.FC<InvoiceProps> = ({
               </div>
               <div className="text-right">
                 <Image
-                  src="/frontend/images/invoice.png"
+                  src="/frontend/images/ireadblacklogo.png"
                   alt="Logo of Invoice"
                   width={100}
                   height={100}
@@ -116,7 +116,7 @@ const Invoice: React.FC<InvoiceProps> = ({
                 <br />
                 10000 City, USA
                 <br />
-                hello@iread.com
+                iread.hello@gmail.com
               </div>
             </div>
 
@@ -128,10 +128,10 @@ const Invoice: React.FC<InvoiceProps> = ({
 
             {/* Total */}
             <div className="flex justify-between items-center mb-2 px-3">
-              <div className="text-2xl leading-none">
+              <div className="text-2xl font-bold text-black leading-none">
                 <span>Total</span>:
               </div>
-              <div className="text-2xl text-right font-medium">${amount}</div>
+              <div className="text-2xl text-right font-bold text-black">${amount}</div>
             </div>
 
             {/* Additional Content: Terms and Conditions */}

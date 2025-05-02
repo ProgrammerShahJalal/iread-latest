@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -7,6 +8,7 @@ import ProfileLayout from "../../components/ProfileLayout";
 
 interface User {
   id: number;
+  uid: number;
   first_name: string;
   last_name: string;
   email: string;

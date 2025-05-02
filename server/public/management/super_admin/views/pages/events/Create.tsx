@@ -18,7 +18,7 @@ import DateTime from '../../components/DateTime';
 import EventCategoryDropDown from '../event_category/components/dropdown/DropDown';
 import EventTagDropDown from '../event_tags/components/dropdown/DropDown';
 
-export interface Props {}
+export interface Props { }
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -26,29 +26,34 @@ const Create: React.FC<Props> = (props: Props) => {
     );
 
     const [data, setData] = useState<anyObject>({});
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
 
         // Check if full_description is empty
         const fullDescription = data.getData();
-        if (!fullDescription || fullDescription.trim() === '') {
-            (window as anyObject).toaster(
-                'Full description is required',
-                'warning',
-            ); // Add 'warning' as second parameter
-            return; // Stop form submission
-        }
+        // if (!fullDescription || fullDescription.trim() === '') {
+        //     (window as anyObject).toaster(
+        //         'Full description is required',
+        //         'warning',
+        //     ); // Add 'warning' as second parameter
+        //     return; // Stop form submission
+        // }
 
         form_data.append('full_description', data.getData());
 
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     const dispatch = useAppDispatch();
@@ -89,11 +94,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                 <h5 className="mb-4">Events Informations</h5>
                                 <div className="row">
                                     <div className="col-8">
-                                        <label className="mb-4">
-                                            {' '}
-                                            Full Description
-                                        </label>
-                                        <div id="full_description"></div>
+                                        <div className="form-control form-group">
+                                            <label className="mb-4">
+                                                {' '}
+                                                Full Description
+                                            </label>
+                                            <div
+                                                id="full_description"></div>
+                                        </div>
                                         <div className="form-group">
                                             <label>Short Description</label>
                                             <textarea
@@ -117,6 +125,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         <InputImage
                                                             label={'Poster'}
                                                             name={'poster'}
+                                                            clearPreview={clearImagePreview}
                                                         />
                                                     </div>
                                                 ) : (
@@ -175,9 +184,15 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     }}
                                                 />
                                             </div>
+                                            <div className="form-group-container">
+
+                                            </div>
+
                                             {/* RADIO OPTIONS */}
                                             <label>Event Type</label>
-                                            <div style={{ paddingBottom: 10 }}>
+                                            <div
+                                                className='form-group-container'
+                                                style={{ paddingBottom: 10 }}>
                                                 {['online', 'offline'].map(
                                                     (type) => (
                                                         <label

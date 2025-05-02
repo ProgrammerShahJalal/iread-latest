@@ -7,30 +7,7 @@ import { getEvents } from "../../../api/eventApi";
 import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import EventEnrollProcess from "../../../components/EventEnrollProcess";
-
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  };
-  return date.toLocaleDateString("en-GB", options);
-};
-
-const formatDateTime = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    // second: "2-digit",
-    hour12: true, // Use 12-hour format (set to false for 24-hour format)
-  };
-  return localDate.toLocaleString("en-GB", options);
-};
+import moment from "moment/moment";
 
 const EventDetailsPage = async ({
   params,
@@ -63,6 +40,9 @@ const EventDetailsPage = async ({
       );
     }
 
+    console.log("event", moment(event?.reg_end_date).format("LLL"));
+    // Check if registration end date has passed
+    const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
     return (
       <section>
         <div
@@ -80,7 +60,7 @@ const EventDetailsPage = async ({
                   <h2 className="title text-white">{event?.title}</h2>
                   <div className="text-white py-6">
                     <CountdownTimer
-                      offerTill={formatDate(event?.reg_end_date)}
+                      offerTill={moment(event?.reg_end_date).format("LLL")}
                     />
                   </div>
                 </div>
@@ -97,15 +77,19 @@ const EventDetailsPage = async ({
                   <li>
                     Categories:{" "}
                     <span className="text-theme-color-2">
-                      {event.categories
-                        ?.map((category: any) => category.title)
-                        .join(", ")}
+                      {event.categories?.length > 0
+                        ? event.categories
+                            .map((category: any) => category.title)
+                            .join(", ")
+                        : "N/A"}
                     </span>
                   </li>
                   <li>
                     Tags:{" "}
                     <span className="text-theme-color-2">
-                      {event.tags?.map((tag: any) => tag.title).join(", ")}
+                      {event.tags?.length > 0
+                        ? event.tags.map((tag: any) => tag.title).join(", ")
+                        : "N/A"}
                     </span>
                   </li>
                 </ul>
@@ -120,18 +104,24 @@ const EventDetailsPage = async ({
               <div className="my-5">
                 <h4 className="text-lg font-bold">Registration Schedule</h4>
                 <p>
-                  <strong>Start:</strong> {formatDate(event.reg_start_date)}{" "}
-                  <br />
-                  <strong>End:</strong> {formatDate(event.reg_end_date)}
+                  <strong>Start:</strong>{" "}
+                  {moment(event.reg_start_date).format("MMMM Do YYYY")} <br />
+                  <strong>End:</strong>{" "}
+                  {moment(event.reg_end_date).format("MMMM Do YYYY")}
                 </p>
               </div>
               <div className="my-5">
                 <h4 className="text-lg font-bold">Event Schedule</h4>
                 <p>
                   <strong>Start:</strong>{" "}
-                  {formatDateTime(event.session_start_date_time)} <br />
+                  {moment(event?.session_start_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}{" "}
+                  <br />
                   <strong>End:</strong>{" "}
-                  {formatDateTime(event.session_end_date_time)}
+                  {moment(event?.session_end_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}
                 </p>
               </div>
 
@@ -177,10 +167,18 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                <EventEnrollProcess
-                  eventId={event.event_id}
-                  eventPrice={event.discount_price}
-                />
+                {/* Only show enrollment process if registration is still open */}
+                {isRegistrationOpen ? (
+                  <EventEnrollProcess
+                    eventId={Number(event.event_id)}
+                    eventPrice={Number(event.discount_price)}
+                  />
+                ) : (
+                  <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <p className="font-bold">Registration Closed</p>
+                    <p>This event&apos;s registration period has ended.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

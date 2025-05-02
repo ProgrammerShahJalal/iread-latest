@@ -39,12 +39,16 @@ async function validate(req: Request) {
     return result;
 }
 
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
+/** Check if a reply exists for the given parent comment ID */
+async function isReplyExists(
+    parentCommentId: string | number,
+): Promise<boolean> {
+    const reply = await Models.get().BlogCommentRepliesModel.findOne({
+        where: { parent_comment_id: parentCommentId },
+    });
+    return !!reply;
+}
+
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -60,6 +64,7 @@ async function update(
     let models = Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
+    let replay_model = new models.BlogCommentRepliesModel;
 
     let inputs: InferCreationAttributes<typeof user_model> = {
         user_id: body.user_id,
@@ -67,30 +72,48 @@ async function update(
         comment: body.comment,
     };
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
-
     /** store data into database */
     try {
-        let data = await models[modelName].findByPk(body.id);
-        if (data) {
-            data.update(inputs);
-            await data.save();
-            return response(201, 'data updated', { data });
-        } else {
+        const data = await models[modelName].findByPk(body.id);
+        const isAdminReply = body?.replay === '1';
+        const isEmptyComment = body?.comment.trim() === '';
+
+        if (!data) {
             throw new custom_error(
-                'data not found',
+                'Data not found',
                 404,
-                'operation not possible',
+                'Operation not possible',
             );
         }
+
+        const replyExists = await isReplyExists(body.id);
+        if (replyExists && isAdminReply) {
+            throw new custom_error('Server error', 500, 'You already replied to this comment.');
+        }
+        if (isEmptyComment && isAdminReply && !replyExists) {
+            throw new custom_error('Server error', 500, 'Please provide a valid replay');
+        }
+
+        if (!isAdminReply) {
+            await data.update(inputs);
+            return response(201, 'Data updated', { data });
+        }
+
+        const inputsReplay: InferCreationAttributes<typeof replay_model> = {
+            user_id: data.user_id,
+            blog_id: data.blog_id,
+            comment: body.comment,
+            parent_comment_id: body.id,
+        };
+        const replayData = await models.BlogCommentRepliesModel.create(inputsReplay);
+        return response(201, 'Replied successfully', { replayData });
+
     } catch (error: any) {
-        let uid = await error_trace(models, error, req.url, req.body);
+        const uid = await error_trace(models, error, req.url, req.body);
         if (error instanceof custom_error) {
             error.uid = uid;
         } else {
-            throw new custom_error('server error', 500, error.message, uid);
+            throw new custom_error('Server error', 500, error.message, uid);
         }
         throw error;
     }

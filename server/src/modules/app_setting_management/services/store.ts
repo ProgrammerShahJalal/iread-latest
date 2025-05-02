@@ -77,17 +77,6 @@ async function store(
     let body = req.body as anyObject;
     let data = new models[modelName]();
 
-    // let blogCategoryBlogModel = models.BlogCategoryBlogModel;
-
-    // let image_path = 'avatar.png';
-    // if (body['cover_image']?.ext) {
-    //     image_path =
-    //         'uploads/blogs/' +
-    //         moment().format('YYYYMMDDHHmmss') +
-    //         body['cover_image'].name;
-    //     await (fastify_instance as any).upload(body['cover_image'], image_path);
-    // }
-
     let values: number[] = JSON.parse(body['app_setting_values']) || [];
 
 
@@ -105,7 +94,7 @@ async function store(
 
 
         if (!data.id) {
-            throw new Error('Failed to save blog data.');
+            throw new Error('Failed to save settings data.');
         }
 
 

@@ -6,6 +6,7 @@ import ProfileLayout from "../../../../../../components/ProfileLayout";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { User } from "@/types/user";
 
 const AssessmentPage = () => {
   const searchParams = useSearchParams();
@@ -19,6 +20,7 @@ const AssessmentPage = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [checkingSubmission, setCheckingSubmission] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   const safeDescription = typeof description === "string" ? description : "";
 
@@ -27,11 +29,20 @@ const AssessmentPage = () => {
       ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
       : process.env.NEXT_PUBLIC_BACKEND_URL;
 
+
+      useEffect(() => {
+              const storedUser = localStorage.getItem("user");
+              if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                setUser(parsedUser);
+              }
+            }, []);
+
   useEffect(() => {
     const checkExistingSubmission = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/api/v1/event-session-assesment-submissions/event/${eventId}/session/${sessionId}/assessment/${assessmentId}/user/${userId}`
+          `${BASE_URL}/api/v1/event-session-assesment-submissions/event/${eventId}/session/${sessionId}/assessment/${assessmentId}/user/${user?.id}`
         );
         
         if (response.data.data) {
@@ -45,10 +56,10 @@ const AssessmentPage = () => {
       }
     };
 
-    if (eventId && sessionId && assessmentId && userId) {
+    if (eventId && sessionId && assessmentId && user?.id) {
       checkExistingSubmission();
     }
-  }, [eventId, sessionId, assessmentId, userId, BASE_URL]);
+  }, [eventId, sessionId, assessmentId, user?.id, BASE_URL]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -64,7 +75,7 @@ const AssessmentPage = () => {
       event_id: eventId,
       event_session_id: sessionId,
       event_session_assesment_id: assessmentId,
-      user_id: userId,
+      user_id: user?.id,
       submitted_content: editorContent,
     };
     

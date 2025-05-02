@@ -18,6 +18,7 @@ const DestroyButton: React.FC<Props> = (props: Props) => {
         );
         if (confirm) {
             dispatch(destroy({ id: props.item.id }) as any);
+            (window as any).toaster("Data Parmanently Deleted!")
         }
     }
     return (

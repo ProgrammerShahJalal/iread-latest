@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import EventDropDown from "../events/components/dropdown/DropDown";
 import UserDropDown from "../users/components/dropdown/DropDown";
 import DateEl from '../../components/DateEl';
+import ManualEnrollmentNotice from './ManualEnrollmentNotice';
 
 
 export interface Props { }
@@ -78,8 +79,7 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event Enrollment Informations</h5>
+                                <ManualEnrollmentNotice/>
                                 <div className="form_auto_fit">
 
                                     <div className="form-group form-vertical">

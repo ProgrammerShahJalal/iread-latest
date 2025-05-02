@@ -84,9 +84,11 @@ const Edit: React.FC<Props> = (props: Props) => {
 
                                 <div>
                                     <div>
-                                        <label style={{
+                                        <h2 style={{
                                             cursor: 'text'!,
-                                        }} className='mb-4'>Submitted Content</label>
+                                        }} className='mb-4'>Submitted Content</h2>
+                                    </div>
+                                    <div>
 
                                         {[
                                             'submitted_content',
@@ -98,8 +100,7 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                 {
                                                     i === 'mark' ? (
                                                         <>
-                                                            <label className="mb-4">Mark</label>
-                                                            <input className="form-group form-vertical" readOnly name={i} value={get_value(i)} />
+                                                            <h6>Mark: {get_value(i)}</h6>
                                                         </>
                                                     ) : (
                                                         i === 'submitted_content' ? (
@@ -107,7 +108,11 @@ const Edit: React.FC<Props> = (props: Props) => {
                                                                 className="post-content"
                                                                 dangerouslySetInnerHTML={{ __html: get_value(i) }}
                                                             />
-                                                        ) : <Input name={i} value={get_value(i)} />
+                                                        ) : i === 'obtained_mark' ? (
+                                                            <Input type='number' name={i} value={get_value(i)} />
+                                                        ): (
+                                                            <Input name={i} value={get_value(i)} />
+                                                        )
                                                     )
                                                 }
                                             </div>

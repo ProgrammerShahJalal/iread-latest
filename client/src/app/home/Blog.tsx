@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
+import { Blog as Bl } from "@/types/blog";
 
 
 
@@ -13,16 +14,16 @@ const Blog = async() => {
         return date.toLocaleDateString('en-GB', options);
     };
 
-     let blogsData: Blog[] = await getBlogs();
+     let blogsData: Bl[] = await getBlogs();
 
     return (
-        <section className="container">
+        <section className="container my-12">
             <div className="section-title mb-10">
                 <div className="row">
                     <div className="col-md-12 text-3xl">
                         <h2 className="mt-0 text-uppercase text-theme-colored title line-bottom line-height-1">
                             Latest
-                            <span className="text-theme-color-2 font-weight-400"> News</span>
+                            <span className="text-theme-color-2 font-weight-400"> Blogs</span>
                         </h2>
                     </div>
                 </div>
@@ -59,14 +60,12 @@ const Blog = async() => {
 
                                                 <div className="text-right">
                                                     <h4 className="text-2xl md:text-xl font-semibold">
-                                                    <Link href={`/blogs/${blog.slug}`}>{blog.title}</Link>
+                                                    <Link href={`/blogs/${blog.slug}`}>{blog.title?.slice(0, 50)}{blog.title?.length > 50 && '...'}</Link>
                                                     </h4>
                                                 </div>
                                             </div>
-
-
                                         </div>
-                                        <p className="text-justify mt-3">{blog.short_description}</p>
+                                        <p className="text-justify mt-3">{blog.short_description?.slice(0, 150)}{blog.short_description?.length > 150 && '...'}</p>
                                         <Link href={`/blogs/${blog.slug}`} className="btn-read-more text-blue-700 hover:text-red-500">
                                             Read more
                                         </Link>

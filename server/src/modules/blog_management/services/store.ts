@@ -28,6 +28,7 @@ async function validate(req: Request) {
         'seo_title',
         'seo_description',
         'seo_keyword',
+        'publish_date',
     ];
 
     for (let index = 0; index < fields.length; index++) {

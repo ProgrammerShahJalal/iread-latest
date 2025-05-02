@@ -30,16 +30,21 @@ const Create: React.FC<Props> = (props: Props) => {
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [clearImagePreview, setClearImagePreview] = useState(false);
     const dispatch = useAppDispatch();
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     // Fetch sessions when event is selected
@@ -56,7 +61,7 @@ const Create: React.FC<Props> = (props: Props) => {
             try {
                 const [eventRes, usersRes] = await Promise.all([
                     axios.get(`/api/v1/events/${selectedEventId}`),
-                    axios.get(`/api/v1/event-certified-users/event/${selectedEventId}`),
+                    axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`),
                 ]);
 
                 setEvent(eventRes.data.data);
@@ -71,7 +76,6 @@ const Create: React.FC<Props> = (props: Props) => {
         fetchEventAndSessions();
     }, [selectedEventId]);
 
-console.log('users', users);
 
     function get_value(key) {
         try {
@@ -113,10 +117,10 @@ console.log('users', users);
                                         <UserDropDownMatch name="users"
                                             multiple={false}
                                             disabled={!selectedEventId}
-                                            options={users.map(user => ({
-                                                id: user.id,
-                                                first_name: user?.user?.first_name,
-                                                last_name: user?.user?.last_name
+                                            options={users?.map(user => ({
+                                                id: user?.id,
+                                                first_name: user?.first_name,
+                                                last_name: user?.last_name
                                             }))}
                                             get_selected_data={(data) => {
                                                 setSelectedSessionId(Number(data.ids));
@@ -171,8 +175,9 @@ console.log('users', users);
                                                     i === 'image' ? (
                                                         <div className="form-group grid_full_width form-vertical">
                                                             <InputImage
-                                                                label={'image'}
+                                                                label={'Upload certificate image'}
                                                                 name={'image'}
+                                                                clearPreview={clearImagePreview}
                                                             />
 
                                                         </div>
