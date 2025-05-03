@@ -18,7 +18,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -43,7 +43,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-  
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -79,61 +79,71 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`type`}
                                             sort={true}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                {(state.all as any)?.data?.length > 0 ? (
-                                    (state.all as any)?.data?.map((i: { [key: string]: any }) => {
-                                            return (
-                                                <tr
-                                                    key={i.id}
-                                                    className={`table_rows table_row_${i.id}`}
-                                                >
-                                                    <td>
-                                                        <TableRowAction
-                                                            item={i}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <SelectItem item={i} />
-                                                    </td>
-                                                    <td>{i.id}</td>
+                                    {(state.all as any)?.data?.length > 0 ? (
+                                        (state.all as any)?.data?.map(
+                                            (i: { [key: string]: any }) => {
+                                                return (
+                                                    <tr
+                                                        key={i.id}
+                                                        className={`table_rows table_row_${i.id}`}
+                                                    >
+                                                        <td>
+                                                            <TableRowAction
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <SelectItem
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>{i.id}</td>
 
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                        >
-                                                            {i.title} 
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        {i.description}
-                                                    </td>
-                                                    <td>
-                                                        {i.type}
-                                                    </td>
-                                                    <td>
-                                                        {i.status}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        },
-                                    )
-                                ) : (
-                                    <tr>
-                                        <td colSpan={9} className="text-center py-4">
-                                            No data found
-                                        </td>
-                                    </tr>
-                                )}
+                                                        <td>
+                                                            <span
+                                                                className="quick_view_trigger"
+                                                                onClick={() =>
+                                                                    quick_view(
+                                                                        i,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {i.title}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {i.description?.slice(
+                                                                0,
+                                                                50,
+                                                            )}
+                                                            {i.description
+                                                                ?.length > 50 &&
+                                                                '...'}
+                                                        </td>
+                                                        <td>{i.type}</td>
+                                                        {/* <td>{i.status}</td> */}
+                                                    </tr>
+                                                );
+                                            },
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={9}
+                                                className="text-center py-4"
+                                            >
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

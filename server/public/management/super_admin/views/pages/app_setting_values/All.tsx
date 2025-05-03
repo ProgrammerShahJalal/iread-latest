@@ -18,7 +18,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props { }
+export interface Props {}
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -33,7 +33,7 @@ const All: React.FC<Props> = (props: Props) => {
 
         dispatch(
             storeSlice.actions.set_select_fields(
-                'title,values,app_setting_key_id,is_default,status',
+                'title,value,app_setting_key_id,is_default,status',
             ),
         );
         dispatch(all({}));
@@ -43,7 +43,7 @@ const All: React.FC<Props> = (props: Props) => {
         dispatch(storeSlice.actions.set_item(data));
         dispatch(storeSlice.actions.set_show_quick_view_canvas(true));
     }
-  
+
     return (
         <div className="page_content">
             <div className="explore_window fixed_size">
@@ -64,11 +64,11 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`id`}
                                             sort={true}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`APP SETTING KEY ID`}
                                             col_name={`app_setting_key_id`}
                                             sort={true}
-                                        />
+                                        /> */}
                                         <TableHeading
                                             label={`Title`}
                                             col_name={`title`}
@@ -77,77 +77,92 @@ const All: React.FC<Props> = (props: Props) => {
                                         <TableHeading
                                             label={`Value`}
                                             col_name={`value`}
-                                            sort={true}
+                                            sort={false}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Type`}
                                             col_name={`type`}
                                             sort={true}
-                                        />
+                                        /> */}
                                         <TableHeading
                                             label={`Is Default?`}
                                             col_name={`is_default`}
                                             sort={true}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Status`}
                                             col_name={`status`}
                                             sort={false}
-                                        />
+                                        /> */}
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                {(state.all as any)?.data?.length > 0 ? (
-                                    (state.all as any)?.data?.map((i: { [key: string]: any }) => {
-                                            return (
-                                                <tr
-                                                    key={i.id}
-                                                    className={`table_rows table_row_${i.id}`}
-                                                >
-                                                    <td>
-                                                        <TableRowAction
-                                                            item={i}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <SelectItem item={i} />
-                                                    </td>
-                                                    <td>{i.id}</td>
-                                                    <td>{i.app_setting_key_id}</td>
-
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
+                                    {(state.all as any)?.data?.length > 0 ? (
+                                        (state.all as any)?.data?.map(
+                                            (i: { [key: string]: any }) => {
+                                                return (
+                                                    <tr
+                                                        key={i.id}
+                                                        className={`table_rows table_row_${i.id}`}
+                                                    >
+                                                        <td>
+                                                            <TableRowAction
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <SelectItem
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>{i.id}</td>
+                                                        {/* <td>
+                                                            {
+                                                                i.app_setting_key_id
                                                             }
-                                                        >
-                                                            {i.title} 
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        {i.value}
-                                                    </td>
-                                                    <td>
-                                                        {i.type}
-                                                    </td>
-                                                    <td>
-                                                        {i.is_default}
-                                                    </td>
-                                                    <td>
-                                                        {i.status}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        },
-                                    )
-                                ) : (
-                                    <tr>
-                                        <td colSpan={9} className="text-center py-4">
-                                            No data found
-                                        </td>
-                                    </tr>
-                                )}
+                                                        </td> */}
+
+                                                        <td>
+                                                            <span
+                                                                className="quick_view_trigger"
+                                                                onClick={() =>
+                                                                    quick_view(
+                                                                        i,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {i.title}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {i.value?.slice(
+                                                                0,
+                                                                50,
+                                                            )}
+                                                            {i.value?.length >
+                                                                50 && '...'}
+                                                        </td>
+                                                        {/* <td>{i.type}</td> */}
+                                                        <td>
+                                                            {i.is_default
+                                                                ? 'Yes'
+                                                                : 'No'}
+                                                        </td>
+                                                        {/* <td>{i.status}</td> */}
+                                                    </tr>
+                                                );
+                                            },
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={9}
+                                                className="text-center py-4"
+                                            >
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

@@ -76,7 +76,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'status',];
+        select_fields = ['id', 'title', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -84,12 +84,12 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        include: [
-            {
-                model: models.AppSettingValuesModel,
-                as: 'app_settings',
-            }
-        ],
+        // include: [
+        //     {
+        //         model: models.AppSettingValuesModel,
+        //         as: 'app_settings',
+        //     }
+        // ],
     };
 
     query.attributes = select_fields;
@@ -99,28 +99,26 @@ async function all(
         query.where = {
             ...query.where,
             created_at: {
-                [Op.between]: [start_date, end_date]
-            }
+                [Op.between]: [start_date, end_date],
+            },
         };
-    } 
+    }
     // Optional: handle cases where only one date is provided
     else if (start_date) {
         query.where = {
             ...query.where,
             created_at: {
-                [Op.gte]: start_date
-            }
+                [Op.gte]: start_date,
+            },
         };
-    } 
-    else if (end_date) {
+    } else if (end_date) {
         query.where = {
             ...query.where,
             created_at: {
-                [Op.lte]: end_date
-            }
+                [Op.lte]: end_date,
+            },
         };
     }
-
 
     if (search_key) {
         query.where = {

@@ -11,8 +11,9 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import Select from './components/management_data_page/Select';
+import TextArea from './components/management_data_page/TextArea';
 
-export interface Props { }
+export interface Props {}
 
 const Edit: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,13 +28,11 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
+    let typeOptions = [
+        { value: 'text', label: 'Text' },
+        { value: 'number', label: 'Number' },
+        { value: 'file', label: 'File' },
     ];
-
-
 
     async function handle_submit(e) {
         e.preventDefault();
@@ -70,35 +69,36 @@ const Edit: React.FC<Props> = (props: Props) => {
                                 />
 
                                 <div>
-                                    <h5 className="mb-4">
-                                        Input Data
-                                    </h5>
+                                    <h5 className="mb-4">Input Data</h5>
                                     <div className="form_auto_fit">
-                                        {[
-                                            'title',
-
-                                        ].map((i) => (
-                                            <div key={i} className="form-group form-vertical">
-                                                <Input
-                                                    name={i}
-                                                    value={get_value(i)}
-                                                />
+                                        {['title', 'description'].map((i) => (
+                                            <div
+                                                key={i}
+                                                className="form-group form-vertical"
+                                            >
+                                                {i === 'description' ? (
+                                                    <TextArea
+                                                        name={i}
+                                                        value={get_value(i)}
+                                                    />
+                                                ) : (
+                                                    <Input
+                                                        name={i}
+                                                        value={get_value(i)}
+                                                    />
+                                                )}
                                             </div>
                                         ))}
-
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                            <Select
-                                                name="status"
-                                                label="Status"
-                                                values={statusOptions}
-                                                value={get_value('status')}
-                                            />
-                                        </div>
-
-
-
+                                        <Select
+                                            name="type"
+                                            label="Type"
+                                            values={typeOptions}
+                                            value={get_value('type')}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="form-group form-vertical">

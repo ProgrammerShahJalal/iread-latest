@@ -139,7 +139,10 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 {/* App Settings  */}
                 <MenuDropDown group_title="App Settings" icon="icon-settings">
                     <MenuDropDownItem label="App Settings" to="/app-settings" />
-                    {/* <MenuDropDownItem label="App Setting Values" to="/app-setting-values" /> */}
+                    <MenuDropDownItem
+                        label="App Setting Values"
+                        to="/app-setting-values"
+                    />
                 </MenuDropDown>
 
                 <li>
