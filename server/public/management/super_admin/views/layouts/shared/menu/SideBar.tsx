@@ -138,9 +138,9 @@ const SideBar: React.FC<Props> = (props: Props) => {
                 </MenuDropDown>
                 {/* App Settings  */}
                 <MenuDropDown group_title="App Settings" icon="icon-settings">
-                    <MenuDropDownItem label="App Setting Keys" to="/app-settings" />
+                    {/* <MenuDropDownItem label="App Setting Keys" to="/app-settings" /> */}
                     <MenuDropDownItem
-                        label="App Setting Values"
+                        label="App Settings"
                         to="/app-setting-values"
                     />
                 </MenuDropDown>
