@@ -60,6 +60,7 @@ async function all(
 
     const { Op } = require('sequelize');
     let search_key = query_param.search_key;
+    let title = query_param.title;
     let orderByCol = query_param.orderByCol || 'id';
     let role = query_param.role || null;
     let orderByAsc = query_param.orderByAsc || 'true';
@@ -76,7 +77,7 @@ async function all(
         select_fields = query_param.select_fields.replace(/\s/g, '').split(',');
         select_fields = [...select_fields, 'id', 'status'];
     } else {
-        select_fields = ['id', 'title', 'status'];
+        select_fields = ['id', 'title', 'value', 'status'];
     }
 
     let query: FindAndCountOptions = {
@@ -84,12 +85,12 @@ async function all(
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
         },
-        // include: [
-        //     {
-        //         model: models.AppSettingValuesModel,
-        //         as: 'app_settings',
-        //     }
-        // ],
+        include: [
+            {
+                model: models.AppSettinsgModel,
+                as: 'app_settings',
+            }
+        ],
     };
 
     query.attributes = select_fields;
@@ -119,6 +120,14 @@ async function all(
             },
         };
     }
+
+    // Exact title match
+    if (title) {
+        query.where = {
+            ...query.where,
+            title: title,
+        };
+    } 
 
     if (search_key) {
         query.where = {

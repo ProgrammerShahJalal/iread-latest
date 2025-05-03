@@ -56,10 +56,10 @@ const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
     const params = useParams();
 
-    useEffect(() => {
-        dispatch(storeSlice.actions.set_item({}));
-        dispatch(details({ id: params.id }) as any);
-    }, []);
+    // useEffect(() => {
+    //     dispatch(storeSlice.actions.set_item({}));
+    //     dispatch(details({ id: params.id }) as any);
+    // }, []);
 
     // Fetch sessions when event is selected
     useEffect(() => {

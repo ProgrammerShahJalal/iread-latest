@@ -5,10 +5,8 @@ import setup from './config/setup';
 import { useAppDispatch } from '../../../store';
 import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
+import TextArea from './components/management_data_page/TextArea';
 import Select from './components/management_data_page/Select';
-import InputImage from './components/management_data_page/InputImage';
-import { anyObject } from '../../../common_types/object';
-import DropDown from './components/dropdown/DropDown';
 
 export interface Props { }
 
@@ -26,6 +24,12 @@ const Create: React.FC<Props> = (props: Props) => {
         }
     }
 
+    let typeOptions = [
+        { value: 'text', label: 'Text' },
+        { value: 'number', label: 'Number' },
+        { value: 'file', label: 'File' },
+    ];
+
     return (
         <>
             <div className="page_content">
@@ -37,33 +41,34 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-                                {/* <DropDown
-                                    multiple={false}
-                                    get_selected_data={(result) =>
-                                        console.log(result)
-                                    }
-                                    name={`contact_messages_list`}
-                                /> */}
 
-                                <h5 className="mb-4">Tags Informations</h5>
+                                <h5 className="mb-4">App Settings Informations</h5>
                                 <div className="form_auto_fit">
-
-                                    {[
-                                        'title',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                    {['title', 'description'].map((i) => (
+                                        <div
+                                            key={i}
+                                            className="form-group form-vertical"
+                                        >
+                                            {i === 'description' ? (
+                                                <TextArea
+                                                    name={i}
+                                                />
+                                            ) : (
+                                                <Input
+                                                    name={i}
+                                                />
+                                            )}
                                         </div>
                                     ))}
-
-                                    {/* <div className="form-group grid_full_width form-vertical">
-                                        <InputImage
-                                            label={'image'}
-                                            name={'image'}
-                                        />
-                                    </div> */}
-
                                 </div>
+                            </div>
+
+                            <div className="form-group form-vertical">
+                                <Select
+                                    name="type"
+                                    label="Type"
+                                    values={typeOptions}
+                                />
                             </div>
 
                             <div className="form-group form-vertical">

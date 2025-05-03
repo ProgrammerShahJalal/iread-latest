@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/management_data_page/Header';
 import Footer from './components/management_data_page/Footer';
 import { useSelector } from 'react-redux';
@@ -10,11 +10,11 @@ import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
-import Select from './components/management_data_page/Select';
+import InputImage from './components/management_data_page/InputImage';
 
-export interface Props {}
+export interface Props { }
 
-const Edit: React.FC<Props> = (props: Props) => {
+const Edit: React.FC<Props> = () => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
@@ -27,21 +27,16 @@ const Edit: React.FC<Props> = (props: Props) => {
         dispatch(details({ id: params.id }) as any);
     }, []);
 
-    let statusOptions = [
-        { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' },
-    ];
-
-    async function handle_submit(e) {
+    async function handle_submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        let form_data = new FormData(e.target);
-        const response = await dispatch(update(form_data) as any);
+        const form_data = new FormData(e.target as HTMLFormElement);
+        await dispatch(update(form_data) as any);
     }
 
-    function get_value(key) {
+    function get_value(key: string): string {
         try {
             if (state.item[key]) return state.item[key];
-            if (state.item?.info[key]) return state.item?.info[key];
+            if (state.item?.info?.[key]) return state.item.info[key];
         } catch (error) {
             return '';
         }
@@ -49,79 +44,88 @@ const Edit: React.FC<Props> = (props: Props) => {
     }
 
     return (
-        <>
-            <div className="page_content">
-                <div className="explore_window fixed_size">
-                    <Header page_title={setup.edit_page_title}></Header>
+        <div className="page_content">
+            <div className="explore_window fixed_size">
+                <Header page_title={setup.edit_page_title} />
 
-                    {Object.keys(state.item).length && (
-                        <div className="content_body custom_scroll">
-                            <form
-                                onSubmit={(e) => handle_submit(e)}
-                                className="mx-auto pt-3"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    defaultValue={get_value(`id`)}
-                                />
+                {Object.keys(state.item).length > 0 && (
+                    <div className="content_body custom_scroll">
+                        <form onSubmit={handle_submit} className="mx-auto pt-3">
+                            <input
+                                type="hidden"
+                                name="id"
+                                defaultValue={get_value('id')}
+                            />
+                            <input
+                                type="hidden"
+                                name="app_setting_key_id"
+                                defaultValue={get_value('app_setting_key_id')}
+                            />
 
-                                <div>
-                                    <h5 className="mb-4">Input Data</h5>
-                                    <div className="form_auto_fit">
-                                        {['title', 'value'].map((i) => (
-                                            <div
-                                                key={i}
-                                                className="form-group form-vertical"
-                                            >
-                                                <Input
-                                                    name={i}
-                                                    value={get_value(i)}
+                            <div>
+                                <h5 className="mb-4">Input Data</h5>
+                                <div className="form_auto_fit">
+
+                                    <div
+                                        key={'title'}
+                                        className="form-group form-vertical"
+                                    >
+
+                                        <h6>Title: {get_value('title')}</h6>
+
+                                    </div>
+
+                                    {['value'].map((field) => (
+                                        <div
+                                            key={field}
+                                            className="form-group form-vertical"
+                                        >
+                                            {state.item.type === 'file' && field === 'value' ? (
+                                                <InputImage
+                                                    label="Upload file"
+                                                    name={field}
+                                                    defalut_preview={get_value(field)}
                                                 />
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {/* <div className="form-group form-vertical">
-                                        <Select
-                                            name="status"
-                                            label="Status"
-                                            values={statusOptions}
-                                            value={get_value('status')}
-                                        />
-                                    </div> */}
+                                            ) : (
+                                                <Input
+                                                    name={field}
+                                                    value={get_value(field)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
+                            </div>
 
-                                <div className="form-group form-vertical">
-                                    <label></label>
-                                    <div className="form_elements">
-                                        <button className="btn btn-outline-info">
-                                            submit
-                                        </button>
-                                    </div>
+                            <div className="form-group form-vertical">
+                                <label />
+                                <div className="form_elements">
+                                    <button className="btn btn-outline-info">
+                                        Submit
+                                    </button>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                <Footer>
+                    {state?.item?.id && (
+                        <li>
+                            <Link
+                                to={`/${setup.route_prefix}/details/${state.item.id}`}
+                                className="outline"
+                            >
+                                <span className="material-symbols-outlined fill">
+                                    visibility
+                                </span>
+                                <div className="text">Details</div>
+                            </Link>
+                        </li>
                     )}
-
-                    <Footer>
-                        {state?.item?.id && (
-                            <li>
-                                <Link
-                                    to={`/${setup.route_prefix}/details/${state.item?.id}`}
-                                    className="outline"
-                                >
-                                    <span className="material-symbols-outlined fill">
-                                        visibility
-                                    </span>
-                                    <div className="text">Details</div>
-                                </Link>
-                            </li>
-                        )}
-                    </Footer>
-                </div>
+                </Footer>
             </div>
-        </>
+        </div>
     );
 };
 

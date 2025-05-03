@@ -47,7 +47,8 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'title',
-                                        'status',
+                                        'description',
+                                        'type',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>
@@ -63,7 +64,7 @@ const Details: React.FC<Props> = (props: Props) => {
                     <Footer>
                         {state.item?.id && (
                             <li>
-                                <Link
+                                {/* <Link
                                     to={`/${setup.route_prefix}/edit/${state.item.id}`}
                                     className="btn-outline-info outline"
                                 >
@@ -71,7 +72,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         edit_square
                                     </span>
                                     <div className="text">Edit</div>
-                                </Link>
+                                </Link> */}
                             </li>
                         )}
                     </Footer>

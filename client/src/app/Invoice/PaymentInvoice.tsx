@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 
 interface InvoiceProps {
   event_id: string | null;
@@ -16,6 +17,13 @@ interface InvoiceProps {
   trx_id?: string | null;
   getTodayDate: () => string;
   generateInvoiceNumber: () => string;
+}
+
+// Define the expected API response type
+interface SiteResponse {
+  data?: {
+    value: string;
+  };
 }
 
 const PaymentInvoice: React.FC<InvoiceProps> = ({
@@ -32,6 +40,43 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
   generateInvoiceNumber,
 }) => {
   const targetRef = useRef<HTMLDivElement>(null);
+  const [siteName, setSiteName] = useState<SiteResponse | null>(null);
+  const [siteEmail, setSiteEmail] = useState<SiteResponse | null>(null);
+  const [sitePhone, setSitePhone] = useState<SiteResponse | null>(null);
+  const [siteAddress, setSiteAddress] = useState<SiteResponse | null>(null);
+  const [invoiceFooter, setInvoiceFooter] = useState<SiteResponse | null>(null);
+
+  const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    useEffect(() => {
+      const endpoints = [
+        { key: 'title/Site name on invoice', setter: setSiteName },
+        { key: 'title/Email on invoice', setter: setSiteEmail },
+        { key: 'title/Phone on invoice', setter: setSitePhone },
+        { key: 'title/Address on invoice', setter: setSiteAddress },
+        { key: 'title/Invoice Footer', setter: setInvoiceFooter },
+      ];
+    
+      const fetchSettings = async () => {
+        try {
+          const responses = await Promise.all(
+            endpoints.map(({ key }) =>
+              axios.get(`${BASE_URL}/api/v1/app-setting-values/${key}`)
+            )
+          );
+          responses.forEach((response, index) => {
+            endpoints[index].setter(response.data);
+          });
+        } catch (error) {
+          console.error("Error fetching settings:", error);
+        }
+      };
+    
+      fetchSettings();
+    }, [BASE_URL]);
 
   const handleDownloadInvoice = () => {
     if (targetRef.current) {
@@ -130,13 +175,13 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
               </div>
               <div className="text-right">
                 <h1 className="font-bold">Recipient Info</h1>
-                IREAD
+                {siteName?.data?.value}
                 <br />
-                Street 12
+              {siteAddress?.data?.value}
                 <br />
-                10000 City, USA
+                {siteEmail?.data?.value}
                 <br />
-                iread.hello@gmail.com
+                {sitePhone?.data?.value}
               </div>
             </div>
 
@@ -174,8 +219,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
 
             {/* Footer */}
             <div className="mt-8 mx-3 text-center text-sm text-gray-600">
-              <p>Thank you for your payment!</p>
-              <p>Please contact us at hello@iread.com for any questions.</p>
+              <p>{invoiceFooter?.data?.value}</p>
             </div>
           </div>
         </div>

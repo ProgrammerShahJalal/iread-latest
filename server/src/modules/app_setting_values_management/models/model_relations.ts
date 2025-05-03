@@ -5,6 +5,6 @@ export function init() {
 
     models.AppSettingValuesModel.belongsTo(models.AppSettinsgModel, {
         foreignKey: "app_setting_key_id",
-        as: "settings",
+        as: "app_settings",
     });
 }

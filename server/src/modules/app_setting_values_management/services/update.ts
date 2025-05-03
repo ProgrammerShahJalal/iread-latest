@@ -60,24 +60,36 @@ async function update(
     let models = Models.get();
     let body = req.body as anyObject;
     let user_model = new models[modelName]();
+    const settingsTableRow = await models.AppSettinsgModel.findByPk(body?.app_setting_key_id);
 
-    let inputs: InferCreationAttributes<typeof user_model> = {
-        app_setting_key_id: body.app_setting_key_id,
-        title: body.title,
-        value: body.value,
-        is_default: body.is_default,
-        type: body.type,
-    };
+    if (!settingsTableRow) {
+        throw new Error('Setting not found');
+    }
 
+    /** Handle file upload if type is file */
+    let valueToSave: string = body.value || '';
+    if (settingsTableRow.type === 'file' && body.value?.ext && body.value?.name) {
+        const image_path =
+            'uploads/app_settings/' +
+            moment().format('YYYYMMDDHHmmss') +
+            body.value.name;
+        await (fastify_instance as any).upload(body.value, image_path);
+        valueToSave = image_path;
+    }
 
-    /** print request data into console */
-    // console.clear();
-    // (fastify_instance as any).print(inputs);
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
+
+            let inputs: InferCreationAttributes<typeof user_model> = {
+                app_setting_key_id: body.app_setting_key_id || data.app_setting_key_id,
+                title: body.title || data.title,
+                value: valueToSave,
+                is_default: body.is_default || data.is_default,
+                type: settingsTableRow.type || data?.type,
+            };
             data.update(inputs);
             await data.save();
             return response(201, 'data updated', { data });

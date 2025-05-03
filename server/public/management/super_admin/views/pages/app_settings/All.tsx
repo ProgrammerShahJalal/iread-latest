@@ -158,11 +158,11 @@ const All: React.FC<Props> = (props: Props) => {
                         ></Paginate>
                     </div>
                 </div>
-                <TableFooter></TableFooter>
+                {/* <TableFooter></TableFooter> */}
             </div>
 
             <Filter></Filter>
-            <QuickView></QuickView>
+            {/* <QuickView></QuickView> */}
         </div>
     );
 };

@@ -47,6 +47,12 @@ DB_HOST=localhost DB_PORT=3306 DB_USER=root DB_PASSWORD=123456 DB_DATABASE=iread
                     value: "logo/footerlogo.png",
                     is_default: true,
                 },
+                {
+                    app_setting_key_id: 2,
+                    title: "Logo on invoice",
+                    value: "logo/invoice.png",
+                    is_default: true,
+                },
             ]
         },
         {
@@ -58,12 +64,6 @@ DB_HOST=localhost DB_PORT=3306 DB_USER=root DB_PASSWORD=123456 DB_DATABASE=iread
                     app_setting_key_id: 3,
                     title: "Site name on invoice",
                     value: "IREAD",
-                    is_default: true,
-                },
-                {
-                    app_setting_key_id: 3,
-                    title: "Logo on invoice",
-                    value: "logo/invoice.png",
                     is_default: true,
                 },
                 {

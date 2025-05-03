@@ -18,7 +18,7 @@ import SelectAll from './components/all_data_page/SelectIAll';
 import TableHeading from './components/all_data_page/TableHeading';
 import { useSearchParams } from 'react-router-dom';
 
-export interface Props {}
+export interface Props { }
 
 const All: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -79,21 +79,17 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`value`}
                                             sort={false}
                                         />
-                                        {/* <TableHeading
+                                        <TableHeading
                                             label={`Type`}
                                             col_name={`type`}
                                             sort={true}
-                                        /> */}
+                                        />
                                         <TableHeading
                                             label={`Is Default?`}
                                             col_name={`is_default`}
                                             sort={true}
                                         />
-                                        {/* <TableHeading
-                                            label={`Status`}
-                                            col_name={`status`}
-                                            sort={false}
-                                        /> */}
+                            
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
@@ -135,14 +131,31 @@ const All: React.FC<Props> = (props: Props) => {
                                                             </span>
                                                         </td>
                                                         <td>
-                                                            {i.value?.slice(
-                                                                0,
-                                                                50,
-                                                            )}
-                                                            {i.value?.length >
-                                                                50 && '...'}
+                                                            <div
+                                                                style={{
+                                                                    aspectRatio: "4/4",
+                                                                    maxWidth: '30px'
+                                                                }}
+                                                            >
+                                                                {i.app_settings?.type === 'file' ? (
+                                                                    <img
+                                                                        src={i.value}
+                                                                        alt="Logo"
+                                                                        className="w-100"
+                                                                        onError={(e) => {
+                                                                            e.currentTarget.src = 'avatar.png'; // Fallback image
+                                                                        }}
+                                                                    />
+                                                                ) : (
+                                                                    <>
+                                                                        {i.value?.slice(0, 17)}
+                                                                        {i.value?.length > 17 && '..'}
+                                                                    </>
+                                                                )}
+                                                            </div>
                                                         </td>
-                                                        {/* <td>{i.type}</td> */}
+
+                                                        <td>{i.app_settings?.type}</td>
                                                         <td>
                                                             {i.is_default
                                                                 ? 'Yes'

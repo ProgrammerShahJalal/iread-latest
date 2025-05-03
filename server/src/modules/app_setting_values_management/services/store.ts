@@ -78,6 +78,11 @@ async function store(
     let data = new models[modelName]();
 
     let values: number[] = JSON.parse(body['app_setting_values']) || [];
+    const settingsTableRow = await models.AppSettinsgModel.findByPk(body?.app_setting_key_id);
+
+    if (!settingsTableRow) {
+        throw new Error('Setting not found');
+    }
 
 
     let inputs: InferCreationAttributes<typeof data> = {
@@ -85,7 +90,7 @@ async function store(
         title: body.title,
         value: body.value,
         is_default: body.is_default,
-        type: body.type,
+        type: settingsTableRow?.type,
     };
 
     try {

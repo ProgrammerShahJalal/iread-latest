@@ -86,11 +86,6 @@ const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
     const params = useParams();
 
-    useEffect(() => {
-        dispatch(storeSlice.actions.set_item({}));
-        dispatch(details({ id: params.id }) as any);
-    }, []);
-
     function get_value(key) {
         try {
             if (state.item[key]) return state.item[key];
