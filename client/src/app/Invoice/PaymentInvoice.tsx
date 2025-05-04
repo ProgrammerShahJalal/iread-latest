@@ -47,36 +47,36 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
   const [invoiceFooter, setInvoiceFooter] = useState<SiteResponse | null>(null);
 
   const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+      : process.env.NEXT_PUBLIC_BACKEND_URL;
 
-    useEffect(() => {
-      const endpoints = [
-        { key: 'title/Site name on invoice', setter: setSiteName },
-        { key: 'title/Email on invoice', setter: setSiteEmail },
-        { key: 'title/Phone on invoice', setter: setSitePhone },
-        { key: 'title/Address on invoice', setter: setSiteAddress },
-        { key: 'title/Invoice Footer', setter: setInvoiceFooter },
-      ];
-    
-      const fetchSettings = async () => {
-        try {
-          const responses = await Promise.all(
-            endpoints.map(({ key }) =>
-              axios.get(`${BASE_URL}/api/v1/app-setting-values/${key}`)
-            )
-          );
-          responses.forEach((response, index) => {
-            endpoints[index].setter(response.data);
-          });
-        } catch (error) {
-          console.error("Error fetching settings:", error);
-        }
-      };
-    
-      fetchSettings();
-    }, [BASE_URL]);
+  useEffect(() => {
+    const endpoints = [
+      { key: 'title/Site name on invoice', setter: setSiteName },
+      { key: 'title/Email on invoice', setter: setSiteEmail },
+      { key: 'title/Phone on invoice', setter: setSitePhone },
+      { key: 'title/Address on invoice', setter: setSiteAddress },
+      { key: 'title/Invoice Footer', setter: setInvoiceFooter },
+    ];
+
+    const fetchSettings = async () => {
+      try {
+        const responses = await Promise.all(
+          endpoints.map(({ key }) =>
+            axios.get(`${BASE_URL}/api/v1/app-setting-values/${key}`)
+          )
+        );
+        responses.forEach((response, index) => {
+          endpoints[index].setter(response.data);
+        });
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+      }
+    };
+
+    fetchSettings();
+  }, [BASE_URL]);
 
   const handleDownloadInvoice = () => {
     if (targetRef.current) {
@@ -177,7 +177,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
                 <h1 className="font-bold">Recipient Info</h1>
                 {siteName?.data?.value}
                 <br />
-              {siteAddress?.data?.value}
+                {siteAddress?.data?.value}
                 <br />
                 {siteEmail?.data?.value}
                 <br />

@@ -11,6 +11,7 @@ import storeSlice from './config/store';
 import { update } from './config/store/async_actions/update';
 import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
+import TextArea from './components/management_data_page/TextArea';
 
 export interface Props { }
 
@@ -63,39 +64,38 @@ const Edit: React.FC<Props> = () => {
                             />
 
                             <div>
-                                <h5 className="mb-4">Input Data</h5>
-                                <div className="form_auto_fit">
 
+
+                                <div
+                                    key={'title'}
+                                    className="form-group form-vertical"
+                                >
+
+                                    <h6>Title: {get_value('title')}</h6>
+
+                                </div>
+
+                                {['value'].map((field) => (
                                     <div
-                                        key={'title'}
+                                        key={field}
                                         className="form-group form-vertical"
                                     >
-
-                                        <h6>Title: {get_value('title')}</h6>
-
+                                        {state.item.type === 'file' && field === 'value' ? (
+                                            <InputImage
+                                                label="Upload file"
+                                                name={field}
+                                                defalut_preview={get_value(field)}
+                                            />
+                                        ) : (
+                                            <TextArea
+                                                name={field}
+                                                value={get_value(field)}
+                                            />
+                                        )}
                                     </div>
-
-                                    {['value'].map((field) => (
-                                        <div
-                                            key={field}
-                                            className="form-group form-vertical"
-                                        >
-                                            {state.item.type === 'file' && field === 'value' ? (
-                                                <InputImage
-                                                    label="Upload file"
-                                                    name={field}
-                                                    defalut_preview={get_value(field)}
-                                                />
-                                            ) : (
-                                                <Input
-                                                    name={field}
-                                                    value={get_value(field)}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
+                                ))}
                             </div>
+
 
                             <div className="form-group form-vertical">
                                 <label />

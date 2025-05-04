@@ -3,6 +3,7 @@ import ContactForm from "./ContactForm";
 
 const ContactPage = async () => {
   // Fetch settings on the server
+  const greetingTitle = await getSettingValue('Greeting title');
   const contactPhone1 = await getSettingValue('Contact phone1');
   const contactPhone2 = await getSettingValue('Contact phone2');
   const contactPhone3 = await getSettingValue('Contact phone3');
@@ -14,6 +15,7 @@ const ContactPage = async () => {
   // Pass settings as props to the client component
   return (
     <ContactForm
+      greetingTitle={greetingTitle}
       contactPhone1={contactPhone1}
       contactPhone2={contactPhone2}
       contactPhone3={contactPhone3}

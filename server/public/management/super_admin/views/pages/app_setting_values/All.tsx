@@ -118,18 +118,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                             }
                                                         </td> */}
 
-                                                        <td>
-                                                            <span
-                                                                className="quick_view_trigger"
-                                                                onClick={() =>
-                                                                    quick_view(
-                                                                        i,
-                                                                    )
-                                                                }
-                                                            >
-                                                                {i.title}
-                                                            </span>
-                                                        </td>
+                                                        <td>{i.title}</td>
                                                         <td>
                                                             <div
                                                                 style={{

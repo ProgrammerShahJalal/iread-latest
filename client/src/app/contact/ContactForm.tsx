@@ -5,6 +5,7 @@ import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 
 interface ContactFormProps {
+  greetingTitle?: { value: string } | null;
   contactPhone1?: { value: string } | null;
   contactPhone2?: { value: string } | null;
   contactPhone3?: { value: string } | null;
@@ -15,6 +16,7 @@ interface ContactFormProps {
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({
+  greetingTitle,
   contactPhone1,
   contactPhone2,
   contactPhone3,
@@ -52,9 +54,9 @@ const ContactForm: React.FC<ContactFormProps> = ({
           from_name: form.name,
           to_name: "IREAD",
           from_email: form.email,
-          to_email: "iread.hello@gmail.com",
+          to_email: contactEmail1?.value || "iread.hello@gmail.com",
           from_phone: form.phone,
-          to_phone: "+880 1303 856 860",
+          to_phone: contactPhone1?.value || "+880 1303 856 860",
           message: form.message,
         },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string
@@ -114,8 +116,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
       </div>
       <div className="flex flex-col items-center justify-center my-5 p-4">
         <p className="text-2xl md:text-lg text-gray-700 text-center mb-6">
-          We’d love to hear from you! Whether you have a question, feedback, or
-          just want to say hello, feel free to reach out.
+        {greetingTitle?.value}
         </p>
 
         <form
