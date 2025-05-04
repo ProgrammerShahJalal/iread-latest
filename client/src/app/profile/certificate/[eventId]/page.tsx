@@ -5,6 +5,7 @@ import { getUserById, getUserByUid } from "../../../../api/userApi";
 import { CertificateViewer } from "../components/CertificateViewer";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 
 type Params = Promise<{ eventId: string }>;
@@ -87,7 +88,15 @@ const MyEventCertificatePage = async ({
               eventTitle={eventData?.title || ""}
             />
           ) : (
-            <p>Certificate not available right now.</p>
+            <><p className="text-lg">Certificate not available right now.</p>
+            <Image
+            className="w=96 mx-auto mt-5"
+             src={"/frontend/images/file-search-trans.png"} 
+             alt="Certificate not available"
+             width={400}
+             height={400}
+             />
+            </>
           )}
         </div>
       </div>

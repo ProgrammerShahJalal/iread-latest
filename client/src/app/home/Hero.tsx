@@ -1,13 +1,23 @@
 "use client";
 
+import axios from 'axios';
 import Image from 'next/image'
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ModalVideo from 'react-modal-video';
 import "react-modal-video/css/modal-video.css";
 
+
+// Define the expected API response type
+interface SiteResponse {
+    data?: {
+      value: string;
+    };
+  }
+
 function Hero() {
     const [isOpen, setIsOpen] = useState(false);
+    const [heroVideoId, setHeroVideoId] = useState<SiteResponse | null>(null);
 
     const openModal = () => {
         setIsOpen(true);
@@ -15,13 +25,40 @@ function Hero() {
 
     const ModalVideoComponent = ModalVideo as any;
 
+    const BASE_URL = process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+    useEffect(() => {
+        const endpoints = [
+          { key: 'title/Hero Video Id', setter: setHeroVideoId },
+        ];
+      
+        const fetchSettings = async () => {
+          try {
+            const responses = await Promise.all(
+              endpoints.map(({ key }) =>
+                axios.get(`${BASE_URL}/api/v1/app-setting-values/${key}`)
+              )
+            );
+            responses.forEach((response, index) => {
+              endpoints[index].setter(response.data);
+            });
+          } catch (error) {
+            console.error("Error fetching settings:", error);
+          }
+        };
+      
+        fetchSettings();
+      }, [BASE_URL]);
+
     return (
         <>
         {/* Modal Video */}
         <ModalVideoComponent
         channel="youtube"
         isOpen={isOpen}
-        videoId="pW1uVUg5wXM"
+        videoId={heroVideoId?.data?.value || 'pW1uVUg5wXM'}
         onClose={() => setIsOpen(false)}
     />
         <div className="container my-16">

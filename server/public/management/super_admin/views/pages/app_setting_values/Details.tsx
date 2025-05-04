@@ -47,7 +47,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                 <tbody>
                                     {[
                                         'title',
-                                        'status',
+                                        'value',
                                     ].map((i) => (
                                         <tr>
                                             <td>{i.replaceAll('_', ' ')}</td>

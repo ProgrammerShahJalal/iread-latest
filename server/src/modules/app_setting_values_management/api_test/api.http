@@ -9,7 +9,7 @@ GET {{hostname}}?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10
 GET {{hostname}}/1 HTTP/1.1
 # get by title
 ###
-GET {{hostname}}/title/Contact address HTTP/1.1
+GET {{hostname}}/title/FAQ HTTP/1.1
 
 # query by title
 ###
