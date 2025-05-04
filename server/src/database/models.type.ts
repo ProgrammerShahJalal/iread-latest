@@ -34,8 +34,8 @@ import * as AuthorModel from "../modules/author_management/models/model";
 
 import * as DonationModel from "../modules/donation_management/models/model";
 
-import * as AppSettinsgModel from "../modules/app_setting_management/models/model";
-import * as AppSettingValuesModel from "../modules/app_setting_management/models/app_setting_values.model";
+import * as AppSettingsModel from "../modules/app_setting_management/models/model";
+import * as AppSettingValuesModel from "../modules/app_setting_values_management/models/model";
 import * as AppSubscribersModel from "../modules/app_subscribers_management/models/model";
 
 import * as UserModel from "../modules/authetication/models/user_model";
@@ -81,7 +81,7 @@ export type model_types = {
 
     DonationModel: typeof DonationModel.DataModel;
 
-    AppSettinsgModel: typeof AppSettinsgModel.DataModel;
+    AppSettinsgModel: typeof AppSettingsModel.DataModel;
     AppSettingValuesModel: typeof AppSettingValuesModel.DataModel;
     AppSubscribersModel: typeof AppSubscribersModel.DataModel;
     

@@ -9,7 +9,6 @@ import EventFaqCard from "./EventFaqCard";
 import EventEnrollProcess from "../../../components/EventEnrollProcess";
 import moment from "moment/moment";
 
-
 const EventDetailsPage = async ({
   params,
 }: {
@@ -41,9 +40,9 @@ const EventDetailsPage = async ({
       );
     }
 
-    console.log('event', moment(event?.reg_end_date).format('LLL'));
- // Check if registration end date has passed
- const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
+    console.log("event", moment(event?.reg_end_date).format("LLL"));
+    // Check if registration end date has passed
+    const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
     return (
       <section>
         <div
@@ -61,7 +60,7 @@ const EventDetailsPage = async ({
                   <h2 className="title text-white">{event?.title}</h2>
                   <div className="text-white py-6">
                     <CountdownTimer
-                      offerTill={moment(event?.reg_end_date).format('LLL')}
+                      offerTill={moment(event?.reg_end_date).format("LLL")}
                     />
                   </div>
                 </div>
@@ -75,20 +74,24 @@ const EventDetailsPage = async ({
             <div className="col-lg-8">
               <div className="entry-meta pl-15">
                 <ul className="list-inline my-6">
-                <li>
-                      Categories: <span className="text-theme-color-2">
-                        {event.categories?.length > 0
-                          ? event.categories.map((category: any) => category.title).join(', ')
-                          : 'N/A'}
-                      </span>
-                    </li>
-                    <li>
-                      Tags: <span className="text-theme-color-2">
-                        {event.tags?.length > 0
-                          ? event.tags.map((tag: any) => tag.title).join(', ')
-                          : 'N/A'}
-                      </span>
-                    </li>
+                  <li>
+                    Categories:{" "}
+                    <span className="text-theme-color-2">
+                      {event.categories?.length > 0
+                        ? event.categories
+                            .map((category: any) => category.title)
+                            .join(", ")
+                        : "N/A"}
+                    </span>
+                  </li>
+                  <li>
+                    Tags:{" "}
+                    <span className="text-theme-color-2">
+                      {event.tags?.length > 0
+                        ? event.tags.map((tag: any) => tag.title).join(", ")
+                        : "N/A"}
+                    </span>
+                  </li>
                 </ul>
               </div>
               <div className="post-content mt-10">
@@ -101,18 +104,24 @@ const EventDetailsPage = async ({
               <div className="my-5">
                 <h4 className="text-lg font-bold">Registration Schedule</h4>
                 <p>
-                  <strong>Start:</strong> {moment(event.reg_start_date).format('MMMM Do YYYY')}{" "}
-                  <br />
-                  <strong>End:</strong> {moment(event.reg_end_date).format('MMMM Do YYYY')}
+                  <strong>Start:</strong>{" "}
+                  {moment(event.reg_start_date).format("MMMM Do YYYY")} <br />
+                  <strong>End:</strong>{" "}
+                  {moment(event.reg_end_date).format("MMMM Do YYYY")}
                 </p>
               </div>
               <div className="my-5">
                 <h4 className="text-lg font-bold">Event Schedule</h4>
                 <p>
                   <strong>Start:</strong>{" "}
-                  {moment(event?.session_start_date_time).format('MMMM Do YYYY, h:mm A')} <br />
+                  {moment(event?.session_start_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}{" "}
+                  <br />
                   <strong>End:</strong>{" "}
-                  {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
+                  {moment(event?.session_end_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}
                 </p>
               </div>
 

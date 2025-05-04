@@ -7,17 +7,17 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
 
-
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
-    const [faqs, setFaqs] = useState<{ title: string; description: string }[]>([]);
+    const [faqs, setFaqs] = useState<{ title: string; description: string }[]>(
+        [],
+    );
 
     const dispatch = useAppDispatch();
     useEffect(() => {
@@ -56,7 +56,6 @@ const Create: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-
     return (
         <>
             <div className="page_content">
@@ -68,11 +67,17 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event FAQs Informations</h5>
+                                <h5 className="mb-4">
+                                    Event FAQs Informations
+                                </h5>
                                 <div>
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <EventDropDown
                                             name="event_id"
                                             multiple={false}
@@ -80,14 +85,25 @@ const Create: React.FC<Props> = (props: Props) => {
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                        <Input name="title" value={get_value('title')} />
+                                        <Input
+                                            name="title"
+                                            value={get_value('title')}
+                                            required={true}
+                                        />
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                        <label>Description</label>
+                                        <label>
+                                            Description
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <textarea
                                             name="description"
-                                            defaultValue={get_value('description')}
+                                            defaultValue={get_value(
+                                                'description',
+                                            )}
                                             className="form-control"
                                             rows={3}
                                         />
@@ -97,16 +113,24 @@ const Create: React.FC<Props> = (props: Props) => {
                                 {/* FAQ Section */}
 
                                 {faqs.map((faq, index) => (
-                                    <div key={index} className="faq-item border p-3 mb-3 rounded">
+                                    <div
+                                        key={index}
+                                        className="faq-item border p-3 mb-3 rounded"
+                                    >
                                         <div className="form-group">
                                             <label>Title</label>
                                             <br />
                                             <input
                                                 className="form-control"
                                                 value={faq.title}
-                                                onChange={(e) => handleFaqChange(index, 'title', e.target.value)}
+                                                onChange={(e) =>
+                                                    handleFaqChange(
+                                                        index,
+                                                        'title',
+                                                        e.target.value,
+                                                    )
+                                                }
                                             />
-
                                         </div>
                                         <div className="form-group">
                                             <label>Description</label>
@@ -114,7 +138,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 className="form-control"
                                                 rows={3}
                                                 value={faq.description}
-                                                onChange={(e) => handleFaqChange(index, 'description', e.target.value)}
+                                                onChange={(e) =>
+                                                    handleFaqChange(
+                                                        index,
+                                                        'description',
+                                                        e.target.value,
+                                                    )
+                                                }
                                             />
                                         </div>
                                         <button
@@ -126,10 +156,13 @@ const Create: React.FC<Props> = (props: Props) => {
                                         </button>
                                     </div>
                                 ))}
-                                <button type="button" className="btn btn-primary" onClick={addFaq}>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={addFaq}
+                                >
                                     + Add More FAQ
                                 </button>
-
                             </div>
 
                             <div className="form-group form-vertical">

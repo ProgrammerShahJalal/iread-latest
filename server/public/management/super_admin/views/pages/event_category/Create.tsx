@@ -10,19 +10,21 @@ import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
 import DropDown from './components/dropdown/DropDown';
 
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
             // init_nominee();
+            setClearImagePreview(true); // Trigger clearing the preview
         }
     }
 
@@ -47,12 +49,9 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                 <h5 className="mb-4">Category Informations</h5>
                                 <div className="form_auto_fit">
-
-                                    {[
-                                        'title',
-                                    ].map((i) => (
+                                    {['title'].map((i) => (
                                         <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                            <Input name={i} required={true} />
                                         </div>
                                     ))}
 
@@ -60,9 +59,9 @@ const Create: React.FC<Props> = (props: Props) => {
                                         <InputImage
                                             label={'image'}
                                             name={'image'}
+                                            clearPreview={clearImagePreview}
                                         />
                                     </div>
-
                                 </div>
                             </div>
 

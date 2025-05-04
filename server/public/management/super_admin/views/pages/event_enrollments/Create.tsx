@@ -7,13 +7,12 @@ import { store } from './config/store/async_actions/store';
 import Input from './components/management_data_page/Input';
 import { initialState } from './config/store/inital_state';
 import { useSelector } from 'react-redux';
-import EventDropDown from "../events/components/dropdown/DropDown";
-import UserDropDown from "../users/components/dropdown/DropDown";
+import EventDropDown from '../events/components/dropdown/DropDown';
+import UserDropDown from '../users/components/dropdown/DropDown';
 import DateEl from '../../components/DateEl';
+import ManualEnrollmentNotice from './ManualEnrollmentNotice';
 
-
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -66,7 +65,6 @@ const Create: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-
     return (
         <>
             <div className="page_content">
@@ -78,42 +76,71 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-
-                                <h5 className="mb-4">Event Enrollment Informations</h5>
+                                <ManualEnrollmentNotice />
                                 <div className="form_auto_fit">
-
                                     <div className="form-group form-vertical">
-                                        <label>Events</label>
-                                        <EventDropDown name="event_id"
+                                        <label>
+                                            Events
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <EventDropDown
+                                            name="event_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
-                                                setSelectedEventId(Number(data?.ids))
+                                                console.log(data);
+                                                setSelectedEventId(
+                                                    Number(data?.ids),
+                                                );
                                             }}
                                         />
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                        <label>Users</label>
-                                        <UserDropDown name="user_id"
+                                        <label>
+                                            Users
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <UserDropDown
+                                            name="user_id"
                                             multiple={false}
                                             get_selected_data={(data) => {
-                                                console.log(data)
-                                                setSelectedUserId(Number(data?.ids));
+                                                console.log(data);
+                                                setSelectedUserId(
+                                                    Number(data?.ids),
+                                                );
                                             }}
                                         />
                                     </div>
                                     <div className="form-group form-vertical">
-                                        <label>Date</label>
+                                        <label>
+                                            Date
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <DateEl
-                                            name={"date"}
+                                            name={'date'}
                                             value={get_value('date')}
-                                            handler={(data) => console.log('Date Changed', data)}
+                                            handler={(data) =>
+                                                console.log(
+                                                    'Date Changed',
+                                                    data,
+                                                )
+                                            }
                                         />
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                        <label>Is Paid?</label>
+                                        <label>
+                                            Is Paid?
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <select
                                             name="is_paid"
                                             className="form-control"
@@ -126,21 +153,30 @@ const Create: React.FC<Props> = (props: Props) => {
                                     </div>
 
                                     <div className="form-group form-vertical">
-                                        <label>Status</label>
+                                        <label>
+                                            Status
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
                                         <select
                                             name="status"
                                             className="form-control"
                                             value={status}
                                             onChange={handleStatusChange}
                                         >
-                                            <option value="pending">Pending</option>
-                                            <option value="rejected">Rejected</option>
-                                            <option value="accepted">Accepted</option>
+                                            <option value="pending">
+                                                Pending
+                                            </option>
+                                            <option value="rejected">
+                                                Rejected
+                                            </option>
+                                            <option value="accepted">
+                                                Accepted
+                                            </option>
                                         </select>
                                     </div>
-
                                 </div>
-
                             </div>
 
                             {/* Conditionally render the submit button */}
@@ -148,21 +184,20 @@ const Create: React.FC<Props> = (props: Props) => {
                                 <div className="form-group form-vertical">
                                     <label></label>
                                     <div className="form_elements">
-                                        <button type="submit" className="btn btn_1 btn-outline-info">
+                                        <button
+                                            type="submit"
+                                            className="btn btn_1 btn-outline-info"
+                                        >
                                             submit
                                         </button>
                                     </div>
                                 </div>
-                            ) :
-
+                            ) : (
                                 <div className="form-group form-vertical">
                                     <label></label>
-                                    <div className="form_elements">
-
-                                    </div>
+                                    <div className="form_elements"></div>
                                 </div>
-
-                            }
+                            )}
                         </form>
                     </div>
                     <Footer></Footer>

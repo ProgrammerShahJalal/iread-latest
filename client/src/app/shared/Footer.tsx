@@ -1,17 +1,46 @@
 import Link from "next/link";
 import React from "react";
+import { getSettingValue } from "../../api/settingValuesApi";
+import Image from "next/image";
 
-const Footer = () => {
+const Footer = async () => {
+    const footerLogo = await getSettingValue('Footer Logo');
+    const siteShortDes = await getSettingValue('Site short description (Max 100 characters)');
+    const contactPhone1 = await getSettingValue('Contact phone1');
+    const contactPhone2 = await getSettingValue('Contact phone2');
+    const contactPhone3 = await getSettingValue('Contact phone3');
+    const contactEmail1 = await getSettingValue('Contact email1');
+    const contactEmail2 = await getSettingValue('Contact email2');
+    const contactEmail3 = await getSettingValue('Contact email3');
+    const facebook = await getSettingValue('Facebook');
+    const twitter = await getSettingValue('Twitter');
+    const instagram = await getSettingValue('Instagram');
+    const linkedin = await getSettingValue('LinkedIn');
+    const youtube = await getSettingValue('YouTube');
+    const pinterest = await getSettingValue('Pinterest');
+
+    const BASE_URL =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+      : process.env.NEXT_PUBLIC_BACKEND_URL;
+
+      
     return (
         <footer className="bg-[#1F1F1F] text-white py-12">
             <div className="container mx-auto px-6 md:px-12">
                 <div className="flex flex-wrap justify-between">
                     {/* Logo & About Section */}
                     <div className="w-full md:w-2/5 mb-6 md:mb-0">
-                        <h1 className="text-white text-2xl font-bold">IREAD</h1>
+                        {
+                            footerLogo?.value ? (<Image
+                                src={`${BASE_URL}/${footerLogo?.value}`}
+                                width={100}
+                                height={100}
+                                alt="Footer Logo"
+                            />) : <span>IRED</span>
+                        }
                         <p className="text-gray-300 mt-4 text-xl md:text-sm">
-                            IREAD Online Learning Platform.
-                            Unlock the power of artificial intelligence with cutting-edge tools and resources.
+                            {siteShortDes?.value}
                         </p>
                     </div>
 
@@ -69,38 +98,46 @@ const Footer = () => {
                     <div className="w-full md:w-1/5">
                         <h2 className="text-white text-xl font-semibold mb-4">Contact Us</h2>
                         <p className="text-gray-300 text-xl md:text-sm">
-                            Email: <Link href="mailto:support@aiuniverse.com" className="hover:underline">support@iread.com</Link>
+                        <strong>Email: </strong><Link href={`mailto:${contactEmail1?.value}`} className="hover:underline">{contactEmail1?.value}</Link>, <Link href={`mailto:${contactEmail2?.value}`} className="hover:underline">{contactEmail2?.value}</Link>, <Link href={`mailto:${contactEmail3?.value}`} className="hover:underline">{contactEmail3?.value}</Link>
                         </p>
+                        
                         <p className="text-gray-300 text-xl md:text-sm">
-                            Phone: <Link href="tel:+1234567890" className="hover:underline">+123 456 7890</Link>
+                            <strong>Phone: </strong><Link href={`tel:${contactPhone1?.value}`} className="hover:underline">{contactPhone1?.value}</Link>, <Link href={`tel:${contactPhone2?.value}`} className="hover:underline">{contactPhone2?.value}</Link>, <Link href={`tel:${contactPhone3?.value}`} className="hover:underline">{contactPhone3?.value}</Link>
                         </p>
+                        
                         <div className="mt-4 flex space-x-4">
 
-                            <Link href="#">
+                            <Link href={`${facebook?.value}`}>
                                 <i className="fa fa-facebook text-white" />
                             </Link>
 
                             <Link
-                                href="#"
+                                href={`${twitter?.value}`}
 
                             >
                                 <i className="fa fa-twitter text-white" />
                             </Link>
                             <Link
-                                href="#"
+                                href={`${linkedin?.value}`}
                             >
                                 <i className="fa fa-linkedin text-white" />
                             </Link>
                             <Link
-                                href="#"
+                                href={`${youtube?.value}`}
                             >
-                                <i className="fa fa-google-plus text-white" />
+                                <i className="fa fa-youtube text-white" />
                             </Link>
                             <Link
-                                href="#"
+                                href={`${instagram?.value}`}
                             >
                                 <i className="fa fa-instagram text-white" />
                             </Link>
+                            <Link
+                                href={`${pinterest?.value}`}
+                            >
+                                <i className="fa fa-pinterest text-white" />
+                            </Link>
+                    
                         </div>
                     </div>
                 </div>

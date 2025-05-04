@@ -8,8 +8,4 @@ export function init() {
         as: "app_settings",
     });
 
-    // models.BlogCommentModel.belongsTo(models.BlogModel, {
-    //     foreignKey: "blog_id",
-    //     as: "blogs",
-    // });
 }

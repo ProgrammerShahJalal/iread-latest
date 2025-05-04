@@ -8,7 +8,7 @@ import setup from '../../config/setup';
 import moment from 'moment/moment';
 import axios from 'axios';
 import { FAQ } from '../../Details';
-export interface Props { }
+export interface Props {}
 
 const modalRoot = document.getElementById('filter-root');
 
@@ -31,11 +31,13 @@ const QuickView: React.FC<Props> = (props: Props) => {
                 const eventId = state.item?.event_id || state.item?.event?._id;
                 if (!eventId) return;
 
-                const response = await axios.get(`/api/v1/event-faqs/by-event/${eventId}`);
-                console.log('response', response.data)
+                const response = await axios.get(
+                    `/api/v1/event-faqs/by-event/${eventId}`,
+                );
+                console.log('response', response.data);
                 setFaqs(response.data.data);
             } catch (error) {
-                console.error("Failed to load FAQs", error);
+                console.error('Failed to load FAQs', error);
             }
         };
 
@@ -59,7 +61,6 @@ const QuickView: React.FC<Props> = (props: Props) => {
         return '';
     }
 
-
     if (modalRoot && state.show_quick_view_canvas) {
         return createPortal(
             <div className="off_canvas quick_view">
@@ -78,13 +79,14 @@ const QuickView: React.FC<Props> = (props: Props) => {
 
                     <div className="data_content">
                         {Object.keys(state.item).length > 0 && (
-                            <div className="content_body custom_scroll"
-                            style={{
-                                width: '100%',
-                                maxWidth: '38rem',
-                                margin: '0 auto',
-                                padding: '0 1rem'
-                            }}
+                            <div
+                                className="content_body custom_scroll"
+                                style={{
+                                    width: '100%',
+                                    maxWidth: '38rem',
+                                    margin: '0 auto',
+                                    padding: '0 1rem',
+                                }}
                             >
                                 <div className="max-w-4xl mx-auto w-full px-4">
                                     <h4 className="text-base font-semibold mb-6 border-b pb-3 break-words">
@@ -93,7 +95,9 @@ const QuickView: React.FC<Props> = (props: Props) => {
 
                                     {faqs.length > 0 && (
                                         <div className="mb-6 flex-wrap">
-                                            <h5 className="text-base font-semibold mb-4 border-b pb-2 text-gray-800 text-wrap">Frequently Asked Questions</h5>
+                                            <h5 className="text-base font-semibold mb-4 border-b pb-2 text-gray-800 text-wrap">
+                                                Frequently Asked Questions
+                                            </h5>
                                             <div className="space-y-4 text-wrap">
                                                 {faqs.map((faq: FAQ, index) => (
                                                     <details

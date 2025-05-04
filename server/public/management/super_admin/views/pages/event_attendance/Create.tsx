@@ -15,11 +15,13 @@ import Time from '../../components/Time';
 import { Attendance, Event, User } from '../../../../../types';
 import DateEl from '../../components/DateEl';
 
-export interface Props { }
+export interface Props {}
 
 const Create: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(
+        null,
+    );
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [users, setUsers] = useState<User[]>([]);
@@ -54,12 +56,14 @@ const Create: React.FC<Props> = () => {
             try {
                 const [eventRes, sessionsRes] = await Promise.all([
                     axios.get(`/api/v1/events/${selectedEventId}`),
-                    axios.get(`/api/v1/event-sessions/event/${selectedEventId}`),
+                    axios.get(
+                        `/api/v1/event-sessions/event/${selectedEventId}`,
+                    ),
                 ]);
 
                 setEvent(eventRes.data.data);
                 setSessions(sessionsRes.data.data);
-                
+
                 // Reset users and attendances when event changes
                 setUsers([]);
                 setUserAttendances([]);
@@ -85,14 +89,18 @@ const Create: React.FC<Props> = () => {
             setLoading(true);
             setError(null);
             try {
-                const usersRes = await axios.get(`/api/v1/event-enrollments/by-event/${selectedEventId}`);
-                
+                const usersRes = await axios.get(
+                    `/api/v1/event-enrollments/by-event/${selectedEventId}`,
+                );
+
                 setUsers(usersRes.data.data);
-                
+
                 // Get the selected session to use its start time as default
-                const selectedSession = sessions.find(s => s.id === selectedSessionId);
+                const selectedSession = sessions.find(
+                    (s) => s.id === selectedSessionId,
+                );
                 const defaultTime = selectedSession?.start_time || '';
-                
+
                 setUserAttendances(
                     usersRes.data.data.map((user: User) => ({
                         event_id: selectedEventId,
@@ -101,7 +109,7 @@ const Create: React.FC<Props> = () => {
                         user_id: user.id,
                         time: selectedTime || defaultTime, // Use selected time or session start time
                         is_present: false,
-                    }))
+                    })),
                 );
             } catch {
                 setError('Failed to fetch users.');
@@ -114,9 +122,9 @@ const Create: React.FC<Props> = () => {
     }, [selectedEventId, selectedSessionId, selectedDate, selectedTime]);
 
     const handleTimeChange = (userId: number, time: string) => {
-        setUserAttendances(prev =>
-            prev.map(record =>
-                record.user_id === userId ? { ...record, time } : record
+        setUserAttendances((prev) =>
+            prev.map((record) =>
+                record.user_id === userId ? { ...record, time } : record,
             ),
         );
     };
@@ -130,10 +138,13 @@ const Create: React.FC<Props> = () => {
 
         try {
             // Prepare attendance data with defaults
-            const attendanceData = userAttendances.map(attendance => ({
+            const attendanceData = userAttendances.map((attendance) => ({
                 ...attendance,
                 date: attendance.date || getTodayDate(),
-                time: attendance.time || sessions.find(s => s.id === selectedSessionId)?.start || '',
+                time:
+                    attendance.time ||
+                    sessions.find((s) => s.id === selectedSessionId)?.start ||
+                    '',
             }));
 
             const response = await dispatch(store(attendanceData) as any);
@@ -163,45 +174,61 @@ const Create: React.FC<Props> = () => {
                     <Header page_title={setup.create_page_title} />
                     <div className="content_body custom_scroll">
                         <form onSubmit={handleSubmit} className="mx-auto pt-3">
-                            <h5 className="mb-4">Event Attendance Information</h5>
+                            <h5 className="mb-4">
+                                Event Attendance Information
+                            </h5>
                             <div className="form_auto_fit">
                                 <div className="form-group form-vertical">
-                                    <label>Events</label>
+                                    <label>
+                                        Events
+                                        <span style={{ color: 'red' }}>*</span>
+                                    </label>
                                     <EventDropDown
                                         name="events"
                                         multiple={false}
                                         get_selected_data={(data) => {
-                                            setSelectedEventId(Number(data.ids));
-                                        }}
-                                    />
-                                </div>
-                                
-                                <div className="form-group form-vertical">
-                                    <label>Sessions</label>
-                                    <SessionDropDown
-                                        name="sessions"
-                                        multiple={false}
-                                        disabled={!selectedEventId}
-                                        options={sessions.map(session => ({
-                                            id: session.id,
-                                            title: session.title,
-                                        }))}
-                                        get_selected_data={(data) => {
-                                            setSelectedSessionId(Number(data.ids));
+                                            setSelectedEventId(
+                                                Number(data.ids),
+                                            );
                                         }}
                                     />
                                 </div>
 
                                 <div className="form-group form-vertical">
-                                    <label>Date</label>
+                                    <label>
+                                        Sessions
+                                        <span style={{ color: 'red' }}>*</span>
+                                    </label>
+                                    <SessionDropDown
+                                        name="sessions"
+                                        multiple={false}
+                                        disabled={!selectedEventId}
+                                        options={sessions.map((session) => ({
+                                            id: session.id,
+                                            title: session.title,
+                                        }))}
+                                        get_selected_data={(data) => {
+                                            setSelectedSessionId(
+                                                Number(data.ids),
+                                            );
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="form-group form-vertical">
+                                    <label>
+                                        Date
+                                        <span style={{ color: 'red' }}>*</span>
+                                    </label>
                                     <DateEl
                                         name="date"
                                         value={selectedDate || getTodayDate()}
                                         handler={(data) => {
-                                            const dateValue = data?.date || getTodayDate();
+                                            const dateValue =
+                                                data?.date || getTodayDate();
                                             setSelectedDate(dateValue);
-                                            setUserAttendances(prev =>
-                                                prev.map(record => ({
+                                            setUserAttendances((prev) =>
+                                                prev.map((record) => ({
                                                     ...record,
                                                     date: dateValue,
                                                 })),
@@ -214,38 +241,80 @@ const Create: React.FC<Props> = () => {
                             {loading && <p>Loading...</p>}
                             {error && <p className="text-red-500">{error}</p>}
 
-                            {selectedEventId && selectedSessionId && users.length > 0 ? (
+                            {selectedEventId &&
+                            selectedSessionId &&
+                            users.length > 0 ? (
                                 <>
                                     <div className="mt-4 mb-2">
-                                        <h6>Attendance for: {event?.title} - {
-                                            sessions.find(s => s.id === selectedSessionId)?.title
-                                        }</h6>
+                                        <h6>
+                                            Attendance for: {event?.title} -{' '}
+                                            {
+                                                sessions.find(
+                                                    (s) =>
+                                                        s.id ===
+                                                        selectedSessionId,
+                                                )?.title
+                                            }
+                                        </h6>
                                         <p>Total Users: {users.length}</p>
                                     </div>
-                                    
+
                                     <table className="w-full border-collapse border border-gray-300 mt-4">
                                         <thead>
                                             <tr className="bg-gray-100">
-                                                <th className="border p-2">#</th>
-                                                <th className="border p-2">User ID</th>
-                                                <th className="border p-2">First Name</th>
-                                                <th className="border p-2">Last Name</th>
-                                                <th className="border p-2">Email</th>
-                                                <th className="border p-2">Phone</th>
-                                                <th className="border p-2">Photo</th>
-                                                <th className="border p-2">Time</th>
-                                                <th className="border p-2">Is Present</th>
+                                                <th className="border p-2">
+                                                    #
+                                                </th>
+                                                <th className="border p-2">
+                                                    User ID
+                                                </th>
+                                                <th className="border p-2">
+                                                    First Name
+                                                </th>
+                                                <th className="border p-2">
+                                                    Last Name
+                                                </th>
+                                                <th className="border p-2">
+                                                    Email
+                                                </th>
+                                                <th className="border p-2">
+                                                    Phone
+                                                </th>
+                                                <th className="border p-2">
+                                                    Photo
+                                                </th>
+                                                <th className="border p-2">
+                                                    Time
+                                                </th>
+                                                <th className="border p-2">
+                                                    Is Present
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {users.map((user, index) => (
-                                                <tr key={user.id} className="text-center">
-                                                    <td className="border p-2">{index + 1}</td>
-                                                    <td className="border p-2">{user.id}</td>
-                                                    <td className="border p-2">{user.first_name}</td>
-                                                    <td className="border p-2">{user.last_name}</td>
-                                                    <td className="border p-2">{user.email}</td>
-                                                    <td className="border p-2">{user.phone_number}</td>
+                                                <tr
+                                                    key={user.id}
+                                                    className="text-center"
+                                                >
+                                                    <td className="border p-2">
+                                                        {index + 1}
+                                                    </td>
+                                                    <td className="border p-2">
+                                                        {user.id}
+                                                    </td>
+                                                    <td className="border p-2">
+                                                        {user.first_name}
+                                                    </td>
+                                                    <td className="border p-2">
+                                                        {user.last_name}
+                                                    </td>
+                                                    <td className="border p-2">
+                                                        {user.email}
+                                                    </td>
+                                                    <td className="border p-2">
+                                                        {user.phone_number}
+                                                    </td>
                                                     <td className="border p-2">
                                                         <img
                                                             width={30}
@@ -259,15 +328,25 @@ const Create: React.FC<Props> = () => {
                                                         <Time
                                                             name={`time_${user.id}`}
                                                             default_value={
-                                                                sessions.find(s => s.id === selectedSessionId)?.start_time || ''
+                                                                sessions.find(
+                                                                    (s) =>
+                                                                        s.id ===
+                                                                        selectedSessionId,
+                                                                )?.start_time ||
+                                                                ''
                                                             }
                                                             value={
                                                                 userAttendances.find(
-                                                                    record => record.user_id === user.id
+                                                                    (record) =>
+                                                                        record.user_id ===
+                                                                        user.id,
                                                                 )?.time || ''
                                                             }
                                                             handler={(data) =>
-                                                                handleTimeChange(user.id, data as any)
+                                                                handleTimeChange(
+                                                                    user.id,
+                                                                    data as any,
+                                                                )
                                                             }
                                                         />
                                                     </td>
@@ -275,16 +354,29 @@ const Create: React.FC<Props> = () => {
                                                         <input
                                                             type="checkbox"
                                                             checked={
-                                                                userAttendances.find(record => record.user_id === user.id)
-                                                                    ?.is_present || false
+                                                                userAttendances.find(
+                                                                    (record) =>
+                                                                        record.user_id ===
+                                                                        user.id,
+                                                                )?.is_present ||
+                                                                false
                                                             }
                                                             onChange={() => {
-                                                                setUserAttendances(prev =>
-                                                                    prev.map(record =>
-                                                                        record.user_id === user.id
-                                                                            ? { ...record, is_present: !record.is_present }
-                                                                            : record,
-                                                                    ),
+                                                                setUserAttendances(
+                                                                    (prev) =>
+                                                                        prev.map(
+                                                                            (
+                                                                                record,
+                                                                            ) =>
+                                                                                record.user_id ===
+                                                                                user.id
+                                                                                    ? {
+                                                                                          ...record,
+                                                                                          is_present:
+                                                                                              !record.is_present,
+                                                                                      }
+                                                                                    : record,
+                                                                        ),
                                                                 );
                                                             }}
                                                         />
@@ -295,28 +387,36 @@ const Create: React.FC<Props> = () => {
                                     </table>
                                 </>
                             ) : selectedEventId && selectedSessionId ? (
-                                !loading && <p>No users found for this event session.</p>
+                                !loading && (
+                                    <p>
+                                        No users found for this event session.
+                                    </p>
+                                )
                             ) : (
                                 !loading && (
                                     <p className="mt-4">
-                                        {!selectedEventId 
-                                            ? "Please select an event first" 
-                                            : "Please select a session to view attendees"}
+                                        {!selectedEventId
+                                            ? 'Please select an event first'
+                                            : 'Please select a session to view attendees'}
                                     </p>
                                 )
                             )}
 
-                            {selectedEventId && selectedSessionId && users.length > 0 && (
-                                <div className="form-group form-vertical mt-4">
-                                    <button
-                                        type="submit"
-                                        className="btn btn_1 btn-outline-info"
-                                        disabled={loading}
-                                    >
-                                        {loading ? 'Saving...' : 'Submit Attendance'}
-                                    </button>
-                                </div>
-                            )}
+                            {selectedEventId &&
+                                selectedSessionId &&
+                                users.length > 0 && (
+                                    <div className="form-group form-vertical mt-4">
+                                        <button
+                                            type="submit"
+                                            className="btn btn_1 btn-outline-info"
+                                            disabled={loading}
+                                        >
+                                            {loading
+                                                ? 'Saving...'
+                                                : 'Submit Attendance'}
+                                        </button>
+                                    </div>
+                                )}
                         </form>
                     </div>
                     <Footer />
@@ -327,4 +427,3 @@ const Create: React.FC<Props> = () => {
 };
 
 export default Create;
-

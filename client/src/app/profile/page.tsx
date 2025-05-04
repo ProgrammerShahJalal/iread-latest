@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import ProfileLayout from "../../components/ProfileLayout";
+import axios from "axios";
 
 
 interface User {
@@ -16,6 +17,13 @@ interface User {
   photo: string;
 }
 
+// Define the expected API response type
+interface SiteResponse {
+  data?: {
+    value: string;
+  };
+}
+
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -23,6 +31,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [grettingMessage, setGrettingMessage] = useState<SiteResponse | null>(null);
 
 
   const BASE_URL = process.env.NODE_ENV === "production"
@@ -38,6 +47,30 @@ const ProfilePage = () => {
       setFormData(parsedUser);
     }
   }, []);
+
+
+    useEffect(() => {
+      const endpoints = [
+        { key: 'title/Gretting Message', setter: setGrettingMessage },
+      ];
+    
+      const fetchSettings = async () => {
+        try {
+          const responses = await Promise.all(
+            endpoints.map(({ key }) =>
+              axios.get(`${BASE_URL}/api/v1/app-setting-values/${key}`)
+            )
+          );
+          responses.forEach((response, index) => {
+            endpoints[index].setter(response.data);
+          });
+        } catch (error) {
+          console.error("Error fetching settings:", error);
+        }
+      };
+    
+      fetchSettings();
+    }, [BASE_URL]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (formData) {
@@ -68,7 +101,7 @@ const ProfilePage = () => {
     <ProfileLayout>
       <div className="bg-white p-6 my-12 mx-auto max-w-4xl rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-6">Profile Information</h1>
-
+          <p className="text-center">{grettingMessage?.data?.value}</p>
         {user ? (
           <div className="flex flex-col items-center space-y-6">
             <input

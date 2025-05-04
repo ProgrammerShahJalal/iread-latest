@@ -18,7 +18,7 @@ import DateTime from '../../components/DateTime';
 import EventCategoryDropDown from '../event_category/components/dropdown/DropDown';
 import EventTagDropDown from '../event_tags/components/dropdown/DropDown';
 
-export interface Props { }
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -26,9 +26,11 @@ const Create: React.FC<Props> = (props: Props) => {
     );
 
     const [data, setData] = useState<anyObject>({});
+    const [clearImagePreview, setClearImagePreview] = useState(false);
 
     async function handle_submit(e) {
         e.preventDefault();
+        setClearImagePreview(false); // Reset before submission
         let form_data = new FormData(e.target);
         // console.log('data', data.getData())
 
@@ -47,17 +49,15 @@ const Create: React.FC<Props> = (props: Props) => {
         const response = await dispatch(store(form_data) as any);
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
             e.target.reset();
+            setClearImagePreview(true); // Trigger clearing the preview
             // init_nominee();
         }
+        e.target.reset();
+        setClearImagePreview(true); // Trigger clearing the preview
     }
 
     const dispatch = useAppDispatch();
-    const params = useParams();
 
-    useEffect(() => {
-        dispatch(storeSlice.actions.set_item({}));
-        dispatch(details({ id: params.id }) as any);
-    }, []);
 
     function get_value(key) {
         try {
@@ -93,12 +93,19 @@ const Create: React.FC<Props> = (props: Props) => {
                                             <label className="mb-4">
                                                 {' '}
                                                 Full Description
+                                                <span style={{ color: 'red' }}>
+                                                    *
+                                                </span>
                                             </label>
-                                            <div
-                                                id="full_description"></div>
+                                            <div id="full_description"></div>
                                         </div>
                                         <div className="form-group">
-                                            <label>Short Description</label>
+                                            <label>
+                                                Short Description
+                                                <span style={{ color: 'red' }}>
+                                                    *
+                                                </span>
+                                            </label>
                                             <textarea
                                                 className="form-control"
                                                 name="short_description"
@@ -120,10 +127,17 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         <InputImage
                                                             label={'Poster'}
                                                             name={'poster'}
+                                                            clearPreview={
+                                                                clearImagePreview
+                                                            }
+                                                            required={true}
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <Input name={i} />
+                                                    <Input
+                                                        name={i}
+                                                        required={true}
+                                                    />
                                                 )}
                                             </div>
                                         ))}
@@ -132,7 +146,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                     <div className="col-4">
                                         <div className="form_auto_fit">
                                             <div className="form-group form-vertical">
-                                                <label>Title</label>
+                                                <label>
+                                                    Title
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
                                                 <input
                                                     type="text"
                                                     className="form-control"
@@ -143,7 +164,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 />
                                             </div>
                                             <div className="form-group form-vertical">
-                                                <label>Place</label>
+                                                <label>
+                                                    Place
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
                                                 <input
                                                     type="text"
                                                     className="form-control"
@@ -178,15 +206,19 @@ const Create: React.FC<Props> = (props: Props) => {
                                                     }}
                                                 />
                                             </div>
-                                            <div className="form-group-container">
-
-                                            </div>
+                                            <div className="form-group-container"></div>
 
                                             {/* RADIO OPTIONS */}
-                                            <label>Event Type</label>
+                                            <label>
+                                                Event Type{' '}
+                                                <span style={{ color: 'red' }}>
+                                                    *
+                                                </span>
+                                            </label>
                                             <div
-                                                className='form-group-container'
-                                                style={{ paddingBottom: 10 }}>
+                                                className="form-group-container"
+                                                style={{ paddingBottom: 10 }}
+                                            >
                                                 {['online', 'offline'].map(
                                                     (type) => (
                                                         <label
@@ -232,7 +264,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                             </div>
 
                                             <div className="form-group grid_full_width form-vertical">
-                                                <label>Reg Start Date</label>
+                                                <label>
+                                                    Reg Start Date
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_start_date'}
@@ -245,7 +284,14 @@ const Create: React.FC<Props> = (props: Props) => {
                                                 ></DateEl>
                                             </div>
                                             <div className="form-group grid_full_width form-vertical">
-                                                <label>Reg End Date</label>
+                                                <label>
+                                                    Reg End Date
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
+                                                </label>
                                                 <DateEl
                                                     value={''}
                                                     name={'reg_end_date'}
@@ -260,6 +306,11 @@ const Create: React.FC<Props> = (props: Props) => {
                                             <div className="form-group grid_full_width form-vertical">
                                                 <label>
                                                     Session Start Date Time
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
                                                 </label>
                                                 <DateTime
                                                     value={''}
@@ -277,6 +328,11 @@ const Create: React.FC<Props> = (props: Props) => {
                                             <div className="form-group grid_full_width form-vertical">
                                                 <label>
                                                     Session End Date Time
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        *
+                                                    </span>
                                                 </label>
                                                 <DateTime
                                                     value={''}

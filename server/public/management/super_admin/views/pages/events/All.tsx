@@ -139,7 +139,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                     <td>
                                                         <SelectItem item={i} />
                                                     </td>
-                                                    <td>{index + 1}</td>
+                                                    <td>{i.id}</td>
 
                                                     <td>
                                                         <span

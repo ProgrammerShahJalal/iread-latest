@@ -76,6 +76,7 @@ async function update(
     try {
         const data = await models[modelName].findByPk(body.id);
         const isAdminReply = body?.replay === '1';
+        const isEmptyComment = body?.comment.trim() === '';
 
         if (!data) {
             throw new custom_error(
@@ -87,7 +88,10 @@ async function update(
 
         const replyExists = await isReplyExists(body.id);
         if (replyExists && isAdminReply) {
-            return response(409, 'You already replied to this comment.', {});
+            throw new custom_error('Server error', 500, 'You already replied to this comment.');
+        }
+        if (isEmptyComment && isAdminReply && !replyExists) {
+            throw new custom_error('Server error', 500, 'Please provide a valid replay');
         }
 
         if (!isAdminReply) {
