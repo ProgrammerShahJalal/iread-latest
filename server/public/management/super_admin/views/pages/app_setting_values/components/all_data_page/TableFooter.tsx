@@ -27,9 +27,9 @@ const Footer: React.FC<Props> = (props: Props) => {
                             <div className="text">create new</div>
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <ExportSelected />
-                    </li>
+                    </li> */}
                     <li>
                         <AllDeactivatedData />
                     </li>

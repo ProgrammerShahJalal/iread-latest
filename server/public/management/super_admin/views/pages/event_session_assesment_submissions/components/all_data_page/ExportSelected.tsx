@@ -15,19 +15,25 @@ const ExportSelected: React.FC<Props> = (props: Props) => {
 
     function handle_export(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         e.preventDefault();
-        const columns = ['id', 'name', 'email'];
+        const columns = ['id', 'event_title', 'session_title', 'assesment_title', 'user_name', 'submitted_content', 'mark', 'obtained_mark', 'grade'];
         const rows: string[][] = [];
 
         state.selected.forEach((data: anyObject) => {
             const row: Array<string> = [];
-            columns.forEach((key: string) => {
-                row.push(data[key]);
-            });
+            row.push(data.id || '');
+            row.push(data.event?.title || '');
+            row.push(data.session?.title || '');
+            row.push(data.assesment?.title || '');
+            row.push(`${data.user?.first_name || ''} ${data.user?.last_name || ''}`.trim());
+            row.push(data.submitted_content || '');
+            row.push(data.mark || '');
+            row.push(data.obtained_mark || '');
+            row.push(data.grade || '');
             rows.push(row);
         });
 
         new CsvBuilder(`${setup.module_name}.csv`)
-            .setColumns(columns)
+            .setColumns(['ID', 'Event Title', 'Session Title', 'Assesment Title', 'User Name', 'Submitted Content', 'Mark', 'Obtained Mark', 'Grade'])
             .addRows(rows)
             .exportFile();
     }

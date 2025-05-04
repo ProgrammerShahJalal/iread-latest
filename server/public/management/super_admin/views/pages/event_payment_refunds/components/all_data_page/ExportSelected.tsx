@@ -15,19 +15,26 @@ const ExportSelected: React.FC<Props> = (props: Props) => {
 
     function handle_export(e: React.MouseEvent<HTMLElement, MouseEvent>) {
         e.preventDefault();
-        const columns = ['id', 'name', 'email'];
+        const columns = ['id', 'event_enrollment_id', 'event_payment_id', 'event_title', 'user_name', 'date', 'amount', 'trx_id', 'media', 'status'];
         const rows: string[][] = [];
 
         state.selected.forEach((data: anyObject) => {
             const row: Array<string> = [];
-            columns.forEach((key: string) => {
-                row.push(data[key]);
-            });
+            row.push(data.id || '');
+            row.push(data.event_enrollment_id || '');
+            row.push(data.event_payment_id || '');
+            row.push(data.event?.title || '');
+            row.push(`${data.user?.first_name || ''} ${data.user?.last_name || ''}`.trim());
+            row.push(data.date || '');
+            row.push(data.amount || '');
+            row.push(data.trx_id || '');
+            row.push(data.media || '');
+            row.push(data.status || '');
             rows.push(row);
         });
 
         new CsvBuilder(`${setup.module_name}.csv`)
-            .setColumns(columns)
+            .setColumns(['ID', 'Event Enrollment ID', 'Event Payment ID', 'Event Title', 'User Name', 'Date', 'Amount', 'Trx ID', 'Media', 'Status'])
             .addRows(rows)
             .exportFile();
     }

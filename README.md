@@ -1,4 +1,4 @@
-# IREAD Online Learning Platform Documentation || Tech Park IT
+# IREAD Online Learning Platform Documentation
 
 ## Introduction
 
