@@ -79,7 +79,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             col_name={`value`}
                                             sort={false}
                                         />
-                                        <TableHeading
+                                        {/* <TableHeading
                                             label={`Type`}
                                             col_name={`type`}
                                             sort={true}
@@ -88,7 +88,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             label={`Is Default?`}
                                             col_name={`is_default`}
                                             sort={true}
-                                        />
+                                        /> */}
                             
                                     </tr>
                                 </thead>
@@ -121,13 +121,13 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <td>{i.title}</td>
                                                         <td>
                                                             <div
-                                                                style={{
-                                                                    aspectRatio: "4/4",
-                                                                    maxWidth: '30px'
-                                                                }}
                                                             >
                                                                 {i.app_settings?.type === 'file' ? (
                                                                     <img
+                                                                    style={{
+                                                                    // aspectRatio: "4/4",
+                                                                    maxWidth: '60px'
+                                                                }}
                                                                         src={i.value}
                                                                         alt="Logo"
                                                                         className="w-100"
@@ -137,19 +137,19 @@ const All: React.FC<Props> = (props: Props) => {
                                                                     />
                                                                 ) : (
                                                                     <>
-                                                                        {i.value?.slice(0, 17)}
-                                                                        {i.value?.length > 17 && '..'}
+                                                                        {i.value?.slice(0, 24)}
+                                                                        {i.value?.length > 24 && '..'}
                                                                     </>
                                                                 )}
                                                             </div>
                                                         </td>
 
-                                                        <td>{i.app_settings?.type}</td>
+                                                        {/* <td>{i.app_settings?.type}</td>
                                                         <td>
                                                             {i.is_default
                                                                 ? 'Yes'
                                                                 : 'No'}
-                                                        </td>
+                                                        </td> */}
                                                         {/* <td>{i.status}</td> */}
                                                     </tr>
                                                 );

@@ -7,24 +7,18 @@ import {
     Request,
 } from '../../../common_types/object';
 import { InferCreationAttributes } from 'sequelize';
-
 import response from '../../../helpers/response';
 import custom_error from '../../../helpers/custom_error';
 import error_trace from '../../../helpers/error_trace';
-
 import moment from 'moment';
 import { modelName } from '../models/model';
 import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'id',
-    ];
+    let fields = ['id'];
 
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
+    for (let field of fields) {
         await body(field)
             .not()
             .isEmpty()
@@ -35,16 +29,8 @@ async function validate(req: Request) {
     }
 
     let result = await validationResult(req);
-
     return result;
 }
-
-// async function update(
-//     fastify_instance: FastifyInstance,
-//     req: FastifyRequest,
-// ): Promise<responseObject> {
-//     throw new Error('500 test');
-// }
 
 async function update(
     fastify_instance: FastifyInstance,
@@ -63,26 +49,47 @@ async function update(
     const settingsTableRow = await models.AppSettinsgModel.findByPk(body?.app_setting_key_id);
 
     if (!settingsTableRow) {
-        throw new Error('Setting not found');
+        throw new custom_error('Setting not found', 404, 'Setting not found');
     }
 
     /** Handle file upload if type is file */
     let valueToSave: string = body.value || '';
-    if (settingsTableRow.type === 'file' && body.value?.ext && body.value?.name) {
-        const image_path =
-            'uploads/app_settings/' +
-            moment().format('YYYYMMDDHHmmss') +
-            body.value.name;
-        await (fastify_instance as any).upload(body.value, image_path);
-        valueToSave = image_path;
+    if (settingsTableRow.type === 'file' && body.value) {
+        // Check if the isGallery is 'true' for multiple uploads
+        const isGallery = ['true'].includes(body.isGallery);
+        
+        if (isGallery && Array.isArray(body.value)) {
+            // Handle multiple file uploads
+            const imagePaths: string[] = [];
+            for (const file of body.value) {
+                if (file?.ext && file?.name) {
+                    const image_path =
+                        'uploads/app_settings/' +
+                        moment().format('YYYYMMDDHHmmss') +
+                        '_' +
+                        Math.random().toString(36).substring(7) + // Add random string to avoid conflicts
+                        file.name;
+                    await (fastify_instance as any).upload(file, image_path);
+                    imagePaths.push(image_path);
+                }
+            }
+            // Store as JSON string
+            valueToSave = JSON.stringify(imagePaths);
+        } else if (body.value?.ext && body.value?.name) {
+            // Handle single file upload
+            const image_path =
+                'uploads/app_settings/' +
+                moment().format('YYYYMMDDHHmmss') +
+                body.value.name;
+            await (fastify_instance as any).upload(body.value, image_path);
+            valueToSave = image_path;
+        }
     }
-
 
     /** store data into database */
     try {
         let data = await models[modelName].findByPk(body.id);
         if (data) {
-
             let inputs: InferCreationAttributes<typeof user_model> = {
                 app_setting_key_id: body.app_setting_key_id || data.app_setting_key_id,
                 title: body.title || data.title,
@@ -90,8 +97,7 @@ async function update(
                 is_default: body.is_default || data.is_default,
                 type: settingsTableRow.type || data?.type,
             };
-            data.update(inputs);
-            await data.save();
+            await data.update(inputs);
             return response(201, 'data updated', { data });
         } else {
             throw new custom_error(
@@ -112,3 +118,4 @@ async function update(
 }
 
 export default update;
+
