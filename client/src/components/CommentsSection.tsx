@@ -42,7 +42,6 @@ const BASE_URL =
     ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
     : process.env.NEXT_PUBLIC_BACKEND_URL;
 
-
 const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [commentts, setCommentts] = useState<BlogComment[]>(comments || []);
   const [user, setUser] = useState<User | null>(null);
@@ -55,6 +54,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [blogViews, setBlogViews] = useState<BlogView[]>([]);
   const [totalViews, setTotalViews] = useState(0);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   // ✅ Fetch comments when component mounts or after a new comment is submitted
   const fetchComments = async () => {
@@ -97,7 +97,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   }, [blogs]);
 
   useEffect(() => {
-  if(user?.id && blogs){
+    if (user?.id && blogs) {
       // ✅ Send blog view count
       axios.post(`${BASE_URL}/api/v1/blog-views/store`, {
         user_id: user?.id,
@@ -105,7 +105,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
       }).catch((error) => {
         console.error("Error recording blog view:", error);
       });
-  }
+    }
   }, [blogs, user?.id])
 
 
@@ -304,13 +304,16 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                 rows={3}
                 placeholder="Add a comment..."
                 value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                required
+                onChange={(e) => {
+                  setCommentText(e.target.value);
+                  setIsEmpty(e.target.value.trim() === '');
+                }}
               />
               <button
                 type="submit"
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                disabled={loading}
+                className={`mt-2 px-4 py-2 rounded ${isEmpty ? "bg-slate-500 text-slate-700 border border-black mt-2 px-4 py-2 rounded" : "bg-blue-500 text-white"
+                  }`}
+                disabled={loading || isEmpty}
               >
                 {loading ? "Posting..." : "Submit"}
               </button>

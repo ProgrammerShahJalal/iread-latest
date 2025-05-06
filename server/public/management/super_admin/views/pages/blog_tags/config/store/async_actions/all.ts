@@ -73,7 +73,6 @@ const fetch_api = async (param, thunkAPI) => {
             fetch_only_latest,
         );
     }
-
     // dispatch(commonStore.actions.set_duration(response.duration));
 
     dispatch(commonStore.actions.set_cached(response.totalStorage));

@@ -27,6 +27,8 @@ import event_enrollments from '../views/pages/event_enrollments/config/store';
 import event_payments from '../views/pages/event_payments/config/store';
 import event_payment_refunds from '../views/pages/event_payment_refunds/config/store';
 import event_feedback_form_fields from '../views/pages/event_feedback_form_fields/config/store';
+import app_settings from '../views/pages/app_settings/config/store';
+import app_setting_values from '../views/pages/app_setting_values/config/store';
 
 const store = configureStore({
     reducer: {
@@ -55,6 +57,8 @@ const store = configureStore({
         event_payments: event_payments.reducer,
         event_payment_refunds: event_payment_refunds.reducer,
         event_feedback_form_fields: event_feedback_form_fields.reducer,
+        app_settings: app_settings.reducer,
+        app_setting_values: app_setting_values.reducer,
     },
     devTools: true,
 });

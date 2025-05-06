@@ -7,9 +7,19 @@ export interface Props {
     value?: string | number | null;
     setter?: (response: unknown) => void;
     referance_data?: object;
+    required?: boolean;
 }
 
-const Input: React.FC<Props> = ({ label, name, placeholder, type, value, setter, ...props }: Props) => {
+const Input: React.FC<Props> = ({
+    label,
+    name,
+    placeholder,
+    type,
+    value,
+    required,
+    setter,
+    ...props
+}: Props) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (setter) {
             setter({
@@ -22,6 +32,7 @@ const Input: React.FC<Props> = ({ label, name, placeholder, type, value, setter,
         <>
             <label htmlFor={name}>
                 {label ? label : name.replaceAll('_', ' ')}
+                {required && <span style={{ color: 'red' }}>*</span>}
             </label>
             <div className="form_elements">
                 <input
@@ -31,7 +42,7 @@ const Input: React.FC<Props> = ({ label, name, placeholder, type, value, setter,
                     }
                     name={name}
                     id={name}
-                    defaultValue={value? value : ''}
+                    defaultValue={value ? value : ''}
                     onChange={handleChange}
                 />
             </div>

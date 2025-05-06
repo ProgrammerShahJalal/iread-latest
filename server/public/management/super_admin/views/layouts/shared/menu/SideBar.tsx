@@ -82,16 +82,16 @@ const SideBar: React.FC<Props> = (props: Props) => {
                         to="/event-enrollments"
                     />
                     <MenuDropDownItem
-                        label="Event Certified Users"
-                        to="/event-certified-users"
-                    />
-                    <MenuDropDownItem
                         label="Event Payments"
                         to="/event-payments"
                     />
                     <MenuDropDownItem
                         label="Event Payment Refunds"
                         to="/event-payment-refunds"
+                    />
+                    <MenuDropDownItem
+                        label="Event Certified Users"
+                        to="/event-certified-users"
                     />
                     <MenuDropDownItem
                         label="Event Feedback Form"
@@ -134,6 +134,14 @@ const SideBar: React.FC<Props> = (props: Props) => {
                     <MenuDropDownItem
                         label="User Login Histories"
                         to="/user-login-histories"
+                    />
+                </MenuDropDown>
+                {/* App Settings  */}
+                <MenuDropDown group_title="App Settings" icon="icon-settings">
+                    {/* <MenuDropDownItem label="App Setting Keys" to="/app-settings" /> */}
+                    <MenuDropDownItem
+                        label="App Settings"
+                        to="/app-setting-values"
                     />
                 </MenuDropDown>
 

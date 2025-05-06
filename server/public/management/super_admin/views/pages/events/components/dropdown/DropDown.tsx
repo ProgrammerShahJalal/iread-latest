@@ -16,9 +16,16 @@ export interface Props {
     get_selected_data?: (anyObject) => void;
     multiple: true | false;
     default_value?: anyObject[] | [];
+    error?: string;
 }
 
-const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_value }) => {
+const DropDown: React.FC<Props> = ({
+    name,
+    get_selected_data,
+    multiple,
+    default_value,
+    error,
+}) => {
     const state: typeof initialState = useSelector(
         (state: RootState) => state[setup.module_name],
     );
@@ -28,25 +35,27 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         dispatch(all({}));
     }, []);
 
-    
     useEffect(() => {
         if (default_value?.length && state.all?.data?.length) {
             setSelectedList((prevSelectedList) => {
                 const enrichedList = default_value.map((defaultItem) => {
-                    const fullItem = state.all.data.find((item) => item.id === defaultItem.id);
+                    const fullItem = state.all.data.find(
+                        (item) => item.id === defaultItem.id,
+                    );
                     return fullItem || defaultItem;
                 });
-    
+
                 // Avoid unnecessary state updates to prevent re-renders
-                if (JSON.stringify(prevSelectedList) !== JSON.stringify(enrichedList)) {
+                if (
+                    JSON.stringify(prevSelectedList) !==
+                    JSON.stringify(enrichedList)
+                ) {
                     return enrichedList;
                 }
                 return prevSelectedList;
             });
         }
     }, [default_value, state.all.data]);
-    
-    
 
     /** local states */
     const [showDropDownList, setShowDropDownList] = useState(false);
@@ -58,7 +67,9 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
         // console.log(selectedList);
         const ids = selectedList.map((i) => i.id).join(',');
         if (selected_items_input && selected_items_input.current) {
-            selected_items_input.current.value = `[${ids}]`;
+            // Send null if no selection
+            selected_items_input.current.value =
+                selectedList.length > 0 ? `[${ids}]` : '';
         }
 
         if (typeof get_selected_data === 'function') {
@@ -69,7 +80,12 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
     return (
         <>
             <div className="custom_drop_down">
-                <input type="hidden" ref={selected_items_input} id={name} name={name} />
+                <input
+                    type="hidden"
+                    ref={selected_items_input}
+                    id={name}
+                    name={name}
+                />
                 <div
                     className="selected_list"
                     onClick={() => setShowDropDownList(true)}
@@ -79,6 +95,7 @@ const DropDown: React.FC<Props> = ({ name, get_selected_data, multiple, default_
                         setSelectedList={setSelectedList}
                     />
                 </div>
+                {error && <div className="text-danger">{error}</div>}
                 {showDropDownList && (
                     <div className="drop_down_items">
                         <div className="drop_down_data_search">

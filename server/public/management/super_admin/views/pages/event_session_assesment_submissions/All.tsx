@@ -108,63 +108,96 @@ const All: React.FC<Props> = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody id="all_list">
-                                {(state.all as any)?.data?.length > 0 ? (
-                                    (state?.all as any)?.data?.map(
-                                        (i: { [key: string]: any }) => {
-                                            return (
-                                                <tr
-                                                    key={i.id}
-                                                    className={`table_rows table_row_${i.id}`}
-                                                >
-                                                    <td>
-                                                        <TableRowAction
-                                                            item={i}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <SelectItem item={i} />
-                                                    </td>
-                                                    <td>{i.id}</td>
-                                                    <td>
-                                                        <span
-                                                            className="quick_view_trigger"
-                                                            onClick={() =>
-                                                                quick_view(i)
-                                                            }
-                                                            style={{
-                                                                color: '#0AAE96',
-                                                                fontWeight: 400,
-                                                                cursor: 'pointer',
-                                                            }}
-                                                        >
-                                                            {i.assesment?.title?.slice(0, 30)}{i.assesment?.title?.length > 30 && '..'}
-                                                        </span>
-                                                    </td>
-                                                    <td>{i.event?.title?.slice(0, 30)}{i.event?.title?.length > 30 && '..'}</td>
-                                                    <td>{i.session?.title?.slice(0, 30)}{i.session?.title?.length > 30 && '..'}</td>
+                                    {(state.all as any)?.data?.length > 0 ? (
+                                        (state?.all as any)?.data?.map(
+                                            (i: { [key: string]: any }) => {
+                                                return (
+                                                    <tr
+                                                        key={i.id}
+                                                        className={`table_rows table_row_${i.id}`}
+                                                    >
+                                                        <td>
+                                                            <TableRowAction
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <SelectItem
+                                                                item={i}
+                                                            />
+                                                        </td>
+                                                        <td>{i.id}</td>
+                                                        <td>
+                                                            <span
+                                                                className="quick_view_trigger"
+                                                                onClick={() =>
+                                                                    quick_view(
+                                                                        i,
+                                                                    )
+                                                                }
+                                                                style={{
+                                                                    color: '#0AAE96',
+                                                                    fontWeight: 400,
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                            >
+                                                                {i.assesment?.title?.slice(
+                                                                    0,
+                                                                    30,
+                                                                )}
+                                                                {i.assesment
+                                                                    ?.title
+                                                                    ?.length >
+                                                                    30 && '..'}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {i.event?.title?.slice(
+                                                                0,
+                                                                30,
+                                                            )}
+                                                            {i.event?.title
+                                                                ?.length > 30 &&
+                                                                '..'}
+                                                        </td>
+                                                        <td>
+                                                            {i.session?.title?.slice(
+                                                                0,
+                                                                30,
+                                                            )}
+                                                            {i.session?.title
+                                                                ?.length > 30 &&
+                                                                '..'}
+                                                        </td>
 
-                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
-                                                    <td>{i.mark}</td>
-                                                    <td>
-                                                        {i.obtained_mark ||
-                                                            'N/A'}
-                                                    </td>
-                                                    <td>
-    
-                                                    {i.grade || 'Pending'}
-                                                    </td>
-                                                    {/* <td>{i.status}</td> */}
-                                                </tr>
-                                            );
-                                        },
-                                    )
-                                ) : (
-                                    <tr>
-                                        <td colSpan={9} className="text-center py-4">
-                                            No data found
-                                        </td>
-                                    </tr>
-                                )}
+                                                        <td>
+                                                            {i.user?.first_name}{' '}
+                                                            {i.user?.last_name}
+                                                        </td>
+                                                        <td>{i.mark}</td>
+                                                        <td>
+                                                            {i.obtained_mark ||
+                                                                'N/A'}
+                                                        </td>
+                                                        <td>
+                                                            {i.grade ||
+                                                                'Pending'}
+                                                        </td>
+                                                        {/* <td>{i.status}</td> */}
+                                                    </tr>
+                                                );
+                                            },
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={9}
+                                                className="text-center py-4"
+                                            >
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

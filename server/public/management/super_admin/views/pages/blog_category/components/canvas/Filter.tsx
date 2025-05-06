@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import DateEl from '../../../../components/DateEl';
+import DateElFilter from '../../../../components/DateElFilter';
 import { RootState, useAppDispatch } from '../../../../../store';
 import storeSlice from '../../config/store';
 import { initialState } from '../../config/store/inital_state';
@@ -63,19 +63,19 @@ const Filter: React.FC<Props> = (props: Props) => {
                     <div className="data_content">
                         <div className="filter_item">
                             <label htmlFor="start_date">Start Date</label>
-                            <DateEl
+                            <DateElFilter
                                 value={''}
                                 name={'start_date'}
                                 handler={get_data}
-                            ></DateEl>
+                            ></DateElFilter>
                         </div>
                         <div className="filter_item">
                             <label htmlFor="end_date">End Date</label>
-                            <DateEl
+                            <DateElFilter
                                 value={''}
                                 name={'end_date'}
                                 handler={get_data}
-                            ></DateEl>
+                            ></DateElFilter>
                         </div>
                         
 

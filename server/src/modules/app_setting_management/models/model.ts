@@ -35,7 +35,6 @@ class DataModel extends Model<Infer, InferCreation> {
     declare description?: string;
     declare type: type;
 
-
     declare status?: status;
     declare creator?: number;
 
@@ -56,7 +55,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             description: {
-                type: DataTypes.STRING(350),
+                type: DataTypes.STRING(450),
                 allowNull: true,
             },
             type: {
@@ -64,7 +63,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             status: {
-                type: new DataTypes.ENUM('active', 'deactive',),
+                type: new DataTypes.ENUM('active', 'deactive'),
 
                 defaultValue: 'active',
             },

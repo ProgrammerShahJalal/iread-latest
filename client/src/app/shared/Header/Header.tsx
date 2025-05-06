@@ -5,9 +5,18 @@ import Navbar from "./Navbar";
 import Link from "next/link";
 import { getEvents } from "../../../api/eventApi";
 import { Event } from "@/types/event";
+import { getSettingValue } from "../../../api/settingValuesApi";
+import { SettingValue } from "@/types/setting";
 
 async function Header() {
   let events: Event[] = await getEvents();
+  const headerLogo = await getSettingValue('Header Logo');
+  const contactPhone1 = await getSettingValue('Contact phone1');
+
+  const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <header id="header" className="header">
@@ -80,7 +89,14 @@ async function Header() {
                   className="menuzord-brand pull-left flip xs-pull-center mb-15"
                   href="/"
                 >
-                  IREAD
+                {
+                  headerLogo?.value ? (<Image
+                    src={`${BASE_URL}/${headerLogo?.value}`}
+                    width={100}
+                    height={100}
+                    alt="Header Logo"
+                    />): <span>IRAED</span>
+                }
                 </Link>
               </div>
             </div>
@@ -91,10 +107,10 @@ async function Header() {
                     <i className="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block" />
                   </li>
                   <li>
-                    <p className="font-12 text-gray text-uppercase">
+                    <p className="font-12 text-black text-uppercase">
                       Call us today!
                     </p>
-                    <h5 className="font-14 m-0"> +(012) 345 6789</h5>
+                    <h5 className="font-14 m-0">{contactPhone1?.value}</h5>
                   </li>
                 </ul>
               </div>

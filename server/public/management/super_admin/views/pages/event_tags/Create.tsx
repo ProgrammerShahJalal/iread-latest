@@ -10,8 +10,7 @@ import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
 import DropDown from './components/dropdown/DropDown';
 
-export interface Props { }
-
+export interface Props {}
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
@@ -47,12 +46,9 @@ const Create: React.FC<Props> = (props: Props) => {
 
                                 <h5 className="mb-4">Tags Informations</h5>
                                 <div className="form_auto_fit">
-
-                                    {[
-                                        'title',
-                                    ].map((i) => (
+                                    {['title'].map((i) => (
                                         <div className="form-group form-vertical">
-                                            <Input name={i} />
+                                            <Input name={i} required={true} />
                                         </div>
                                     ))}
 
@@ -62,7 +58,6 @@ const Create: React.FC<Props> = (props: Props) => {
                                             name={'image'}
                                         />
                                     </div> */}
-
                                 </div>
                             </div>
 

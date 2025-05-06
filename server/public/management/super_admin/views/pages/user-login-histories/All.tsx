@@ -78,7 +78,7 @@ const All: React.FC<Props> = (props: Props) => {
                                             sort={true}
                                         />
                                         <TableHeading
-                                            label={`User ID`}
+                                            label={`User Name`}
                                             col_name={`user_id`}
                                             sort={true}
                                         />
@@ -127,7 +127,7 @@ const All: React.FC<Props> = (props: Props) => {
                                                         <SelectItem item={i} />
                                                     </td>
                                                     <td>{i.id}</td>
-                                                    <td>{i.user_id}</td>
+                                                    <td>{i.user?.first_name} {i.user?.last_name}</td>
                                                     <td>{formateDateTime(i.login_date)}</td>
                                                     <td>{formateDateTime(i.logout_date)}</td>
                                                     <td>

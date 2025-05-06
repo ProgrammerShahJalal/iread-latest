@@ -10,7 +10,7 @@ import { initialState } from './config/store/inital_state';
 import { Link, useParams } from 'react-router-dom';
 import storeSlice from './config/store';
 import moment from 'moment/moment';
-export interface Props {}
+export interface Props { }
 
 const Details: React.FC<Props> = (props: Props) => {
     const state: typeof initialState = useSelector(
@@ -27,6 +27,11 @@ const Details: React.FC<Props> = (props: Props) => {
 
     function get_value(key) {
         try {
+            // Handle nested user object
+            if (key === 'user_id' && state.item.user) {
+                return `${state.item.user.first_name} ${state.item.user.last_name}`;
+            }
+
             if (state.item[key]) return state.item[key];
             if (state.item?.info[key]) return state.item?.info[key];
         } catch (error) {
@@ -49,7 +54,7 @@ const Details: React.FC<Props> = (props: Props) => {
                     {Object.keys(state.item).length && (
                         <div className="content_body custom_scroll">
                             <table className="table quick_modal_table table-hover">
-                                <tbody>
+                                {/* <tbody>
                                     {['id', 'user_id', 'login_date','logout_date', 'device', 'total_session_time', 'status'].map(
                                         (i) => (
                                             <tr key={i}>
@@ -60,13 +65,65 @@ const Details: React.FC<Props> = (props: Props) => {
                                             {
                                                 i === 'total_session_time' ? ( <td>{get_value(i)} seconds</td>) : (
                                                     i === 'login_date' || i === 'logout_date' ? (<td>{formateDateTime(get_value(i))}</td>) : (
-                                                        <td>{get_value(i)}</td>
+                                                        i === 'user_id' ? (
+                                                        <><label>User Name</label>
+                                                        <td>{get_value(i)}</td></>
+                                                        ) : <td>{get_value(i)}</td>)
                                                     )
-                                                )
                                             }
                                             </tr>
                                         ),
                                     )}
+                                </tbody> */}
+
+
+                                <tbody>
+                                    {[
+                                        'id',
+                                        'user_id',
+                                        'login_date',
+                                        'logout_date',
+                                        'device',
+                                        'total_session_time',
+                                        'status',
+                                    ].map((i) => (
+                                        i === 'user_id' ? (
+                                            <tr key={i}>
+                                                <td>User Name</td>
+                                                <td>:</td>
+                                                <td>{get_value(i)}</td>
+                                            </tr>
+                                        ) : (
+                                            i === 'blog_id' ? (
+                                                <tr key={i}>
+                                                    <td>Blog Title</td>
+                                                    <td>:</td>
+                                                    <td>{get_value(i)}</td>
+                                                </tr>
+                                            ) : (
+                                                i === 'login_date' || i === 'logout_date' ? (
+                                                    <tr key={i}>
+                                                        <td>{i.replaceAll('_', ' ')}</td>
+                                                        <td>:</td>
+                                                        <td>{formateDateTime(get_value(i))}</td>
+                                                    </tr>
+                                                ) : (
+                                                    i === 'total_session_time' ? (<tr key={i}>
+                                                        <td>{i.replaceAll('_', ' ')}</td>
+                                                        <td>:</td>
+                                                        <td>{get_value(i)}seconds</td>
+                                                    </tr>) 
+                                                    : 
+                                                    (<tr key={i}>
+                                                        <td>{i.replaceAll('_', ' ')}</td>
+                                                        <td>:</td>
+                                                        <td>{get_value(i)}</td>
+                                                    </tr>)
+                                                )
+                                            )
+                                        )
+                                    ))}
+
                                 </tbody>
                             </table>
                         </div>
@@ -75,7 +132,7 @@ const Details: React.FC<Props> = (props: Props) => {
                     <Footer>
                         {state.item?.id && (
                             <li>
-                                <Link
+                                {/* <Link
                                     to={`/${setup.route_prefix}/edit/${state.item.id}`}
                                     className="btn-outline-info outline"
                                 >
@@ -83,7 +140,7 @@ const Details: React.FC<Props> = (props: Props) => {
                                         edit_square
                                     </span>
                                     <div className="text">Edit</div>
-                                </Link>
+                                </Link> */}
                             </li>
                         )}
                     </Footer>

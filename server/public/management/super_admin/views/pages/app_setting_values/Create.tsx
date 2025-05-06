@@ -8,10 +8,9 @@ import Input from './components/management_data_page/Input';
 import Select from './components/management_data_page/Select';
 import InputImage from './components/management_data_page/InputImage';
 import { anyObject } from '../../../common_types/object';
-import DropDown from './components/dropdown/DropDown';
+import SettingDropDown from '../app_settings/components/dropdown/DropDown';
 
 export interface Props { }
-
 
 const Create: React.FC<Props> = (props: Props) => {
     const dispatch = useAppDispatch();
@@ -37,64 +36,32 @@ const Create: React.FC<Props> = (props: Props) => {
                             className="mx-auto pt-3"
                         >
                             <div>
-                                {/* <DropDown
-                                    multiple={false}
-                                    get_selected_data={(result) =>
-                                        console.log(result)
-                                    }
-                                    name={`contact_messages_list`}
-                                /> */}
 
-                                <h5 className="mb-4">Blogs Informations</h5>
+                                <h5 className="mb-4">Settings Informations</h5>
                                 <div className="form_auto_fit">
-
-                                
-
-                                    {[
-                                        'title',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
-                                    {[
-                                        'short_description',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
-                                    {[
-                                        'full_description',
-                                    ].map((i) => (
+                                    {['title', 'value'].map((i) => (
                                         <div className="form-group form-vertical">
                                             <Input name={i} />
                                         </div>
                                     ))}
 
-{[
-                                        'slug',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
- {[
-                                        'seo_title',
-                                    ].map((i) => (
-                                        <div className="form-group form-vertical">
-                                            <Input name={i} />
-                                        </div>
-                                    ))}
-
-                                    <div className="form-group grid_full_width form-vertical">
-                                        <InputImage
-                                            label={'Cover Image'}
-                                            name={'cover_image'}
+                                    <div className="form-group form-vertical">
+                                        <label>
+                                            App Settings Key
+                                            <span style={{ color: 'red' }}>
+                                                *
+                                            </span>
+                                        </label>
+                                        <SettingDropDown
+                                            name="app_setting_key_id"
+                                            multiple={false}
+                                            get_selected_data={(data) => {
+                                                console.log(data);
+                                            }}
                                         />
                                     </div>
-
                                 </div>
+
                             </div>
 
                             <div className="form-group form-vertical">
@@ -115,6 +82,3 @@ const Create: React.FC<Props> = (props: Props) => {
 };
 
 export default Create;
-
-
-

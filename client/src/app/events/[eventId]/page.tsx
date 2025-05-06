@@ -8,7 +8,13 @@ import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import EventEnrollProcess from "../../../components/EventEnrollProcess";
 import moment from "moment/moment";
+import { getSettingValue } from "../../../api/settingValuesApi";
 
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
+    
 
 const EventDetailsPage = async ({
   params,
@@ -20,8 +26,28 @@ const EventDetailsPage = async ({
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
   }
-  const imageUrls = photoGallary?.map((image) => image.image);
+  const settingImages = await getSettingValue('Event Gallary');
+  const staticImages = photoGallary?.map((image) => image.image);
 
+  let imageUrls: string[];
+  try {
+    // Parse settingImages.value if it's a string, otherwise use it directly
+    const parsedImages = settingImages?.value
+      ? typeof settingImages.value === 'string'
+        ? JSON.parse(settingImages.value)
+        : settingImages.value
+      : staticImages;
+
+    // Ensure imageUrls is an array of strings and prepend BASE_URL for relative paths
+    imageUrls = Array.isArray(parsedImages)
+      ? parsedImages.map((path) =>
+          path.startsWith('http') ? path : `${BASE_URL}/${path}`
+        )
+      : staticImages;
+  } catch (error) {
+    console.error('Error parsing settingImages.value:', error);
+    imageUrls = staticImages;
+  }
   try {
     const events = await getEvents();
     const faqs = await getFaqs();
@@ -41,9 +67,9 @@ const EventDetailsPage = async ({
       );
     }
 
-    console.log('event', moment(event?.reg_end_date).format('LLL'));
- // Check if registration end date has passed
- const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
+    // console.log("event", moment(event?.reg_end_date).format("LLL"));
+    // Check if registration end date has passed
+    const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
     return (
       <section>
         <div
@@ -61,7 +87,7 @@ const EventDetailsPage = async ({
                   <h2 className="title text-white">{event?.title}</h2>
                   <div className="text-white py-6">
                     <CountdownTimer
-                      offerTill={moment(event?.reg_end_date).format('LLL')}
+                      offerTill={moment(event?.reg_end_date).format("LLL")}
                     />
                   </div>
                 </div>
@@ -75,20 +101,24 @@ const EventDetailsPage = async ({
             <div className="col-lg-8">
               <div className="entry-meta pl-15">
                 <ul className="list-inline my-6">
-                <li>
-                      Categories: <span className="text-theme-color-2">
-                        {event.categories?.length > 0
-                          ? event.categories.map((category: any) => category.title).join(', ')
-                          : 'N/A'}
-                      </span>
-                    </li>
-                    <li>
-                      Tags: <span className="text-theme-color-2">
-                        {event.tags?.length > 0
-                          ? event.tags.map((tag: any) => tag.title).join(', ')
-                          : 'N/A'}
-                      </span>
-                    </li>
+                  <li>
+                    Categories:{" "}
+                    <span className="text-theme-color-2">
+                      {event.categories?.length > 0
+                        ? event.categories
+                            .map((category: any) => category.title)
+                            .join(", ")
+                        : "N/A"}
+                    </span>
+                  </li>
+                  <li>
+                    Tags:{" "}
+                    <span className="text-theme-color-2">
+                      {event.tags?.length > 0
+                        ? event.tags.map((tag: any) => tag.title).join(", ")
+                        : "N/A"}
+                    </span>
+                  </li>
                 </ul>
               </div>
               <div className="post-content mt-10">
@@ -101,18 +131,24 @@ const EventDetailsPage = async ({
               <div className="my-5">
                 <h4 className="text-lg font-bold">Registration Schedule</h4>
                 <p>
-                  <strong>Start:</strong> {moment(event.reg_start_date).format('MMMM Do YYYY')}{" "}
-                  <br />
-                  <strong>End:</strong> {moment(event.reg_end_date).format('MMMM Do YYYY')}
+                  <strong>Start:</strong>{" "}
+                  {moment(event.reg_start_date).format("MMMM Do YYYY")} <br />
+                  <strong>End:</strong>{" "}
+                  {moment(event.reg_end_date).format("MMMM Do YYYY")}
                 </p>
               </div>
               <div className="my-5">
                 <h4 className="text-lg font-bold">Event Schedule</h4>
                 <p>
                   <strong>Start:</strong>{" "}
-                  {moment(event?.session_start_date_time).format('MMMM Do YYYY, h:mm A')} <br />
+                  {moment(event?.session_start_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}{" "}
+                  <br />
                   <strong>End:</strong>{" "}
-                  {moment(event?.session_end_date_time).format('MMMM Do YYYY, h:mm A')}
+                  {moment(event?.session_end_date_time).format(
+                    "MMMM Do YYYY, h:mm A"
+                  )}
                 </p>
               </div>
 
@@ -190,7 +226,7 @@ const EventDetailsPage = async ({
 
           <div className="my-10">
             <div>
-              <h4 className="text-lg font-bold mb-4">Photo Gallery</h4>
+              <h4 className="text-lg font-bold mb-4">Our Events Gallery</h4>
               <ImageGallery images={imageUrls} />
             </div>
           </div>
