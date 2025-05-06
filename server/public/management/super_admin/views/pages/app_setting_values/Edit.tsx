@@ -56,10 +56,10 @@ const Edit: React.FC<Props> = () => {
 
     const form_data = new FormData(e.target as HTMLFormElement);
 
-    console.log('Form Data before modifications:');
-    for (const [key, value] of form_data.entries()) {
-      console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
-    }
+    // console.log('Form Data before modifications:');
+    // for (const [key, value] of form_data.entries()) {
+    //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
+    // }
 
     // Remove default value field to avoid empty file
     form_data.delete('value');
@@ -85,17 +85,17 @@ const Edit: React.FC<Props> = () => {
       form_data.append('isGallery', isGallery.toString());
     }
 
-    console.log('Form Data after modifications:');
-    for (const [key, value] of form_data.entries()) {
-      console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
-    }
+    // console.log('Form Data after modifications:');
+    // for (const [key, value] of form_data.entries()) {
+    //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
+    // }
 
     await dispatch(update(form_data) as any);
 
-    console.log('Form Data after dispatch:');
-    for (const [key, value] of form_data.entries()) {
-      console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
-    }
+    // console.log('Form Data after dispatch:');
+    // for (const [key, value] of form_data.entries()) {
+    //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
+    // }
 
     formRef.current?.reset();
     setImageData({ files: [], previews: imageData.previews });

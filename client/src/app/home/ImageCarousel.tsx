@@ -30,17 +30,17 @@ const isValidUrl = (url: string | undefined): boolean => {
 
 const getValidImageSrc = (apiValue: string | undefined, fallback: string): string => {
   if (!apiValue) {
-    console.log("No API value, using fallback:", fallback);
+    // console.log("No API value, using fallback:", fallback);
     return fallback;
   }
 
   if (isValidUrl(apiValue)) {
-    console.log("Valid full URL from API:", apiValue);
+    // console.log("Valid full URL from API:", apiValue);
     return apiValue;
   }
 
   const fullUrl = `${BASE_URL}/${apiValue.replace(/^\/+/, '')}`;
-  console.log("Constructed URL:", fullUrl);
+  // console.log("Constructed URL:", fullUrl);
 
   return isValidUrl(fullUrl) ? fullUrl : fallback;
 };
@@ -77,7 +77,7 @@ const ImageCarousel: React.FC = () => {
           )
         );
         responses.forEach((response, index) => {
-          console.log(`API Response for ${endpoints[index].key}:`, response.data);
+          // console.log(`API Response for ${endpoints[index].key}:`, response.data);
           endpoints[index].setter(response.data);
         });
       } catch (error) {

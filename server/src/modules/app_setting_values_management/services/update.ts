@@ -47,7 +47,7 @@ async function update(
     /** Initializations */
     const models = Models.get();
     const body = req.body as anyObject;
-    console.log('Request body:', body);
+    // console.log('Request body:', body);
 
     const user_model = new models[modelName]();
     const settingsTableRow = await models.AppSettinsgModel.findByPk(
@@ -89,7 +89,7 @@ async function update(
                         const parsedValue = JSON.parse(body.value);
                         if (Array.isArray(parsedValue)) {
                             imagePaths = parsedValue.filter((path: string) => !path.startsWith('data:'));
-                            console.log('Parsed body.value:', imagePaths);
+                            // console.log('Parsed body.value:', imagePaths);
                         }
                     } catch (error: any) {
                         console.log('Failed to parse body.value:', error.message);
@@ -99,7 +99,7 @@ async function update(
                         const parsedValue = JSON.parse(data.value);
                         if (Array.isArray(parsedValue)) {
                             imagePaths = parsedValue.filter((path: string) => !path.startsWith('data:'));
-                            console.log('Parsed data.value:', imagePaths);
+                            // console.log('Parsed data.value:', imagePaths);
                         }
                     } catch (error: any) {
                         console.log('Failed to parse data.value:', error.message);
@@ -131,7 +131,7 @@ async function update(
                 }
 
                 valueToSave = JSON.stringify(imagePaths);
-                console.log('valueToSave:', valueToSave);
+                // console.log('valueToSave:', valueToSave);
             } else if (body['value[0]']) {
                 // Handle single file upload
                 const file = body['value[0]'];

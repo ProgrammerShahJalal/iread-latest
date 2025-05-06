@@ -8,46 +8,38 @@ export interface Props {
   onImageChange?: (data: { files: File[]; previews: string[] }) => void;
 }
 
-const InputImage: React.FC<Props> = ({ name, label, defalut_preview, multiple = false, onImageChange, ...props }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uiPreviews, setUiPreviews] = useState<string[]>(() => {
-    if (Array.isArray(defalut_preview)) {
-      return defalut_preview.filter((path) => typeof path === 'string');
-    }
-    if (typeof defalut_preview === 'string' && defalut_preview) {
-      return [defalut_preview];
-    }
-    return [];
-  });
-  const [files, setFiles] = useState<File[]>([]);
-  const [serverPreviews, setServerPreviews] = useState<string[]>(() => {
-    if (Array.isArray(defalut_preview)) {
-      return defalut_preview.filter((path) => typeof path === 'string' && !path.startsWith('data:'));
-    }
-    if (typeof defalut_preview === 'string' && defalut_preview && !defalut_preview.startsWith('data:')) {
-      return [defalut_preview];
-    }
-    return [];
-  });
+const cleanUrl = (url: string) => url.split('&')[0]; // Remove query parameters
 
-  // Initialize previews based on defalut_preview
+const InputImage: React.FC<Props> = ({
+  name,
+  label,
+  defalut_preview,
+  multiple = false,
+  onImageChange,
+  ...props
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uiPreviews, setUiPreviews] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [serverPreviews, setServerPreviews] = useState<string[]>([]);
+
+  // Initialize and update previews based on defalut_preview
   useEffect(() => {
     const initialPreviews = (() => {
       if (Array.isArray(defalut_preview)) {
-        return defalut_preview.filter((path) => typeof path === 'string' && !path.startsWith('data:'));
+        return defalut_preview
+          .filter((path) => typeof path === 'string' && !path.startsWith('data:'))
+          .map(cleanUrl); // Clean URLs
       }
       if (typeof defalut_preview === 'string' && defalut_preview && !defalut_preview.startsWith('data:')) {
-        return [defalut_preview];
+        return [cleanUrl(defalut_preview)];
       }
       return [];
     })();
 
-    // Only update if serverPreviews or files have changed
-    if (JSON.stringify(initialPreviews) !== JSON.stringify(serverPreviews) || files.length > 0) {
-      setServerPreviews(initialPreviews);
-      setUiPreviews(initialPreviews);
-      setFiles([]);
-    }
+    // console.log('initialPreviews:', initialPreviews);
+    setServerPreviews(initialPreviews);
+    setUiPreviews(initialPreviews);
   }, [defalut_preview]);
 
   // Notify parent of state changes
@@ -58,7 +50,7 @@ const InputImage: React.FC<Props> = ({ name, label, defalut_preview, multiple = 
   const handleFileChange = () => {
     const fileInput = fileInputRef.current;
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
-      const newFiles = Array.from(fileInput.files).filter(file => file.size > 0);
+      const newFiles = Array.from(fileInput.files).filter((file) => file.size > 0);
       if (newFiles.length === 0) {
         console.log('No valid files selected');
         return;
@@ -79,7 +71,7 @@ const InputImage: React.FC<Props> = ({ name, label, defalut_preview, multiple = 
         setUiPreviews((prev) => (multiple ? [...prev, ...results] : [results[0]]));
         setFiles((prev) => {
           const updatedFiles = multiple ? [...prev, ...newFiles] : [newFiles[0]];
-          console.log('Updated files state:', updatedFiles.map(f => ({ name: f.name, size: f.size })));
+          // console.log('Updated files state:', updatedFiles.map((f) => ({ name: f.name, size: f.size })));
           return updatedFiles;
         });
       });
@@ -93,7 +85,7 @@ const InputImage: React.FC<Props> = ({ name, label, defalut_preview, multiple = 
     setServerPreviews((prev) => prev.filter((_, i) => i !== index));
     setFiles((prev) => {
       const updatedFiles = prev.filter((_, i) => i !== index);
-      console.log('Files after removal:', updatedFiles.map(f => ({ name: f.name, size: f.size })));
+      // console.log('Files after removal:', updatedFiles.map((f) => ({ name: f.name, size: f.size })));
       return updatedFiles;
     });
     if (fileInputRef.current) {
