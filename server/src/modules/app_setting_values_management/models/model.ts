@@ -62,7 +62,7 @@ function init(sequelize: Sequelize) {
                 allowNull: true,
             },
             value: {
-                type: DataTypes.STRING(150),
+                type: DataTypes.TEXT(),
                 allowNull: true,
             },
             is_default: {

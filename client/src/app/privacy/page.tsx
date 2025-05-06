@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 import React from 'react';
+import { getSettingValue } from '../../api/settingValuesApi';
 
-function PrivacyPolicyPage() {
-    return (
-        <div className="container mx-auto px-4 py-12">
-            <h1 className="text-3xl font-bold text-center mb-6">Privacy Policy</h1>
-            <p className="mb-4">
+// staticPrivacy as fallback
+
+const staticPrivacy = <>
+<p className="mb-4">
                 Welcome to our Privacy Policy page. Your privacy is critically important to us, and we are committed to protecting the information you share with us.
             </p>
             <h2 className="text-2xl font-semibold mb-4">Information We Collect</h2>
@@ -51,11 +51,30 @@ function PrivacyPolicyPage() {
             </p>
             <h2 className="text-2xl font-semibold my-4">Contact Us</h2>
             <p className="mb-4">
-                If you have any questions about this Privacy Policy, feel free to contact us at <a href="mailto:support@example.com" className="text-blue-600 underline">support@example.com</a>.
+                If you have any questions about this Privacy Policy, feel free to contact us at <a href="mailto:support@example.com" className="text-blue-600 underline">iread.hello@gmail.com</a>.
             </p>
             <p className="text-sm text-gray-500">
-                Last updated: January 12, 2025
+                Last updated: May 12, 2025
             </p>
+</>
+
+async function PrivacyPolicyPage() {
+
+    const policy = await getSettingValue('Privacy Policy');
+    return (
+        <div className="container mx-auto px-4 py-12">
+            <h1 className="text-3xl font-bold text-center mb-6">Privacy Policy</h1>
+
+        {
+            policy?.value ? (
+                <div
+                  className="post-content"
+                  dangerouslySetInnerHTML={{ __html: policy?.value || '' }}
+                />
+            ) : (
+                staticPrivacy
+            )
+        }
         </div>
     );
 }

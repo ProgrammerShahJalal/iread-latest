@@ -8,6 +8,13 @@ import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
 import EventEnrollProcess from "../../../components/EventEnrollProcess";
 import moment from "moment/moment";
+import { getSettingValue } from "../../../api/settingValuesApi";
+
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL;
+    
 
 const EventDetailsPage = async ({
   params,
@@ -19,8 +26,28 @@ const EventDetailsPage = async ({
   if (!eventId) {
     return <div className="py-24 text-center">Invalid event request.</div>;
   }
-  const imageUrls = photoGallary?.map((image) => image.image);
+  const settingImages = await getSettingValue('Event Gallary');
+  const staticImages = photoGallary?.map((image) => image.image);
 
+  let imageUrls: string[];
+  try {
+    // Parse settingImages.value if it's a string, otherwise use it directly
+    const parsedImages = settingImages?.value
+      ? typeof settingImages.value === 'string'
+        ? JSON.parse(settingImages.value)
+        : settingImages.value
+      : staticImages;
+
+    // Ensure imageUrls is an array of strings and prepend BASE_URL for relative paths
+    imageUrls = Array.isArray(parsedImages)
+      ? parsedImages.map((path) =>
+          path.startsWith('http') ? path : `${BASE_URL}/${path}`
+        )
+      : staticImages;
+  } catch (error) {
+    console.error('Error parsing settingImages.value:', error);
+    imageUrls = staticImages;
+  }
   try {
     const events = await getEvents();
     const faqs = await getFaqs();
@@ -40,7 +67,7 @@ const EventDetailsPage = async ({
       );
     }
 
-    console.log("event", moment(event?.reg_end_date).format("LLL"));
+    // console.log("event", moment(event?.reg_end_date).format("LLL"));
     // Check if registration end date has passed
     const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
     return (
@@ -199,7 +226,7 @@ const EventDetailsPage = async ({
 
           <div className="my-10">
             <div>
-              <h4 className="text-lg font-bold mb-4">Photo Gallery</h4>
+              <h4 className="text-lg font-bold mb-4">Our Events Gallery</h4>
               <ImageGallery images={imageUrls} />
             </div>
           </div>

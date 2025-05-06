@@ -26,6 +26,14 @@ async function details(
             where: {
                 id: params.id,
             },
+            include: [
+                {
+                    model: models.UserModel,
+                    as: 'user',
+                    attributes: ['first_name', 'last_name'],
+                    required: false,
+                },
+            ],
         });
 
         if (data) {

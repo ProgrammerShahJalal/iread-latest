@@ -95,7 +95,7 @@ async function Header() {
                     width={100}
                     height={100}
                     alt="Header Logo"
-                    />): <span>IRED</span>
+                    />): <span>IRAED</span>
                 }
                 </Link>
               </div>
