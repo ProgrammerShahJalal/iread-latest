@@ -13,7 +13,7 @@ import Input from './components/management_data_page/Input';
 import InputImage from './components/management_data_page/InputImage';
 import TextArea from './components/management_data_page/TextArea';
 
-export interface Props {}
+export interface Props { }
 
 const Edit: React.FC<Props> = () => {
   const state: typeof initialState = useSelector((state: RootState) => state[setup.module_name]);
@@ -53,52 +53,56 @@ const Edit: React.FC<Props> = () => {
 
   async function handle_submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+  
     const form_data = new FormData(e.target as HTMLFormElement);
-
-    // console.log('Form Data before modifications:');
-    // for (const [key, value] of form_data.entries()) {
-    //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
-    // }
-
-    // Remove default value field to avoid empty file
-    form_data.delete('value');
-
-    // Add existing previews (filter out data URLs)
-    if (imageData.previews.length > 0) {
-      const filteredPreviews = imageData.previews.filter((preview) => !preview.startsWith('data:'));
-      if (filteredPreviews.length > 0) {
-        form_data.append('value', JSON.stringify(filteredPreviews));
+  
+    // Handle non-file types
+    if (state.item.type !== 'file') {
+      const value = form_data.get('value')?.toString();
+      if (value) {
+        form_data.set('value', value); // Ensure value is set for non-file types
       }
     }
-
-    // Add new files
-    if (imageData.files.length > 0) {
-      imageData.files.forEach((file, index) => {
-        if (file.size > 0) {
-          form_data.append(`value[${index}]`, file);
+  
+    // Handle file types
+    if (state.item.type === 'file') {
+      // Remove default value field to avoid empty file
+      form_data.delete('value');
+  
+      // Add existing previews (filter out data URLs)
+      if (imageData.previews.length > 0) {
+        const filteredPreviews = imageData.previews.filter((preview) => !preview.startsWith('data:'));
+        if (filteredPreviews.length > 0) {
+          form_data.append('value', JSON.stringify(filteredPreviews));
         }
-      });
+      }
+  
+      // Add new files
+      if (imageData.files.length > 0) {
+        imageData.files.forEach((file, index) => {
+          if (file.size > 0) {
+            form_data.append(`value[${index}]`, file);
+          }
+        });
+      }
     }
-
+  
     if (isGallery) {
       form_data.append('isGallery', isGallery.toString());
     }
-
-    // console.log('Form Data after modifications:');
+  
+    // Debugging: Log FormData contents
+    // console.log('Form Data before dispatch:');
     // for (const [key, value] of form_data.entries()) {
     //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
     // }
-
+  
     await dispatch(update(form_data) as any);
-
-    // console.log('Form Data after dispatch:');
-    // for (const [key, value] of form_data.entries()) {
-    //   console.log(`${key}:`, value instanceof File ? { name: value.name, size: value.size } : value);
-    // }
-
-    formRef.current?.reset();
-    setImageData({ files: [], previews: imageData.previews });
+  
+    if (state.item.type === 'file') {
+      formRef.current?.reset();
+      setImageData({ files: [], previews: imageData.previews });
+    }
   }
 
   return (
