@@ -1,4 +1,4 @@
-name: CICD TEST
+name: CI/CD TEST
 
 on:
   push:
@@ -7,63 +7,78 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the repository code
-      - name: Checkout code
+      # Checkout the repository code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
-      - name: Set up Node.js
+      # Set up Node.js environment
+      - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.13.1' # Specified Node.js version
+          node-version: '22.13.1'
 
-      # Step 3: Cache node modules for client
-      - name: Cache node modules for client
+      # Cache client node modules
+      - name: Cache Client Node Modules
         uses: actions/cache@v4
         with:
           path: client/node_modules
           key: ${{ runner.os }}-client-${{ hashFiles('client/package-lock.json') }}
           restore-keys: ${{ runner.os }}-client-
 
-      # Step 4: Install dependencies and build the client
+      # Cache Next.js build output
+      - name: Cache Next.js Build
+        uses: actions/cache@v4
+        with:
+          path: client/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-nextjs-
+
+      # Build client (Next.js)
       - name: Build Client
         env:
+          CI: true
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_DATABASE }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
           DB_PORT: ${{ secrets.DB_PORT }}
         run: |
           cd client
           npm i --legacy-peer-deps
           npm run build
-        continue-on-error: true # Allow the workflow to continue if the build fails for debugging
 
-      # Step 5: Cache node modules for server
-      - name: Cache node modules for server
+      # Cache server node modules
+      - name: Cache Server Node Modules
         uses: actions/cache@v4
         with:
           path: server/node_modules
           key: ${{ runner.os }}-server-${{ hashFiles('server/package-lock.json') }}
           restore-keys: ${{ runner.os }}-server-
 
-      # Step 6: Install dependencies and build the server
+      # Cache Vite build output
+      - name: Cache Vite Build
+        uses: actions/cache@v4
+        with:
+          path: server/dist
+          key: ${{ runner.os }}-vite-${{ hashFiles('server/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-vite-
+
+      # Build server (Vite)
       - name: Build Server
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_DATABASE }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
           DB_PORT: ${{ secrets.DB_PORT }}
         run: |
           cd server
           npm i --legacy-peer-deps
-          npm run super_admin
+          npm run super_admin:ci
 
-      # Step 7: Deploy to VPS using SSH
-      - name: Deploy using SSH
+      # Deploy to VPS
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -75,7 +90,7 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 22.13.1 || nvm install 22.13.1
             cd ${{ secrets.PROJECT_PATH }}
-            git reset 🙂hard HEAD
+            git reset --hard HEAD
             git clean -fd
             git pull origin main --prune --force || true
             cd client
@@ -84,5 +99,5 @@ jobs:
             pm2 restart client || echo "Client restart failed, check PM2 process name"
             cd ../server
             npm i --legacy-peer-deps
-            npm run super_admin
+            npm run super_admin:ci
             pm2 restart server || echo "Server restart failed, check PM2 process name"
