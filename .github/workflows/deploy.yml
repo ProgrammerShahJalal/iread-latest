@@ -5,11 +5,52 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy using ssh
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.1' # Specified Node.js version
+
+      # Step 3: Cache node modules for client
+      - name: Cache node modules for client
+        uses: actions/cache@v4
+        with:
+          path: client/node_modules
+          key: ${{ runner.os }}-client-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-client-
+
+      # Step 4: Install dependencies and build the client
+      - name: Build Client
+        run: |
+          cd client
+          npm i --legacy-peer-deps
+          npm run build
+
+      # Step 5: Cache node modules for server
+      - name: Cache node modules for server
+        uses: actions/cache@v4
+        with:
+          path: server/node_modules
+          key: ${{ runner.os }}-server-${{ hashFiles('server/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-server-
+
+      # Step 6: Install dependencies and build the server
+      - name: Build Server
+        run: |
+          cd server
+          npm i --legacy-peer-deps
+          npm run super_admin
+
+      # Step 7: Deploy to VPS using SSH
+      - name: Deploy using SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -21,3 +62,11 @@ jobs:
             git reset --hard HEAD
             git clean -fd
             git pull origin main --prune --force || true
+            cd client
+            npm i --legacy-peer-deps
+            npm run build
+            pm2 restart client
+            cd ../server
+            npm i --legacy-peer-deps
+            npm run super_admin
+            pm2 restart server
