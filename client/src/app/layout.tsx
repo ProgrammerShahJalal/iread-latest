@@ -11,12 +11,12 @@ import { SettingValue } from "@/types/setting";
 // const inter = Inter({ subsets: ["latin"] });
 
 // Fetch metadata values
-const titleResult = await getSettingValue('Site Title');
-const descriptionResult = await getSettingValue('Site short description (Max 100 characters)');
+const titleResult = await getSettingValue('Site Title') || "IREAD | Online Training Platform - USA";
+const descriptionResult = await getSettingValue('Site short description (Max 100 characters)') || "IREAD Online Learning Platform. Unlock the power of artificial intelligence with cutting-edge tools and resources.";
 
-// Extract the 'value' property, assuming it's a string, or use null if not available
-const title: string | null = titleResult ? titleResult.value : null;
-const description: string | null = descriptionResult ? descriptionResult.value : null;
+// Safely extract values
+const title: string = typeof titleResult === "string" ? titleResult : titleResult?.value ?? "IREAD | Online Training Platform - USA";
+const description: string = typeof descriptionResult === "string" ? descriptionResult : descriptionResult?.value ?? "";
 
 // Define metadata with fallback values
 export const metadata: Metadata = {
