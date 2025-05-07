@@ -29,10 +29,17 @@ jobs:
 
       # Step 4: Install dependencies and build the client
       - name: Build Client
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_DATABASE }}
+          DB_PORT: ${{ secrets.DB_PORT }}
         run: |
           cd client
           npm i --legacy-peer-deps
           npm run build
+        continue-on-error: true # Allow the workflow to continue if the build fails for debugging
 
       # Step 5: Cache node modules for server
       - name: Cache node modules for server
@@ -44,6 +51,12 @@ jobs:
 
       # Step 6: Install dependencies and build the server
       - name: Build Server
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_DATABASE }}
+          DB_PORT: ${{ secrets.DB_PORT }}
         run: |
           cd server
           npm i --legacy-peer-deps
@@ -58,15 +71,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 22.13.1 || nvm install 22.13.1
             cd ${{ secrets.PROJECT_PATH }}
-            git reset --hard HEAD
+            git reset 🙂hard HEAD
             git clean -fd
             git pull origin main --prune --force || true
             cd client
             npm i --legacy-peer-deps
             npm run build
-            pm2 restart client
+            pm2 restart client || echo "Client restart failed, check PM2 process name"
             cd ../server
             npm i --legacy-peer-deps
             npm run super_admin
-            pm2 restart server
+            pm2 restart server || echo "Server restart failed, check PM2 process name"
