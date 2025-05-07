@@ -24,10 +24,7 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     // Fetch user roles and store them in a map

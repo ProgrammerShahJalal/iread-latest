@@ -37,10 +37,7 @@ interface CommentsSectionProps {
   comments: BlogComment[];
 }
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [commentts, setCommentts] = useState<BlogComment[]>(comments || []);

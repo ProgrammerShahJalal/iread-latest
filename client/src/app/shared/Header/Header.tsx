@@ -13,10 +13,7 @@ async function Header() {
   const headerLogo = await getSettingValue('Header Logo');
   const contactPhone1 = await getSettingValue('Contact phone1');
 
-  const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <header id="header" className="header">
