@@ -166,7 +166,7 @@ class FastifyApp {
             root: path.resolve(path.join(__dirname), '../../public/views'),
         });
 
-        const FRONTEND_URL = process.env.FRONTEND_URL;
+        const FRONTEND_URL = process.env.FRONTEND_LIVE_URL;
 
 
         this.fastify.register(fastifyCors, {
