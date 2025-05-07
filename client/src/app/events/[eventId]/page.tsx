@@ -10,10 +10,7 @@ import EventEnrollProcess from "../../../components/EventEnrollProcess";
 import moment from "moment/moment";
 import { getSettingValue } from "../../../api/settingValuesApi";
 
-const BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
     
 
 const EventDetailsPage = async ({

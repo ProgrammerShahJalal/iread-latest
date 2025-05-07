@@ -27,10 +27,7 @@ function HappyStudentAtAGlance({ }: Props) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [statisticalInfo, setStatisticalInfo] = useState<SiteResponse>();
 
-  const BASE_URL =
-    process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     const endpoints = [

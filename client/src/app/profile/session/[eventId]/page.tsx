@@ -59,10 +59,7 @@ function EventSessionPage() {
         }
     }, []);
 
-    const BASE_URL =
-        process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-            : process.env.NEXT_PUBLIC_BACKEND_URL;
+    const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     useEffect(() => {
         const fetchData = async () => {

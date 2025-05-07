@@ -25,7 +25,7 @@ const DashboardLayout: React.FC<Props> = (props: Props) => {
                             />
                         </div>
                         <h6 className="mt-3 f-12">
-                            Super admin
+                            Super admin Updated
                         </h6>
                     </div>
                     <SideBar />
