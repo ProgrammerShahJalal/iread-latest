@@ -5,6 +5,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import ProfileLayout from "../../components/ProfileLayout";
 import axios from "axios";
+import apiClient from "../../lib/apiClient";
 
 
 interface User {
@@ -34,7 +35,7 @@ const ProfilePage = () => {
   const [grettingMessage, setGrettingMessage] = useState<SiteResponse | null>(null);
 
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
 
   useEffect(() => {

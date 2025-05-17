@@ -9,6 +9,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { getUserByUid } from "../../../../api/userApi";
 import moment from "moment/moment";
 import { Event } from "@/types/event";
+import apiClient from "../../../../lib/apiClient";
 
 
 type Params = Promise<{ eventId: string }>
@@ -86,7 +87,7 @@ const EventDetailsPage = async (props: {
 
           <div className="text-center">
             <Image
-              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+              src={`${apiClient.defaults.baseURL}/${event.poster}`}
               alt={event.title}
               width={800}
               height={400}

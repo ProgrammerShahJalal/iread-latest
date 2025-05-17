@@ -67,6 +67,7 @@ const EventDetailsPage = async ({
     // console.log("event", moment(event?.reg_end_date).format("LLL"));
     // Check if registration end date has passed
     const isRegistrationOpen = moment().isBefore(moment(event.reg_end_date));
+
     return (
       <section>
         <div
@@ -101,17 +102,15 @@ const EventDetailsPage = async ({
                   <li>
                     Categories:{" "}
                     <span className="text-theme-color-2">
-                      {event.categories?.length > 0
-                        ? event.categories
-                            .map((category: any) => category.title)
-                            .join(", ")
+                      {Array.isArray(event?.categories) && event.categories.length > 0
+                        ? event.categories.map((category: any) => category.title).join(", ")
                         : "N/A"}
                     </span>
                   </li>
                   <li>
                     Tags:{" "}
                     <span className="text-theme-color-2">
-                      {event.tags?.length > 0
+                      {Array.isArray(event?.tags) && event.tags.length > 0
                         ? event.tags.map((tag: any) => tag.title).join(", ")
                         : "N/A"}
                     </span>

@@ -5,9 +5,10 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import apiClient from "../../lib/apiClient";
 
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = apiClient.defaults.baseURL;
 
 interface SiteResponse {
   data?: {

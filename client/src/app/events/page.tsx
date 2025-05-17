@@ -8,6 +8,35 @@ import moment from "moment/moment";
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
 
+  if(eventsData?.length === 0) {
+    return (
+      <><section
+        className="inner-header divider parallax layer-overlay overlay-dark-5"
+        data-bg-img="/frontend/images/event/eventbg.jpg"
+        style={{
+          backgroundImage: 'url("/frontend/images/event/eventbg.jpg")',
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="container pt-70 pb-20">
+          {/* Section Content */}
+          <div className="section-content">
+            <div className="row pt-14">
+              <div className="col-md-12">
+                <h2 className="title text-white">Events</h2>
+                <div className="mt-16 mb-20"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><div className="w-96 h-[50vh] mx-auto">
+          <h3 className="text-center font-semibold text-lg mt-20">No Events Found!</h3>
+        </div></>
+    )
+  }
+
   return (
     <section>
       <div className="min-h-[100vh] bg-[#E2E8F0]">

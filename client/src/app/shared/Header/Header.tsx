@@ -7,13 +7,14 @@ import { getEvents } from "../../../api/eventApi";
 import { Event } from "@/types/event";
 import { getSettingValue } from "../../../api/settingValuesApi";
 import { SettingValue } from "@/types/setting";
+import apiClient from "../../../lib/apiClient";
 
 async function Header() {
   let events: Event[] = await getEvents();
   const headerLogo = await getSettingValue('Header Logo');
   const contactPhone1 = await getSettingValue('Contact phone1');
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   return (
     <header id="header" className="header">

@@ -10,7 +10,7 @@ export async function getEventResources(eventId: number) {
             er.url
         FROM event_resources er
         WHERE er.event_id = ?
-        ORDER BY er.id DESC;
+        ORDER BY resource_id DESC;
     `;
 
   const eventResources = (await query(event_resources_query, [eventId])) as any;

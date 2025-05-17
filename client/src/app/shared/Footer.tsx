@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { getSettingValue } from "../../api/settingValuesApi";
 import Image from "next/image";
+import apiClient from "../../lib/apiClient";
 
 interface SettingValue {
   value: string;
@@ -23,7 +24,7 @@ const Footer = async () => {
     const youtube = await getSettingValue('YouTube') || '#';
     const pinterest = await getSettingValue('Pinterest') || '#';
 
-    const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const BASE_URL = apiClient.defaults.baseURL;
 
     return (
         <footer className="bg-[#1F1F1F] text-white py-12">

@@ -4,6 +4,7 @@ import { happyStudentsGlance } from '@/data/happyStudentsGlance';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import CountUp from 'react-countup';
+import apiClient from '../../lib/apiClient';
 
 // Define the expected API response type
 interface SiteResponse {
@@ -27,7 +28,7 @@ function HappyStudentAtAGlance({ }: Props) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [statisticalInfo, setStatisticalInfo] = useState<SiteResponse>();
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   useEffect(() => {
     const endpoints = [

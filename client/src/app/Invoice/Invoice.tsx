@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Link from "next/link";
 import axios from "axios";
+import apiClient from "../../lib/apiClient";
 
 interface InvoiceProps {
   name: string | null;
@@ -39,7 +40,7 @@ const Invoice: React.FC<InvoiceProps> = ({
   const [invoiceFooter, setInvoiceFooter] = useState<SiteResponse | null>(null);
 
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
     useEffect(() => {
       const endpoints = [

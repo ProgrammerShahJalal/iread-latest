@@ -15,7 +15,34 @@ const BlogsPage: React.FC = async () => {
         return date.toLocaleDateString("en-GB", options);
     };
 
-    let blogsData: Blog[] = await getBlogs();
+    const blogsData = (await getBlogs()) as Blog[];
+    if(blogsData?.length === 0) {
+    return (
+      <><section
+                className="inner-header"
+                style={{
+                    backgroundImage: 'url("/frontend/images/bg/bg.png")',
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                }}
+            >
+        <div className="container pt-70 pb-20">
+          {/* Section Content */}
+          <div className="section-content">
+            <div className="row pt-14">
+              <div className="col-md-12">
+                <h2 className="title text-white">Blogs</h2>
+                <div className="mt-16 mb-20"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><div className="w-96 h-[50vh] mx-auto">
+          <h3 className="text-center font-semibold text-lg mt-20">No Blogs Found!</h3>
+        </div></>
+    )
+  }
 
     return (
         <section>

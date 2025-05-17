@@ -18,7 +18,7 @@ export async function getEventPayments(eventId: number, userId: number) {
         FROM event_payments ep
         WHERE ep.event_id = ? 
         AND ep.user_id = ?
-        ORDER BY ep.id DESC;
+        ORDER BY payment_id DESC;
     `;
 
   const eventPayments = (await query(event_payments_query, [

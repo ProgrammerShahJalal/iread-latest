@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import apiClient from "../../../lib/apiClient";
 
 function Navbar() {
   const [user, setUser] = useState<any>(null);
@@ -55,7 +56,7 @@ function Navbar() {
     };
   }, []);
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   const handleLogout = async () => {
     try {
@@ -210,7 +211,7 @@ function Navbar() {
                     className="flex items-center focus:outline-none"
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${user?.photo}`}
+                      src={`${apiClient.defaults.baseURL}/${user?.photo}`}
                       alt="Profile Picture"
                       className="w-16 h-16 md:w-10 md:h-10 border border-white object-cover rounded-full"
                       width={300}
