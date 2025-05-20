@@ -5,24 +5,25 @@ import Header from "./shared/Header/Header";
 import Footer from "./shared/Footer";
 import { Toaster } from "react-hot-toast";
 import { getSettingValue } from "../api/settingValuesApi";
-import { SettingValue } from "@/types/setting";
 
-// Initialize font (commented out as in original code)
-// const inter = Inter({ subsets: ["latin"] });
+export const revalidate = 60; // Revalidate every 60 seconds
 
-// Fetch metadata values
-const titleResult = await getSettingValue('Site Title') || "IREAD | Online Training Platform - USA";
-const descriptionResult = await getSettingValue('Site short description (Max 100 characters)') || "IREAD Online Learning Platform. Unlock the power of artificial intelligence with cutting-edge tools and resources.";
 
-// Safely extract values
-const title: string = typeof titleResult === "string" ? titleResult : titleResult?.value ?? "IREAD | Online Training Platform - USA";
-const description: string = typeof descriptionResult === "string" ? descriptionResult : descriptionResult?.value ?? "";
+export async function generateMetadata() {
+  // Fetch metadata values
+  const titleResult = await getSettingValue('Site Title') || "IREAD | Online Training Platform - USA";
+  const descriptionResult = await getSettingValue('Site short description (Max 100 characters)') || "IREAD Online Learning Platform. Unlock the power of artificial intelligence with cutting-edge tools and resources.";
 
-// Define metadata with fallback values
-export const metadata: Metadata = {
-  title: title ?? "IREAD | Online Training Platform - USA",
-  description: description ?? "IREAD Online Learning Platform. Unlock the power of artificial intelligence with cutting-edge tools and resources.",
-};
+  // Safely extract values
+  const title = typeof titleResult === "string" ? titleResult : titleResult?.value ?? "IREAD | Online Training Platform - USA";
+  const description = typeof descriptionResult === "string" ? descriptionResult : descriptionResult?.value ?? "";
+
+  return {
+    title: title,
+    description: description,
+    // You can add other metadata properties here
+  };
+}
 
 export default function RootLayout({
   children,

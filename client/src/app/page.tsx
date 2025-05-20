@@ -6,6 +6,8 @@ import HappyStudentAtAGlance from "./home/HappyStudentAtAGlance";
 import Hero from "./home/Hero";
 import OurTeachers from "./home/OurTeachers";
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
     return (
         <>

@@ -9,6 +9,8 @@ import { getSettingValue } from "../../../api/settingValuesApi";
 import { SettingValue } from "@/types/setting";
 import apiClient from "../../../lib/apiClient";
 
+export const dynamic = 'force-dynamic';
+
 async function Header() {
   let events: Event[] = await getEvents();
   const headerLogo = await getSettingValue('Header Logo');

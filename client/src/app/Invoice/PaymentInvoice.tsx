@@ -6,6 +6,8 @@ import Link from "next/link";
 import axios from "axios";
 import apiClient from "../../lib/apiClient";
 
+export const dynamic = 'force-dynamic';
+
 interface InvoiceProps {
   event_id: string | null;
   event_enrollment_id: string | null;

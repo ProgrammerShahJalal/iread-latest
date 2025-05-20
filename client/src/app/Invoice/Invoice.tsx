@@ -6,6 +6,8 @@ import Link from "next/link";
 import axios from "axios";
 import apiClient from "../../lib/apiClient";
 
+export const dynamic = 'force-dynamic';
+
 interface InvoiceProps {
   name: string | null;
   email: string | null;

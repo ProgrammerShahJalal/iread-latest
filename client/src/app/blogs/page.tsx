@@ -4,6 +4,8 @@ import { getBlogs } from "../../api/blogApi";
 import Link from "next/link";
 import { Blog } from "@/types/blog";
 
+export const dynamic = 'force-dynamic';
+
 const BlogsPage: React.FC = async () => {
     const formatDate = (isoDate: string): string => {
         const date = new Date(isoDate);
@@ -70,7 +72,7 @@ const BlogsPage: React.FC = async () => {
                                     {blog.cover_image && (
                                         <Link href={`/blogs/${blog.slug}`} className="block overflow-hidden">
                                             <Image
-                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.cover_image}`}
                                                 alt={blog.title}
                                                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                                                 width={400}

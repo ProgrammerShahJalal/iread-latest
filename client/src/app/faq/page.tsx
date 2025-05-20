@@ -15,7 +15,7 @@ interface Faq {
 // Static FAQs as fallback
 const staticFaqs: Faq[] = [
   {
-    question: "How do I contact support?",
+    question: "How DUMM do I contact support?",
     answer: "You can contact our support team through the Contact Us page for any assistance or queries.",
     url: "",
   },

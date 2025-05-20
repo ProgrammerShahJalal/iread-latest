@@ -5,6 +5,8 @@ import { getEvents } from "../../api/eventApi";
 import { Event } from "@/types/event";
 import moment from "moment/moment";
 
+export const dynamic = 'force-dynamic';
+
 const EventsPage = async () => {
   let eventsData: Event[] = await getEvents();
 
@@ -82,7 +84,7 @@ const EventsPage = async () => {
                                 <Image
                                   className="object-cover"
                                   alt={event.title}
-                                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/${event.poster}`}
                                   fill
                                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                 />

@@ -50,7 +50,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
       const endpoints = [
-        { key: 'title/Gretting Message', setter: setGrettingMessage },
+        { key: 'title/Greeting Message', setter: setGrettingMessage },
       ];
     
       const fetchSettings = async () => {

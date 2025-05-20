@@ -36,7 +36,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                 <div className="entry-header">
                   <div className="container post-thumb thumb">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.cover_image}`}
                       alt={blog.title}
                       priority={true}
                       className="Image-responsive rounded-md Image-fullwidth"

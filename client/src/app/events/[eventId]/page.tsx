@@ -10,7 +10,7 @@ import EventEnrollProcess from "../../../components/EventEnrollProcess";
 import moment from "moment/moment";
 import { getSettingValue } from "../../../api/settingValuesApi";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
     
 
 const EventDetailsPage = async ({
@@ -73,7 +73,7 @@ const EventDetailsPage = async ({
         <div
           className="inner-header divider parallax layer-overlay overlay-dark-5"
           style={{
-            backgroundImage: `url(${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster})`,
+            backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_URL}/${event.poster})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -165,7 +165,7 @@ const EventDetailsPage = async ({
             <div className="col-lg-4">
               <div className="bg-light p-4 shadow">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/${event.poster}`}
                   alt={event.title}
                   width={400}
                   height={300}
