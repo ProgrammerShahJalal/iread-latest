@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation';
 
 interface PaginationProps {
+  root: string;
   currentPage: number;
   totalPages: number;
 }
 
-export const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
+export const Pagination = ({ root, currentPage, totalPages }: PaginationProps) => {
   const router = useRouter();
 
   const maxVisiblePages = 5;
@@ -24,7 +25,7 @@ export const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
   }
 
   const handlePageChange = (page: number) => {
-    router.push(`/blogs?page=${page}`);
+    router.push(`/${root}?page=${page}`);
   };
 
   return (

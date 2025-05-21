@@ -9,24 +9,24 @@ import { Pagination } from "../../components/Pagination";
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-   searchParams: Promise<Record<string, string | string[] | undefined>>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 const EventsPage = async ({ searchParams }: PageProps) => {
   // Await searchParams to resolve the Promise
   const resolvedSearchParams = await searchParams;
   const { page } = resolvedSearchParams;
-  
+
   const currentPage = typeof page === 'string' ? Number(page) : Array.isArray(page) ? Number(page[0]) : 1;
   const itemsPerPage = 6;
-  
+
   // Get all events from the server
   const allEvents = await getEvents();
-  
+
   // Calculate pagination values
   const totalCount = allEvents.length;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
-  
+
   // Get events for current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -36,8 +36,7 @@ const EventsPage = async ({ searchParams }: PageProps) => {
     return (
       <>
         <section
-          className="inner-header divider parallax layer-overlay overlay-dark-5"
-          data-bg-img="/frontend/images/event/eventbg.jpg"
+          className="inner-header"
           style={{
             backgroundImage: 'url("/frontend/images/event/eventbg.jpg")',
             backgroundPosition: "center",
@@ -57,7 +56,7 @@ const EventsPage = async ({ searchParams }: PageProps) => {
           </div>
         </section>
         <div className="w-96 h-[50vh] mx-auto">
-          <h3 className="text-center font-semibold text-lg mt-20">No Events Found!</h3>
+          <h3 className="text-center font-semibold text-lg mt-20">No Blogs Found!</h3>
         </div>
       </>
     );
@@ -66,11 +65,8 @@ const EventsPage = async ({ searchParams }: PageProps) => {
   return (
     <section>
       <div className="min-h-[100vh] bg-[#E2E8F0]">
-        <div className="section-content">
-          <div className="row">
             <section
-              className="inner-header divider parallax layer-overlay overlay-dark-5"
-              data-bg-img="/frontend/images/event/eventbg.jpg"
+              className="inner-header"
               style={{
                 backgroundImage: 'url("/frontend/images/event/eventbg.jpg")',
                 backgroundPosition: "center",
@@ -78,15 +74,8 @@ const EventsPage = async ({ searchParams }: PageProps) => {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <div className="container pt-70 pb-20">
-                <div className="section-content">
-                  <div className="row pt-14">
-                    <div className="col-md-12">
-                      <h2 className="title text-white">Events</h2>
-                      <div className="mt-16 mb-20"></div>
-                    </div>
-                  </div>
-                </div>
+              <div className="container">
+                <h2 className="title text-white">Events</h2>
               </div>
             </section>
             <div className="container">
@@ -109,8 +98,8 @@ const EventsPage = async ({ searchParams }: PageProps) => {
                             <div className="p-4 flex flex-col flex-grow">
                               <h5 className="md:text-lg font-semibold mb-2 line-clamp-2">
                                 <Link href={`/events/${event?.event_id}`}>
-                                  {event.title?.length > 50 
-                                    ? `${event.title.slice(0, 50)}...` 
+                                  {event.title?.length > 50
+                                    ? `${event.title.slice(0, 50)}...`
                                     : event.title}
                                 </Link>
                               </h5>
@@ -142,10 +131,11 @@ const EventsPage = async ({ searchParams }: PageProps) => {
                         </div>
                       ))}
                     </div>
-                    
+
                     {totalPages > 1 && (
                       <div className="mt-12">
                         <Pagination
+                          root={'events'}
                           currentPage={currentPage}
                           totalPages={totalPages}
                         />
@@ -156,8 +146,6 @@ const EventsPage = async ({ searchParams }: PageProps) => {
               </section>
             </div>
           </div>
-        </div>
-      </div>
     </section>
   );
 };
