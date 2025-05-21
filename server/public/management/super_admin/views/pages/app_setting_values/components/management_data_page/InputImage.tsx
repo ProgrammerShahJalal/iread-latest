@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { anyObject } from '../../../../../../../../src/common_types/object';
 
 export interface Props {
   name: string;
@@ -50,31 +51,56 @@ const InputImage: React.FC<Props> = ({
   const handleFileChange = () => {
     const fileInput = fileInputRef.current;
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
-      const newFiles = Array.from(fileInput.files).filter((file) => file.size > 0);
+      const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+      const newFiles = Array.from(fileInput.files).filter(
+        (file) => file.size > 0 && allowedTypes.includes(file.type)
+      );
+
       if (newFiles.length === 0) {
-        console.log('No valid files selected');
+        const invalidFiles = Array.from(fileInput.files).some(
+          (file) => !allowedTypes.includes(file.type)
+        );
+        if (invalidFiles) {
+          (window as anyObject).toaster(
+            'Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.',
+            'warning'
+          );
+        } else {
+          console.log('No valid files selected');
+        }
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
         return;
       }
+
       const newPreviews = newFiles.map((file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        return new Promise<string>((resolve) => {
+        return new Promise<string>((resolve, reject) => {
           reader.onloadend = () => {
             if (typeof reader.result === 'string') {
               resolve(reader.result);
+            } else {
+              reject(new Error('Failed to read file as data URL'));
             }
           };
+          reader.onerror = () => reject(new Error('Error reading file'));
         });
       });
 
-      Promise.all(newPreviews).then((results) => {
-        setUiPreviews((prev) => (multiple ? [...prev, ...results] : [results[0]]));
-        setFiles((prev) => {
-          const updatedFiles = multiple ? [...prev, ...newFiles] : [newFiles[0]];
-          // console.log('Updated files state:', updatedFiles.map((f) => ({ name: f.name, size: f.size })));
-          return updatedFiles;
+      Promise.all(newPreviews)
+        .then((results) => {
+          setUiPreviews((prev) => (multiple ? [...prev, ...results] : [results[0]]));
+          setFiles((prev) => (multiple ? [...prev, ...newFiles] : [newFiles[0]]));
+        })
+        .catch((error) => {
+          console.error('Error processing files:', error);
+          (window as anyObject).toaster('Error processing selected files.', 'error');
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
         });
-      });
     } else {
       console.log('No files selected in handleFileChange');
     }
