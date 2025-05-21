@@ -3,123 +3,154 @@ import React from "react";
 import { getBlogs } from "../../api/blogApi";
 import Link from "next/link";
 import { Blog } from "@/types/blog";
+import { Pagination } from "../../components/Pagination";
 
 export const dynamic = 'force-dynamic';
 
-const BlogsPage: React.FC = async () => {
-    const formatDate = (isoDate: string): string => {
-        const date = new Date(isoDate);
-        const options: Intl.DateTimeFormatOptions = {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        };
-        return date.toLocaleDateString("en-GB", options);
-    };
+interface PageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
 
-    const blogsData = (await getBlogs()) as Blog[];
-    if(blogsData?.length === 0) {
+const BlogsPage = async ({ searchParams }: PageProps) => {
+  // Await searchParams to resolve the Promise
+  const resolvedSearchParams = await searchParams;
+  const { page } = resolvedSearchParams;
+
+  const formatDate = (isoDate: string): string => {
+    const date = new Date(isoDate);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    return date.toLocaleDateString("en-GB", options);
+  };
+
+  const currentPage = typeof page === 'string' ? Number(page) : Array.isArray(page) ? Number(page[0]) : 1;
+  const itemsPerPage = 6;
+
+  // Get all blogs from the server
+  const allBlogs = (await getBlogs()) as Blog[];
+
+  // Calculate pagination values
+  const totalCount = allBlogs.length;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  // Get blogs for current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const blogsData = allBlogs.slice(startIndex, endIndex);
+
+  if (allBlogs?.length === 0) {
     return (
-      <><section
-                className="inner-header"
-                style={{
-                    backgroundImage: 'url("/frontend/images/bg/bg.png")',
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                }}
-            >
-        <div className="container pt-70 pb-20">
-          {/* Section Content */}
-          <div className="section-content">
-            <div className="row pt-14">
-              <div className="col-md-12">
-                <h2 className="title text-white">Blogs</h2>
-                <div className="mt-16 mb-20"></div>
+      <>
+        <section
+          className="inner-header"
+          style={{
+            backgroundImage: 'url("/frontend/images/bg/bg.png")',
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="container pt-70 pb-20">
+            <div className="section-content">
+              <div className="row pt-14">
+                <div className="col-md-12">
+                  <h2 className="title text-white">Blogs</h2>
+                  <div className="mt-16 mb-20"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section><div className="w-96 h-[50vh] mx-auto">
+        </section>
+        <div className="w-96 h-[50vh] mx-auto">
           <h3 className="text-center font-semibold text-lg mt-20">No Blogs Found!</h3>
-        </div></>
-    )
+        </div>
+      </>
+    );
   }
 
-    return (
-        <section>
-            <section
-                className="inner-header"
-                style={{
-                    backgroundImage: 'url("/frontend/images/bg/bg.png")',
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                }}
-            >
-                <div className="container">
-                    <h2 className="title text-white">Blogs</h2>
-                </div>
-            </section>
+  return (
+    <section>
+      <section
+        className="inner-header"
+        style={{
+          backgroundImage: 'url("/frontend/images/bg/bg.png")',
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="container">
+          <h2 className="title text-white">Blogs</h2>
+        </div>
+      </section>
 
-            {/* Blogs List */}
-            <section id="news" className="py-12 bg-[#E2E8F0]">
-                <div className="container">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {blogsData.map((blog) => (
-                            <div key={blog.blog_id} className="group">
-                                <article className="h-full flex flex-col overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                                    {blog.cover_image && (
-                                        <Link href={`/blogs/${blog.slug}`} className="block overflow-hidden">
-                                            <Image
-                                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.cover_image}`}
-                                                alt={blog.title}
-                                                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                                                width={400}
-                                                height={250}
-                                            />
-                                        </Link>
-                                    )}
-                                    <div className="p-6 flex-grow">
-                                        <div className="flex items-start gap-4 mb-3">
-                                            <div className="bg-[#202C45] text-white text-center px-3 py-2 rounded-md min-w-[80px]">
-                                                <span className="font-medium">
-                                                    {formatDate(blog.publish_date).split(' ')[0]}
-                                                </span>
-                                                <span className="block">
-                                                    {formatDate(blog.publish_date).split(' ').slice(1).join(' ')}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <h3 className="md:text-lg text-3xl font-bold text-gray-800 line-clamp-2">
-                                                    <Link href={`/blogs/${blog.slug}`} className="hover:text-gray-600">
-                                                        {blog.title}
-                                                    </Link>
-                                                </h3>
-                                            </div>
-                                        </div>
-                                        <p className="text-gray-600 mb-4">
-                                            {blog.short_description?.slice(0, 150)}
-                                            {blog.short_description?.length > 150 && '...'}
-                                        </p>
-                                        <Link 
-                                            href={`/blogs/${blog.slug}`} 
-                                            className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center"
-                                        >
-                                            Read more
-                                            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                            </svg>
-                                        </Link>
-                                    </div>
-                                </article>
-                            </div>
-                        ))}
+      <section id="news" className="py-12 bg-[#E2E8F0]">
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogsData.map((blog) => (
+              <div key={blog.blog_id} className="group">
+                <article className="h-full flex flex-col overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                  {blog.cover_image && (
+                    <Link href={`/blogs/${blog.slug}`} className="block overflow-hidden">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.cover_image}`}
+                        alt={blog.title}
+                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        width={400}
+                        height={250}
+                      />
+                    </Link>
+                  )}
+                  <div className="p-6 flex-grow">
+                    <div className="flex items-start gap-4 mb-3">
+                      <div className="bg-[#202C45] text-white text-center px-3 py-2 rounded-md min-w-[80px]">
+                        <span className="font-medium">
+                          {formatDate(blog.publish_date).split(' ')[0]}
+                        </span>
+                        <span className="block">
+                          {formatDate(blog.publish_date).split(' ').slice(1).join(' ')}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="md:text-lg text-3xl font-bold text-gray-800 line-clamp-2">
+                          <Link href={`/blogs/${blog.slug}`} className="hover:text-gray-600">
+                            {blog.title}
+                          </Link>
+                        </h3>
+                      </div>
                     </div>
-                </div>
-            </section>
-        </section>
-    );
+                    <p className="text-gray-600 mb-4">
+                      {blog.short_description?.slice(0, 150)}
+                      {blog.short_description?.length > 150 && '...'}
+                    </p>
+                    <Link
+                      href={`/blogs/${blog.slug}`}
+                      className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center"
+                    >
+                      Read more
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          )}
+        </div>
+      </section>
+    </section>
+  );
 };
 
 export default BlogsPage;
