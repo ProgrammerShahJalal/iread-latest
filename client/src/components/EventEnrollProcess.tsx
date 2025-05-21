@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import apiClient from "../lib/apiClient";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
@@ -31,7 +32,7 @@ const EventEnrollProcess = ({
     }
   }, []);
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   const handleEnrollment = async () => {
     if (!userId) return;

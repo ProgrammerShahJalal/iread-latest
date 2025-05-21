@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { User } from '@/types/user';
+import apiClient from '../../../../lib/apiClient';
 
 
 // Define the type for a form field
@@ -42,7 +43,7 @@ function EventFeedbackPage() {
         }
       }, []);
 
-      const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+      const BASE_URL = apiClient.defaults.baseURL;
 
     useEffect(() => {
         const fetchFeedbackFields = async () => {

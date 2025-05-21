@@ -6,6 +6,7 @@ import { CertificateViewer } from "../components/CertificateViewer";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import apiClient from "../../../../lib/apiClient";
 
 
 type Params = Promise<{ eventId: string }>;
@@ -61,7 +62,7 @@ const MyEventCertificatePage = async ({
   ]);
 
   const certificateImageUrl = myCertificate?.image
-    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${myCertificate.image}`
+    ? `${apiClient.defaults.baseURL}/${myCertificate.image}`
     : null;
 
   return (

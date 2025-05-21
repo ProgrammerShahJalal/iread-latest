@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import apiClient from "../../lib/apiClient";
 
 interface FormErrors {
   first_name?: string;
@@ -32,7 +33,7 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

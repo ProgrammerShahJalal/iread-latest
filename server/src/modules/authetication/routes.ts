@@ -13,7 +13,8 @@ module.exports = async function (fastify: FastifyInstance) {
     fastify.register(
         async (route, opts) => {
             route
-                .get(`/`, controllerInstance.all)
+                .get(`/`,
+                    { preHandler: auth_middleware }, controllerInstance.all)
                 .post(`/login`, controllerInstance.login)
                 .post(`/register`, controllerInstance.register)
                 .post(`/update`, controllerInstance.update)

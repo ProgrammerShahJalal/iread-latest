@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getUserByUid } from "../../../api/userApi";
 import { Event } from "@/types/event";
 import moment from "moment/moment";
+import apiClient from "../../../lib/apiClient";
 
 
 
@@ -48,7 +49,7 @@ const MyEventsPage = async ({ searchParams }: PageProps) => {
                           <Image
                             className="object-cover"
                             alt={event.title}
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${event.poster}`}
+                            src={`${apiClient.defaults.baseURL}/${event.poster}`}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
 

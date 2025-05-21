@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["ireadapp.techparkit.org", "www.aalto.fi", "cdn.pixabay.com", "127.0.0.1"],
+    domains: ["admin.i-read.org", "i-read.org", "ireadapp.techparkit.org", "www.aalto.fi", "cdn.pixabay.com", "127.0.0.1", "localhost", "i.ibb.co", "ibb.co"],
   },
 };
 

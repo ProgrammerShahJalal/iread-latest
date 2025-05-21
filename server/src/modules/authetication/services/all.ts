@@ -67,6 +67,7 @@ async function all(
     let paginate = parseInt((req.query as any).paginate) || 10;
     let select_fields: string[] = [];
     let exclude_fields: string[] = ['password'];
+    const authUser = (req as any).user;
 
     // Add date range parameters
     let start_date = query_param.start_date;
@@ -83,6 +84,7 @@ async function all(
         order: [[orderByCol, orderByAsc == 'true' ? 'ASC' : 'DESC']],
         where: {
             status: show_active_data == 'true' ? 'active' : 'deactive',
+            id: { [Op.ne]: authUser?.id },
         },
         include: [{ model: models.UserRolesModel, as: "role" }]
 
@@ -131,6 +133,7 @@ else if (end_date) {
             ],
         };
     }
+    console.log('auth user ', (req as any).user)
 
     try {
         let data = await (fastify_instance as anyObject).paginate(

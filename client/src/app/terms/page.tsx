@@ -1,5 +1,7 @@
 import { getSettingValue } from "../../api/settingValuesApi";
 
+export const dynamic = 'force-dynamic';
+
 // static terms as fallback
 const staticTerms = <><p className="mt-8">
   At IREAD, we are dedicated to delivering high-quality educational services
@@ -50,7 +52,7 @@ const staticTerms = <><p className="mt-8">
 const TermsAndConditions = async() => {
 
   const terms = await getSettingValue('Terms');
-  console.log('Terms:', terms);
+
     return (
       <div className="container py-6 sm:py-10">
         <h2 className="text-xl sm:text-3xl mb-2">

@@ -1,6 +1,8 @@
 import { getSettingValue } from "../../api/settingValuesApi";
 import ContactForm from "./ContactForm";
 
+export const dynamic = 'force-dynamic';
+
 const ContactPage = async () => {
   const greetingTitle = await getSettingValue('Greeting title') || '';
   const contactPhone1 = await getSettingValue('Contact phone1') || '';

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import ModalVideo from 'react-modal-video';
 import "react-modal-video/css/modal-video.css";
+import apiClient from '../../lib/apiClient';
 
 
 // Define the expected API response type
@@ -27,7 +28,7 @@ function Hero() {
 
     const ModalVideoComponent = ModalVideo as any;
 
-    const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const BASE_URL = apiClient.defaults.baseURL;
 
     useEffect(() => {
         const endpoints = [

@@ -2,13 +2,16 @@ import Link from "next/link";
 import React from "react";
 import { getSettingValue } from "../../api/settingValuesApi";
 import Image from "next/image";
+import apiClient from "../../lib/apiClient";
+
+export const dynamic = 'force-dynamic';
 
 interface SettingValue {
   value: string;
 }
 
 const Footer = async () => {
-    const footerLogo = await getSettingValue('Footer Logo') || "/client/public/frontend/images/logo-white-footer.png";
+    const footerLogo = await getSettingValue('Footer Logo') || "https://i.ibb.co/cSYvWDGV/ireadfav.png";
     const siteShortDes = await getSettingValue('Site short description (Max 100 characters)') || "IREAD Online Learning Platform. Unlock the power of artificial intelligence with cutting-edge tools and resources.";
     const contactPhone1 = await getSettingValue('Contact phone1') || '';
     const contactPhone2 = await getSettingValue('Contact phone2') || '';
@@ -23,7 +26,7 @@ const Footer = async () => {
     const youtube = await getSettingValue('YouTube') || '#';
     const pinterest = await getSettingValue('Pinterest') || '#';
 
-    const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const BASE_URL = apiClient.defaults.baseURL;
 
     return (
         <footer className="bg-[#1F1F1F] text-white py-12">
