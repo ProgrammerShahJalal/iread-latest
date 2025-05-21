@@ -156,7 +156,7 @@ function DonationPage() {
                     type="submit"
                     className="btn btn-flat btn-theme-colored"
                   >
-                    Next
+                    Continue to Donation
                   </button>
                 </div>
               </form>

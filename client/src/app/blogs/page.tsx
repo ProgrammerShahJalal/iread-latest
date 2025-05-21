@@ -143,6 +143,7 @@ const BlogsPage = async ({ searchParams }: PageProps) => {
 
           {totalPages > 1 && (
             <Pagination
+              root="blogs"
               currentPage={currentPage}
               totalPages={totalPages}
             />
