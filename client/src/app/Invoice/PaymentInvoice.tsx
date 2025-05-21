@@ -4,6 +4,9 @@ import jsPDF from "jspdf";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import apiClient from "../../lib/apiClient";
+
+export const dynamic = 'force-dynamic';
 
 interface InvoiceProps {
   event_id: string | null;
@@ -46,10 +49,7 @@ const PaymentInvoice: React.FC<InvoiceProps> = ({
   const [siteAddress, setSiteAddress] = useState<SiteResponse | null>(null);
   const [invoiceFooter, setInvoiceFooter] = useState<SiteResponse | null>(null);
 
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   useEffect(() => {
     const endpoints = [

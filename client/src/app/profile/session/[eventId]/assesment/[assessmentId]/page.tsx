@@ -7,6 +7,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { User } from "@/types/user";
+import apiClient from "../../../../../../lib/apiClient";
 
 const AssessmentPage = () => {
   const searchParams = useSearchParams();
@@ -24,10 +25,7 @@ const AssessmentPage = () => {
 
   const safeDescription = typeof description === "string" ? description : "";
 
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
 
       useEffect(() => {

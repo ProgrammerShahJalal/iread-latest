@@ -10,6 +10,7 @@ import { Event } from '@/types/event';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { User } from '@/types/user';
+import apiClient from '../../../../lib/apiClient';
 
 interface Session {
     id: number;
@@ -59,10 +60,7 @@ function EventSessionPage() {
         }
     }, []);
 
-    const BASE_URL =
-        process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-            : process.env.NEXT_PUBLIC_BACKEND_URL;
+    const BASE_URL = apiClient.defaults.baseURL;
 
     useEffect(() => {
         const fetchData = async () => {

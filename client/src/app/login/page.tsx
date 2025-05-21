@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import apiClient from "../../lib/apiClient";
 
 interface FormErrors {
   email?: string;
@@ -24,10 +25,7 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   useEffect(() => {
     // Fetch user roles and store them in a map

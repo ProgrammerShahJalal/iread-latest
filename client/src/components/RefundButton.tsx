@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import apiClient from "../lib/apiClient";
 
 const RefundButton = ({
   paymentId,
@@ -24,10 +25,7 @@ const RefundButton = ({
   const [loading, setLoading] = useState(false);
   const [requested, setRequested] = useState(false);
 
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-      : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
   const handleRefundRequest = async () => {
     setLoading(true);

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ProfileLayout from "../../../components/ProfileLayout";
 import toast from "react-hot-toast";
+import apiClient from "../../../lib/apiClient";
 
 
 interface User {
@@ -22,10 +23,7 @@ const ProfileSettingPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-
-  const BASE_URL = process.env.NODE_ENV === "production"
-? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-: process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
 
   useEffect(() => {
@@ -131,7 +129,7 @@ const ProfileSettingPage = () => {
                 />
               ) : (
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${formData?.photo || user?.photo}`}
+                  src={`${apiClient.defaults.baseURL}/${formData?.photo || user?.photo}`}
                   alt="Profile"
                   width={300}
                   height={300}

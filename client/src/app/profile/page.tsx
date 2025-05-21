@@ -5,6 +5,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import ProfileLayout from "../../components/ProfileLayout";
 import axios from "axios";
+import apiClient from "../../lib/apiClient";
 
 
 interface User {
@@ -34,9 +35,7 @@ const ProfilePage = () => {
   const [grettingMessage, setGrettingMessage] = useState<SiteResponse | null>(null);
 
 
-  const BASE_URL = process.env.NODE_ENV === "production"
-? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-: process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
 
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
       const endpoints = [
-        { key: 'title/Gretting Message', setter: setGrettingMessage },
+        { key: 'title/Greeting Message', setter: setGrettingMessage },
       ];
     
       const fetchSettings = async () => {

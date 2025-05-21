@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import toast from "react-hot-toast";
+import apiClient from "../../lib/apiClient";
 
 function DonationPage() {
   const [donationData, setDonationData] = useState({
@@ -36,9 +37,8 @@ function DonationPage() {
     }));
   };
 
-  const BASE_URL = process.env.NODE_ENV === "production"
-  ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-  : process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = apiClient.defaults.baseURL;
+  console.log('base url from donation', BASE_URL);
 
 
   const handleSubmit = async (e: React.FormEvent) => {

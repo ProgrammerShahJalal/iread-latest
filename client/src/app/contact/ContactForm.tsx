@@ -5,14 +5,14 @@ import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 
 interface ContactFormProps {
-  greetingTitle?: { value: string } | null;
-  contactPhone1?: { value: string } | null;
-  contactPhone2?: { value: string } | null;
-  contactPhone3?: { value: string } | null;
-  contactEmail1?: { value: string } | null;
-  contactEmail2?: { value: string } | null;
-  contactEmail3?: { value: string } | null;
-  address?: { value: string } | null;
+  greetingTitle?: { value: string } | '';
+  contactPhone1?: { value: string } | '';
+  contactPhone2?: { value: string } | '';
+  contactPhone3?: { value: string } | '';
+  contactEmail1?: { value: string } | '';
+  contactEmail2?: { value: string } | '';
+  contactEmail3?: { value: string } | '';
+  address?: { value: string } | '';
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({
@@ -34,6 +34,11 @@ const ContactForm: React.FC<ContactFormProps> = ({
   });
   const [loading, setLoading] = useState(false);
 
+  // Helper function to safely extract value
+  const getValue = (prop: { value: string } | '' | undefined): string => {
+    return typeof prop === 'object' && prop?.value ? prop.value : 'N/A';
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm({
@@ -45,7 +50,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     emailjs
       .send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
@@ -54,9 +58,9 @@ const ContactForm: React.FC<ContactFormProps> = ({
           from_name: form.name,
           to_name: "IREAD",
           from_email: form.email,
-          to_email: contactEmail1?.value || "iread.hello@gmail.com",
+          to_email: getValue(contactEmail1)|| "iread.hello@gmail.com", 
           from_phone: form.phone,
-          to_phone: contactPhone1?.value || "+880 1303 856 860",
+          to_phone: getValue(contactPhone1) || "+880 1303 856 860",
           message: form.message,
         },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string
@@ -92,7 +96,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
               <i className="fa fa-phone font-36 mb-10 text-theme-colored" />
               <h4>Phone</h4>
               <h6 className="text-gray">
-                 {contactPhone1?.value || "N/A"}, {contactPhone2?.value || "N/A"}, {contactPhone3?.value || "N/A"}
+              {getValue(contactPhone1)}, {getValue(contactPhone2)}, {getValue(contactPhone3)}
               </h6>
             </div>
           </div>
@@ -100,7 +104,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             <div className="contact-info text-center pt-60 pb-60 border-right">
               <i className="fa fa-map-marker font-36 mb-10 text-theme-colored" />
               <h4>Address</h4>
-              <h6 className="text-gray">{address?.value || "N/A"}</h6>
+              <h6 className="text-gray">{getValue(address)}</h6>
             </div>
           </div>
           <div className="col-sm-12 col-md-4">
@@ -108,7 +112,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
               <i className="fa fa-envelope font-36 mb-10 text-theme-colored" />
               <h4>Email</h4>
               <h6 className="text-gray">
-                {contactEmail1?.value || "N/A"}, {contactEmail2?.value || "N/A"}, {contactEmail3?.value || "N/A"}
+              {getValue(contactEmail1)}, {getValue(contactEmail2)}, {getValue(contactEmail3)}
               </h6>
             </div>
           </div>
@@ -116,7 +120,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
       </div>
       <div className="flex flex-col items-center justify-center my-5 p-4">
         <p className="text-2xl md:text-lg text-gray-700 text-center mb-6">
-        {greetingTitle?.value}
+        {getValue(greetingTitle)}
         </p>
 
         <form

@@ -2,13 +2,11 @@ import Image from 'next/image';
 import React from 'react';
 import { getSettingValue } from '../../api/settingValuesApi';
 import ImageGallery from './ImageGallary';
+import apiClient from '../../lib/apiClient';
 
 type Props = {};
 
-const BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = apiClient.defaults.baseURL;
 
 const staticImages = [
   'https://cdn.pixabay.com/photo/2024/12/28/01/27/ai-generated-9295105_1280.jpg',

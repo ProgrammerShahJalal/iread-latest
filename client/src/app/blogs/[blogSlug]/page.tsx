@@ -5,15 +5,12 @@ import CommentsSection from "../../../components/CommentsSection";
 import { getLatestBlogViewById } from "../../../api/blogViewApi";
 import moment from "moment/moment";
 
-
 const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string }> }) => {
-  const { blogSlug } = await params; // ✅ Await params before using
+  const { blogSlug } = await params;
 
   if (!blogSlug) {
     return <div className="py-24 text-center">Invalid blog request.</div>;
   }
-
-
 
   try {
     const blogs = await getBlogs();
@@ -27,11 +24,9 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
       );
     }
 
-
-    // ✅ Fetch blog comments
     const comments = await getBlogComments(blog.blog_id);
     const blogView = await getLatestBlogViewById(blog.blog_id);
-    console.log('blog view', blogView?.total_count);
+
     return (
       <section>
         <div className="container my-10 min-h-[100vh]">
@@ -41,7 +36,7 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                 <div className="entry-header">
                   <div className="container post-thumb thumb">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/${blog.cover_image}`}
                       alt={blog.title}
                       priority={true}
                       className="Image-responsive rounded-md Image-fullwidth"
@@ -56,26 +51,27 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                 <div className="entry-meta pl-15">
                   <ul className="list-inline my-6">
                     <li>
-                      Posted: <span className="text-theme-color-2">{moment(blog.publish_date).format('LL')}</span>
+                      Posted: <span className="text-theme-color-2">{moment(blog.publish_date).format("LL")}</span>
                     </li>
                     <li>
-                      By: <span className="text-theme-color-2">{blog.author ? blog.author.name : 'Admin'}</span>
+                      By: <span className="text-theme-color-2">Admin</span>
                     </li>
                     <li>
-                      Categories: <span className="text-theme-color-2">
-                        {blog.categories?.length > 0
-                          ? blog.categories.map((category: any) => category.title).join(', ')
-                          : 'N/A'}
+                      Categories:{" "}
+                      <span className="text-theme-color-2">
+                        {blog.categories.length > 0
+                          ? blog.categories.map((category: { id: number; title: string }) => category.title).join(", ")
+                          : "N/A"}
                       </span>
                     </li>
                     <li>
-                      Tags: <span className="text-theme-color-2">
-                        {blog.tags?.length > 0
-                          ? blog.tags.map((tag: any) => tag.title).join(', ')
-                          : 'N/A'}
+                      Tags:{" "}
+                      <span className="text-theme-color-2">
+                        {blog.tags.length > 0
+                          ? blog.tags.map((tag: { id: number; title: string }) => tag.title).join(", ")
+                          : "N/A"}
                       </span>
                     </li>
-
                   </ul>
                 </div>
                 <div className="post-content mt-10">
@@ -86,9 +82,8 @@ const BlogDetailsPage = async ({ params }: { params: Promise<{ blogSlug: string 
                 </div>
               </article>
               <div className="flex justify-end">
-                <h4 className="text-base font-semibold">Total Views: {blogView?.total_count}</h4>
+                <h4 className="text-base font-semibold">Total Views: {blogView?.total_count || 0}</h4>
               </div>
-              {/* Blog Comments Form */}
               <CommentsSection blogs={blog.blog_id} comments={comments} />
             </div>
           </div>

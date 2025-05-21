@@ -18,7 +18,7 @@ export async function getEventPaymentRefunds(eventId: number, userId: number) {
         FROM event_payment_refunds epr
         WHERE epr.event_id = ? 
         AND epr.user_id = ?
-        ORDER BY epr.id DESC;
+        ORDER BY refund_id DESC;
     `;
 
   const eventPaymentRefunds = (await query(event_payment_refunds_query, [

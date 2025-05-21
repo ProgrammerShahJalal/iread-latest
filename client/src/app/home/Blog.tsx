@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { getBlogs } from "../../api/blogApi";
 import { Blog as Bl } from "@/types/blog";
+import apiClient from "../../lib/apiClient";
 
 
 
@@ -38,7 +39,7 @@ const Blog = async() => {
                                         {
                                             blog?.cover_image && (
                                                 <Image
-                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${blog.cover_image}`}
+                                                src={`${apiClient.defaults.baseURL}/${blog.cover_image}`}
                                                     alt={blog.title}
                                                     className="w-full h-64 object-cover rounded-md"
                                                     width={400}

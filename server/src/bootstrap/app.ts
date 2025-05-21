@@ -166,11 +166,8 @@ class FastifyApp {
             root: path.resolve(path.join(__dirname), '../../public/views'),
         });
 
-        const FRONTEND_URL = process.env.NODE_ENV === "production"
-            ? process.env.FRONTEND_LIVE_URL
-            : process.env.FRONTEND_URL;
+        const FRONTEND_URL = process.env.FRONTEND_URL;
 
-            // console.log('===FRONTEND URL===', FRONTEND_URL);
 
         this.fastify.register(fastifyCors, {
             origin: `${FRONTEND_URL}`,

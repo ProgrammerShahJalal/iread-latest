@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import apiClient from "../lib/apiClient";
 
 interface BlogComment {
   id: number;
@@ -37,10 +38,7 @@ interface CommentsSectionProps {
   comments: BlogComment[];
 }
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_BACKEND_LIVE_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
+const BASE_URL = apiClient.defaults.baseURL;
 
 const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
   const [commentts, setCommentts] = useState<BlogComment[]>(comments || []);
@@ -190,7 +188,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                 <div className="flex gap-3">
                   <Image
                     src={comment.user?.photo
-                      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${comment.user.photo}`
+                      ? `${apiClient.defaults.baseURL}/${comment.user.photo}`
                       : '/default-avatar.png'} // Use a local default avatar
                     alt={`${comment?.user?.first_name} ${comment?.user?.last_name}`}
                     width={48}
@@ -250,7 +248,7 @@ const CommentsSection = ({ blogs, comments }: CommentsSectionProps) => {
                         {comment.replies.map((reply, index) => (
                           <li key={reply.id} className="flex gap-2">
                             <Image
-                              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin.png`}
+                              src={`${apiClient.defaults.baseURL}/admin.png`}
                               alt="Admin"
                               width={40}
                               height={40}
