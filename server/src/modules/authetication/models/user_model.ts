@@ -125,7 +125,7 @@ function init(sequelize: Sequelize) {
                 defaultValue: '0',
             },
             status: {
-                type: DataTypes.ENUM('active', 'inactive'),
+                type: DataTypes.ENUM('active', 'deactive'),
                 defaultValue: 'active',
             },
             created_at: {
