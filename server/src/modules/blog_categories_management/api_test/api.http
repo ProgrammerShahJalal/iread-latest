@@ -1,4 +1,4 @@
-@hostname = http://127.0.0.1:5001/api/v1/blog-categories
+@hostname = http://127.0.0.1:5011/api/v1/blog-categories
 
 # all
 ###
@@ -6,7 +6,7 @@ GET {{hostname}}?orderByCol=id&orderByAsc=true&show_active_data=true&paginate=10
 
 # get
 ###
-GET {{hostname}}/1 HTTP/1.1
+GET {{hostname}}/2 HTTP/1.1
 
 # store
 ###
@@ -14,8 +14,8 @@ POST  {{hostname}}/store HTTP/1.1
 content-type: application/json
 
 {
-    "title": "blog categories 2",
-    "image": "uploads/blog_categories/cat.png"
+    "title": "testing category",
+    "image": "uploads/blog_categories/test.png"
 }
 
 
@@ -27,7 +27,6 @@ content-type: application/json
 {
     "id": 1,
     "title": "author 3 upated",
-    "description": "description updated"
 }
 
 # soft delete

@@ -35,7 +35,7 @@ const auth_middleware = async (request: FastifyRequest, reply: FastifyReply) => 
     const jwt = require('jsonwebtoken');
     // Get token from cookies
     const cookies = parseCookieString(request.headers.cookie || '');
-    console.log('cookies', cookies);
+    // console.log('cookies', cookies);
     const token = cookies?.token?.startsWith('Bearer ') ? cookies.token.slice(7) : null;
 
     if (!token) {
@@ -54,8 +54,8 @@ const auth_middleware = async (request: FastifyRequest, reply: FastifyReply) => 
         }
         const models = Models.get();
         let user = await models.UserModel.findByPk(authUser?.id);
-        console.log('authUser', authUser);
-        console.log('decoded user ', decoded);
+        // console.log('authUser', authUser);
+        // console.log('decoded user ', decoded);
 
         if (user && user.token === decoded.token) {
             (request as anyObject).user = decoded;

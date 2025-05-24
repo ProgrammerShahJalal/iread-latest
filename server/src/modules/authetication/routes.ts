@@ -18,6 +18,8 @@ module.exports = async function (fastify: FastifyInstance) {
                 .post(`/login`, controllerInstance.login)
                 .post(`/register`, controllerInstance.register)
                 .post(`/update`, controllerInstance.update)
+                .post(`/soft-delete`, { preHandler: auth_middleware }, controllerInstance.delete)
+                .post(`/restore`, { preHandler: auth_middleware }, controllerInstance.restore)
                 .post(`/forget`, controllerInstance.forget)
                 .get(`/:id`, controllerInstance.find);
         },
@@ -30,7 +32,7 @@ module.exports = async function (fastify: FastifyInstance) {
             route
                 .post(
                     `/logout`,
-                    // { preHandler: auth_middleware },
+                    { preHandler: auth_middleware },
                     controllerInstance.logout,
                 )
 
