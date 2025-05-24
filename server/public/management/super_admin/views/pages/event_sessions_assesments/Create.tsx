@@ -138,8 +138,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                         {['title', 'mark', 'pass_mark'].map(
                                             (i) => (
                                                 <div className="form-group form-vertical">
-                                                    {i === 'mark' ||
-                                                    'pass_mark' ? (
+                                                    {i === 'mark' || i === 'pass_mark' ? (
                                                         <Input
                                                             type="number"
                                                             name={i}
@@ -147,6 +146,7 @@ const Create: React.FC<Props> = (props: Props) => {
                                                         />
                                                     ) : (
                                                         <Input
+                                                            type="text"
                                                             name={i}
                                                             required={true}
                                                         />

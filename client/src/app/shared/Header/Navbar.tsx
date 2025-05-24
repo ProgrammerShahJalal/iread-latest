@@ -59,39 +59,66 @@ function Navbar() {
   const BASE_URL = apiClient.defaults.baseURL;
 
   const handleLogout = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "frontend",
-          user: user,
-        }),
-      });
-
-      // Check if the response is a success
-      if (response.ok) {
-        localStorage.removeItem("user");
-        window.dispatchEvent(new Event("userUpdated"));
-        setUser(null);
-        toast.success("Logout successful!");
-        router.push("/login");
-      } else {
-        const errorText = await response.text();
-        console.error("Logout failed:", errorText);
-        toast.error("Logout failed. Please try again.");
+  try {
+    console.log("Attempting logout with user:", user);
+    console.log("Document cookies:", document.cookie);
+    
+    // Get token from document.cookie manually if needed
+    const getTokenFromCookie = () => {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'token') {
+          return decodeURIComponent(value); // Decode here directly
+        }
       }
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("An error occurred during logout.");
-    } finally {
-      setShowLogoutModal(false);
-      setDropdownOpen(false);
+      return null;
+    };
+
+    const cookieToken = getTokenFromCookie();
+    const userToken = user?.token; // Token from localStorage (always available)
+    
+    console.log("Cookie token:", cookieToken);
+    console.log("User token from localStorage:", userToken);
+    console.log("All cookies:", document.cookie);
+
+    const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+      method: "POST",
+      credentials: "include", // This should send cookies
+      headers: {
+        "Content-Type": "application/json",
+        // Send cookie token in header if available
+        ...(cookieToken && { "Cookie": `token=${encodeURIComponent(cookieToken)}` }),
+      },
+      body: JSON.stringify({
+        from: "frontend",
+        user: user, // This includes user.token from localStorage
+        cookieToken: cookieToken, // Send cookie token separately
+        userToken: userToken, // Send user token explicitly
+      }),
+    });
+
+    console.log("Response status:", response.status);
+
+    if (response.ok) {
+      localStorage.removeItem("user");
+      window.dispatchEvent(new Event("userUpdated"));
+      setUser(null);
+      toast.success("Logout successful!");
+      router.push("/login");
+    } else {
+      const errorText = await response.text();
+      console.error("Logout failed:", errorText);
+      toast.error("Logout failed. Please try again.");
     }
-  };
+  } catch (error) {
+    console.error("Logout error:", error);
+    toast.error("An error occurred during logout.");
+  } finally {
+    setShowLogoutModal(false);
+    setDropdownOpen(false);
+  }
+};
 
   const openLogoutConfirmation = () => {
     setShowLogoutModal(true);
