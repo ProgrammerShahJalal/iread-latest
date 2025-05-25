@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import apiClient from "../../lib/apiClient";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 interface FormErrors {
   first_name?: string;
@@ -23,7 +24,8 @@ const RegisterPage: React.FC = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<FormErrors>({}); // Changed from error string to errors object
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,6 +33,10 @@ const RegisterPage: React.FC = () => {
     if (errors[e.target.name as keyof FormErrors]) {
       setErrors({ ...errors, [e.target.name]: undefined });
     }
+  };
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
   };
 
   const BASE_URL = apiClient.defaults.baseURL;
@@ -74,15 +80,16 @@ const RegisterPage: React.FC = () => {
       }
 
       const data = await response.json();
-      
+
       // Store user info in localStorage
       const { id, uid, first_name, last_name, email, phone_number, slug, photo } = data?.data;
       localStorage.setItem(
-        "user", 
+        "user",
         JSON.stringify({ id, uid, first_name, last_name, email, phone_number, slug, photo })
       );
-
-      router.push(`/login`);
+      setTimeout(() => {
+        window.location.href = `/profile?slug=${slug}&uid=${uid}`;
+      }, 2000); // Delay of 2 seconds
       toast.success('Registration Successful!');
     } catch (err: any) {
       toast.error(err.message);
@@ -101,47 +108,49 @@ const RegisterPage: React.FC = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <InputField 
-            id="first_name" 
-            label="First Name" 
-            type="text" 
-            value={formData.first_name} 
-            onChange={handleChange} 
+          <InputField
+            id="first_name"
+            label="First Name"
+            type="text"
+            value={formData.first_name}
+            onChange={handleChange}
             error={errors.first_name}
           />
-          <InputField 
-            id="last_name" 
-            label="Last Name" 
-            type="text" 
-            value={formData.last_name} 
-            onChange={handleChange} 
+          <InputField
+            id="last_name"
+            label="Last Name"
+            type="text"
+            value={formData.last_name}
+            onChange={handleChange}
             error={errors.last_name}
           />
-          <InputField 
-            id="email" 
-            label="Email Address" 
-            type="email" 
-            value={formData.email} 
-            onChange={handleChange} 
+          <InputField
+            id="email"
+            label="Email Address"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
             autoComplete="email"
             error={errors.email}
           />
-          <InputField 
-            id="phone_number" 
-            label="Phone Number" 
-            type="tel" 
-            value={formData.phone_number} 
-            onChange={handleChange} 
+          <InputField
+            id="phone_number"
+            label="Phone Number"
+            type="tel"
+            value={formData.phone_number}
+            onChange={handleChange}
             error={errors.phone_number}
           />
-          <InputField 
-            id="password" 
-            label="Password" 
-            type="password" 
-            value={formData.password} 
-            onChange={handleChange} 
+          <InputField
+            id="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'} // Dynamic type based on showPassword
+            value={formData.password}
+            onChange={handleChange}
             autoComplete="new-password"
             error={errors.password}
+            togglePasswordVisibility={handleTogglePassword}
+            showPassword={showPassword}
           />
 
           <button
@@ -173,32 +182,47 @@ interface InputFieldProps {
   required?: boolean;
   autoComplete?: string;
   error?: string;
+  togglePasswordVisibility?: () => void; // New prop for toggling
+  showPassword?: boolean; // New prop for icon state
 }
 
-const InputField: React.FC<InputFieldProps> = ({ 
-  id, 
-  label, 
-  type, 
-  value, 
-  onChange, 
-  required, 
+const InputField: React.FC<InputFieldProps> = ({
+  id,
+  label,
+  type,
+  value,
+  onChange,
+  required,
   autoComplete,
-  error 
+  error,
+  togglePasswordVisibility,
+  showPassword,
 }) => (
   <div>
     <label htmlFor={id} className="block text-sm font-medium text-gray-900">
       {label}
     </label>
-    <input
-      id={id}
-      name={id}
-      type={type}
-      value={value}
-      onChange={onChange}
-      required={required}
-      autoComplete={autoComplete}
-      className={`mt-2 block w-full rounded-md border ${error ? 'border-red-500' : 'border-gray-300'} px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-    />
+    <div className="relative mt-2">
+      <input
+        id={id}
+        name={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        required={required}
+        autoComplete={autoComplete}
+        className={`block w-full rounded-md border ${error ? 'border-red-500' : 'border-gray-300'} px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10`} // Added pr-10 for padding
+      />
+      {id === 'password' && togglePasswordVisibility && (
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+        >
+          {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+        </button>
+      )}
+    </div>
     {error && (
       <p className="mt-1 text-sm text-red-600">{error}</p>
     )}

@@ -246,9 +246,11 @@ function Navbar() {
                     />
                   </button>
                 ) : (
-                  <Link href="/login" className="text-white">
-                    Login / Register
-                  </Link>
+                  <><Link href="/login" className="text-white">
+                      Login / 
+                    </Link><Link href="/register" className="text-white">
+                  {" "}  Register
+                      </Link></>
                 )}
 
                 {dropdownOpen && user?.email && (

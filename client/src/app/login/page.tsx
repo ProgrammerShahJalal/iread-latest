@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import apiClient from "../../lib/apiClient";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 interface FormErrors {
   email?: string;
@@ -16,6 +17,12 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [userRolesMap, setUserRolesMap] = useState<{ [key: number]: string }>({});
+  const [showPassword, setShowPassword] = useState(false);
+
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,7 +48,7 @@ const LoginPage: React.FC = () => {
         setUserRolesMap(roleMap);
       })
       .catch((err) => console.error("Error fetching user roles:", err));
-  }, []);
+  }, [BASE_URL]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +64,7 @@ const LoginPage: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        
+
         if (errorData) {
           // Handle validation errors (422 status)
           if (response.status === 422 && errorData.data?.length > 0) {
@@ -77,7 +84,7 @@ const LoginPage: React.FC = () => {
             return;
           }
         }
-        
+
         // Fallback to status-based messages
         if (response.status === 403) {
           throw new Error(
@@ -89,7 +96,7 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
-      
+
       // Store user info in localStorage
       const {
         id,
@@ -150,11 +157,13 @@ const LoginPage: React.FC = () => {
           <InputField
             id="password"
             label="Password"
-            type="password"
+              type={showPassword ? 'text' : 'password'} // Dynamic type based on showPassword
             value={formData.password}
             onChange={handleChange}
             autoComplete="current-password"
             error={errors.password}
+            togglePasswordVisibility={handleTogglePassword}
+            showPassword={showPassword}
           />
 
           <button
@@ -189,6 +198,8 @@ interface InputFieldProps {
   required?: boolean;
   autoComplete?: string;
   error?: string;
+  togglePasswordVisibility?: () => void; // New prop for toggling
+  showPassword?: boolean; // New prop for icon state
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -199,22 +210,35 @@ const InputField: React.FC<InputFieldProps> = ({
   onChange,
   required,
   autoComplete,
-  error
+  error,
+  togglePasswordVisibility,
+  showPassword,
 }) => (
   <div>
     <label htmlFor={id} className="block text-sm font-medium text-gray-900">
       {label}
     </label>
-    <input
-      id={id}
-      name={id}
-      type={type}
-      value={value}
-      onChange={onChange}
-      required={required}
-      autoComplete={autoComplete}
-      className={`mt-2 block w-full rounded-md border ${error ? 'border-red-500' : 'border-gray-300'} px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-    />
+    <div className="mt-2 relative">
+      <input
+        id={id}
+        name={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        required={required}
+        autoComplete={autoComplete}
+        className={`mt-2 block w-full rounded-md border ${error ? 'border-red-500' : 'border-gray-300'} px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+      />
+      {id === 'password' && togglePasswordVisibility && (
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+        >
+          {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+        </button>
+      )}
+    </div>
     {error && (
       <p className="mt-1 text-sm text-red-600">{error}</p>
     )}
