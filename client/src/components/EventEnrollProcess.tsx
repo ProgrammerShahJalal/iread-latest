@@ -7,6 +7,46 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import apiClient from "../lib/apiClient";
 
+// Custom hook for userId
+const useUserId = () => {
+  const [userId, setUserId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+          const user: { id: string; token?: string } = JSON.parse(userData);
+          return user.id || null;
+        }
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+      }
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+          const user: { id: string; token?: string } = JSON.parse(userData);
+          setUserId(user.id || null);
+        } else {
+          setUserId(null);
+        }
+      } catch (error) {
+        console.error("Error handling storage change:", error);
+        setUserId(null);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  return userId;
+};
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 const EventEnrollProcess = ({
@@ -16,21 +56,12 @@ const EventEnrollProcess = ({
   eventId: number;
   eventPrice: number;
 }) => {
-  const [userId, setUserId] = useState<string | null>(null);
+  const userId = useUserId();
   const [eventEnrollmentId, setEventEnrollmentId] = useState<string | null>(
     null
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      if (user?.token && user?.id) {
-        setUserId(user.id);
-      }
-    }
-  }, []);
 
   const BASE_URL = apiClient.defaults.baseURL;
 
