@@ -15,6 +15,9 @@ import restore from './services/restore';
 import destroy from './services/destroy';
 import data_import from './services/import';
 import payment_refunds from './services/payment_refunds';
+import Models from '../../database/models';
+import { modelName } from './models/model';
+import { handleFailedPayment, handleSuccessfulPayment } from './services/webhook';
 
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
@@ -72,6 +75,7 @@ export default function (fastify: FastifyInstance) {
             }
         },
         // Handle Stripe Webhook
+
         webhook: async function handleStripeWebhook(
             req: FastifyRequest,
             res: FastifyReply,
@@ -96,9 +100,9 @@ export default function (fastify: FastifyInstance) {
 
             try {
                 event = stripe.webhooks.constructEvent(
-                    req.body as Buffer, // Raw request body as a buffer
+                    req.body as Buffer,
                     sig,
-                    'whsec_SqL0lqb4ZCMI6wfrFy2g6a0hmAcxITjn' as string,
+                    process.env.STRIPE_WEBHOOK_SECRET as string, // Use env variable
                 );
             } catch (err: any) {
                 console.error(
@@ -111,26 +115,66 @@ export default function (fastify: FastifyInstance) {
                 });
             }
 
-            // Handle the event
-            switch (event.type) {
-                case 'checkout.session.completed':
-                    const session = event.data
-                        .object as Stripe.Checkout.Session;
-                    console.log('Payment successful:', session);
-                    // Process the successful payment (e.g., save details to the database)
-                    break;
-                case 'payment_intent.succeeded':
-                    const paymentIntent = event.data
-                        .object as Stripe.PaymentIntent;
-                    console.log('Payment intent succeeded:', paymentIntent);
-                    break;
-                default:
-                    console.warn(`Unhandled event type: ${event.type}`);
-            }
+            try {
+                // Handle the event
+                switch (event.type) {
+                    case 'checkout.session.completed':
+                        const session = event.data.object as Stripe.Checkout.Session;
+                        console.log('Payment successful:', session.id);
 
-            return res
-                .status(200)
-                .send({ success: true, message: 'Webhook received.' });
+                        if (session.metadata && session.payment_status === 'paid') {
+                            await handleSuccessfulPayment(
+                                fastify,
+                                session.id,
+                                session.metadata as any
+                            );
+                        }
+                        break;
+
+                    case 'checkout.session.expired':
+                        const expiredSession = event.data.object as Stripe.Checkout.Session;
+                        console.log('Payment session expired:', expiredSession.id);
+
+                        await handleFailedPayment(
+                            fastify,
+                            expiredSession.id,
+                            'expired'
+                        );
+                        break;
+
+                    case 'checkout.session.async_payment_failed':
+                        const failedSession = event.data.object as Stripe.Checkout.Session;
+                        console.log('Payment failed:', failedSession.id);
+
+                        await handleFailedPayment(
+                            fastify,
+                            failedSession.id,
+                            'failed'
+                        );
+                        break;
+
+                    case 'payment_intent.payment_failed':
+                        const failedPayment = event.data.object as Stripe.PaymentIntent;
+                        console.log('Payment intent failed:', failedPayment.id);
+                        // Handle payment intent failures if needed
+                        break;
+
+                    default:
+                        console.warn(`Unhandled event type: ${event.type}`);
+                }
+
+                return res.status(200).send({
+                    success: true,
+                    message: 'Webhook processed successfully'
+                });
+
+            } catch (error: any) {
+                console.error('Error processing webhook:', error);
+                return res.status(500).send({
+                    success: false,
+                    message: 'Error processing webhook'
+                });
+            }
         },
 
         store: async function (req: FastifyRequest, res: FastifyReply) {
