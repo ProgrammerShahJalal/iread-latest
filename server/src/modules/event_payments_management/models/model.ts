@@ -100,7 +100,7 @@ function init(sequelize: Sequelize) {
 
             status: {
                 type: new DataTypes.ENUM('success', 'failed'),
-                defaultValue: 'failed',
+                defaultValue: 'success',
             },
 
             created_at: DataTypes.DATE,

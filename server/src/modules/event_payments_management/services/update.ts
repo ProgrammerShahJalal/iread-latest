@@ -18,27 +18,24 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'id',
-    ];
-
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
+    let requestBody = req.body as anyObject;
+    
+    // Validate that either id OR (event_id AND user_id) is provided
+    const hasId = requestBody.id;
+    const hasEventAndUser = requestBody.event_id && requestBody.user_id;
+    
+    if (!hasId && !hasEventAndUser) {
+        // Add a custom validation error since neither identification method is complete
+        await body('id')
             .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+                `the <b>id</b> field is required`,
             )
             .run(req);
     }
 
     let result = await validationResult(req);
-
     return result;
 }
-
 
 
 async function update(
@@ -70,10 +67,18 @@ async function update(
     body.users = parseField(body.users);
     body.payments = parseField(body.payments);
 
-
     /** store data into database */
     try {
-        let data = await models[modelName].findByPk(body.id);
+        let record = await models[modelName].findOne(
+            {
+                where: {
+                    event_id: body.event_id,
+                    user_id: body.user_id,
+                }
+            }
+        );
+
+        let data = await models[modelName].findByPk(body.id || record?.id);
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
                 event_id: body.events?.[0] || data.event_id,
@@ -86,6 +91,7 @@ async function update(
                 media: body.media || data.media,
                 session_id: body.session_id || data.session_id,
                 is_refunded: body.is_refunded || data.is_refunded || false,
+                status: body.status || data.status,
             };
             data.update(inputs);
             await data.save();

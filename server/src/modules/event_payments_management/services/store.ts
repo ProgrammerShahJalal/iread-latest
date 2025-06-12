@@ -161,7 +161,7 @@ async function store(
         // console.log('Stripe Session:', session);
 
 
-        // Insert payment record with PENDING status initially
+        // Insert payment record with FAILED status initially
         let inputs: InferCreationAttributes<typeof data> = {
             event_id: getValue(body.event_id),
             user_id: getValue(body.user_id),

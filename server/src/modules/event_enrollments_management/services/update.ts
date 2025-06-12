@@ -18,27 +18,24 @@ import Models from '../../../database/models';
 
 /** validation rules */
 async function validate(req: Request) {
-    let field = '';
-    let fields = [
-        'id',
-    ];
-
-    for (let index = 0; index < fields.length; index++) {
-        const field = fields[index];
-        await body(field)
-            .not()
-            .isEmpty()
+    let requestBody = req.body as anyObject;
+    
+    // Validate that either id OR (event_id AND user_id) is provided
+    const hasId = requestBody.id;
+    const hasEventAndUser = requestBody.event_id && requestBody.user_id;
+    
+    if (!hasId && !hasEventAndUser) {
+        // Add a custom validation error since neither identification method is complete
+        await body('id')
             .withMessage(
-                `the <b>${field.replaceAll('_', ' ')}</b> field is required`,
+                `the <b>id</b> field is required`,
             )
             .run(req);
     }
 
     let result = await validationResult(req);
-
     return result;
 }
-
 
 
 async function update(
@@ -55,17 +52,17 @@ async function update(
     let models = Models.get();
     let body = req.body as anyObject;
 
-        // Parse fields that might be stringified
-        const parseField = (field: any) => {
-            try {
-                return typeof field === 'string' ? JSON.parse(field) : field;
-            } catch {
-                return field;
-            }
-        };
-    
-        body.event_id = parseField(body.event_id);
-        body.user_id = parseField(body.user_id);
+    // Parse fields that might be stringified
+    const parseField = (field: any) => {
+        try {
+            return typeof field === 'string' ? JSON.parse(field) : field;
+        } catch {
+            return field;
+        }
+    };
+
+    body.event_id = parseField(body.event_id);
+    body.user_id = parseField(body.user_id);
 
 
     let user_model = new models[modelName]();
@@ -74,7 +71,16 @@ async function update(
 
     /** store data into database */
     try {
-        let data = await models[modelName].findByPk(body.id);
+        let record = await models[modelName].findOne(
+            {
+                where: {
+                    event_id: body.event_id,
+                    user_id: body.user_id,
+                }
+            }
+        );
+
+        let data = await models[modelName].findByPk(body.id || record?.id);
 
         if (data) {
             let inputs: InferCreationAttributes<typeof user_model> = {
