@@ -19,7 +19,7 @@ To run the server application locally:
    ```
 2. Install dependencies:
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 3. Set up environment variables:
     - Create a `.env` file by copying `.env.example`.
@@ -30,8 +30,15 @@ To run the server application locally:
    ```
 5. Start the development server:
    ```bash
-   npm run dev # Or npm run server, based on your package.json scripts
+   npm run server
    ```
+
+   Additionally, to build and watch the super admin panel (which might be part of the backend's served assets), you can run:
+
+   ```bash
+   npm run super_admin
+   ```
+   This command typically builds the super admin interface. Check the `server/package.json` for more details on this and other build scripts.
 
 The server application will be accessible at [http://localhost:5011](http://localhost:5011) (or the port specified in your project configuration if different).
 

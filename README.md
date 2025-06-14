@@ -379,16 +379,16 @@ cd <repository-folder>
 
 ```bash
 # Install root dependencies (if any)
-npm install
+npm install --legacy-peer-deps
 
 # Install client dependencies
 cd client
-npm install
+npm install --legacy-peer-deps
 cd ..
 
 # Install server dependencies
 cd server
-npm install
+npm install --legacy-peer-deps
 cd ..
 ```
 
