@@ -6,9 +6,11 @@ import Link from "next/link";
 import { getEvents } from "../../../api/eventApi";
 import { getFaqs } from "../../../api/faqApi";
 import EventFaqCard from "./EventFaqCard";
-import EventEnrollProcess from "../../../components/EventEnrollProcess";
+// EventEnrollProcess will now be used within EventEnrollmentStatusWrapper
+// import EventEnrollProcess from "../../../components/EventEnrollProcess"; 
 import moment from "moment/moment";
 import { getSettingValue } from "../../../api/settingValuesApi";
+import EventEnrollmentStatusWrapper from './EventEnrollmentStatusWrapper'; // Import the new wrapper
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
     
@@ -190,18 +192,12 @@ const EventDetailsPage = async ({
                     </p>
                   </div>
                 </div>
-                {/* Only show enrollment process if registration is still open */}
-                {isRegistrationOpen ? (
-                  <EventEnrollProcess
-                    eventId={Number(event.event_id)}
-                    eventPrice={Number(event.discount_price)}
-                  />
-                ) : (
-                  <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                    <p className="font-bold">Registration Closed</p>
-                    <p>This event&apos;s registration period has ended.</p>
-                  </div>
-                )}
+                {/* Replace EventEnrollProcess and "Registration Closed" with EventEnrollmentStatusWrapper */}
+                <EventEnrollmentStatusWrapper
+                  eventId={Number(event.event_id)}
+                  eventPrice={Number(event.discount_price)}
+                  isRegistrationOpen={isRegistrationOpen}
+                />
               </div>
             </div>
           </div>
