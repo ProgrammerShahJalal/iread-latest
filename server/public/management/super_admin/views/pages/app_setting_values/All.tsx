@@ -90,7 +90,7 @@ const All: React.FC<Props> = () => {
 
     // For text or other types
     const text = value?.toString() || '';
-    const maxLength = 100;
+    const maxLength = 32;
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
