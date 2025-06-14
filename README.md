@@ -74,12 +74,21 @@ project-root
 |       |-- plugins/
 |       |-- routes/
 |       |-- index.ts  # Server entry point
-|   |-- .env
+|   |-- .env.example # Example environment variables, copy to .env
 |   |-- package.json
 |   |-- tsconfig.json
 ```
 
+## Module-Specific Documentation
+
+For more detailed information about the client and server applications, including specific setup and development guides, refer to their respective README files:
+
+- [Client Documentation](./client/README.md)
+- [Server Documentation](./server/README.md)
+
 ## Backend API Endpoints
+
+The base URL for the API endpoints will depend on your setup (e.g., `http://localhost:5011/api/v1` when running locally without Docker, or `http://localhost:8005/api/v1` when using Docker).
 
 ### Authentication (users)
 
@@ -369,7 +378,18 @@ cd <repository-folder>
 2. Install Dependencies:
 
 ```bash
+# Install root dependencies (if any)
 npm install
+
+# Install client dependencies
+cd client
+npm install
+cd ..
+
+# Install server dependencies
+cd server
+npm install
+cd ..
 ```
 
 3. Set Up Environment Variables:
@@ -381,14 +401,18 @@ npm install
 
 ```bash
 # Start the backend server
-npm run server
+cd server
+npm run dev # Or the appropriate script from server/package.json, typically 'npm start' or 'npm run dev'
+# Note: Check server/package.json for the exact command if 'npm run dev' or 'npm start' does not work.
 
-# Start the frontend
-npm run dev
+# In a new terminal, start the frontend client
+cd client
+npm run dev # Or the appropriate script from client/package.json
+# Note: Check client/package.json for the exact command if 'npm run dev' does not work.
 ```
 
-- Server: [http://localhost:5011](http://localhost:5011)
-- Client: [http://localhost:5012](http://localhost:5012)
+- Server: [http://localhost:5011](http://localhost:5011) (or as configured in `server/.env`)
+- Client: [http://localhost:5012](http://localhost:5012) (or as configured by the Next.js development server)
 
 5. Run the Application Using Docker:
 

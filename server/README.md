@@ -1,27 +1,38 @@
-# Uniflex Limited - Real Estate Business Management
+# IREAD Server
 
-## Project Overview
+This is the server-side application for the IREAD Online Learning Platform. It handles the business logic, API endpoints, and database interactions for the platform.
 
-Uniflex Limited is a Real Estate Business Management System built using the MERN stack with MySQL as the database. This project includes a server and a super-admin interface.
+## Technologies Used
 
-## Prerequisites
+- Node.js
+- Fastify
+- MySQL
+- TypeScript
 
-Before you begin, ensure you have met the following requirements:
+## Running the Server
 
-- Node.js and npm instal
-- Yarn package manager installed
-- MySQL installed and running
+To run the server application locally:
 
-## Getting Started
+1. Navigate to the `server` directory:
+   ```bash
+   cd server
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+    - Create a `.env` file by copying `.env.example`.
+    - Update the `.env` file with your database credentials and other necessary configurations.
+4. Run database migrations:
+   ```bash
+   npm run migrate # Or the specific command used in your project, e.g., npx sequelize-cli db:migrate
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev # Or npm run server, based on your package.json scripts
+   ```
 
-First, run the development server:
+The server application will be accessible at [http://localhost:5011](http://localhost:5011) (or the port specified in your project configuration if different).
 
-```bash
-npm run dev
-npm run server
-npm run super-admin
-# or
-yarn dev
-# or
-pnpm dev
-```
+Refer to the main [README.md](../README.md) for API endpoint documentation and more details on the overall project.
