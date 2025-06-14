@@ -95,7 +95,7 @@ async function store(
         }
     };
 
-    // Parse the whole body’s fields in one go
+    // Parse the whole body's fields in one go
     Object.keys(body).forEach(key => {
         body[key] = parseField(body[key]);
     });
@@ -121,13 +121,13 @@ async function store(
         if (existingEnrollment) {
             event_enrollment_id = existingEnrollment.id;
         } else {
-            // Create new enrollment
+            // Create new enrollment with PENDING status initially
             const newEnrollment = await models.EventEnrollmentsModel.create({
                 event_id: event_id,
                 user_id: user_id,
                 date: moment().format('YYYY-MM-DD'),
-                is_paid: '1',
-                status: 'accepted',
+                is_paid: '0', // Set to unpaid initially
+                status: 'pending', // Set to pending initially
             });
             event_enrollment_id = newEnrollment.id;
         }
@@ -161,7 +161,7 @@ async function store(
         // console.log('Stripe Session:', session);
 
 
-        // Insert payment record first (to get event_payment_id)
+        // Insert payment record with FAILED status initially
         let inputs: InferCreationAttributes<typeof data> = {
             event_id: getValue(body.event_id),
             user_id: getValue(body.user_id),
@@ -171,6 +171,7 @@ async function store(
             media: body.media,
             session_id: session?.id,
             is_refunded: false,
+            status: 'failed', // Add status field for payment record
         };
 
         data.set(inputs);
@@ -184,15 +185,14 @@ async function store(
             event_payment_id: event_payment_id,
         });
 
-        // Update `is_paid` to true in the EventEnrollmentsModel
-        await models.EventEnrollmentsModel.update(
-            { is_paid: '1', status: 'accepted' },
-            { where: { id: event_enrollment_id } }
+        // DON'T update enrollment status here - let webhook handle it
+        // The enrollment remains pending until payment is confirmed
 
-        );
-
-        return response(201, 'data created', {
-            data,
+        return response(201, 'checkout session created', {
+            data: {
+                ...data.toJSON(),
+                checkout_url: session.url
+            },
         });
     } catch (error: any) {
         let uid = await error_trace(models, error, req.url, req.body);

@@ -60,8 +60,8 @@ function Navbar() {
 
   const handleLogout = async () => {
   try {
-    console.log("Attempting logout with user:", user);
-    console.log("Document cookies:", document.cookie);
+    // console.log("Attempting logout with user:", user);
+    // console.log("Document cookies:", document.cookie);
     
     // Get token from document.cookie manually if needed
     const getTokenFromCookie = () => {
@@ -78,9 +78,9 @@ function Navbar() {
     const cookieToken = getTokenFromCookie();
     const userToken = user?.token; // Token from localStorage (always available)
     
-    console.log("Cookie token:", cookieToken);
-    console.log("User token from localStorage:", userToken);
-    console.log("All cookies:", document.cookie);
+    // console.log("Cookie token:", cookieToken);
+    // console.log("User token from localStorage:", userToken);
+    // console.log("All cookies:", document.cookie);
 
     const response = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
       method: "POST",
@@ -98,7 +98,7 @@ function Navbar() {
       }),
     });
 
-    console.log("Response status:", response.status);
+    // console.log("Response status:", response.status);
 
     if (response.ok) {
       localStorage.removeItem("user");
@@ -246,9 +246,11 @@ function Navbar() {
                     />
                   </button>
                 ) : (
-                  <Link href="/login" className="text-white">
-                    Login / Register
-                  </Link>
+                  <><Link href="/login" className="text-white">
+                      Login / 
+                    </Link><Link href="/register" className="text-white">
+                  {" "}  Register
+                      </Link></>
                 )}
 
                 {dropdownOpen && user?.email && (

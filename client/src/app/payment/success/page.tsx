@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import emailjs from "@emailjs/browser";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import apiClient from "../../../lib/apiClient";
 
 const PaymentSuccessContent = () => {
   const searchParams = useSearchParams();
@@ -19,6 +20,10 @@ const PaymentSuccessContent = () => {
   const [userPhone, setUserPhone] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [isDbUpdated, setIsDbUpdated] = useState(false);
+
+
+  const BASE_URL = apiClient.defaults.baseURL;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -50,6 +55,89 @@ const PaymentSuccessContent = () => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     return `${randomNum}-${year}`;
   };
+
+  // Function to update event_payments table
+  const updateEventPayments = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/v1/event-payments/update`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user_id,
+          event_id: event_id,
+          status: "success",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update event payments");
+      }
+
+      const data = await response.json();
+      console.log("Event payments updated successfully:", data);
+      return true;
+    } catch (error) {
+      console.error("Error updating event payments:", error);
+      toast.error("Failed to update payment status");
+      return false;
+    }
+  };
+
+  // Function to update event_enrollments table
+  const updateEventEnrollments = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/v1/event-enrollments/update`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: user_id,
+          event_id: event_id,
+          is_paid: "1",
+          status: "accepted",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update event enrollments");
+      }
+
+      const data = await response.json();
+      console.log("Event enrollments updated successfully:", data);
+      return true;
+    } catch (error) {
+      console.error("Error updating event enrollments:", error);
+      toast.error("Failed to update enrollment status");
+      return false;
+    }
+  };
+
+  // Function to update both tables
+  const updateDatabaseRecords = async () => {
+    if (!user_id || !event_id || isDbUpdated) {
+      return;
+    }
+
+    try {
+      // Update both tables concurrently
+      const [paymentsUpdated, enrollmentsUpdated] = await Promise.all([
+        updateEventPayments(),
+        updateEventEnrollments(),
+      ]);
+
+      if (paymentsUpdated && enrollmentsUpdated) {
+        setIsDbUpdated(true);
+        toast.success("Payment and enrollment status updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating database records:", error);
+      toast.error("Failed to update database records");
+    }
+  };
+
 
   const sendInvoiceEmail = () => {
     if (!userEmail || isEmailSent) {
@@ -86,6 +174,14 @@ const PaymentSuccessContent = () => {
         }
       );
   };
+
+  // Update database records when component mounts
+  useEffect(() => {
+    if (user_id && event_id && !isDbUpdated) {
+      updateDatabaseRecords();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user_id, event_id, isDbUpdated]);
 
   useEffect(() => {
     if (userEmail && !isEmailSent) {

@@ -75,7 +75,7 @@ async function store(
         user_id: body.user_id || body.user_id?.[0],
         date: body.date,
         is_paid: body.is_paid || '0',
-        status: body.status,
+        status: body.status || 'pending',
     };
 
     try {
@@ -88,12 +88,14 @@ async function store(
         });
 
         if (existingEnrollment) {
-            return response(422, 'User is already enrolled in this event', {
+            if(existingEnrollment.status === 'accepted' && existingEnrollment.is_paid === '1'){
+                return response(422, 'User is already enrolled in this event', {
                 data: [{
                     path: 'user_id',
                     msg: 'User is already enrolled in this event'
                 }]
             });
+            }
         }
         /** store data into database */
         (await data.update(inputs)).save();
