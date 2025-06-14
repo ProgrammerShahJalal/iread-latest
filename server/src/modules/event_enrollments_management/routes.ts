@@ -19,7 +19,23 @@ module.exports = function (
         .post(`${prefix}/destroy`, controllerInstance.destroy)
         .post(`${prefix}/import`, controllerInstance.import)
         .get(`${prefix}/:id`, controllerInstance.find)
-        .get(`${prefix}/by-event/:id`, controllerInstance.findByEvent);
+        .get(`${prefix}/by-event/:id`, controllerInstance.findByEvent)
+        .get(
+            `${prefix}/check`,
+            {
+                schema: {
+                    querystring: {
+                        type: 'object',
+                        properties: {
+                            eventId: { type: 'string' },
+                            userId: { type: 'string' },
+                        },
+                        required: ['eventId', 'userId'],
+                    },
+                },
+            },
+            controllerInstance.checkEnrollmentStatusHandler,
+        );
 
     done();
 };

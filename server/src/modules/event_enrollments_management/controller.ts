@@ -5,6 +5,7 @@ import details from './services/details';
 import soft_delete from './services/soft_delete';
 import store from './services/store';
 import { responseObject } from '../../common_types/object';
+import checkStatusService from './services/checkStatus'; // Added import
 import update from './services/update';
 import restore from './services/restore';
 import destroy from './services/destroy';
@@ -40,6 +41,26 @@ export default function (fastify: FastifyInstance) {
                     .code(data.status)
                     .header('Cache-Control', 'public, max-age=30')
                     .send(data);
+            } catch (error: any) {
+                return handleServiceError(error, res);
+            }
+        },
+
+        checkEnrollmentStatusHandler: async function (
+            req: FastifyRequest,
+            res: FastifyReply,
+        ) {
+            const { eventId, userId } = req.query as {
+                eventId: string;
+                userId: string;
+            };
+            try {
+                const isEnrolled = await checkStatusService(
+                    fastify,
+                    eventId,
+                    userId,
+                );
+                return res.code(200).send({ isEnrolled: isEnrolled });
             } catch (error: any) {
                 return handleServiceError(error, res);
             }
